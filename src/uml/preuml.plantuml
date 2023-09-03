@@ -1,0 +1,93 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+' This is the javafx class
+' Fco
+class GameWindows {
+    + canvas: Canvas
+}
+
+class GameState {
+    + ended: Boolean
+    + winner: Player
+}
+
+' Fco
+class TankGame {
+    - terrain: Terrain
+    - tanks: Array<Tank>
+    - cannonBall: Cannonball
+    - canvas: Canvas
+
+    + TankGame():
+    + startGame(): void
+    + tick(dt: Double): GameState
+    + draw():
+}
+
+' Benja
+class Point {
+    - x: double
+    - y: double
+    + Point(double, double):
+}
+
+' Benja
+class Velocity {
+    - dx: double
+    - dy: double
+
+    + Velocity(double, double)
+}
+
+' Sofi
+class Cannonball extends Drawable {
+    - position: Point
+    - velocity: Velocity
+}
+
+' Maca
+interface Drawable {
+    + draw(GraphicContext)
+    + erase(GraphicContext)
+}
+
+' Maca
+class Terrain extends Drawable {
+    + Terrain(List<Point>):
+    + isInside(Point): Boolean
+}
+
+' Sofi
+class Tank extends Drawable {
+    - player: Player
+    - color: Color
+    - position: Position
+
+    + isInside(Point): Boolean
+}
+
+class Player {
+    - points: double
+}
+
+' Todos
+class Constants {
+    + GRAVITY: double
+    + TANK_HIT_BOX_SIZE: double
+    + TERRAIN_COLOR: Color
+}
+
+TankGame ... GameWindows
+TankGame -- GameState
+
+TankGame *--> Tank
+TankGame o--> Cannonball
+Tank *--> Player
+Tank *--> Point
+Cannonball *-> Velocity
+Cannonball *--> Point
+
+@enduml
