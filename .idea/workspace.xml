@@ -4,20 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ae5dcb7c-2f02-47ba-9abb-acd65bf48ffa" name="Changes" comment="First Commit">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/uml/preuml.plantuml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="ae5dcb7c-2f02-47ba-9abb-acd65bf48ffa" name="Changes" comment="docs(uml): the uml of the general project has been created&#10;&#10;A general layout has been made but there are still a lot of methods to be defined.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dev/bfms/tankgame/GameWindows.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dev/bfms/tankgame/TankGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dev/bfms/tankgame/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dev/bfms/tankgame/HelloApplication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "fraco-oxza"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="efb16692-0bde-420e-a2fa-2ef4863c7de1" />
+        <option name="url" value="https://github.com/fraco-oxza/tankGame.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -55,7 +74,7 @@
       <workItem from="1693256119377" duration="228000" />
       <workItem from="1693256374005" duration="19000" />
       <workItem from="1693739302636" duration="629000" />
-      <workItem from="1693739946421" duration="5171000" />
+      <workItem from="1693739946421" duration="6589000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1693256215802</created>
@@ -64,7 +83,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693256215802</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="docs(uml): the uml of the general project has been created&#10;&#10;A general layout has been made but there are still a lot of methods to be defined.">
+      <option name="closed" value="true" />
+      <created>1693745331540</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1693745331540</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -72,6 +99,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Commit" />
+    <MESSAGE value="docs(uml): the uml of the general project has been created&#10;&#10;A general layout has been made but there are still a lot of methods to be defined." />
+    <option name="LAST_COMMIT_MESSAGE" value="docs(uml): the uml of the general project has been created&#10;&#10;A general layout has been made but there are still a lot of methods to be defined." />
   </component>
 </project>
