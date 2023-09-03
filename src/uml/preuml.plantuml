@@ -43,7 +43,7 @@ class Velocity {
 }
 
 ' Sofi
-class Cannonball extends Drawable {
+class Cannonball implements Drawable {
     - position: Point
     - velocity: Velocity
 }
@@ -55,13 +55,13 @@ interface Drawable {
 }
 
 ' Maca
-class Terrain extends Drawable {
+class Terrain implements Drawable {
     + Terrain(List<Point>):
     + isInside(Point): Boolean
 }
 
 ' Sofi
-class Tank extends Drawable {
+class Tank implements Drawable {
     - player: Player
     - color: Color
     - position: Position
