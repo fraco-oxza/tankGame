@@ -32,8 +32,12 @@ class Terrain(Drawable):
                 "green",
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
+                    constants.WINDOWS_SIZE[1] - self.ground_lines[i],
+                    constants.TERRAIN_LINE_WIDTH,
+                    self.ground_lines[i],
                 ),
             )
+        pygame.display.flip()
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -105,7 +109,8 @@ class TankGame:
 
 
 def main():
-    pass
+    a = TankGame()
+    a.start()
 
 
 if __name__ == "__main__":
