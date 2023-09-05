@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from random import randint, random
+from random import randint
+import math
 
 import pygame
 from pygame.scrap import contains
@@ -32,7 +33,7 @@ class Terrain(Drawable):
         for i in range(len(self.ground_lines)):
             pygame.draw.rect(
                 screen,
-                "green",
+                constants.TERRAIN_COLOR,
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
                     constants.WINDOWS_SIZE[1] - self.ground_lines[i],
@@ -58,7 +59,7 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        pygame.draw.circle(screen, "blue", self.position, 4)
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -83,6 +84,8 @@ class Tank(Drawable):
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
         self.position = position
+        self.shoot_angle = 0.2
+        self.shoot_velocity = 145  # m/s
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -90,6 +93,15 @@ class Tank(Drawable):
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
+
+    def shoot(self) -> Cannonball:
+        v_x = self.shoot_velocity * math.cos(self.shoot_angle)
+        # the -1 is since in this system the vertical coordinates are inverted
+        v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
+
+        return Cannonball(
+            pygame.Vector2(self.position.x, self.position.y), pygame.Vector2(v_x, v_y)
+        )
 
 
 class TankGame:
@@ -133,7 +145,7 @@ class TankGame:
                     tank2_x,
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
-                        tank2_x // constants.TERRAIN_LINE_WIDTH
+                        tank2_x // constants.TERRAIN_LINE_WIDTH - 1
                     ],
                 ),
             )
@@ -148,8 +160,8 @@ class TankGame:
                 if event.type == pygame.QUIT:
                     running = False
 
-            self.screen.fill(constants.SKY_COLOR)
             playing_tank = self.tanks[actual_player]
+            self.screen.fill(constants.SKY_COLOR)
 
             # IN PROGRESS
             # keys_pressed = pygame.key.get_pressed()
@@ -159,9 +171,6 @@ class TankGame:
             # pass
             # if keys
 
-            # Select angle and velocity
-
-            # Swap the actual player
             actual_player = (actual_player + 1) % 2
 
             for tank in self.tanks:
@@ -171,7 +180,7 @@ class TankGame:
 
             pygame.display.flip()
 
-            self.clock.tick(60)
+            self.clock.tick(constants.FPS)
 
 
 def main():
