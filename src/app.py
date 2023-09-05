@@ -2,6 +2,7 @@ from abc import abstractmethod
 from random import randint, random
 
 import pygame
+from pygame.scrap import contains
 
 import constants
 
@@ -39,7 +40,6 @@ class Terrain(Drawable):
                     self.ground_lines[i],
                 ),
             )
-        pygame.display.flip()
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -77,6 +77,8 @@ class Tank(Drawable):
     player: Player
     color: pygame.Color
     position: pygame.Vector2
+    shoot_velocity: float  # m/s
+    shoot_angle: float  # rads
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
@@ -84,7 +86,7 @@ class Tank(Drawable):
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        pygame.draw.circle(screen, self.color, self.position, 5)
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -93,7 +95,6 @@ class Tank(Drawable):
 class TankGame:
     terrain: Terrain
     tanks: list[Tank]
-    cannonball: None | Cannonball
     screen: pygame.Surface
 
     def __init__(self) -> None:
@@ -103,11 +104,44 @@ class TankGame:
         self.screen = pygame.display.set_mode(constants.WINDOWS_SIZE)
         self.clock = pygame.time.Clock()
         self.cannonball = None
+        self.tanks = list()
 
-        # TODO: Inicializar tanques y asi
+        quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
+
+        mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
+
+        tank1_x = randint(0, mid_point - quart_of_windows)
+        tank2_x = randint(mid_point + quart_of_windows, constants.WINDOWS_SIZE[0])
+
+        self.tanks.append(
+            Tank(
+                pygame.Color(255, 0, 0),
+                pygame.Vector2(
+                    tank1_x,
+                    constants.WINDOWS_SIZE[1]
+                    - self.terrain.ground_lines[
+                        tank1_x // constants.TERRAIN_LINE_WIDTH
+                    ],
+                ),
+            )
+        )
+
+        self.tanks.append(
+            Tank(
+                pygame.Color(0, 0, 255),
+                pygame.Vector2(
+                    tank2_x,
+                    constants.WINDOWS_SIZE[1]
+                    - self.terrain.ground_lines[
+                        tank2_x // constants.TERRAIN_LINE_WIDTH
+                    ],
+                ),
+            )
+        )
 
     def start(self) -> None:
         running = True
+        actual_player = randint(0, 1)
 
         while running:
             for event in pygame.event.get():
@@ -115,8 +149,29 @@ class TankGame:
                     running = False
 
             self.screen.fill(constants.SKY_COLOR)
+            playing_tank = self.tanks[actual_player]
+
+            # IN PROGRESS
+            # keys_pressed = pygame.key.get_pressed()
+            # if keys_pressed[pygame.K_DOWN]:
+            # pass
+            # if keys_pressed[pygame.K_UP]:
+            # pass
+            # if keys
+
+            # Select angle and velocity
+
+            # Swap the actual player
+            actual_player = (actual_player + 1) % 2
+
+            for tank in self.tanks:
+                tank.draw(self.screen)
+
             self.terrain.draw(self.screen)
-            self.clock.tick(constants.FPS)
+
+            pygame.display.flip()
+
+            self.clock.tick(60)
 
 
 def main():
