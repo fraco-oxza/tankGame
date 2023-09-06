@@ -28,6 +28,7 @@ class Terrain(Drawable):
         self.ground_lines = [constants.SEA_LEVEL] * int(
             width / constants.TERRAIN_LINE_WIDTH
         )
+        print("linea de prueba")
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
