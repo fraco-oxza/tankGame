@@ -21,14 +21,26 @@ class Drawable:
 class Terrain(Drawable):
     ground_lines: list[int]
 
-    def __init__(self, mountains: int, valleys: int):
-        # Este es el constructor, aquí puedes hacer la lógica
-        # que cree las ground_lines
-        width = constants.WINDOWS_SIZE[0]
-        self.ground_lines = [constants.SEA_LEVEL] * int(
-            width / constants.TERRAIN_LINE_WIDTH
-        )
-        print("linea de prueba")
+    def mountain(self,lista:list,indiceInicial:int, indiceFinal: int):
+        for i in range(indiceInicial,indiceFinal):
+            lista.append(random.gauss(400, 100))
+        return lista
+    def completeList(self):
+        lista=[]
+        pixelesDividos = constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+        indice=0
+        for i in range(0,constants.WINDOWS_SIZE[0]):
+            if i % pixelesDividos==0:
+                lista=self.mountain(lista,i,indice)
+            indice=indice+pixelesDividos
+        return lista
+    def __init__(self,mountains:int, valleys:int):
+        self.ground_lines=self.completeList()
+
+
+
+
+
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
