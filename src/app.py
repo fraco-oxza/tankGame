@@ -1,12 +1,9 @@
 from abc import abstractmethod
 from random import randint
 import math
-
 import pygame
 from pygame.scrap import contains
-
 import constants
-
 
 class Drawable:
     @abstractmethod
@@ -80,7 +77,7 @@ class Tank(Drawable):
     color: pygame.Color
     position: pygame.Vector2
     shoot_velocity: float  # m/s
-    shoot_angle: float  # rads
+    shoot_angle: float  # rad
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
@@ -90,8 +87,13 @@ class Tank(Drawable):
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pygame.draw.circle(screen, self.color, self.position, 5)
+        #pygame.draw.circle(screen, self.color, self.position, 10)
+        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
+        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y-10, 20, 10))
+        pygame.draw.polygon(screen, self.color, ((self.position.x, self.position.y-10), (self.position.x +2, self.position.y+2),
+                                                 (self.position.x + 55, self.position.y - 35), (self.position.x + 10, self.position.y-10)))
 
+        pygame.draw.circle(screen, constants.BLACK, (self.position.x +20 , self.position.y+20), 10)
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
 
@@ -155,6 +157,7 @@ class TankGame:
     def start(self) -> None:
         running = True
         actual_player = randint(0, 1)
+        pygame.display.set_caption("TankGame!")
 
         while running:
             for event in pygame.event.get():
@@ -173,11 +176,10 @@ class TankGame:
             # if keys
 
             actual_player = (actual_player + 1) % 2
+            self.terrain.draw(self.screen)
 
             for tank in self.tanks:
                 tank.draw(self.screen)
-
-            self.terrain.draw(self.screen)
 
             pygame.display.flip()
 
