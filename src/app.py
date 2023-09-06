@@ -100,14 +100,28 @@ class Tank(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         # pygame.draw.circle(screen, self.color, self.position, 10)
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y - 10, 20, 10))
-        pygame.draw.polygon(screen, self.color,
-                            ((self.position.x, self.position.y - 10), (self.position.x + 2, self.position.y + 2),
-                             (self.position.x + 55, self.position.y - 35),
-                             (self.position.x + 10, self.position.y - 10)))
+        pygame.draw.rect(
+            screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20)
+        )
+        pygame.draw.rect(
+            screen,
+            self.color,
+            pygame.Rect(self.position.x, self.position.y - 10, 20, 10),
+        )
+        pygame.draw.polygon(
+            screen,
+            self.color,
+            (
+                (self.position.x, self.position.y - 10),
+                (self.position.x + 2, self.position.y + 2),
+                (self.position.x + 55, self.position.y - 35),
+                (self.position.x + 10, self.position.y - 10),
+            ),
+        )
 
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10)
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10
+        )
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -151,7 +165,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH
-                        ],
+                    ],
                 ),
             )
         )
@@ -164,7 +178,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                    ],
                 ),
             )
         )
