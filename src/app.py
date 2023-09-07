@@ -5,6 +5,7 @@ import pygame
 from pygame.scrap import contains
 import constants
 
+
 class Drawable:
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -23,18 +24,17 @@ class Terrain(Drawable):
         for i in range(indiceInicial, indiceFinal):
             middle = (indiceFinal + indiceInicial) // 2
             if i <= middle:
-                actualIncrease += randint(1,2)
+                actualIncrease += randint(1, 2)
             else:
-                actualIncrease -= randint(1,2)
+                actualIncrease -= randint(1, 2)
             lista[i] += actualIncrease
         return lista
 
     def completeList(self):
-        lista = [constants.SEA_LEVEL]*(constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+        lista = [constants.SEA_LEVEL] * (constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
 
         for i in range(0, constants.MOUNTAINS):
             self.mountain(lista, 2, 400)
-
 
         return lista
 
@@ -101,13 +101,16 @@ class Tank(Drawable):
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        #pygame.draw.circle(screen, self.color, self.position, 10)
+        # pygame.draw.circle(screen, self.color, self.position, 10)
         pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y-10, 20, 10))
-        pygame.draw.polygon(screen, self.color, ((self.position.x, self.position.y-10), (self.position.x +2, self.position.y+2),
-                                                 (self.position.x + 55, self.position.y - 35), (self.position.x + 10, self.position.y-10)))
+        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y - 10, 20, 10))
+        pygame.draw.polygon(screen, self.color,
+                            ((self.position.x, self.position.y - 10), (self.position.x + 2, self.position.y + 2),
+                             (self.position.x + 55, self.position.y - 35),
+                             (self.position.x + 10, self.position.y - 10)))
 
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x +20 , self.position.y+20), 10)
+        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10)
+
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
 
@@ -119,6 +122,19 @@ class Tank(Drawable):
         return Cannonball(
             pygame.Vector2(self.position.x, self.position.y), pygame.Vector2(v_x, v_y)
         )
+
+
+class HUD(Drawable):
+    tanks: list[Tank]
+
+    def __init__(self, tanks: list[Tank]):
+        self.tanks = tanks
+
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        pass
+
+    def erase(self, screen: pygame.surface.Surface) -> None:
+        pass
 
 
 class TankGame:
@@ -168,6 +184,8 @@ class TankGame:
             )
         )
 
+        self.hud = HUD(self.tanks)
+
     def start(self) -> None:
         running = True
         actual_player = randint(0, 1)
@@ -195,6 +213,7 @@ class TankGame:
             for tank in self.tanks:
                 tank.draw(self.screen)
 
+            self.hud.draw(self.screen)
             pygame.display.flip()
 
             self.clock.tick(constants.FPS)
