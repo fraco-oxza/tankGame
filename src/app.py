@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from random import randint
 import math
-
 import pygame
 from pygame.scrap import contains
 
@@ -19,28 +18,30 @@ class Drawable:
 
 
 class Terrain(Drawable):
-    ground_lines: list[int]
+    ground_lines: list[float]
 
-    def mountain(self,lista:list,indiceInicial:int, indiceFinal: int):
-        for i in range(indiceInicial,indiceFinal):
-            lista.append(random.gauss(400, 100))
+    def mountain(self, lista: list[int], indiceInicial: int, indiceFinal: int):
+        actualIncrease = 0
+        for i in range(indiceInicial, indiceFinal):
+            middle = (indiceFinal + indiceInicial) // 2
+            if i <= middle:
+                actualIncrease += randint(1,2)
+            else:
+                actualIncrease -= randint(1,2)
+            lista[i] += actualIncrease
         return lista
+
     def completeList(self):
-        lista=[]
-        pixelesDividos = constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-        indice=0
-        for i in range(0,constants.WINDOWS_SIZE[0]):
-            if i % pixelesDividos==0:
-                lista=self.mountain(lista,i,indice)
-            indice=indice+pixelesDividos
+        lista = [constants.SEA_LEVEL]*(constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+
+        for i in range(0, constants.MOUNTAINS):
+            self.mountain(lista, 2, 400)
+
+
         return lista
-    def __init__(self,mountains:int, valleys:int):
-        self.ground_lines=self.completeList()
 
-
-
-
-
+    def __init__(self, mountains: int, valleys: int):
+        self.ground_lines = self.completeList()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
@@ -102,29 +103,7 @@ class Tank(Drawable):
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        # pygame.draw.circle(screen, self.color, self.position, 10)
-        pygame.draw.rect(
-            screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20)
-        )
-        pygame.draw.rect(
-            screen,
-            self.color,
-            pygame.Rect(self.position.x, self.position.y - 10, 20, 10),
-        )
-        pygame.draw.polygon(
-            screen,
-            self.color,
-            (
-                (self.position.x, self.position.y - 10),
-                (self.position.x + 2, self.position.y + 2),
-                (self.position.x + 55, self.position.y - 35),
-                (self.position.x + 10, self.position.y - 10),
-            ),
-        )
-
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10
-        )
+        pygame.draw.circle(screen, self.color, self.position, 5)
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -167,8 +146,8 @@ class TankGame:
                     tank1_x,
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
-                        tank1_x // constants.TERRAIN_LINE_WIDTH
-                    ],
+                        tank1_x // constants.TERRAIN_LINE_WIDTH - 1
+                        ],
                 ),
             )
         )
@@ -181,7 +160,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ],
+                        ],
                 ),
             )
         )
