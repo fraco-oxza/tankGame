@@ -9,3 +9,4 @@ SKY_COLOR = "#00008B"
 TERRAIN_COLOR = "#006400"
 BLACK = (0, 0, 0)
 PIXEL_SIZE = 1.0  # meters
+X_SPEED = 8.0

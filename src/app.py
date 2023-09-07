@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from random import randint
 import math
+import random
 
 import pygame
 
@@ -43,7 +44,7 @@ class Terrain(Drawable, Collidable):
         )
 
         for i in range(0, constants.MOUNTAINS):
-            self.mountain(lista, 2, 400)
+            self.mountain(lista, 2, 200)
 
         return lista
 
@@ -150,9 +151,10 @@ class Tank(Drawable, Collidable):
         # the -1 is since in this system the vertical coordinates are inverted
         v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
 
-        return Cannonball(
-            pygame.Vector2(self.position.x, self.position.y), pygame.Vector2(v_x, v_y)
-        )
+        new_x = self.position.x + 40 * math.cos(self.shoot_angle)
+        new_y = self.position.y - 40 * math.sin(self.shoot_angle)
+
+        return Cannonball(pygame.Vector2(new_x, new_y), pygame.Vector2(v_x, v_y))
 
 
 class HUD(Drawable):
@@ -261,6 +263,8 @@ class TankGame:
                     playing_tank.shoot_velocity += 1
                 if keysPressed[pygame.K_LEFT]:
                     playing_tank.shoot_velocity -= 1
+                    if playing_tank.shoot_velocity < 1:
+                        playing_tank.shoot_velocity = 1
                 if keysPressed[pygame.K_SPACE]:
                     self.cannonball = playing_tank.shoot()
                 self.render()
@@ -268,7 +272,7 @@ class TankGame:
             # Travel of the cannonball
             while self.running and self.cannonball is not None:
                 self.check_running()
-                self.cannonball.tick((1.0 / constants.FPS))
+                self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
 
                 if self.terrain.collidesWith(self.cannonball.position):
                     self.cannonball = None
