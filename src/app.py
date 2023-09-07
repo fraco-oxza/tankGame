@@ -38,7 +38,9 @@ class Terrain(Drawable, Collidable):
         return lista
 
     def completeList(self):
-        lista = [constants.SEA_LEVEL] * (constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+        lista = [constants.SEA_LEVEL] * (
+            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+        )
 
         for i in range(0, constants.MOUNTAINS):
             self.mountain(lista, 2, 400)
@@ -114,22 +116,27 @@ class Tank(Drawable, Collidable):
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
         self.position = position
-        self.shoot_angle = 0.2 #rad
+        self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         # player no lo usaremos en las primeras
+
     def draw(self, screen: pygame.surface.Surface) -> None:
+        new_x = self.position.x + 40 * math.cos(self.shoot_angle)
+        new_y = self.position.y - 40 * math.sin(self.shoot_angle)
 
-        new_x = self.position.x - 40 * math.cos(self.shoot_angle)
-        new_y = self.position.y - 40 *  math.sin(self.shoot_angle)
-
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
-        pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y - 10, 20, 10))
-        pygame.draw.line(
+        pygame.draw.rect(
+            screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20)
+        )
+        pygame.draw.rect(
             screen,
             self.color,
-            (self.position.x , self.position.y), (new_x, new_y), 5)
+            pygame.Rect(self.position.x, self.position.y - 10, 20, 10),
+        )
+        pygame.draw.line(screen, self.color, self.position, (new_x, new_y), 5)
 
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10)
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10
+        )
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
         # Sofi jobs
@@ -192,7 +199,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                    ],
                 ),
             )
         )
@@ -205,7 +212,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                    ],
                 ),
             )
         )
