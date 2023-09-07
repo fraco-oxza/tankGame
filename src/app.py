@@ -91,24 +91,25 @@ class Tank(Drawable):
     color: pygame.Color
     position: pygame.Vector2
     shoot_velocity: float  # m/s
-    shoot_angle: float  # rad
+    shoot_angle: float  # rad // CONVERSABLE
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
         self.position = position
-        self.shoot_angle = 0.2
+        self.shoot_angle = 0.2 #rad
         self.shoot_velocity = 145  # m/s
         # player no lo usaremos en las primeras
-
     def draw(self, screen: pygame.surface.Surface) -> None:
-        #new_x = self.position.x + self.shoot_velocity * math.cos(self.shoot_angle)
-        #new_y = self.position.y + self.shoot_velocity * math.sin(self.shoot_angle)
+
+        new_x = self.position.x - 40 * math.cos(self.shoot_angle)
+        new_y = self.position.y - 40 *  math.sin(self.shoot_angle)
+
         pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
         pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y - 10, 20, 10))
-        # pygame.draw.line(
-        #    screen,
-        #    self.color,
-        #    (self.position.x + 10, self.position.y + 20), (new_x, new_y), 3)
+        pygame.draw.line(
+            screen,
+            self.color,
+            (self.position.x , self.position.y), (new_x, new_y), 5)
 
         pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10)
 
@@ -202,14 +203,18 @@ class TankGame:
             self.screen.fill(constants.SKY_COLOR)
 
             keysPressed = pygame.key.get_pressed()
-            if keysPressed[pygame.K_DOWN]:
+
+            if keysPressed[pygame.K_DOWN] and (playing_tank.shoot_angle <= math.radians(360)):
                 playing_tank.shoot_angle += math.radians(1)
-            if keysPressed[pygame.K_UP]:
-                playing_tank.shoot_angle -= math.radians(1)
-            if keysPressed[pygame.K_RIGHT]:
-                playing_tank.shoot_velocity += 1
-            if keysPressed[pygame.K_LEFT]:
-                playing_tank.shoot_velocity -= 1
+            if keysPressed[pygame.K_UP] and (playing_tank.shoot_angle <= math.radians(360)):
+                    playing_tank.shoot_angle -= math.radians(1)
+
+
+             # EN PROCESO
+            #if keysPressed[pygame.K_RIGHT]:
+             #   playing_tank.shoot_velocity += 1
+            #if keysPressed[pygame.K_LEFT]:
+            #    playing_tank.shoot_velocity -= 1
 
             actual_player = (actual_player + 1) % 2
             self.terrain.draw(self.screen)
