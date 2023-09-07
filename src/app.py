@@ -16,16 +16,30 @@ class Drawable:
 
 
 class Terrain(Drawable):
-    ground_lines: list[int]
+    ground_lines: list[float]
+
+    def mountain(self, lista: list[int], indiceInicial: int, indiceFinal: int):
+        actualIncrease = 0
+        for i in range(indiceInicial, indiceFinal):
+            middle = (indiceFinal + indiceInicial) // 2
+            if i <= middle:
+                actualIncrease += randint(1,2)
+            else:
+                actualIncrease -= randint(1,2)
+            lista[i] += actualIncrease
+        return lista
+
+    def completeList(self):
+        lista = [constants.SEA_LEVEL]*(constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+
+        for i in range(0, constants.MOUNTAINS):
+            self.mountain(lista, 2, 400)
+
+
+        return lista
 
     def __init__(self, mountains: int, valleys: int):
-        # Este es el constructor, aquí puedes hacer la lógica
-        # que cree las ground_lines
-        width = constants.WINDOWS_SIZE[0]
-        self.ground_lines = [constants.SEA_LEVEL] * int(
-            width / constants.TERRAIN_LINE_WIDTH
-        )
-        print("linea de prueba")
+        self.ground_lines = self.completeList()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
@@ -135,8 +149,8 @@ class TankGame:
                     tank1_x,
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
-                        tank1_x // constants.TERRAIN_LINE_WIDTH
-                    ],
+                        tank1_x // constants.TERRAIN_LINE_WIDTH - 1
+                        ],
                 ),
             )
         )
@@ -149,7 +163,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ],
+                        ],
                 ),
             )
         )
