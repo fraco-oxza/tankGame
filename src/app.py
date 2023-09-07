@@ -1,9 +1,16 @@
 from abc import abstractmethod
 from random import randint
 import math
+
 import pygame
-from pygame.scrap import contains
+
 import constants
+
+
+class Collidable:
+    @abstractmethod
+    def collidesWith(self, point: pygame.Vector2) -> bool:
+        pass
 
 
 class Drawable:
@@ -16,8 +23,8 @@ class Drawable:
         pass
 
 
-class Terrain(Drawable):
-    ground_lines: list[float]
+class Terrain(Drawable, Collidable):
+    ground_lines: list[int]
 
     def mountain(self, lista: list[int], indiceInicial: int, indiceFinal: int):
         actualIncrease = 0
@@ -57,6 +64,17 @@ class Terrain(Drawable):
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
 
+    def collidesWith(self, point: pygame.Vector2) -> bool:
+        if point.x < 0.0:
+            return True
+
+        line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
+
+        if line_index >= len(self.ground_lines):
+            return True
+
+        return point.y > (constants.WINDOWS_SIZE[1] - self.ground_lines[line_index])
+
 
 class Cannonball(Drawable):
     position: pygame.Vector2
@@ -71,7 +89,7 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pygame.draw.circle(screen, "blue", self.position, 4)
+        pygame.draw.circle(screen, "#ffaa00", self.position, 6)
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -86,7 +104,7 @@ class Player:
         self.points = points
 
 
-class Tank(Drawable):
+class Tank(Drawable, Collidable):
     player: Player
     color: pygame.Color
     position: pygame.Vector2
@@ -96,13 +114,13 @@ class Tank(Drawable):
     def __init__(self, color: pygame.Color, position: pygame.Vector2):
         self.color = color
         self.position = position
-        self.shoot_angle = 0.2
-        self.shoot_velocity = 145  # m/s
+        self.shoot_angle = 0.7
+        self.shoot_velocity = 600  # m/s
         # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         #new_x = self.position.x + self.shoot_velocity * math.cos(self.shoot_angle)
-        #new_y = self.position.y + self.shoot_velocity * math.sin(self.shoot_angle)
+        # new_y = self.position.y + self.shoot_velocity * math.sin(self.shoot_angle)
         pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 20))
         pygame.draw.rect(screen, self.color, pygame.Rect(self.position.x, self.position.y - 10, 20, 10))
         # pygame.draw.line(
@@ -111,6 +129,10 @@ class Tank(Drawable):
         #    (self.position.x + 10, self.position.y + 20), (new_x, new_y), 3)
 
         pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 20), 10)
+
+    def collidesWith(self, point: pygame.Vector2) -> bool:
+        # Sofi jobs
+        return True
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -142,8 +164,10 @@ class TankGame:
     terrain: Terrain
     tanks: list[Tank]
     screen: pygame.Surface
+    cannonball: Cannonball | None
 
     def __init__(self) -> None:
+        self.running = True
         self.terrain = Terrain(constants.MOUNTAINS, constants.VALLEYS)
 
         pygame.init()
@@ -187,40 +211,68 @@ class TankGame:
 
         self.hud = HUD(self.tanks)
 
+    def render(self) -> None:
+        self.screen.fill(constants.SKY_COLOR)
+        self.terrain.draw(self.screen)
+
+        for tank in self.tanks:
+            tank.draw(self.screen)
+
+        if self.cannonball != None:
+            self.cannonball.draw(self.screen)
+
+        self.hud.draw(self.screen)
+
+        pygame.display.flip()
+        self.clock.tick(constants.FPS)
+
+    def check_running(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
     def start(self) -> None:
-        running = True
         actual_player = randint(0, 1)
         pygame.display.set_caption("TankGame!")
         icon = pygame.image.load("tankIcon.png")
         pygame.display.set_icon(icon)
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
+        while self.running:
+            self.check_running()
 
             playing_tank = self.tanks[actual_player]
-            self.screen.fill(constants.SKY_COLOR)
 
-            keysPressed = pygame.key.get_pressed()
-            if keysPressed[pygame.K_DOWN]:
-                playing_tank.shoot_angle += math.radians(1)
-            if keysPressed[pygame.K_UP]:
-                playing_tank.shoot_angle -= math.radians(1)
-            if keysPressed[pygame.K_RIGHT]:
-                playing_tank.shoot_velocity += 1
-            if keysPressed[pygame.K_LEFT]:
-                playing_tank.shoot_velocity -= 1
+            # Select the angle
+            while self.running and self.cannonball is None:
+                self.check_running()
+                keysPressed = pygame.key.get_pressed()
+                if keysPressed[pygame.K_DOWN]:
+                    playing_tank.shoot_angle += math.radians(1)
+                if keysPressed[pygame.K_UP]:
+                    playing_tank.shoot_angle -= math.radians(1)
+                if keysPressed[pygame.K_RIGHT]:
+                    playing_tank.shoot_velocity += 1
+                if keysPressed[pygame.K_LEFT]:
+                    playing_tank.shoot_velocity -= 1
+                if keysPressed[pygame.K_SPACE]:
+                    self.cannonball = playing_tank.shoot()
+                self.render()
+
+            # Travel of the cannonball
+            while self.running and self.cannonball is not None:
+                self.check_running()
+                self.cannonball.tick((1.0 / constants.FPS))
+
+                if self.terrain.collidesWith(self.cannonball.position):
+                    self.cannonball = None
+
+                self.render()
+
+            while pygame.key.get_pressed()[pygame.K_SPACE]:
+                self.check_running()
+                self.render()
 
             actual_player = (actual_player + 1) % 2
-            self.terrain.draw(self.screen)
-
-            for tank in self.tanks:
-                tank.draw(self.screen)
-
-            self.hud.draw(self.screen)
-            pygame.display.flip()
-
-            self.clock.tick(constants.FPS)
+            self.render()
 
 
 def main():
