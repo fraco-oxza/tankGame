@@ -148,51 +148,57 @@ class Tank(Drawable, Collidable):
         new_x = self.position.x + 40 * math.cos(self.shoot_angle)
         new_y = self.position.y - 40 * math.sin(self.shoot_angle)
 
-
         pygame.draw.rect(
-            screen, self.color, pygame.Rect(self.position.x , self.position.y, 20, 10)
+            screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 10)
         )
         pygame.draw.rect(
-            screen, self.color, pygame.Rect(self.position.x, self.position.y+10, 50, 20)
+            screen,
+            self.color,
+            pygame.Rect(self.position.x, self.position.y + 10, 50, 20),
         )
         pygame.draw.rect(
-            screen, constants.GRAY, pygame.Rect(self.position.x, self.position.y+30, 50, 8)
+            screen,
+            constants.GRAY,
+            pygame.Rect(self.position.x, self.position.y + 30, 50, 8),
         )
 
-        #decoration IN PROCESS, IS UGLY NOW
+        # decoration IN PROCESS, IS UGLY NOW
 
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x, self.position.y+35),5)
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 10, self.position.y + 38), 5)
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 20, self.position.y + 40), 5)
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 30, self.position.y + 40), 5)
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 40, self.position.y + 38), 5)
-        pygame.draw.circle(screen, constants.BLACK, (self.position.x + 50, self.position.y + 35), 5)
-
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x, self.position.y + 35), 5
+        )
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 10, self.position.y + 38), 5
+        )
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 20, self.position.y + 40), 5
+        )
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 30, self.position.y + 40), 5
+        )
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 40, self.position.y + 38), 5
+        )
+        pygame.draw.circle(
+            screen, constants.BLACK, (self.position.x + 50, self.position.y + 35), 5
+        )
 
         # cannon
 
         pygame.draw.line(screen, self.color, self.position, (new_x, new_y), 5)
 
-        pygame.draw.circle(
-            screen, self.color,(new_x, new_y) , 4
-        )
+        pygame.draw.circle(screen, self.color, (new_x, new_y), 4)
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
-
-        #MORE PROCESS :3
-       # if (point.x + 5 >= self.position.x):
-       #     return True
-       # if (point.x - 5 <= self.position.x):
-       #     return True
-       # if (point.y + 5 >= self.position.y):
-       #    return True
-       # if (point.y - 5 <= self.position.y):
-       #    return True
-
-
-
-
-
+        # MORE PROCESS :3
+        # if (point.x + 5 >= self.position.x):
+        #     return True
+        # if (point.x - 5 <= self.position.x):
+        #     return True
+        # if (point.y + 5 >= self.position.y):
+        #    return True
+        # if (point.y - 5 <= self.position.y):
+        #    return True
 
         # Sofi jobs
         return True
@@ -368,20 +374,17 @@ class TankGame:
 
             # Travel of the cannonball
             while self.running and self.cannonball is not None:
-                    self.check_running()
-                    self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
+                self.check_running()
+                self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
 
-                    if self.terrain.collidesWith(self.cannonball.position):
-                        self.cannonball = None
+                if self.terrain.collidesWith(self.cannonball.position):
+                    self.cannonball = None
 
+                # process :3
+                # if playing_tank.collidesWith(self.cannonball.position):
+                #    self.cannonball = None
 
-                    #process :3
-                    #if playing_tank.collidesWith(self.cannonball.position):
-                    #    self.cannonball = None
-
-
-
-                    self.render()
+                self.render()
 
             while pygame.key.get_pressed()[pygame.K_SPACE]:
                 self.check_running()
