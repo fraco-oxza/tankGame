@@ -31,25 +31,42 @@ class Terrain(Drawable, Collidable):
         actualIncrease = 0
         for i in range(indiceInicial, indiceFinal):
             middle = (indiceFinal + indiceInicial) // 2
-            if i <= middle:
-                actualIncrease += randint(1, 2)
+            if(i-5<=middle & i+5>=middle):
+                actualIncrease+= 5
             else:
-                actualIncrease -= randint(1, 2)
+                if i < middle:
+                    actualIncrease += randint(2,8)
+                else:
+                    actualIncrease -= randint(2,8)
+                print(i)
             lista[i] += actualIncrease
+
         return lista
 
     def completeList(self):
-        lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
-        )
+        lista = [constants.SEA_LEVEL] * (constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+
+        # 1000
+        # 0 333 - 334 666 - 667 1000
+        divide=(constants.WINDOWS_SIZE[0]//constants.MOUNTAINS) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
-            self.mountain(lista, 2, 200)
+            aumentar=i*divide
+
+            indiceX1 = random.randint(aumentar,divide*(i+1)-1)
+            indiceX2 = random.randint(aumentar,divide*(i+1)-1)
+
+            if(indiceX2<indiceX1):
+                #indiceX2, indiceX1 = (indiceX1, indiceX2)
+                aux=indiceX1
+                indiceX1=indiceX2
+                indiceX2=aux
+
+            self.mountain(lista, indiceX1, indiceX2)
 
         return lista
-
     def __init__(self, mountains: int, valleys: int):
-        self.ground_lines = self.completeList()
+        self.ground_lines=self.completeList()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
