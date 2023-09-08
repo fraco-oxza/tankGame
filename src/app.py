@@ -32,7 +32,7 @@ class Terrain(Drawable, Collidable):
         actualIncrease = 0
         for i in range(indiceInicial, indiceFinal):
             middle = (indiceFinal + indiceInicial) // 2
-            if (i - 5 <= middle & i + 5 >= middle):
+            if i - 5 <= middle & i + 5 >= middle:
                 actualIncrease += 5
             else:
                 if i < middle:
@@ -45,11 +45,15 @@ class Terrain(Drawable, Collidable):
         return lista
 
     def completeList(self):
-        lista = [constants.SEA_LEVEL] * (constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+        lista = [constants.SEA_LEVEL] * (
+            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+        )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
-        divide = (constants.WINDOWS_SIZE[0] // constants.MOUNTAINS) // constants.TERRAIN_LINE_WIDTH
+        divide = (
+            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+        ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -57,7 +61,7 @@ class Terrain(Drawable, Collidable):
             indiceX1 = random.randint(aumentar, divide * (i + 1) - 1)
             indiceX2 = random.randint(aumentar, divide * (i + 1) - 1)
 
-            if (indiceX2 < indiceX1):
+            if indiceX2 < indiceX1:
                 # indiceX2, indiceX1 = (indiceX1, indiceX2)
                 aux = indiceX1
                 indiceX1 = indiceX2
@@ -199,14 +203,33 @@ class HUD(Drawable):
             self.tanks[1].shoot_angle = 0
         elif self.tanks[1].shoot_angle * (180 / 3.14) < 0:
             self.tanks[1].shoot_angle = 6.28319
-        self.text_angle1 = self.font.render("Ángulo: " + str(int(self.tanks[0].shoot_angle * (180 / 3.14))) + "°", True,
-                                            "white")
-        self.text_angle2 = self.font.render("Ángulo: " + str(int(self.tanks[1].shoot_angle * (180 / 3.14))) + "°", True,
-                                            "white")
-        pygame.draw.rect(screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height))
-        pygame.draw.rect(screen, "Grey", pygame.Rect(self.left, self.top, self.width, self.height), 2)
-        pygame.draw.rect(screen, "Black", pygame.Rect(self.left + 900, self.top, self.width, self.height))
-        pygame.draw.rect(screen, "Grey", pygame.Rect(self.left + 900, self.top, self.width, self.height), 2)
+        self.text_angle1 = self.font.render(
+            "Ángulo: " + str(int(self.tanks[0].shoot_angle * (180 / 3.14))) + "°",
+            True,
+            "white",
+        )
+        self.text_angle2 = self.font.render(
+            "Ángulo: " + str(int(self.tanks[1].shoot_angle * (180 / 3.14))) + "°",
+            True,
+            "white",
+        )
+        pygame.draw.rect(
+            screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
+        )
+        pygame.draw.rect(
+            screen, "Grey", pygame.Rect(self.left, self.top, self.width, self.height), 2
+        )
+        pygame.draw.rect(
+            screen,
+            "Black",
+            pygame.Rect(self.left + 900, self.top, self.width, self.height),
+        )
+        pygame.draw.rect(
+            screen,
+            "Grey",
+            pygame.Rect(self.left + 900, self.top, self.width, self.height),
+            2,
+        )
         screen.blit(self.text_angle1, (self.left + 5, self.top + 5))
         screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
 
@@ -245,7 +268,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                    ],
                 ),
             )
         )
@@ -258,7 +281,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                    ],
                 ),
             )
         )
