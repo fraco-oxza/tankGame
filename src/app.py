@@ -253,14 +253,14 @@ class HUD(Drawable):
             "white",
         )
         self.text_velocity1 = self.font.render(
-            "Velocidad: "+str(int(self.tanks[0].shoot_velocity))+" m/s",
+            "Velocidad: " + str(int(self.tanks[0].shoot_velocity)) + " m/s",
             True,
-            'white'
+            "white",
         )
         self.text_velocity2 = self.font.render(
             "Velocidad: " + str(int(self.tanks[1].shoot_velocity)) + " m/s",
             True,
-            'white'
+            "white",
         )
         pygame.draw.rect(
             screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
@@ -282,12 +282,12 @@ class HUD(Drawable):
         pygame.draw.rect(
             screen,
             "Black",
-            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
         )
         pygame.draw.rect(
             screen,
             "Grey",
-            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
             2,
         )
         pygame.draw.rect(
