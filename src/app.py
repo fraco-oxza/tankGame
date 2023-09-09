@@ -94,14 +94,14 @@ class Terrain(Drawable, Collidable):
         pygame.draw.polygon(screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]])
         pos = pygame.mouse.get_pos()
         print(pos)
-        pygame.draw.line(screen, constants.Green, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
-        pygame.draw.polygon(screen, constants.Green, [[159, 89], [23, 485], [260, 485]])
-        pygame.draw.line(screen, constants.Green, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
-        pygame.draw.polygon(screen, constants.Green, [[542, 114], [328, 485], [783, 485]])
-        pygame.draw.line(screen, constants.Green, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
+        pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
+        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
+        pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
+        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
+        pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
                          50)
-        pygame.draw.polygon(screen, constants.Green, [[1280, 145], [861, 485], [1280, 486]])
-        pygame.draw.line(screen, constants.Green, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
+        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
+        pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
                          50)
     """
     def draw(self, screen: pygame.surface.Surface) -> None:
