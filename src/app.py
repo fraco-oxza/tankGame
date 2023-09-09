@@ -230,6 +230,8 @@ class HUD(Drawable):
         self.font = pygame.font.SysFont("Arial", 30)
         self.text_angle1 = None
         self.text_angle2 = None
+        self.text_velocity1 = None
+        self.text_velocity2 = None
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         if self.tanks[0].shoot_angle * (180 / 3.14) > 360:
@@ -250,6 +252,16 @@ class HUD(Drawable):
             True,
             "white",
         )
+        self.text_velocity1 = self.font.render(
+            "Velocidad: "+str(int(self.tanks[0].shoot_velocity))+" m/s",
+            True,
+            'white'
+        )
+        self.text_velocity2 = self.font.render(
+            "Velocidad: " + str(int(self.tanks[1].shoot_velocity)) + " m/s",
+            True,
+            'white'
+        )
         pygame.draw.rect(
             screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
         )
@@ -267,8 +279,33 @@ class HUD(Drawable):
             pygame.Rect(self.left + 900, self.top, self.width, self.height),
             2,
         )
+        pygame.draw.rect(
+            screen,
+            "Black",
+            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+        )
+        pygame.draw.rect(
+            screen,
+            "Grey",
+            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+            2,
+        )
+        pygame.draw.rect(
+            screen,
+            "Black",
+            pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
+        )
+        pygame.draw.rect(
+            screen,
+            "Grey",
+            pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
+            2,
+        )
+        print(self.tanks[0].shoot_velocity)
         screen.blit(self.text_angle1, (self.left + 5, self.top + 5))
         screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
+        screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
+        screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
