@@ -92,8 +92,6 @@ class Terrain(Drawable, Collidable):
         pygame.draw.polygon(screen, constants.DarkGreen, [[979, 189], [966, 207], [992, 207]])
         pygame.draw.polygon(screen, constants.DarkGreen, [[1005, 189], [992, 207], [1015, 207]])
         pygame.draw.polygon(screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]])
-        pos = pygame.mouse.get_pos()
-        print(pos)
         pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
         pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
         pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
