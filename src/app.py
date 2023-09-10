@@ -7,6 +7,7 @@ import random
 from typing import Optional
 
 import pygame
+from pygame.rect import Rect
 
 import constants
 
@@ -24,6 +25,15 @@ class Drawable:
 
 
 class Background(Drawable):
+
+
+
+    def sky(self,screen: pygame.surface.Surface) :
+
+        sky = pygame.image.load("sky.png")
+        sky_rect = sky.get_rect()
+        sky = pygame.transform.scale(sky, constants.WINDOWS_SIZE)
+        return sky_rect, sky
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.line(
             screen,
@@ -285,11 +295,9 @@ class Tank(Drawable, Collidable):
         pygame.draw.circle(screen, self.color, (new_x, new_y), 4)
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
-         fin = False
          if ( ((point.x - self.position.x)**2 + (point.y - self.position.y )**2)**(1/2) <= constants.TANK_RADIO):
-             print(((point.x - self.position.x )**2 + (point.y - self.position.y))**(1/2))
-             fin= True
-         return fin
+            return True
+         return False
 
     def shoot(self) -> Cannonball:
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
@@ -470,7 +478,7 @@ class TankGame:
         while to make the game run at the fps, specified in the FPS constant
         :return:
         """
-        self.screen.fill(constants.SKY_COLOR)
+        #self.screen.fill(constants.SKY_COLOR)
         self.background.draw(self.screen)
         self.terrain.draw(self.screen)
 
@@ -493,7 +501,9 @@ class TankGame:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-
+        clouds = self.background.sky(self.screen)
+        screen_rect, sky = clouds
+        self.screen.blit(sky, screen_rect.topleft)
     def process_input(self) -> None:
         """
         This method is responsible for reading from the keyboard what the user wants to do, modifying the attributes of
@@ -504,7 +514,7 @@ class TankGame:
 
         keysPressed = pygame.key.get_pressed()
         if keysPressed[pygame.K_DOWN]:
-            playing_tank.shoot_angle += math.radians(0.1)
+            playing_tank.shoot_angle += math.radians(0.5)
         if keysPressed[pygame.K_UP]:
             playing_tank.shoot_angle -= math.radians(0.5)
         if keysPressed[pygame.K_RIGHT]:
