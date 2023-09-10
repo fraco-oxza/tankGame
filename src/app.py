@@ -1,7 +1,7 @@
-from abc import abstractmethod
-from random import randint
 import math
 import random
+from abc import abstractmethod
+from random import randint
 from typing import Optional
 
 import pygame
@@ -21,8 +21,7 @@ class Drawable:
         raise NotImplementedError
 
 
-
-class Backround(Drawable):
+class Background(Drawable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.line(
             screen,
@@ -80,15 +79,6 @@ class Backround(Drawable):
             screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]]
         )
         pygame.draw.rect(screen, constants.Menu, pygame.Rect(0, 485, 1280, 720))
-        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
-        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
-        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
-        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
-        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
-        #                50)
-        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
-        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
-        #                50)
 
 
 class Terrain(Drawable, Collidable):
@@ -112,14 +102,14 @@ class Terrain(Drawable, Collidable):
 
     def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
         divide = (
-            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-        ) // constants.TERRAIN_LINE_WIDTH
+                         constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+                 ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -160,7 +150,7 @@ class Terrain(Drawable, Collidable):
 
     def completeList(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         arrayFinal = []
         for i in range(0, len(lista)):
@@ -186,7 +176,6 @@ class Terrain(Drawable, Collidable):
                     self.ground_lines[i],
                 ),
             )
-
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
@@ -214,7 +203,6 @@ class Cannonball(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ffaa00", self.position, 6)
-
 
 
 class Player:
@@ -297,8 +285,7 @@ class Tank(Drawable, Collidable):
         #    return True
 
         # Sofi jobs
-        return True
-
+        return False
 
     def shoot(self) -> Cannonball:
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
@@ -395,30 +382,47 @@ class HUD(Drawable):
             pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
             2,
         )
-        print(self.tanks[0].shoot_velocity)
+
         screen.blit(self.text_angle1, (self.left + 5, self.top + 5))
         screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
         screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
 
-
 class TankGame:
+    """
+    This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
+    input, drawing, among others. It can be said that it is the central class of the project.
+    """
     terrain: Terrain
     tanks: list[Tank]
     screen: pygame.Surface
     cannonball: Optional[Cannonball]
+    running: bool
+    actual_player: int
+    winner: Optional[int]
 
     def __init__(self) -> None:
-        self.running = True
-        self.backround = Backround()
+        """
+        constructor that initializes each element within the game, in addition to starting the window itself of the game
+        """
+        pygame.init()
+
+        pygame.display.set_caption("TankGame!")
+        icon = pygame.image.load("tankIcon.png")
+        pygame.display.set_icon(icon)
+
+        self.background = Background()
         self.terrain = Terrain(constants.MOUNTAINS, constants.VALLEYS)
 
-        pygame.init()
+        self.winner = None
+        self.running = True
         self.screen = pygame.display.set_mode(constants.WINDOWS_SIZE)
         self.clock = pygame.time.Clock()
+
         self.cannonball = None
         self.tanks = []
+        self.actual_player = randint(0, 1)
 
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
 
@@ -435,7 +439,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ],
+                        ],
                 ),
             )
         )
@@ -448,7 +452,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ],
+                        ],
                 ),
             )
         )
@@ -456,8 +460,13 @@ class TankGame:
         self.hud = HUD(self.tanks)
 
     def render(self) -> None:
+        """
+        This method is responsible for drawing each element of the window, it also puts the execution to sleep for a
+        while to make the game run at the fps, specified in the FPS constant
+        :return: 
+        """
         self.screen.fill(constants.SKY_COLOR)
-        self.backround.draw(self.screen)
+        self.background.draw(self.screen)
         self.terrain.draw(self.screen)
 
         for tank in self.tanks:
@@ -471,63 +480,92 @@ class TankGame:
         self.clock.tick(constants.FPS)
 
     def check_running(self):
+        """
+        This method checks if the player has sent the signal to close the window and stops the execution if this is the
+        case, it is also responsible for cleaning any position that has been left unused.
+        :return:
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
 
+    def process_input(self) -> None:
+        """
+        This method is responsible for reading from the keyboard what the user wants to do, modifying the attributes of
+        the tanks or creating the cannonball.
+        :return: 
+        """
+        playing_tank = self.tanks[self.actual_player]
+
+        keysPressed = pygame.key.get_pressed()
+        if keysPressed[pygame.K_DOWN]:
+            playing_tank.shoot_angle += math.radians(0.1)
+        if keysPressed[pygame.K_UP]:
+            playing_tank.shoot_angle -= math.radians(0.5)
+        if keysPressed[pygame.K_RIGHT]:
+            playing_tank.shoot_velocity += 0.5
+        if keysPressed[pygame.K_LEFT]:
+            playing_tank.shoot_velocity -= 0.5
+            if playing_tank.shoot_velocity < 1:
+                playing_tank.shoot_velocity = 1
+        if keysPressed[pygame.K_SPACE]:
+            self.cannonball = playing_tank.shoot()
+
+    def process_cannonball_trajectory(self) -> None:
+        """
+        This method is responsible for moving the cannonball and seeing what happens, in case there is a terminal event,
+        it stops the execution
+        :return:
+        """
+        self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
+
+        if self.terrain.collidesWith(self.cannonball.position):
+            self.cannonball = None
+            return
+
+        for tank in self.tanks:
+            if tank.collidesWith(self.cannonball.position):
+                self.running = False
+                self.winner = (self.actual_player + 1) % 2
+                return
+
+    def wait_release_space(self) -> None:
+        """
+        This method waits until the actual player releases the space key, because if we do not wait until the release,
+        the player could shoot a very short trajectory, and they accidentally shoot as the other player.
+        :return: None
+        """
+        while pygame.key.get_pressed()[pygame.K_SPACE]:
+            self.check_running()
+            self.render()
+
     def start(self) -> None:
-        actual_player = randint(0, 1)
-        pygame.display.set_caption("TankGame!")
-        icon = pygame.image.load("tankIcon.png")
-        pygame.display.set_icon(icon)
         while self.running:
             self.check_running()
-
-            playing_tank = self.tanks[actual_player]
 
             # Select the angle
             while self.running and self.cannonball is None:
                 self.check_running()
-                keysPressed = pygame.key.get_pressed()
-                if keysPressed[pygame.K_DOWN]:
-                    playing_tank.shoot_angle += math.radians(1)
-                if keysPressed[pygame.K_UP]:
-                    playing_tank.shoot_angle -= math.radians(1)
-                if keysPressed[pygame.K_RIGHT]:
-                    playing_tank.shoot_velocity += 1
-                if keysPressed[pygame.K_LEFT]:
-                    playing_tank.shoot_velocity -= 1
-                    if playing_tank.shoot_velocity < 1:
-                        playing_tank.shoot_velocity = 1
-                if keysPressed[pygame.K_SPACE]:
-                    self.cannonball = playing_tank.shoot()
+                self.process_input()
                 self.render()
 
             # Travel of the cannonball
             while self.running and self.cannonball is not None:
                 self.check_running()
-                self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
-
-                if self.terrain.collidesWith(self.cannonball.position):
-                    self.cannonball = None
-
-                # process :3
-                # if playing_tank.collidesWith(self.cannonball.position):
-                #    self.cannonball = None
-
+                self.process_cannonball_trajectory()
                 self.render()
 
-            while pygame.key.get_pressed()[pygame.K_SPACE]:
-                self.check_running()
-                self.render()
-
-            actual_player = (actual_player + 1) % 2
+            self.wait_release_space()
+            self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
+
+        if self.winner is not None:
+            print("Ha ganado el jugador ", self.winner)
 
 
 def main():
-    a = TankGame()
-    a.start()
+    tank_game = TankGame()
+    tank_game.start()
 
 
 if __name__ == "__main__":
