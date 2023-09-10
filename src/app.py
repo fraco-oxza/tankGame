@@ -73,7 +73,12 @@ class Terrain(Drawable, Collidable):
             lista.append(constants.SEA_LEVEL+160)
         return lista
 
-
+    def increaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
+        for i in range(indexInicio,indexFinal):
+            h=lista[i-1]
+            h = h + 1
+            lista.append(h)
+        return lista
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = self.completeList()
 
