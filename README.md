@@ -17,8 +17,8 @@ Using pipenv:
 git clone https://github.com/fraco-oxza/tankGame
 cd tankGame
 # Create virtual env and install deps
-pipenv shell
 pipenv install
+pipenv shell
 ```
 
 Using pip:
