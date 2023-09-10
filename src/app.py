@@ -109,9 +109,7 @@ class Terrain(Drawable, Collidable):
             h=lista[i-1]
             h = h + 3
             lista[i]=h
-            print(h,"h")
         for i in range(indexInicio,len(lista)):
-            print("---",lista[i])
         return lista
 
     def decreaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
