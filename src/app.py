@@ -29,7 +29,7 @@ class Terrain(Drawable, Collidable):
     ground_lines: list[int]
     def fondo(self):
         j=0
-    def mountain(self, lista: list[int], indiceInicial: int, indiceFinal: int):
+    def mountainRandom(self, lista: list[int], indiceInicial: int, indiceFinal: int):
         actualIncrease = 0
         for i in range(indiceInicial, indiceFinal):
             middle = (indiceFinal + indiceInicial) // 2
@@ -42,7 +42,7 @@ class Terrain(Drawable, Collidable):
 
         return lista
 
-    def completeList(self):
+    def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
             constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
@@ -68,6 +68,11 @@ class Terrain(Drawable, Collidable):
             self.mountain(lista, indiceX1, indiceX2)
 
         return lista
+    def Rect(self,lista: list,indexInicio:int, indexFinal:int):
+        for i in range(indexInicio,indexFinal):
+            lista.append(constants.SEA_LEVEL+160)
+        return lista
+
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = self.completeList()
@@ -92,15 +97,15 @@ class Terrain(Drawable, Collidable):
         pygame.draw.polygon(screen, constants.DarkGreen, [[979, 189], [966, 207], [992, 207]])
         pygame.draw.polygon(screen, constants.DarkGreen, [[1005, 189], [992, 207], [1015, 207]])
         pygame.draw.polygon(screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]])
-        pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
-        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
-        pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
-        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
-        pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
-                         50)
-        pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
-        pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
-                         50)
+        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
+        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
+        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
+        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
+        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
+         #                50)
+        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
+        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
+         #                50)
     """
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
