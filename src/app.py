@@ -27,8 +27,10 @@ class Drawable:
 
 class Terrain(Drawable, Collidable):
     ground_lines: list[int]
+
     def fondo(self):
-        j=0
+        j = 0
+
     def mountainRandom(self, lista: list[int], indiceInicial: int, indiceFinal: int):
         actualIncrease = 0
         for i in range(indiceInicial, indiceFinal):
@@ -68,56 +70,97 @@ class Terrain(Drawable, Collidable):
             self.mountain(lista, indiceX1, indiceX2)
 
         return lista
-    def Rect(self,lista: list,indexInicio:int, indexFinal:int):
-        for i in range(indexInicio,indexFinal):
-            lista.append(constants.SEA_LEVEL+160)
+
+    def Rect(self, lista: list, indexInicio: int, indexFinal: int):
+        for i in range(indexInicio, indexFinal):
+            lista.append(constants.SEA_LEVEL + 160)
         return lista
 
-    def increaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
-        for i in range(indexInicio,indexFinal):
-            h=lista[i-1]
+    def increaseMountain(self, lista: list, indexInicio: int, indexFinal: int):
+        for i in range(indexInicio, indexFinal):
+            h = lista[i - 1]
             h = h + 1
             lista.append(h)
         return lista
 
-    def decreaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
-        for i in range(indexInicio,indexFinal):
-            h=lista[i-1]
-            h=h-1
+    def decreaseMountain(self, lista: list, indexInicio: int, indexFinal: int):
+        for i in range(indexInicio, indexFinal):
+            h = lista[i - 1]
+            h = h - 1
             lista.append(h)
         return lista
+
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = self.completeList()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pygame.draw.rect(screen,constants.Menu,pygame.Rect(0, 485, 1280, 720))
+        pygame.draw.rect(screen, constants.Menu, pygame.Rect(0, 485, 1280, 720))
 
-        pygame.draw.line(screen,constants.DarkGreen, (0,constants.SEA_LEVEL+140),(50,constants.SEA_LEVEL+140),40)
-        pygame.draw.polygon(screen,constants.DarkGreen,[[350, 220],[ 20, 435], [680, 435]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[750, 220], [600, 400], [900, 400]])
-        pygame.draw.polygon(screen,constants.DarkGreen,[[1000, 120],[1280, 435], [680, 435]])
-        pygame.draw.polygon(screen, constants.White, [[265, 279], [349,221], [436, 279]])
-        pygame.draw.polygon(screen, constants.White, [[750, 220], [699, 284], [801, 284]])
-        pygame.draw.polygon(screen, constants.White, [[1000, 120], [915, 206], [1075, 206]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[318, 265], [296, 282], [333, 282]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[348, 265], [333, 282], [370, 282]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[385, 265], [370, 282], [400, 282]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[727, 268], [717, 285], [734, 285]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[747, 268], [734, 285], [755, 285]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[765, 268], [755, 285], [775, 285]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[953, 189], [937,207], [966, 207]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[979, 189], [966, 207], [992, 207]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[1005, 189], [992, 207], [1015, 207]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]])
-        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
-        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
-        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
-        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
-        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
-         #                50)
-        #pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
-        #pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
-         #                50)
+        pygame.draw.line(
+            screen,
+            constants.DarkGreen,
+            (0, constants.SEA_LEVEL + 140),
+            (50, constants.SEA_LEVEL + 140),
+            40,
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[350, 220], [20, 435], [680, 435]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[750, 220], [600, 400], [900, 400]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[1000, 120], [1280, 435], [680, 435]]
+        )
+        pygame.draw.polygon(
+            screen, constants.White, [[265, 279], [349, 221], [436, 279]]
+        )
+        pygame.draw.polygon(
+            screen, constants.White, [[750, 220], [699, 284], [801, 284]]
+        )
+        pygame.draw.polygon(
+            screen, constants.White, [[1000, 120], [915, 206], [1075, 206]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[318, 265], [296, 282], [333, 282]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[348, 265], [333, 282], [370, 282]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[385, 265], [370, 282], [400, 282]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[727, 268], [717, 285], [734, 285]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[747, 268], [734, 285], [755, 285]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[765, 268], [755, 285], [775, 285]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[953, 189], [937, 207], [966, 207]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[979, 189], [966, 207], [992, 207]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[1005, 189], [992, 207], [1015, 207]]
+        )
+        pygame.draw.polygon(
+            screen, constants.DarkGreen, [[1029, 189], [1015, 207], [1040, 207]]
+        )
+        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (0, constants.SEA_LEVEL + 160), (50, constants.SEA_LEVEL + 160),50)
+        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[159, 89], [23, 485], [260, 485]])
+        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (248, constants.SEA_LEVEL + 160), (361, constants.SEA_LEVEL + 160), 50)
+        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[542, 114], [328, 485], [783, 485]])
+        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (679, constants.SEA_LEVEL + 160), (925, constants.SEA_LEVEL + 160),
+        #                50)
+        # pygame.draw.polygon(screen, constants.TERRAIN_COLOR, [[1280, 145], [861, 485], [1280, 486]])
+        # pygame.draw.line(screen, constants.TERRAIN_COLOR, (1246, constants.SEA_LEVEL + 160), (1279, constants.SEA_LEVEL + 160),
+        #                50)
+
     """
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
@@ -132,6 +175,7 @@ class Terrain(Drawable, Collidable):
                 ),
             )
     """
+
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
 
@@ -298,14 +342,14 @@ class HUD(Drawable):
             "white",
         )
         self.text_velocity1 = self.font.render(
-            "Velocidad: "+str(int(self.tanks[0].shoot_velocity))+" m/s",
+            "Velocidad: " + str(int(self.tanks[0].shoot_velocity)) + " m/s",
             True,
-            'white'
+            "white",
         )
         self.text_velocity2 = self.font.render(
             "Velocidad: " + str(int(self.tanks[1].shoot_velocity)) + " m/s",
             True,
-            'white'
+            "white",
         )
         pygame.draw.rect(
             screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
@@ -327,12 +371,12 @@ class HUD(Drawable):
         pygame.draw.rect(
             screen,
             "Black",
-            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
         )
         pygame.draw.rect(
             screen,
             "Grey",
-            pygame.Rect(self.left + 200, self.top, self.width+60, self.height),
+            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
             2,
         )
         pygame.draw.rect(
