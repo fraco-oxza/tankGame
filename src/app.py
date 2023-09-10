@@ -66,7 +66,6 @@ class Terrain(Drawable, Collidable):
                 actualIncrease += randint(2, 8)
             else:
                 actualIncrease -= randint(2, 8)
-                print(i)
             lista[i] += actualIncrease
 
         return lista
@@ -94,7 +93,7 @@ class Terrain(Drawable, Collidable):
                 indiceX1 = indiceX2
                 indiceX2 = aux
 
-            self.mountain(lista, indiceX1, indiceX2)
+            self.mountainRandom(lista, indiceX1, indiceX2)
 
         return lista
     def Rect(self,lista: list,indexInicio:int, indexFinal:int):
@@ -103,8 +102,6 @@ class Terrain(Drawable, Collidable):
         return lista
 
     def increaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
-        print(indexInicio)
-        print(indexFinal)
         for i in range(indexInicio,indexFinal):
             h=lista[i-1]
             h = h + 3
@@ -129,7 +126,7 @@ class Terrain(Drawable, Collidable):
                 lista = self.decreaseMountain(lista, arrayFinal[j],arrayFinal[j]+80 )
         return lista
     def __init__(self, mountains: int, valleys: int):
-        self.ground_lines = self.completeList()
+        self.ground_lines = self.completeListRandom()
 
 
 
@@ -206,7 +203,6 @@ class Tank(Drawable, Collidable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         new_x = self.position.x + 40 * math.cos(self.shoot_angle)
         new_y = self.position.y - 40 * math.sin(self.shoot_angle)
-
         pygame.draw.rect(
             screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 10)
         )
@@ -241,26 +237,21 @@ class Tank(Drawable, Collidable):
         pygame.draw.circle(
             screen, constants.BLACK, (self.position.x + 50, self.position.y + 35), 5
         )
-
         # cannon
 
         pygame.draw.line(screen, self.color, self.position, (new_x, new_y), 5)
 
         pygame.draw.circle(screen, self.color, (new_x, new_y), 4)
 
-    def collidesWith(self, point: pygame.Vector2) -> bool:
-        # MORE PROCESS :3
-        # if (point.x + 5 >= self.position.x):
-        #     return True
-        # if (point.x - 5 <= self.position.x):
-        #     return True
-        # if (point.y + 5 >= self.position.y):
-        #    return True
-        # if (point.y - 5 <= self.position.y):
-        #    return True
+       # pygame.draw.circle(
+        #    screen, constants.YELLOW, (self.position.x, self.position.y), constants.TANK_RADIO )
 
-        # Sofi jobs
-        return True
+    def collidesWith(self, point: pygame.Vector2) -> bool:
+         fin = False
+         if ( ((point.x - self.position.x)**2 + (point.y - self.position.y )**2)**(1/2) <= constants.TANK_RADIO):
+             print(((point.x - self.position.x )**2 + (point.y - self.position.y))**(1/2))
+             fin= True
+         return fin
 
     def erase(self, screen: pygame.surface.Surface) -> None:
         pass
@@ -360,7 +351,6 @@ class HUD(Drawable):
             pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
             2,
         )
-        print(self.tanks[0].shoot_velocity)
         screen.blit(self.text_angle1, (self.left + 5, self.top + 5))
         screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
         screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
@@ -423,7 +413,6 @@ class TankGame:
         self.hud = HUD(self.tanks)
 
     def render(self) -> None:
-        self.screen.fill(constants.SKY_COLOR)
         self.backround.draw(self.screen)
         self.terrain.draw(self.screen)
 
@@ -444,14 +433,21 @@ class TankGame:
 
     def start(self) -> None:
         actual_player = randint(0, 1)
+        background = pygame.image.load("sky.png")
+        background_rect = background.get_rect()
+        background = pygame.transform.scale(background, constants.WINDOWS_SIZE)
         pygame.display.set_caption("TankGame!")
         icon = pygame.image.load("tankIcon.png")
         pygame.display.set_icon(icon)
         while self.running:
             self.check_running()
-
+            self.screen.fill((0,0,0))
+            self.screen.blit(background, background_rect)
             playing_tank = self.tanks[actual_player]
-
+            if (actual_player == 0):
+                other_tank = 1
+            else:
+                other_tank = 0
             # Select the angle
             while self.running and self.cannonball is None:
                 self.check_running()
@@ -474,13 +470,13 @@ class TankGame:
             while self.running and self.cannonball is not None:
                 self.check_running()
                 self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
-
                 if self.terrain.collidesWith(self.cannonball.position):
                     self.cannonball = None
+                if (self.cannonball is not  None):
+                        if self.tanks[other_tank].collidesWith(self.cannonball.position):
 
-                # process :3
-                # if playing_tank.collidesWith(self.cannonball.position):
-                #    self.cannonball = None
+                            print("LE PEGOOO")
+                            self.cannonball = None
 
                 self.render()
 
