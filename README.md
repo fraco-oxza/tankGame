@@ -28,7 +28,7 @@ Using pip:
 git clone https://github.com/fraco-oxza/tankGame
 cd tankGame
 # install deps
-python3 -m pip install pygame
+python3 -m pip install -r requirements.txt
 ```
 
 ### Windows
