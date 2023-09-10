@@ -1,4 +1,6 @@
-# tankGame
+# Tank Game
+
+![Game Icon](src/tankIcon.png)
 
 Tank game is our programming project for the University of Talca, it is a simple
 2D game that allows you to simulate the trajectory of shots and impacts.
@@ -36,6 +38,9 @@ python3 -m pip install -r requirements.txt
 TODO
 
 ## Running
+
+To run the game you only need to enter the src folder and run the app.py file
+with python
 
 ```bash
 cd src/
