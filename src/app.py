@@ -25,16 +25,18 @@ class Drawable:
 
 
 class Background(Drawable):
-
-
-
-    def sky(self,screen: pygame.surface.Surface) :
-
-        sky = pygame.image.load("sky.png")
+    @staticmethod
+    def sky():
+        sky = pygame.image.load("sky.jpg")
         sky_rect = sky.get_rect()
         sky = pygame.transform.scale(sky, constants.WINDOWS_SIZE)
+
         return sky_rect, sky
+
     def draw(self, screen: pygame.surface.Surface) -> None:
+        screen_rect, sky = Background.sky()
+        screen.blit(sky, screen_rect.topleft)
+
         pygame.draw.line(
             screen,
             constants.DarkGreen,
@@ -123,14 +125,14 @@ class Terrain(Drawable, Collidable):
 
     def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
         divide = (
-            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-        ) // constants.TERRAIN_LINE_WIDTH
+                         constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+                 ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -153,9 +155,9 @@ class Terrain(Drawable, Collidable):
             lista.append(constants.SEA_LEVEL + 160)
         return lista
 
-    def increaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
-        for i in range(indexInicio,indexFinal):
-            h=lista[i-1]
+    def increaseMountain(self, lista: list, indexInicio: int, indexFinal: int):
+        for i in range(indexInicio, indexFinal):
+            h = lista[i - 1]
             h = h + 3
             lista[i] = h
         return lista
@@ -169,7 +171,7 @@ class Terrain(Drawable, Collidable):
 
     def completeList(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         arrayFinal = []
         for i in range(0, len(lista)):
@@ -195,7 +197,6 @@ class Terrain(Drawable, Collidable):
                     self.ground_lines[i],
                 ),
             )
-
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
@@ -223,7 +224,6 @@ class Cannonball(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ffaa00", self.position, 6)
-
 
 
 class Player:
@@ -254,50 +254,35 @@ class Tank(Drawable, Collidable):
         new_y = self.position.y - 40 * math.sin(self.shoot_angle)
 
         pygame.draw.rect(
-            screen, self.color, pygame.Rect(self.position.x, self.position.y, 20, 10)
+            screen, self.color, pygame.Rect(self.position.x - 10, self.position.y - 4, 20, 14)
         )
         pygame.draw.rect(
             screen,
             self.color,
-            pygame.Rect(self.position.x, self.position.y + 10, 50, 20),
+            pygame.Rect(self.position.x - 25, self.position.y + 10, 50, 20),
         )
         pygame.draw.rect(
             screen,
             constants.GRAY,
-            pygame.Rect(self.position.x, self.position.y + 30, 50, 8),
+            pygame.Rect(self.position.x - 25, self.position.y + 30, 50, 8),
         )
 
         # decoration IN PROCESS, IS UGLY NOW
 
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x, self.position.y + 35), 5
-        )
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 10, self.position.y + 38), 5
-        )
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 20, self.position.y + 40), 5
-        )
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 30, self.position.y + 40), 5
-        )
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 40, self.position.y + 38), 5
-        )
-        pygame.draw.circle(
-            screen, constants.BLACK, (self.position.x + 50, self.position.y + 35), 5
-        )
+        for i in range(6):
+            pygame.draw.circle(
+                screen, constants.BLACK, (self.position.x - 25 + 10 * i, self.position.y + 35), 5
+            )
 
         # cannon
 
         pygame.draw.line(screen, self.color, self.position, (new_x, new_y), 5)
-
         pygame.draw.circle(screen, self.color, (new_x, new_y), 4)
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
-         if ( ((point.x - self.position.x)**2 + (point.y - self.position.y )**2)**(1/2) <= constants.TANK_RADIO):
+        if (((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (1 / 2) <= constants.TANK_RADIO):
             return True
-         return False
+        return False
 
     def shoot(self) -> Cannonball:
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
@@ -401,7 +386,6 @@ class HUD(Drawable):
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
 
-
 class TankGame:
     """
     This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
@@ -452,7 +436,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                        ] - 40,
                 ),
             )
         )
@@ -465,7 +449,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ],
+                        ] - 40,
                 ),
             )
         )
@@ -478,7 +462,6 @@ class TankGame:
         while to make the game run at the fps, specified in the FPS constant
         :return:
         """
-        #self.screen.fill(constants.SKY_COLOR)
         self.background.draw(self.screen)
         self.terrain.draw(self.screen)
 
@@ -501,9 +484,7 @@ class TankGame:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-        clouds = self.background.sky(self.screen)
-        screen_rect, sky = clouds
-        self.screen.blit(sky, screen_rect.topleft)
+
     def process_input(self) -> None:
         """
         This method is responsible for reading from the keyboard what the user wants to do, modifying the attributes of
