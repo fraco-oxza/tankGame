@@ -504,10 +504,6 @@ class TankGame:
             self.screen.fill((0,0,0))
             self.screen.blit(background, background_rect)
             playing_tank = self.tanks[actual_player]
-            if (actual_player == 0):
-                other_tank = 1
-            else:
-                other_tank = 0
             # Select the angle
             while self.running and self.cannonball is None:
                 self.check_running()
@@ -532,7 +528,10 @@ class TankGame:
         :return:
         """
         playing_tank = self.tanks[self.actual_player]
-
+        if self.actual_player == 0:
+            other_tank = 1
+        else:
+            other_tank = 0
         keysPressed = pygame.key.get_pressed()
         if keysPressed[pygame.K_DOWN]:
             playing_tank.shoot_angle += math.radians(0.1)
@@ -555,6 +554,9 @@ class TankGame:
                     self.cannonball = None
                 if (self.cannonball is not  None):
                         if self.tanks[other_tank].collidesWith(self.cannonball.position):
+                            print("LE PEGOOO")
+                            self.cannonball = None
+
     def process_cannonball_trajectory(self) -> None:
         """
         This method is responsible for moving the cannonball and seeing what happens, in case there is a terminal event,
@@ -567,8 +569,7 @@ class TankGame:
             self.cannonball = None
             return
 
-                            print("LE PEGOOO")
-                            self.cannonball = None
+
         for tank in self.tanks:
             if tank.collidesWith(self.cannonball.position):
                 self.running = False
