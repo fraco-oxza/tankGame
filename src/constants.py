@@ -12,6 +12,7 @@ GRAY = (94, 94, 110)
 YELLOW = (238, 205, 43)
 PIXEL_SIZE = 1.0  # meters
 X_SPEED = 8.0
+TANK_RADIO = 40
 DarkGreen="#1C542D"
 White="#FFFFFF"
 Menu="#77DD77"
