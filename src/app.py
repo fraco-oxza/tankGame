@@ -12,17 +12,14 @@ import constants
 class Collidable:
     @abstractmethod
     def collidesWith(self, point: pygame.Vector2) -> bool:
-        pass
+        raise NotImplementedError
 
 
 class Drawable:
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
-    def erase(self, screen: pygame.surface.Surface) -> None:
-        pass
 
 
 class Backround(Drawable):
@@ -190,8 +187,6 @@ class Terrain(Drawable, Collidable):
                 ),
             )
 
-    def erase(self, screen: pygame.surface.Surface) -> None:
-        pass
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
@@ -220,8 +215,6 @@ class Cannonball(Drawable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ffaa00", self.position, 6)
 
-    def erase(self, screen: pygame.surface.Surface) -> None:
-        pass
 
 
 class Player:
@@ -306,8 +299,6 @@ class Tank(Drawable, Collidable):
         # Sofi jobs
         return True
 
-    def erase(self, screen: pygame.surface.Surface) -> None:
-        pass
 
     def shoot(self) -> Cannonball:
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
@@ -410,8 +401,6 @@ class HUD(Drawable):
         screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
-    def erase(self, screen: pygame.surface.Surface) -> None:
-        pass
 
 
 class TankGame:
@@ -429,7 +418,7 @@ class TankGame:
         self.screen = pygame.display.set_mode(constants.WINDOWS_SIZE)
         self.clock = pygame.time.Clock()
         self.cannonball = None
-        self.tanks = list()
+        self.tanks = []
 
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
 
@@ -474,7 +463,7 @@ class TankGame:
         for tank in self.tanks:
             tank.draw(self.screen)
 
-        if self.cannonball != None:
+        if self.cannonball is not None:
             self.cannonball.draw(self.screen)
 
         self.hud.draw(self.screen)
