@@ -1,0 +1,64 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+' Fco
+class TankGame {
+    + terrain: Terrain
+    + tanks: list[Tank]
+    + cannonBall: Optional[Cannonball]
+    + screen: pygame.Surface
+    + running: bool
+    + actual_player: int
+    + winner: Optional[int
+
+    + TankGame():
+    + render(): None
+    + check_running(): bool
+    + process_input(): None
+    + process_cannonball_trajectory(): None
+    + wait_release_space(): None
+    + start(): None
+}
+
+class Cannonball extends Drawable {
+    - position: Point
+    - velocity: Velocity
+}
+
+interface Drawable {
+    + draw(Surface)
+}
+
+class Terrain extends Drawable {
+    + Terrain(List<Point>):
+    + isInside(Point): Boolean
+}
+
+class Tank extends Drawable {
+    - player: Player
+    - color: Color
+    - position: Position
+
+    + isInside(Point): Boolean
+}
+
+class Player {
+    - points: double
+}
+
+class Constants {
+    + GRAVITY: double
+    + TANK_HIT_BOX_SIZE: double
+    + TERRAIN_COLOR: Color
+}
+
+TankGame -- Constants
+
+TankGame *--> Tank
+TankGame o--> Cannonball
+TankGame *--> Terrain
+Tank *--> Player
+
+@enduml
