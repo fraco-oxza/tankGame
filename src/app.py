@@ -29,7 +29,7 @@ class Backround(Drawable):
         pygame.draw.line(screen, constants.DarkGreen, (0, constants.SEA_LEVEL + 140), (50, constants.SEA_LEVEL + 140),
                          40)
         pygame.draw.polygon(screen, constants.DarkGreen, [[350, 220], [20, 435], [680, 435]])
-        pygame.draw.polygon(screen, constants.DarkGreen, [[750, 220], [600, 400], [900, 400]])
+        pygame.draw.polygon(screen, constants.DarkGreen, [[750, 220], [600, 430], [900, 430]])
         pygame.draw.polygon(screen, constants.DarkGreen, [[1000, 120], [1280, 435], [680, 435]])
         pygame.draw.polygon(screen, constants.White, [[265, 279], [349, 221], [436, 279]])
         pygame.draw.polygon(screen, constants.White, [[750, 220], [699, 284], [801, 284]])
@@ -103,25 +103,33 @@ class Terrain(Drawable, Collidable):
         return lista
 
     def increaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
+        print(indexInicio)
+        print(indexFinal)
         for i in range(indexInicio,indexFinal):
             h=lista[i-1]
-            h = h + 1
-            lista.append(h)
+            h = h + 3
+            lista[i]=h
+            print(h,"h")
+        for i in range(indexInicio,len(lista)):
+            print("---",lista[i])
         return lista
 
     def decreaseMountain(self,lista:list,indexInicio:int, indexFinal:int):
         for i in range(indexInicio,indexFinal):
             h=lista[i-1]
-            h=h-1
-            lista.append(h)
+            h=h-3
+            lista[i]=h
         return lista
 
     def completeList(self):
-        lista = [constants.SEA_LEVEL] * (
-                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
-        )
-        for i in range(1,len(lista)):
-            j=0
+        lista = [constants.SEA_LEVEL] * (constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH)
+        arrayFinal=[]
+        for i in range(0,len(lista)):
+            if((i%214==0) & (i+80<640)):
+                lista=self.increaseMountain(lista,i,i+80)
+                arrayFinal.append(i+80)
+            for j in range (0,len(arrayFinal)):
+                lista = self.decreaseMountain(lista, arrayFinal[j],arrayFinal[j]+80 )
         return lista
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = self.completeList()
