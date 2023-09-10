@@ -15,4 +15,3 @@ X_SPEED = 8.0
 DarkGreen = "#1C542D"
 White = "#FFFFFF"
 Menu = "#77DD77"
-

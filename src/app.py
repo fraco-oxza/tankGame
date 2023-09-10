@@ -21,7 +21,6 @@ class Drawable:
         raise NotImplementedError
 
 
-
 class Backround(Drawable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.line(
@@ -187,7 +186,6 @@ class Terrain(Drawable, Collidable):
                 ),
             )
 
-
     def collidesWith(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
             return True
@@ -214,7 +212,6 @@ class Cannonball(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ffaa00", self.position, 6)
-
 
 
 class Player:
@@ -298,7 +295,6 @@ class Tank(Drawable, Collidable):
 
         # Sofi jobs
         return True
-
 
     def shoot(self) -> Cannonball:
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
@@ -400,7 +396,6 @@ class HUD(Drawable):
         screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
         screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
-
 
 
 class TankGame:
