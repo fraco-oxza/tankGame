@@ -58,14 +58,14 @@ class Terrain(Drawable, Collidable):
 
     def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
-                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
         divide = (
-                         constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-                 ) // constants.TERRAIN_LINE_WIDTH
+            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+        ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -94,7 +94,7 @@ class Terrain(Drawable, Collidable):
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
-                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         self.sin_mountain(0, 500)
         self.sin_mountain(400, 600)
@@ -181,7 +181,9 @@ class Tank(Drawable, Collidable):
         new_y = self.position.y - 20 * math.sin(self.shoot_angle)
 
         pygame.draw.rect(
-            screen, self.color, pygame.Rect(self.position.x - 5, self.position.y - 2, 10, 7)
+            screen,
+            self.color,
+            pygame.Rect(self.position.x - 5, self.position.y - 2, 10, 7),
         )
         pygame.draw.rect(
             screen,
@@ -198,7 +200,10 @@ class Tank(Drawable, Collidable):
 
         for i in range(6):
             pygame.draw.circle(
-                screen, constants.BLACK, (self.position.x - 12 + 5 * i, self.position.y + 18), 3
+                screen,
+                constants.BLACK,
+                (self.position.x - 12 + 5 * i, self.position.y + 18),
+                3,
             )
 
         # cannon
@@ -207,7 +212,9 @@ class Tank(Drawable, Collidable):
         pygame.draw.circle(screen, self.color, (new_x, new_y), 2)
 
     def collidesWith(self, point: pygame.Vector2) -> bool:
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (1 / 2) <= constants.TANK_RADIO:
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+            1 / 2
+        ) <= constants.TANK_RADIO:
             return True
         return False
 
@@ -232,7 +239,7 @@ class HUD(Drawable):
     def __init__(self, tanks: list[Tank], tankGame: TankGame):
         self.tank_game = TankGame
         self.tanks = tanks
-        self.font = pygame.font.SysFont("Arial", 30)
+        self.font = pygame.font.Font("Roboto.ttf", 24)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -318,6 +325,7 @@ class TankGame:
     This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
     input, drawing, among others. It can be said that it is the central class of the project.
     """
+
     terrain: Terrain
     tanks: list[Tank]
     screen: pygame.Surface
@@ -363,7 +371,8 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ] - 15,
+                    ]
+                    - 15,
                 ),
             )
         )
@@ -376,7 +385,8 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ] - 15,
+                    ]
+                    - 15,
                 ),
             )
         )
