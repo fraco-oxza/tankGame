@@ -1,4 +1,4 @@
-# Tank Game ![Game Icon](src/tankIcon.png)
+# Tank Game ![Game Icon](resources/images/tankIcon.png)
 
 Tank game is our programming project for the University of Talca, it is a simple
 2D game that allows you to simulate the trajectory of shots and impacts.
