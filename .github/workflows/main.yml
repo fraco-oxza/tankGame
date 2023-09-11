@@ -20,9 +20,9 @@ jobs:
     - name: Install deps
       run: pipenv install
     - name: Build executable
-      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame" --add-data "./tankGame/resources;resources/"  "src/app.py"
+      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame.exe" --add-data "./tankGame/resources;resources/"  "src/app.py"
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: output/TankGame
-        token: ${{ secrets.GH_TOKEN }}
+        files: output/TankGame.exe
+        token: ${{ secrets.GH }}
