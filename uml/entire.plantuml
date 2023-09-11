@@ -101,7 +101,6 @@ class Constants {
     +DarkGreen :color
     +White:color
     +Menu :color
-
 }
 
 TankGame -- Constants
