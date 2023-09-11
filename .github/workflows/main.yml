@@ -5,9 +5,6 @@ on:
     tags:
       - "v*.*.*"
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
   build:
     runs-on: windows-latest
@@ -19,12 +16,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.10'
-    - name: Install pipenv
-      run: pip install pipenv
-    - name: Create VirtualEnv
-      run: pipenv shell
     - name: Install deps
-      run: pipenv install -d
+      run: pip install -r requirements.txt
+    - name: Install PyInstaller
+      run: pip install pyinstaller
     - name: Build executable
       run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame.exe" --add-data "tankGame/resources;resources/"  "src/app.py"
     - name: Release
