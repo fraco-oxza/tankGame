@@ -104,7 +104,7 @@ class Terrain(Drawable, Collidable):
             constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         self.sin_mountain(0, 400)
-        self.sin_mountain(400, 600)
+        self.sin_mountain(280, 600)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
