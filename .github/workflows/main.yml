@@ -25,5 +25,5 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: output/TankGame.exe
+        files: ./output/TankGame.exe
         token: ${{ secrets.GH }}
