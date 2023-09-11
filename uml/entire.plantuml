@@ -30,10 +30,20 @@ class Cannonball extends Drawable {
 interface Drawable {
     + draw(Surface)
 }
+class Background extends Drawable{
+    +sky()
+    +draw(screen: pygame.surface.Surface)
+}
 
 class Terrain extends Drawable {
-    + Terrain(List<Point>):
-    + isInside(Point): Boolean
+    +gruond_lines: List<Int>
+
+    + Terrain(mountains: int, valleys: int)
+    +increase_mountain(lista: list, indexInicio: int, indexFinal: int):list
+    +decreaseMountain(lista: list, indexInicio: int, indexFinal: int):list
+    +complete_list():list
+    +draw( screen: pygame.surface.Surface)
+    +collidesWith(self, point: pygame.Vector2): bool
 }
 
 class Tank extends Drawable {
