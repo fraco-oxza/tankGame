@@ -90,14 +90,14 @@ class Terrain(Drawable, Collidable):
 
         return lista
 
-    def sin_mountain(self, index_inicial: int, index_final: int):
-        m = (index_inicial + index_final) // 2
+    def sin_mountain(self, i: int, j: int):
+        m = (i + j) // 2
 
-        for k in range(index_inicial, m):
-            self.ground_lines[k] += ((k - index_inicial) ** 2) / 200.0
+        for k in range(i, m):
+            self.ground_lines[k] += ((k - i) ** 2) / 200.0
 
-        for k in range(m, index_final):
-            self.ground_lines[k] += ((index_final - k) ** 2) / 200.0
+        for k in range(m, j):
+            self.ground_lines[k] += ((j - k) ** 2) / 200.0
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
