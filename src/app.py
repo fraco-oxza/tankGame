@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 import random
 from abc import abstractmethod
@@ -89,7 +91,6 @@ class Terrain(Drawable, Collidable):
 
         for k in range(m, j):
             self.ground_lines[k] += ((j - k) ** 2) / 200.0
-
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
@@ -228,7 +229,7 @@ class HUD(Drawable):
     width = 160
     height = 50
 
-    def __init__(self, tanks: list[Tank]):
+    def __init__(self, tanks: list[Tank], tankGame: TankGame):
         self.TankGame = TankGame
         self.tanks = tanks
         self.font = pygame.font.SysFont("Arial", 25)
@@ -312,14 +313,6 @@ class HUD(Drawable):
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
 
-class Context:
-    tanks: list[Tank]
-    cannonball: Optional[Cannonball]
-
-    def __init__(self):
-        pass
-
-
 class TankGame:
     """
     This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
@@ -388,7 +381,7 @@ class TankGame:
             )
         )
 
-        self.hud = HUD(self.tanks)
+        self.hud = HUD(self.tanks, self)
 
     def render(self) -> None:
         """
