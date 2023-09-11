@@ -15,7 +15,9 @@ import constants
 
 
 def resource_path(relative_path: str):
-    path = getattr(sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
+    path = getattr(
+        sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
+    )
 
     return os.path.join(path, "resources", relative_path)
 
