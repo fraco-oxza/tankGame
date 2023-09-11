@@ -43,7 +43,7 @@ jobs:
     - name: Install PyInstaller
       run: pip install pyinstaller
     - name: Build executable
-      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame" --add-data "resources;resources"  "src/app.py"
+      run: pyinstaller --noconfirm --onefile --windowed --icon "./resources/images/favicon.ico" --name "TankGame" --add-data "./resources/;resources/"  "src/app.py"
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
