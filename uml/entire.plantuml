@@ -34,6 +34,12 @@ class Background extends Drawable{
     +sky()
     +draw(screen: pygame.surface.Surface)
 }
+class HUD extends Drawable{
+    + tanks: list[Tank]
+    + left: int
+    + top: int
+    + width: int
+    + height: int
 
 class Terrain extends Drawable {
     +gruond_lines: List<Int>
@@ -45,13 +51,28 @@ class Terrain extends Drawable {
     +draw( screen: pygame.surface.Surface)
     +collidesWith(self, point: pygame.Vector2): bool
 }
+class Collidable {
+ +collides_with(Point)) : Boolean
+}
+class Terrain {
+    + Terrain(List<Point>):
+    + isInside(Point): Boolean
+}
+class Background(Drawable){
 
-class Tank extends Drawable {
+    + sky():sky_rect, sky
+    + draw(Surface):None
+}
+class Tank extends Collidable  {
     - player: Player
     - color: Color
     - position: Position
+    -shoot_velocity: float
+    -shoot_angle: float
 
-    + isInside(Point): Boolean
+    +draw(Surface) : None
+    +collides_with(Point)) : Boolean
+    +shoot(): Cannonball:
 }
 
 class Player {
@@ -70,5 +91,6 @@ TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
 Tank *--> Player
+HUD *--> Tank
 
 @enduml
