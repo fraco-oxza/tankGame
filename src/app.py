@@ -243,24 +243,20 @@ class HUD(Drawable):
         self.text_velocity2 = None
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        if self.tanks[0].shoot_angle * (180 / 3.14) > 360:
-            self.tanks[0].shoot_angle = 0
-        elif self.tanks[0].shoot_angle * (180 / 3.14) < 0:
-            self.tanks[0].shoot_angle = 6.28319
-        if self.tanks[1].shoot_angle * (180 / 3.14) > 360:
-            self.tanks[1].shoot_angle = 0
-        elif self.tanks[1].shoot_angle * (180 / 3.14) < 0:
-            self.tanks[1].shoot_angle = 6.28319
+        self.tanks[0].shoot_angle %= 2.0 * math.pi
+        self.tanks[1].shoot_angle %= 2.0 * math.pi
+
         self.text_angle1 = self.font.render(
-            "Ángulo: " + str(int(self.tanks[0].shoot_angle * (180 / 3.14))) + "°",
+            "Ángulo: %.1f" % math.degrees(self.tanks[0].shoot_angle) + "°",
             True,
             "white",
         )
         self.text_angle2 = self.font.render(
-            "Ángulo: " + str(int(self.tanks[1].shoot_angle * (180 / 3.14))) + "°",
+            "Ángulo: %.1f" % math.degrees(self.tanks[1].shoot_angle) + "°",
             True,
             "white",
         )
+
         self.text_velocity1 = self.font.render(
             "Velocidad: " + str(int(self.tanks[0].shoot_velocity)) + " m/s",
             True,
@@ -430,15 +426,35 @@ class TankGame:
 
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_DOWN]:
-            playing_tank.shoot_angle += math.radians(0.5)
+            if keys_pressed[pygame.K_LSHIFT]:
+                playing_tank.shoot_angle += math.radians(0.5)
+            else:
+                playing_tank.shoot_angle += math.radians(0.1)
+
         if keys_pressed[pygame.K_UP]:
-            playing_tank.shoot_angle -= math.radians(0.5)
+            if keys_pressed[pygame.K_LSHIFT]:
+                playing_tank.shoot_angle -= math.radians(0.5)
+            else:
+                playing_tank.shoot_angle -= math.radians(0.1)
+
         if keys_pressed[pygame.K_RIGHT]:
-            playing_tank.shoot_velocity += 0.5
+            if keys_pressed[pygame.K_LSHIFT]:
+                playing_tank.shoot_velocity += 0.5
+            else:
+                playing_tank.shoot_velocity += 0.1
+
+            if playing_tank.shoot_velocity > 200:
+                playing_tank.shoot_velocity = 200
+
         if keys_pressed[pygame.K_LEFT]:
-            playing_tank.shoot_velocity -= 0.5
+            if keys_pressed[pygame.K_LSHIFT]:
+                playing_tank.shoot_velocity -= 0.5
+            else:
+                playing_tank.shoot_velocity -= 0.1
+
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
+
         if keys_pressed[pygame.K_SPACE]:
             self.cannonball = playing_tank.shoot()
 
