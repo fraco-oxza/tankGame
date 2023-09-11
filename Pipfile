@@ -8,6 +8,7 @@ pygame = "*"
 
 [dev-packages]
 auto-py-to-exe = "*"
+pyinstaller = "*"
 
 [requires]
 python_version = "*"
