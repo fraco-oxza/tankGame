@@ -1,14 +1,23 @@
 from __future__ import annotations
 
 import math
+import os
+from os.path import join
 import random
 from abc import abstractmethod
 from random import randint
 from typing import Optional
+import sys
 
 import pygame
 
 import constants
+
+
+def resource_path(relative_path: str):
+    path = getattr(sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
+
+    return os.path.join(path, "resources", relative_path)
 
 
 class Collidable:
@@ -24,17 +33,16 @@ class Drawable:
 
 
 class Background(Drawable):
-    @staticmethod
-    def sky():
-        sky = pygame.image.load("sky.jpg")
-        sky_rect = sky.get_rect()
-        sky = pygame.transform.scale(sky, constants.WINDOWS_SIZE)
+    sky_image: pygame.Surface
 
-        return sky_rect, sky
+    def __init__(self):
+        self.sky_image = pygame.transform.scale(
+            pygame.image.load(resource_path("images/sky.jpg")), constants.WINDOWS_SIZE
+        )
+        self.sky_rect = self.sky_image.get_rect()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        screen_rect, sky = Background.sky()
-        screen.blit(sky, screen_rect.topleft)
+        screen.blit(self.sky_image, self.sky_rect.topleft)
 
 
 class Terrain(Drawable, Collidable):
@@ -236,7 +244,7 @@ class HUD(Drawable):
     def __init__(self, tanks: list[Tank], tank_game: TankGame):
         self.tank_game = tank_game
         self.tanks = tanks
-        self.font = pygame.font.Font("Roboto.ttf", 24)
+        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -334,7 +342,7 @@ class TankGame:
         pygame.init()
 
         pygame.display.set_caption("TankGame!")
-        icon = pygame.image.load("tankIcon.png")
+        icon = pygame.image.load(resource_path("images/tankIcon.png"))
         pygame.display.set_icon(icon)
 
         self.background = Background()
