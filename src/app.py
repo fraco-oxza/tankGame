@@ -4,19 +4,16 @@ import math
 import random
 from abc import abstractmethod
 from random import randint
-import math
-import random
 from typing import Optional
 
 import pygame
-from pygame.rect import Rect
 
 import constants
 
 
 class Collidable:
     @abstractmethod
-    def collidesWith(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
         raise NotImplementedError
 
 
@@ -122,7 +119,7 @@ class Terrain(Drawable, Collidable):
                 ),
             )
 
-    def collidesWith(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
             return True
 
@@ -211,7 +208,7 @@ class Tank(Drawable, Collidable):
         pygame.draw.line(screen, self.color, self.position, (new_x, new_y), 3)
         pygame.draw.circle(screen, self.color, (new_x, new_y), 2)
 
-    def collidesWith(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
         ) <= constants.TANK_RADIO:
@@ -236,8 +233,8 @@ class HUD(Drawable):
     width = 160
     height = 50
 
-    def __init__(self, tanks: list[Tank], tankGame: TankGame):
-        self.tank_game = TankGame
+    def __init__(self, tanks: list[Tank], tank_game: TankGame):
+        self.tank_game = tank_game
         self.tanks = tanks
         self.font = pygame.font.Font("Roboto.ttf", 24)
         self.text_angle1 = None
@@ -431,18 +428,18 @@ class TankGame:
         """
         playing_tank = self.tanks[self.actual_player]
 
-        keysPressed = pygame.key.get_pressed()
-        if keysPressed[pygame.K_DOWN]:
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_DOWN]:
             playing_tank.shoot_angle += math.radians(0.5)
-        if keysPressed[pygame.K_UP]:
+        if keys_pressed[pygame.K_UP]:
             playing_tank.shoot_angle -= math.radians(0.5)
-        if keysPressed[pygame.K_RIGHT]:
+        if keys_pressed[pygame.K_RIGHT]:
             playing_tank.shoot_velocity += 0.5
-        if keysPressed[pygame.K_LEFT]:
+        if keys_pressed[pygame.K_LEFT]:
             playing_tank.shoot_velocity -= 0.5
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
-        if keysPressed[pygame.K_SPACE]:
+        if keys_pressed[pygame.K_SPACE]:
             self.cannonball = playing_tank.shoot()
 
     def process_cannonball_trajectory(self) -> None:
@@ -453,12 +450,12 @@ class TankGame:
         """
         self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
 
-        if self.terrain.collidesWith(self.cannonball.position):
+        if self.terrain.collides_with(self.cannonball.position):
             self.cannonball = None
             return
 
         for tank in self.tanks:
-            if tank.collidesWith(self.cannonball.position):
+            if tank.collides_with(self.cannonball.position):
                 self.running = False
                 self.winner = (self.actual_player + 1) % 2
                 return
