@@ -84,6 +84,24 @@ class Constants {
     + GRAVITY: double
     + TANK_HIT_BOX_SIZE: double
     + TERRAIN_COLOR: Color
+    + WINDOWS_SIZE :int
+    + TERRAIN_LINE_WIDTH:int
+    + SEA_LEVEL :int
+    + FPS :int
+    +MOUNTAINS:int
+    +VALLEYS:int
+    +SKY_COLOR :color
+    +TERRAIN_COLOR :color
+    +BLACK :color
+    +GRAY :color
+    +YELLOW :color
+    +PIXEL_SIZE :int
+    +X_SPEED :int
+    +TANK_RADIO :int
+    +DarkGreen :color
+    +White:color
+    +Menu :color
+
 }
 
 TankGame -- Constants
