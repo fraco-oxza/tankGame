@@ -30,6 +30,14 @@ class Cannonball extends Drawable {
 interface Drawable {
     + draw(Surface)
 }
+class HUD extends Drawable{
+    + tanks: list[Tank]
+    + left: int
+    + top: int
+    + width: int
+    + height: int
+
+}
 class Collidable {
  +collides_with(Point)) : Boolean
 }
@@ -70,5 +78,6 @@ TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
 Tank *--> Player
+HUD *--> Tank
 
 @enduml
