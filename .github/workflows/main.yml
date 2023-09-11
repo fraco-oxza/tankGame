@@ -1,0 +1,28 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Create VirtualEnv
+      run: pipenv shell
+    - name: Install deps
+      run: pipenv install
+    - name: Build executable
+      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame.exe" --add-data "./tankGame/resources;resources/"  "src/app.py"
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/TankGame.exe
+        token: ${{ secrets.GH }}
