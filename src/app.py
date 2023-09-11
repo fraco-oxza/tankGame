@@ -230,7 +230,7 @@ class HUD(Drawable):
     height = 50
 
     def __init__(self, tanks: list[Tank], tankGame: TankGame):
-        self.TankGame = TankGame
+        self.tank_game = TankGame
         self.tanks = tanks
         self.font = pygame.font.SysFont("Arial", 30)
         self.text_angle1 = None
