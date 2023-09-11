@@ -24,9 +24,9 @@ jobs:
     - name: Create VirtualEnv
       run: pipenv shell
     - name: Install deps
-      run: pipenv install
+      run: pipenv install -d
     - name: Build executable
-      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame.exe" --add-data "./tankGame/resources;resources/"  "src/app.py"
+      run: pyinstaller --noconfirm --onefile --windowed --icon "resources/images/favicon.ico" --name "TankGame.exe" --add-data "tankGame/resources;resources/"  "src/app.py"
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
