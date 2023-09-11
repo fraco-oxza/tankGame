@@ -147,8 +147,7 @@ class Terrain(Drawable, Collidable):
 
         return lista
 
-
-    def increaseMountain(self, lista: list, indexInicio: int, indexFinal: int):
+    def increase_mountain(self, lista: list, indexInicio: int, indexFinal: int):
         for i in range(indexInicio, indexFinal):
             h = lista[i - 1]
             h = h + 3
@@ -168,8 +167,8 @@ class Terrain(Drawable, Collidable):
         )
         arrayFinal = []
         for i in range(0, len(lista)):
-            if (i % 214 == 0) & (i + 80 < 640):
-                lista = self.increaseMountain(lista, i, i + 80)
+            if (i % 214 == 0) & (i + 80 < len(lista)):
+                lista = self.increase_mountain(lista, i, i + 80)
                 arrayFinal.append(i + 80)
             for j in range(0, len(arrayFinal)):
                 lista = self.decreaseMountain(lista, arrayFinal[j], arrayFinal[j] + 80)
