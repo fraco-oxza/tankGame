@@ -107,9 +107,6 @@ class Background(Drawable):
 class Terrain(Drawable, Collidable):
     ground_lines: list[int]
 
-    def fondo(self):
-        j = 0
-
     def mountainRandom(self, lista: list[int], indiceInicial: int, indiceFinal: int):
         actualIncrease = 0
         for i in range(indiceInicial, indiceFinal):
@@ -150,10 +147,6 @@ class Terrain(Drawable, Collidable):
 
         return lista
 
-    def Rect(self, lista: list, indexInicio: int, indexFinal: int):
-        for i in range(indexInicio, indexFinal):
-            lista.append(constants.SEA_LEVEL + 160)
-        return lista
 
     def increaseMountain(self, lista: list, indexInicio: int, indexFinal: int):
         for i in range(indexInicio, indexFinal):
