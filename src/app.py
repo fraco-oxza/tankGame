@@ -95,8 +95,8 @@ class Terrain(Drawable, Collidable):
         self.ground_lines = [constants.SEA_LEVEL] * (
                 constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
-        self.sin_mountain(0, 300)
-        self.sin_mountain(200, 600)
+        self.sin_mountain(0, 500)
+        self.sin_mountain(400, 600)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
@@ -146,7 +146,7 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pygame.draw.circle(screen, "#ffaa00", self.position, 2)
+        pygame.draw.circle(screen, "#ff0000", self.position, 2)
 
 
 class Player:
@@ -231,7 +231,7 @@ class HUD(Drawable):
     def __init__(self, tanks: list[Tank]):
         self.TankGame = TankGame
         self.tanks = tanks
-        self.font = pygame.font.SysFont("Arial", 30)
+        self.font = pygame.font.SysFont("Arial", 25)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
