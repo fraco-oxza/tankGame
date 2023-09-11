@@ -20,6 +20,7 @@ class TankGame {
     + process_cannonball_trajectory(): None
     + wait_release_space(): None
     + start(): None
+
 }
 
 class Cannonball extends Drawable {
