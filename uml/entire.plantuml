@@ -31,12 +31,17 @@ interface Drawable {
     + draw(Surface)
 }
 class Collidable {
+ +collides_with(Point)) : Boolean
 }
 class Terrain {
     + Terrain(List<Point>):
     + isInside(Point): Boolean
 }
+class Background(Drawable){
 
+    + sky():sky_rect, sky
+    + draw(Surface):None
+}
 class Tank extends Collidable  {
     - player: Player
     - color: Color
