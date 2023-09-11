@@ -15,6 +15,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Install pipenv
+      run: pip install pipenv
     - name: Create VirtualEnv
       run: pipenv shell
     - name: Install deps
