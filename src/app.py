@@ -165,7 +165,15 @@ class Player:
         self.name = name
         self.points = points
 
-
+    def score(self, point: pygame.Vector2, points) -> float:
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                1 / 2) <= constants.TANK_RADIO + 50:
+            return (points + 100)
+        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                1 / 2) >= constants.TANK_RADIO + 50:
+            return (points - (points // 3))
+        else:
+            return points
 class Tank(Drawable, Collidable):
     player: Player
     color: pygame.Color
