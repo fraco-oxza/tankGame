@@ -78,7 +78,7 @@ class Tank extends Collidable  {
 
 class Player {
     - points: double
-    +score(Point, points) : int
+    +score(position_cannonball, position) : int
 }
 
 class Constants {
