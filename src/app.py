@@ -159,19 +159,19 @@ class Cannonball(Drawable):
 
 class Player:
     name: str
-    points: float
+    points: int
 
-    def __init__(self, name: str, points: float):
+    def __init__(self, name: str, points: int):
         self.name = name
         self.points = points
 
-    def score(self, point: pygame.Vector2, points) -> float:
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+    def score(self, point: pygame.Vector2, points, position: pygame.Vector2) -> int:
+        if ((point.x - position.x) ** 2 + (point.y - position.y) ** 2) ** (
                 1 / 2) <= constants.TANK_RADIO + 50:
-            return (points + 100)
-        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+            return points + 100
+        elif ((point.x - position.x) ** 2 + (point.y - position.y) ** 2) ** (
                 1 / 2) >= constants.TANK_RADIO + 50:
-            return (points - (points // 3))
+            return points - (points // 3)
         else:
             return points
 class Tank(Drawable, Collidable):
@@ -186,7 +186,6 @@ class Tank(Drawable, Collidable):
         self.position = position
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
-        # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         # hit box
