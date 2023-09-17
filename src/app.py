@@ -65,14 +65,14 @@ class Terrain(Drawable, Collidable):
 
     def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
         divide = (
-            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-        ) // constants.TERRAIN_LINE_WIDTH
+                         constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+                 ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -101,7 +101,7 @@ class Terrain(Drawable, Collidable):
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         self.sin_mountain(0, 400)
         self.sin_mountain(280, 600)
@@ -165,15 +165,17 @@ class Player:
         self.name = name
         self.points = points
 
-    def score(self, point: pygame.Vector2, points, position: pygame.Vector2) -> int:
-        if ((point.x - position.x) ** 2 + (point.y - position.y) ** 2) ** (
+    def score(self, position_cannonball: pygame.Vector2, position: pygame.Vector2):
+        if ((position_cannonball.x - position.x) ** 2 + (position_cannonball.y - position.y) ** 2) ** (
                 1 / 2) <= constants.TANK_RADIO + 50:
-            return points + 100
-        elif ((point.x - position.x) ** 2 + (point.y - position.y) ** 2) ** (
+            self.points = self.points + 100
+        elif ((position_cannonball.x - position.x) ** 2 + (position_cannonball.y - position.y) ** 2) ** (
                 1 / 2) >= constants.TANK_RADIO + 50:
-            return points - (points // 3)
+            self.points = self.points - (self.points // 3)
         else:
-            return points
+            self.points = self.points
+
+
 class Tank(Drawable, Collidable):
     player: Player
     color: pygame.Color
@@ -181,7 +183,8 @@ class Tank(Drawable, Collidable):
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
 
-    def __init__(self, color: pygame.Color, position: pygame.Vector2):
+    def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
+        self.player = player
         self.color = color
         self.position = position
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
@@ -227,7 +230,7 @@ class Tank(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= constants.TANK_RADIO:
             return True
         return False
@@ -373,6 +376,9 @@ class TankGame:
         tank1_x = randint(0, mid_point - quart_of_windows)
         tank2_x = randint(mid_point + quart_of_windows, constants.WINDOWS_SIZE[0])
 
+        player1 = Player("1", 0)
+        player2 = Player("2", 0)
+
         self.tanks.append(
             Tank(
                 pygame.Color(50, 50, 0),
@@ -381,9 +387,10 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
+                player1,
             )
         )
 
@@ -395,9 +402,10 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
+                player2
             )
         )
 
@@ -492,6 +500,9 @@ class TankGame:
                 self.running = False
                 self.winner = (self.actual_player + 1) % 2
                 return
+
+            # tank.player.score(self.cannonball.position, tank.position)
+            # print(tank.player.name, tank.player.points)
 
     def wait_release_space(self) -> None:
         """
