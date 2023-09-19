@@ -144,7 +144,7 @@ class Terrain(Drawable, Collidable):
 class Cannonball(Drawable):
     position: pygame.Vector2
     velocity: pygame.Vector2
-    minimum_distance: int
+    minimum_distance: float
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
@@ -167,10 +167,13 @@ class Cannonball(Drawable):
         return v_max
 
     def close_distance(self, tank_position: pygame.Vector2):
+
         distance = ((tank_position.x - self.position.x) ** 2 + (tank_position.y - self.position.y) ** 2) ** (
                 1 / 2)
+        print(distance)
         if distance < self.minimum_distance:
             self.minimum_distance = distance
+        print("minimo:", self.minimum_distance)
 
 class Player:
     name: str
@@ -513,7 +516,6 @@ class TankGame:
                 self.winner = (self.actual_player + 1) % 2
                 return
 
-
     def wait_release_space(self) -> None:
         """
         This method waits until the actual player releases the space key, because if we do not wait until the release,
@@ -539,7 +541,6 @@ class TankGame:
                 self.check_running()
                 self.process_cannonball_trajectory()
                 self.render()
-
             self.wait_release_space()
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
