@@ -144,10 +144,12 @@ class Terrain(Drawable, Collidable):
 class Cannonball(Drawable):
     position: pygame.Vector2
     velocity: pygame.Vector2
+    minimum_distance: int
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
         self.velocity = velocity
+        self.minimum_distance = sys.maxsize
 
     def tick(self, dt: float):
         self.position += self.velocity * dt
@@ -156,6 +158,19 @@ class Cannonball(Drawable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ff0000", self.position, 2)
 
+    def max_height(self) -> float:
+        return (self.velocity.y ** 2) / (2 * constants.GRAVITY)
+
+    def max_velocity(self) -> float:
+        angle_rad = math.atan2(self.velocity.y, self.velocity.x)
+        v_max = self.velocity.magnitude() * math.cos(angle_rad)
+        return v_max
+
+    def close_distance(self, tank_position: pygame.Vector2):
+        distance = ((tank_position.x - self.position.x) ** 2 + (tank_position.y - self.position.y) ** 2) ** (
+                1 / 2)
+        if distance < self.minimum_distance:
+            self.minimum_distance = distance
 
 class Player:
     name: str
@@ -165,12 +180,10 @@ class Player:
         self.name = name
         self.points = points
 
-    def score(self, position_cannonball: pygame.Vector2, position: pygame.Vector2):
-        if ((position_cannonball.x - position.x) ** 2 + (position_cannonball.y - position.y) ** 2) ** (
-                1 / 2) <= constants.TANK_RADIO + 50:
-            self.points = self.points + 100
-        elif ((position_cannonball.x - position.x) ** 2 + (position_cannonball.y - position.y) ** 2) ** (
-                1 / 2) >= constants.TANK_RADIO + 50:
+    def score(self, distance):
+        if distance <= constants.TANK_RADIO + 50:
+            self.points = self.points + 20
+        elif distance >= constants.TANK_RADIO + 50:
             self.points = self.points - (self.points // 3)
         else:
             self.points = self.points
@@ -490,7 +503,6 @@ class TankGame:
         :return:
         """
         self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
-
         if self.terrain.collides_with(self.cannonball.position):
             self.cannonball = None
             return
@@ -501,8 +513,6 @@ class TankGame:
                 self.winner = (self.actual_player + 1) % 2
                 return
 
-            # tank.player.score(self.cannonball.position, tank.position)
-            # print(tank.player.name, tank.player.points)
 
     def wait_release_space(self) -> None:
         """
