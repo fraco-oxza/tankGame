@@ -189,13 +189,11 @@ class Player:
                 cannonball_position.y - tank_position.y) ** 2) ** (1 / 2)
         if isinstance(impact, TerrainImpact):
             if distance <= constants.TANK_RADIO * 2:
-                print("holaa estoy en el if 1")
                 self.points = self.points + 100
             elif distance <= constants.TANK_RADIO + 200:
                 self.points = self.points + 50
-
             else:
-                self.points = self.points - 100
+                self.points = self.points - (self.points // 3)
 
         elif isinstance(impact, TankImpact):
             self.points += 1000
