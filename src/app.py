@@ -65,14 +65,14 @@ class Terrain(Drawable, Collidable):
 
     def completeListRandom(self):
         lista = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         # 1000
         # 0 333 - 334 666 - 667 1000
         divide = (
-            constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
-        ) // constants.TERRAIN_LINE_WIDTH
+                         constants.WINDOWS_SIZE[0] // constants.MOUNTAINS
+                 ) // constants.TERRAIN_LINE_WIDTH
 
         for i in range(0, constants.MOUNTAINS):
             aumentar = i * divide
@@ -107,7 +107,7 @@ class Terrain(Drawable, Collidable):
             self.ground_lines[j] -= ((j - fin) ** 2) / 100
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
         self.sin_mountain(160, 400)
         self.sin_mountain(450, 640)
@@ -152,10 +152,12 @@ class Terrain(Drawable, Collidable):
 class Cannonball(Drawable):
     position: pygame.Vector2
     velocity: pygame.Vector2
+    minimum_distance: float
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
         self.velocity = velocity
+        self.minimum_distance = sys.maxsize
 
     def tick(self, dt: float):
         self.position += self.velocity * dt
@@ -164,14 +166,38 @@ class Cannonball(Drawable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.circle(screen, "#ff0000", self.position, 2)
 
+    def max_height(self) -> float:
+        return (self.velocity.y ** 2) / (2 * constants.GRAVITY)
+
+    def max_velocity(self) -> float:
+        angle_rad = math.atan2(self.velocity.y, self.velocity.x)
+        v_max = self.velocity.magnitude() * math.cos(angle_rad)
+        return v_max
+
+    def close_distance(self, tank_position: pygame.Vector2):
+
+        distance = ((tank_position.x - self.position.x) ** 2 + (tank_position.y - self.position.y) ** 2) ** (
+                1 / 2)
+        print(distance)
+        if distance < self.minimum_distance:
+            self.minimum_distance = distance
+        print("minimo:", self.minimum_distance)
 
 class Player:
     name: str
-    points: float
+    points: int
 
-    def __init__(self, name: str, points: float):
+    def __init__(self, name: str, points: int):
         self.name = name
         self.points = points
+
+    def score(self, distance):
+        if distance <= constants.TANK_RADIO + 50:
+            self.points = self.points + 20
+        elif distance >= constants.TANK_RADIO + 50:
+            self.points = self.points - (self.points // 3)
+        else:
+            self.points = self.points
 
 
 class Tank(Drawable, Collidable):
@@ -181,12 +207,12 @@ class Tank(Drawable, Collidable):
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
 
-    def __init__(self, color: pygame.Color, position: pygame.Vector2):
+    def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
+        self.player = player
         self.color = color
         self.position = position
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
-        # player no lo usaremos en las primeras
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         # hit box
@@ -228,7 +254,7 @@ class Tank(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= constants.TANK_RADIO:
             return True
         return False
@@ -374,6 +400,9 @@ class TankGame:
         tank1_x = randint(0, mid_point - quart_of_windows)
         tank2_x = randint(mid_point + quart_of_windows, constants.WINDOWS_SIZE[0])
 
+        player1 = Player("1", 0)
+        player2 = Player("2", 0)
+
         self.tanks.append(
             Tank(
                 pygame.Color(50, 50, 0),
@@ -382,9 +411,10 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
+                player1,
             )
         )
 
@@ -396,9 +426,10 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
+                player2
             )
         )
 
@@ -483,7 +514,6 @@ class TankGame:
         :return:
         """
         self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
-
         if self.terrain.collides_with(self.cannonball.position):
             self.cannonball = None
             return
@@ -519,7 +549,6 @@ class TankGame:
                 self.check_running()
                 self.process_cannonball_trajectory()
                 self.render()
-
             self.wait_release_space()
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
