@@ -168,7 +168,6 @@ class Terrain(Drawable, Collidable):
                     self.ground_lines[i] - 200,
                 ),
             )
-
     def collides_with(self, point: pygame.Vector2) -> bool:
         if point.x < 0.0:
             return True
