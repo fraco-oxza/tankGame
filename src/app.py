@@ -18,7 +18,6 @@ def resource_path(relative_path: str):
     path = getattr(
         sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
     )
-
     return os.path.join(path, "resources", relative_path)
 
 
@@ -105,6 +104,7 @@ class Terrain(Drawable, Collidable):
             self.ground_lines[i] -= ((i - inicio) ** 2) / 100
         for j in range(m, fin):
             self.ground_lines[j] -= ((j - fin) ** 2) / 100
+
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
                 constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
@@ -113,6 +113,7 @@ class Terrain(Drawable, Collidable):
         self.sin_mountain(450, 640)
         self.valley(0, 250)
         self.valley(250, 500)
+
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
             pygame.draw.rect(
@@ -151,7 +152,6 @@ class Terrain(Drawable, Collidable):
 class Cannonball(Drawable):
     position: pygame.Vector2
     velocity: pygame.Vector2
-    minimum_distance: float
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
@@ -173,14 +173,6 @@ class Cannonball(Drawable):
         v_max = self.velocity.magnitude() * math.cos(angle_rad)
         return v_max
 
-    def close_distance(self, tank_position: pygame.Vector2):
-
-        distance = ((tank_position.x - self.position.x) ** 2 + (tank_position.y - self.position.y) ** 2) ** (
-                1 / 2)
-        print(distance)
-        if distance < self.minimum_distance:
-            self.minimum_distance = distance
-        print("minimo:", self.minimum_distance)
 
 class Player:
     name: str
@@ -190,13 +182,23 @@ class Player:
         self.name = name
         self.points = points
 
-    def score(self, distance):
-        if distance <= constants.TANK_RADIO + 50:
-            self.points = self.points + 20
-        elif distance >= constants.TANK_RADIO + 50:
-            self.points = self.points - (self.points // 3)
-        else:
-            self.points = self.points
+    def score(self, impact: Impact, tank_position: pygame.Vector2):
+
+        cannonball_position = impact.position
+        distance = ((cannonball_position.x - tank_position.x) ** 2 + (
+                cannonball_position.y - tank_position.y) ** 2) ** (1 / 2)
+        if isinstance(impact, TerrainImpact):
+            if distance <= constants.TANK_RADIO * 2:
+                print("holaa estoy en el if 1")
+                self.points = self.points + 100
+            elif distance <= constants.TANK_RADIO + 200:
+                self.points = self.points + 50
+
+            else:
+                self.points = self.points - 100
+
+        elif isinstance(impact, TankImpact):
+            self.points += 1000
 
 
 class Tank(Drawable, Collidable):
@@ -356,6 +358,21 @@ class HUD(Drawable):
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
 
+class Impact:
+    position: pygame.Vector2
+
+    def __init__(self, position: pygame.Vector2) -> None:
+        self.position = position
+
+
+class TerrainImpact(Impact):
+    pass
+
+
+class TankImpact(Impact):
+    pass
+
+
 class TankGame:
     """
     This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
@@ -506,22 +523,25 @@ class TankGame:
         if keys_pressed[pygame.K_SPACE]:
             self.cannonball = playing_tank.shoot()
 
-    def process_cannonball_trajectory(self) -> None:
+    def process_cannonball_trajectory(self) -> Impact:
         """
         This method is responsible for moving the cannonball and seeing what happens, in case there is a terminal event,
         it stops the execution
         :return:
         """
         self.cannonball.tick((1.0 / constants.FPS) * constants.X_SPEED)
+
         if self.terrain.collides_with(self.cannonball.position):
+            last_position = self.cannonball.position
             self.cannonball = None
-            return
+            return TerrainImpact(last_position)
 
         for tank in self.tanks:
+
             if tank.collides_with(self.cannonball.position):
                 self.running = False
-                self.winner = (self.actual_player + 1) % 2
-                return
+                self.winner = self.actual_player
+                return TankImpact(self.cannonball.position)
 
     def wait_release_space(self) -> None:
         """
@@ -536,18 +556,25 @@ class TankGame:
     def start(self) -> None:
         while self.running:
             self.check_running()
-
             # Select the angle
             while self.running and self.cannonball is None:
                 self.check_running()
                 self.process_input()
                 self.render()
 
+            last_state = None
+
             # Travel of the cannonball
             while self.running and self.cannonball is not None:
                 self.check_running()
-                self.process_cannonball_trajectory()
+                last_state = self.process_cannonball_trajectory()
                 self.render()
+
+            if isinstance(last_state, Impact):
+                other_player = (self.actual_player + 1) % 2
+                self.tanks[self.actual_player].player.score(last_state, self.tanks[other_player].position)
+                print("puntaje ", self.actual_player, ":", self.tanks[self.actual_player].player.points)
+
             self.wait_release_space()
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
