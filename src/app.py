@@ -113,7 +113,6 @@ class Terrain(Drawable, Collidable):
         self.sin_mountain(450, 640)
         self.valley(0, 250)
         self.valley(250, 500)
-
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
             pygame.draw.rect(
