@@ -94,17 +94,25 @@ class Terrain(Drawable, Collidable):
         m = (i + j) // 2
 
         for k in range(i, m):
-            self.ground_lines[k] += ((k - i) ** 2) / 200.0
+            self.ground_lines[k] += ((k - i) ** 2) / 60
 
         for k in range(m, j):
-            self.ground_lines[k] += ((j - k) ** 2) / 200.0
+            self.ground_lines[k] += ((j - k) ** 2) / 60.0
 
+    def valley(self, inicio: int, fin: int):
+        m = (inicio + fin) // 2
+        for i in range(inicio, m):
+            self.ground_lines[i] -= ((i - inicio) ** 2) / 100
+        for j in range(m, fin):
+            self.ground_lines[j] -= ((j - fin) ** 2) / 100
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
             constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
-        self.sin_mountain(0, 400)
-        self.sin_mountain(280, 600)
+        self.sin_mountain(160, 400)
+        self.sin_mountain(450, 640)
+        self.valley(0, 250)
+        self.valley(250, 500)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
