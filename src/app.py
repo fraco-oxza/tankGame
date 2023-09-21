@@ -788,12 +788,6 @@ class TankGame:
                 self.tanks[self.actual_player].player.score(
                     self.last_state, self.tanks[other_player].position
                 )
-                print(
-                    "puntaje ",
-                    self.actual_player,
-                    ":",
-                    self.tanks[self.actual_player].player.points,
-                )
 
             self.cannonball = None
             self.last_state = None
