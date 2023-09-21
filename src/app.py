@@ -185,11 +185,13 @@ class Cannonball(Drawable):
     velocity: pygame.Vector2
     trajectory: list[pygame.Vector2]
     max_height: int
+    max_distance: int
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
         self.velocity = velocity
         self.max_height = sys.maxsize
+        self.max_distance = sys.maxsize
         self.trajectory = []
 
     def tick(self, dt: float):
@@ -206,6 +208,11 @@ class Cannonball(Drawable):
 
     def get_max_height(self) -> int:
         return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
+
+    def get_max_distance(self, tank_position: pygame.Vector2, canonball_position: pygame.Vector2) -> int:
+        return ((canonball_position.x - tank_position.x) ** 2 + (canonball_position.y - tank_position.y) ** 2) ** (
+                    1 / 2)
+
 
     def max_velocity(self) -> float:
         angle_rad = math.atan2(self.velocity.y, self.velocity.x)
@@ -373,16 +380,25 @@ class HUD(Drawable):
             transparency = 128
             rect_surface = pygame.Surface((300, 70))
             rect_surface.set_alpha(transparency)
-            rect_x, rect_y = constants.H_MAX
-            screen.blit(rect_surface, (rect_x, rect_y))
+            rect_x1, rect_y1 = constants.H_MAX
+            rect_x2, rect_y2 = constants.DISTANCE_MAX
+            screen.blit(rect_surface, (rect_x1, rect_y1))
+            screen.blit(rect_surface, (rect_x2, rect_y2))
 
             if self.tank_game.cannonball is not None:
                 self.text_cannonball_info = self.font.render(
-                    "Maxima Altura: %d" % (self.tank_game.cannonball.get_max_height()),
+                    "Maxima Altura: %d" % (self.tank_game.cannonball.get_max_height()) + " [m]",
                     True,
                     "white",
+
                 )
                 screen.blit(self.text_cannonball_info, pygame.Vector2(40, 675))
+            if self.tank_game.cannonball is not None:
+                distance = self.tank_game.cannonball.get_max_distance(self.tanks[self.tank_game.actual_player].position,
+                                                                      self.tank_game.cannonball.position)
+                self.text_cannonball_info = self.font.render("Distancia total: %d" % (distance) + " [m]", True,
+                                                             "white", )
+                screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
         self.text_angle1 = self.font.render(
             "Ángulo: %.1f" % math.degrees(self.tanks[0].shoot_angle) + "°",
             True,
@@ -704,6 +720,7 @@ class TankGame:
             # Travel of the cannonball
             while self.running and self.last_state is None:
                 self.check_running()
+                print(self.process_cannonball_trajectory())
                 self.last_state = self.process_cannonball_trajectory()
                 self.render()
 
