@@ -370,19 +370,19 @@ class HUD(Drawable):
             )
 
         if self.tank_game.last_state is not None:
-            pygame.draw.rect(
-                screen,
-                "Black",
-                pygame.Rect(100, 600, constants.WINDOWS_SIZE[0] - 200, 100),
-            )
+            transparency = 128
+            rect_surface = pygame.Surface((300, 70))
+            rect_surface.set_alpha(transparency)
+            rect_x, rect_y = constants.H_MAX
+            screen.blit(rect_surface, (rect_x, rect_y))
+
             if self.tank_game.cannonball is not None:
                 self.text_cannonball_info = self.font.render(
                     "Maxima Altura: %d" % (self.tank_game.cannonball.get_max_height()),
                     True,
                     "white",
                 )
-                screen.blit(self.text_cannonball_info, pygame.Vector2(400, 650))
-
+                screen.blit(self.text_cannonball_info, pygame.Vector2(40, 675))
         self.text_angle1 = self.font.render(
             "Ángulo: %.1f" % math.degrees(self.tanks[0].shoot_angle) + "°",
             True,

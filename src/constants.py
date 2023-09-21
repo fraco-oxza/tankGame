@@ -17,3 +17,4 @@ DarkGreen = "#1C542D"
 White = "#FFFFFF"
 HUD_COLOR = "#141414"
 HUD_HEIGHT = 200
+H_MAX = (0, 650)
