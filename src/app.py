@@ -764,6 +764,5 @@ def main():
     tank_game = TankGame()
     tank_game.start()
 
-
 if __name__ == "__main__":
     main()
