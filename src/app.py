@@ -59,7 +59,6 @@ class Terrain(Drawable, Collidable):
                 actualIncrease += randint(2, 8)
             else:
                 actualIncrease -= randint(2, 8)
-                print(i)
             lista[i] += actualIncrease
 
         return lista
@@ -328,11 +327,16 @@ class HUD(Drawable):
         self.tanks = tanks
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
+        self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
         self.text_velocity2 = None
         self.text_cannonball_info = None
+        self.text_winner_info = None
+
+
+
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.tanks[0].shoot_angle %= 2.0 * math.pi
@@ -466,8 +470,19 @@ class HUD(Drawable):
         screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
 
         if self.tank_game.winner is not None:
-            # Maca Sofia trabajo, pantalla de ganador
-            pass
+            center = (380, 260)
+            transparency = 128
+            rect_surface = pygame.Surface((900, 500))
+            rect_surface.set_alpha(transparency)
+            rect_x1, rect_y1 = constants.H_WINNER
+            screen.blit(rect_surface, (rect_x1, rect_y1))
+            self.text_winner_info = self.font100.render(
+                "WINNER",
+                True,
+                constants.YELLOW,
+            )
+            screen.blit(self.text_winner_info, center)
+
 
     def show_instructions(self, screen: pygame.surface.Surface):
         screen.fill("#151f28")
@@ -720,7 +735,6 @@ class TankGame:
             # Travel of the cannonball
             while self.running and self.last_state is None:
                 self.check_running()
-                print(self.process_cannonball_trajectory())
                 self.last_state = self.process_cannonball_trajectory()
                 self.render()
 
