@@ -102,9 +102,9 @@ class Terrain(Drawable, Collidable):
     def valley(self, inicio: int, fin: int):
         m = (inicio + fin) // 2
         for i in range(inicio, m):
-            self.ground_lines[i] -= ((i - inicio) ** 2) // 700
+            self.ground_lines[i] -= ((i - inicio) ** 2) // 500
         for j in range(m, fin):
-            self.ground_lines[j] -= ((j - fin) ** 2) // 700
+            self.ground_lines[j] -= ((j - fin) ** 2) // 500
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL + constants.HUD_HEIGHT] * (
