@@ -351,7 +351,7 @@ class HUD(Drawable):
 
         if (
             self.tank_game.cannonball is not None
-            and self.tank_game.cannonball.position.y < 0
+
         ):
             draw_pos = (
                 self.tank_game.cannonball.position.x,
