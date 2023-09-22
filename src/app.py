@@ -242,7 +242,7 @@ class Player:
                 self.points = self.points - (self.points // 3)
 
         elif isinstance(impact, TankImpact):
-            self.points += 1000
+            self.points += 10000
 
 
 class Tank(Drawable, Collidable):
@@ -339,6 +339,8 @@ class HUD(Drawable):
         self.text_cannonball_info = None
         self.text_winner_info = None
         self.text_winner_score = None
+        self.text_score1 = None
+        self.text_score2 = None
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.tanks[0].shoot_angle %= 2.0 * math.pi
@@ -410,6 +412,31 @@ class HUD(Drawable):
             True,
             "white",
         )
+        color_score1 = "white"
+        if self.tanks[0].player.points >= self.tanks[1].player.points:
+            color_score1 = "green"
+        else:
+            color_score1 = "red"
+
+        self.text_score1 = self.font.render(
+            "Puntaje: %d" % self.tanks[0].player.points + " puntos",
+            True,
+            color_score1,
+        )
+        screen.blit(self.text_score1, pygame.Vector2(100, 875))
+        color_score2 = "white"
+        if self.tanks[1].player.points >= self.tanks[1].player.points:
+            color_score2 = "green"
+        else:
+            color_score2 = "red"
+
+        self.text_score2 = self.font.render(
+            "Puntaje: %d" % self.tanks[1].player.points + " puntos",
+            True,
+            color_score2,
+        )
+        screen.blit(self.text_score2, pygame.Vector2(750, 875))
+
         self.text_angle2 = self.font.render(
             "Ángulo: %.1f" % math.degrees(self.tanks[1].shoot_angle) + "°",
             True,
@@ -426,6 +453,7 @@ class HUD(Drawable):
             True,
             "white",
         )
+
         pygame.draw.rect(
             screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
         )
@@ -475,7 +503,7 @@ class HUD(Drawable):
             center = (360, 260)
             transparency = 220
             rect_surface = pygame.Surface((900, 500))
-            rect_surface.fill("#B35DB0")
+            rect_surface.fill("#64BA1E")
             rect_surface.set_alpha(transparency)
             rect_x1, rect_y1 = constants.H_WINNER
             screen.blit(rect_surface, (rect_x1, rect_y1))
