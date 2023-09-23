@@ -3,10 +3,10 @@ from __future__ import annotations
 import math
 import os
 import random
+import sys
 from abc import abstractmethod
 from random import randint
 from typing import Optional
-import sys
 
 import pygame
 
@@ -152,46 +152,59 @@ class Terrain(Drawable, Collidable):
                     20,
                 ),
             )
-            pygame.draw.rect(
-                screen,
-                "#c8dfe2",
-                pygame.Rect(
-                    i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - line + 20,
-                    constants.TERRAIN_LINE_WIDTH,
-                    line - 20,
-                ),
-            )
-            pygame.draw.rect(
-                screen,
-                "#50707f",
-                pygame.Rect(
-                    i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - line + 60,
-                    constants.TERRAIN_LINE_WIDTH,
-                    line - 60,
-                ),
-            )
-            pygame.draw.rect(
-                screen,
-                "#415c6b",
-                pygame.Rect(
-                    i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - line + 120,
-                    constants.TERRAIN_LINE_WIDTH,
-                    line - 120,
-                ),
-            )
-            pygame.draw.rect(
-                screen,
-                "#2e4957",
-                pygame.Rect(
-                    i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - line + 200,
-                    constants.TERRAIN_LINE_WIDTH,
-                    line - 200,
-                ),
-            )
+            if line >= 20:
+                pygame.draw.rect(
+                    screen,
+                    "#c8dfe2",
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        constants.WINDOWS_SIZE[1] - line + 20,
+                        constants.TERRAIN_LINE_WIDTH,
+                        40,
+                    ),
+                )
+            else:
+                continue
+
+            if line >= 60:
+                pygame.draw.rect(
+                    screen,
+                    "#50707f",
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        constants.WINDOWS_SIZE[1] - line + 60,
+                        constants.TERRAIN_LINE_WIDTH,
+                        60,
+                    ),
+                )
+            else:
+                continue
+
+            if line >= 120:
+                pygame.draw.rect(
+                    screen,
+                    "#415c6b",
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        constants.WINDOWS_SIZE[1] - line + 120,
+                        constants.TERRAIN_LINE_WIDTH,
+                        120,
+                    ),
+                )
+            else:
+                continue
+
+            if line >= 240:
+                pygame.draw.rect(
+                    screen,
+                    "#2e4957",
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        constants.WINDOWS_SIZE[1] - line + 240,
+                        constants.TERRAIN_LINE_WIDTH,
+                        line - 240,
+                    ),
+                )
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
