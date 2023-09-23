@@ -5,12 +5,16 @@ import os
 import random
 import sys
 from abc import abstractmethod
-from random import randint
+from random import Random, randint
 from typing import Optional
 
 import pygame
 
 import constants
+
+
+def sigmoid(x: float) -> float:
+    return 1.0 / (1 + math.exp(-x))
 
 
 def resource_path(relative_path: str):
@@ -36,6 +40,7 @@ class Background(Drawable):
     sky_image: pygame.Surface
     snowflakes: list[pygame.Vector2]
     wind: float
+    wind_target: float
 
     def __init__(self):
         image_size = pygame.Vector2(
@@ -49,6 +54,7 @@ class Background(Drawable):
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
         self.wind = 0
+        self.wind_target = 0
 
     def add_random_snowflake(self):
         self.snowflakes.append(
@@ -63,6 +69,12 @@ class Background(Drawable):
             snowflake.y += 1  # gravity
             if snowflake.y > (constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT):
                 snowflake.y -= constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT
+
+            if abs(self.wind - self.wind_target) < 1e-9:
+                self.wind_target = (random.random() - 0.5) * 5.0
+
+            wind_diff = self.wind_target - self.wind
+            self.wind += math.tanh(wind_diff) * 1e-5
 
             snowflake.x += self.wind
 
