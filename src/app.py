@@ -61,8 +61,8 @@ class Terrain(Drawable, Collidable):
         valleys = deformations_index[0:valley]
 
         for i in range(deformations):
-            start = segment_start + randint(-segment_size // 2, segment_size // 3)
-            end = segment_end + randint(-segment_size // 3, segment_size // 2)
+            start = segment_start + randint(3 * (-segment_size // 4), segment_size // 3)
+            end = segment_end + randint(-segment_size // 3, 3 * (segment_size // 4))
 
             start = max(start, 0)
             end = min(end, len(self.ground_lines) - 1)
@@ -108,7 +108,8 @@ class Terrain(Drawable, Collidable):
         self.ground_lines = [constants.SEA_LEVEL + constants.HUD_HEIGHT] * (
             constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
-        random.seed(constants.MAP_SEED)
+        if constants.MAP_SEED != -1:
+            random.seed(constants.MAP_SEED)
         self.completeListRandom(mountains, valleys)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -327,8 +328,6 @@ class HUD(Drawable):
         self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
         self.font100.set_bold(True)
         self.font100.set_italic(True)
-        self.font_score = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
-        self.font_score.set_bold(True)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -513,13 +512,15 @@ class HUD(Drawable):
             )
             screen.blit(self.text_winner_info, center)
 
-            self.text_winner_score = self.font_score.render(
+            self.font.set_bold(True)
+            self.text_winner_score = self.font.render(
                 "Puntaje: %d"
                 % self.tank_game.tanks[self.tank_game.winner].player.points
                 + " puntos",
                 True,
                 "white",
             )
+            self.font.set_bold(False)
             screen.blit(self.text_winner_score, pygame.Vector2(550, 250))
 
             pygame.draw.rect(
