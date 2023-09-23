@@ -354,16 +354,21 @@ class HUD(Drawable):
                 constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT,
             )
             pygame.draw.circle(screen, "#cc0000", draw_pos, 6)
-            cannonball_height = self.font16.render(
-                f"^{int(constants.WINDOWS_SIZE[1]- self.tank_game.cannonball.position.y- constants.HUD_HEIGHT)}[m]",
+            height = int(
+                constants.WINDOWS_SIZE[1]
+                - self.tank_game.cannonball.position.y
+                - constants.HUD_HEIGHT
+            )
+            cannonball_height_text = self.font16.render(
+                f"^{height}[m]",
                 True,
                 "white",
             )
             screen.blit(
-                cannonball_height,
+                cannonball_height_text,
                 (
-                    draw_pos[0] - cannonball_height.get_rect().size[0] // 2,
-                    draw_pos[1] + cannonball_height.get_rect().size[1] // 2,
+                    draw_pos[0] - cannonball_height_text.get_rect().size[0] // 2,
+                    draw_pos[1] + cannonball_height_text.get_rect().size[1] // 2,
                 ),
             )
 
@@ -498,9 +503,10 @@ class HUD(Drawable):
             )
             screen.blit(self.text_winner_info, center)
 
+            points = self.tank_game.tanks[self.tank_game.winner].player.points
             self.font.set_bold(True)
             self.text_winner_score = self.font.render(
-                f"Puntaje: {self.tank_game.tanks[self.tank_game.winner].player.points} puntos",
+                f"Puntaje: {points} puntos",
                 True,
                 "white",
             )
