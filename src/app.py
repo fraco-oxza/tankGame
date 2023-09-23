@@ -115,13 +115,13 @@ class Terrain(Drawable, Collidable):
         random.seed()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        for i in enumerate(self.ground_lines):
+        for (i, line) in enumerate(self.ground_lines):
             pygame.draw.rect(
                 screen,
                 constants.TERRAIN_COLOR,
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - self.ground_lines[i],
+                    constants.WINDOWS_SIZE[1] - line,
                     constants.TERRAIN_LINE_WIDTH,
                     20,
                 ),
@@ -131,9 +131,9 @@ class Terrain(Drawable, Collidable):
                 "#c8dfe2",
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - self.ground_lines[i] + 20,
+                    constants.WINDOWS_SIZE[1] - line + 20,
                     constants.TERRAIN_LINE_WIDTH,
-                    self.ground_lines[i] - 20,
+                    line - 20,
                 ),
             )
             pygame.draw.rect(
@@ -141,9 +141,9 @@ class Terrain(Drawable, Collidable):
                 "#50707f",
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - self.ground_lines[i] + 60,
+                    constants.WINDOWS_SIZE[1] - line + 60,
                     constants.TERRAIN_LINE_WIDTH,
-                    self.ground_lines[i] - 60,
+                    line - 60,
                 ),
             )
             pygame.draw.rect(
@@ -151,9 +151,9 @@ class Terrain(Drawable, Collidable):
                 "#415c6b",
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - self.ground_lines[i] + 120,
+                    constants.WINDOWS_SIZE[1] - line + 120,
                     constants.TERRAIN_LINE_WIDTH,
-                    self.ground_lines[i] - 120,
+                    line - 120,
                 ),
             )
             pygame.draw.rect(
@@ -161,9 +161,9 @@ class Terrain(Drawable, Collidable):
                 "#2e4957",
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - self.ground_lines[i] + 200,
+                    constants.WINDOWS_SIZE[1] - line + 200,
                     constants.TERRAIN_LINE_WIDTH,
-                    self.ground_lines[i] - 200,
+                    line - 200,
                 ),
             )
 
