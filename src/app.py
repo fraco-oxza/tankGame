@@ -51,7 +51,7 @@ class Background(Drawable):
 class Terrain(Drawable, Collidable):
     ground_lines: list[int]
 
-    def completeListRandom(self, mountains: int, valley: int):
+    def generate_terrain(self, mountains: int, valley: int):
         deformations = mountains + valley
         segment_size = len(self.ground_lines) // deformations
         segment_start = 0
@@ -111,11 +111,11 @@ class Terrain(Drawable, Collidable):
 
         if constants.MAP_SEED != -1:
             random.seed(constants.MAP_SEED)
-        self.completeListRandom(mountains, valleys)
+        self.generate_terrain(mountains, valleys)
         random.seed()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        for i in range(len(self.ground_lines)):
+        for i in enumerate(self.ground_lines):
             pygame.draw.rect(
                 screen,
                 constants.TERRAIN_COLOR,
@@ -208,18 +208,11 @@ class Cannonball(Drawable):
     def get_max_height(self) -> int:
         return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
 
-    def get_max_distance(
-        self, tank_position: pygame.Vector2, canonball_position: pygame.Vector2
-    ) -> int:
+    def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         return (
-            (canonball_position.x - tank_position.x) ** 2
-            + (canonball_position.y - tank_position.y) ** 2
+            (self.position.x - tank_position.x) ** 2
+            + (self.position.y - tank_position.y) ** 2
         ) ** (1 / 2)
-
-    def max_velocity(self) -> float:
-        angle_rad = math.atan2(self.velocity.y, self.velocity.x)
-        v_max = self.velocity.magnitude() * math.cos(angle_rad)
-        return v_max
 
 
 class Player:
@@ -362,12 +355,7 @@ class HUD(Drawable):
             )
             pygame.draw.circle(screen, "#cc0000", draw_pos, 6)
             cannonball_height = self.font16.render(
-                "^%d[m]"
-                % int(
-                    constants.WINDOWS_SIZE[1]
-                    - self.tank_game.cannonball.position.y
-                    - constants.HUD_HEIGHT
-                ),
+                f"^{int(constants.WINDOWS_SIZE[1]- self.tank_game.cannonball.position.y- constants.HUD_HEIGHT)}[m]",
                 True,
                 "white",
             )
@@ -390,66 +378,62 @@ class HUD(Drawable):
 
             if self.tank_game.cannonball is not None:
                 self.text_cannonball_info = self.font.render(
-                    "Maxima Altura: %d" % (self.tank_game.cannonball.get_max_height())
-                    + " [m]",
+                    f"Maxima Altura: {self.tank_game.cannonball.get_max_height()} [m]",
                     True,
                     "white",
                 )
                 screen.blit(self.text_cannonball_info, pygame.Vector2(40, 675))
             if self.tank_game.cannonball is not None:
-                distance = self.tank_game.cannonball.get_max_distance(
-                    self.tanks[self.tank_game.actual_player].position,
-                    self.tank_game.cannonball.position,
+                distance = self.tank_game.cannonball.calculate_distance_to(
+                    self.tanks[self.tank_game.actual_player].position
                 )
                 self.text_cannonball_info = self.font.render(
-                    "Distancia total: %d" % (distance) + " [m]",
+                    f"Distancia total: {distance} [m]",
                     True,
                     "white",
                 )
                 screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
         self.text_angle1 = self.font.render(
-            "Ángulo: %.1f" % math.degrees(self.tanks[0].shoot_angle) + "°",
+            f"Ángulo: {math.degrees(self.tanks[0].shoot_angle):.1f}°",
             True,
             "white",
         )
-        color_score1 = "white"
         if self.tanks[0].player.points >= self.tanks[1].player.points:
             color_score1 = "green"
         else:
             color_score1 = "red"
 
         self.text_score1 = self.font.render(
-            "Puntaje: %d" % self.tanks[0].player.points + " puntos",
+            f"Puntaje: {self.tanks[0].player.points} puntos",
             True,
             color_score1,
         )
         screen.blit(self.text_score1, pygame.Vector2(100, 875))
-        color_score2 = "white"
         if self.tanks[1].player.points >= self.tanks[1].player.points:
             color_score2 = "green"
         else:
             color_score2 = "red"
 
         self.text_score2 = self.font.render(
-            "Puntaje: %d" % self.tanks[1].player.points + " puntos",
+            f"Puntaje: {self.tanks[1].player.points} puntos",
             True,
             color_score2,
         )
         screen.blit(self.text_score2, pygame.Vector2(750, 875))
 
         self.text_angle2 = self.font.render(
-            "Ángulo: %.1f" % math.degrees(self.tanks[1].shoot_angle) + "°",
+            f"Ángulo: {math.degrees(self.tanks[1].shoot_angle):.1f}°",
             True,
             "white",
         )
 
         self.text_velocity1 = self.font.render(
-            "Velocidad: " + str(int(self.tanks[0].shoot_velocity)) + " m/s",
+            f"Velocidad: {int(self.tanks[0].shoot_velocity)} m/s",
             True,
             "white",
         )
         self.text_velocity2 = self.font.render(
-            "Velocidad: " + str(int(self.tanks[1].shoot_velocity)) + " m/s",
+            f"Velocidad: {int(self.tanks[1].shoot_velocity)} m/s",
             True,
             "white",
         )
@@ -516,9 +500,7 @@ class HUD(Drawable):
 
             self.font.set_bold(True)
             self.text_winner_score = self.font.render(
-                "Puntaje: %d"
-                % self.tank_game.tanks[self.tank_game.winner].player.points
-                + " puntos",
+                f"Puntaje: {self.tank_game.tanks[self.tank_game.winner].player.points} puntos",
                 True,
                 "white",
             )
@@ -617,8 +599,9 @@ class TankImpact(Impact):
 
 class TankGame:
     """
-    This class represents the complete game, it is responsible for maintaining the tanks, bullets, controlling user
-    input, drawing, among others. It can be said that it is the central class of the project.
+    This class represents the complete game, it is responsible for maintaining the
+    tanks, bullets, controlling user input, drawing, among others. It can be said that
+    it is the central class of the project.
     """
 
     terrain: Terrain
@@ -631,7 +614,8 @@ class TankGame:
 
     def __init__(self) -> None:
         """
-        constructor that initializes each element within the game, in addition to starting the window itself of the game
+        constructor that initializes each element within the game, in
+        addition to starting the window itself of the game.
         """
         pygame.init()
 
@@ -696,8 +680,9 @@ class TankGame:
 
     def render(self) -> None:
         """
-        This method is responsible for drawing each element of the window, it also puts the execution to sleep for a
-        while to make the game run at the fps, specified in the FPS constant
+        This method is responsible for drawing each element of the window, it also
+        puts the execution to sleep for a while to make the game run at the fps,
+        specified in the FPS constant
         :return:
         """
         self.background.draw(self.screen)
@@ -716,8 +701,9 @@ class TankGame:
 
     def check_running(self):
         """
-        This method checks if the player has sent the signal to close the window and stops the execution if this is the
-        case, it is also responsible for cleaning any position that has been left unused.
+        This method checks if the player has sent the signal to close the window and
+        stops the execution if this is the case, it is also responsible for cleaning
+        any position that has been left unused.
         :return:
         """
         for event in pygame.event.get():
@@ -726,8 +712,8 @@ class TankGame:
 
     def process_input(self) -> None:
         """
-        This method is responsible for reading from the keyboard what the user wants to do, modifying the attributes of
-        the tanks or creating the cannonball.
+        This method is responsible for reading from the keyboard what the user wants
+        to do, modifying the attributes of the tanks or creating the cannonball.
         :return:
         """
         playing_tank = self.tanks[self.actual_player]
@@ -768,8 +754,8 @@ class TankGame:
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
-        This method is responsible for moving the cannonball and seeing what happens, in case there is a terminal event,
-        it stops the execution
+        This method is responsible for moving the cannonball and seeing what happens,
+        in case there is a terminal event, it stops the execution
         :return:
         """
         if self.cannonball is None:
@@ -791,8 +777,9 @@ class TankGame:
 
     def wait_release_space(self) -> None:
         """
-        This method waits until the actual player releases the space key, because if we do not wait until the release,
-        the player could shoot a very short trajectory, and they accidentally shoot as the other player.
+        This method waits until the actual player releases the space key, because
+        if we do not wait until the release, the player could shoot a very short
+        trajectory, and they accidentally shoot as the other player.
         :return: None
         """
         while pygame.key.get_pressed()[pygame.K_SPACE]:
@@ -800,7 +787,6 @@ class TankGame:
             self.render()
 
     def start(self) -> None:
-        # Instrucciones
         self.hud.show_instructions(self.screen)
 
         while self.running:
