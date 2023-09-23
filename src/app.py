@@ -108,9 +108,11 @@ class Terrain(Drawable, Collidable):
         self.ground_lines = [constants.SEA_LEVEL + constants.HUD_HEIGHT] * (
             constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
+
         if constants.MAP_SEED != -1:
             random.seed(constants.MAP_SEED)
         self.completeListRandom(mountains, valleys)
+        random.seed()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         for i in range(len(self.ground_lines)):
