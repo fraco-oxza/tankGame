@@ -434,6 +434,7 @@ class HUD(Drawable):
         self.tank_game = tank_game
         self.tanks = tanks
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
+        self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
         self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
         self.font100.set_bold(True)
@@ -452,15 +453,11 @@ class HUD(Drawable):
         self.tanks[0].shoot_angle %= 2.0 * math.pi
         self.tanks[1].shoot_angle %= 2.0 * math.pi
 
-        pygame.draw.rect(
-            screen,
-            constants.HUD_COLOR,
-            pygame.Rect(
-                0,
-                constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT,
-                constants.WINDOWS_SIZE[0],
-                constants.HUD_HEIGHT,
-            ),
+        hud = pygame.image.load(resource_path("images/Angle.png"))
+        screen.blit(
+            hud,
+            (0,
+             constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT)
         )
 
         if self.tank_game.cannonball is not None:
@@ -515,8 +512,8 @@ class HUD(Drawable):
                 screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
                 self.tank_game.cannonball.draw_trajectory(screen)
 
-        self.text_angle1 = self.font.render(
-            f"Ángulo: {math.degrees(self.tanks[0].shoot_angle):.1f}°",
+        self.text_angle1 = self.font30.render(
+            f"{math.degrees(self.tanks[0].shoot_angle):.1f}°",
             True,
             "white",
         )
@@ -543,67 +540,31 @@ class HUD(Drawable):
         )
         screen.blit(self.text_score2, pygame.Vector2(750, 875))
 
-        self.text_angle2 = self.font.render(
-            f"Ángulo: {math.degrees(self.tanks[1].shoot_angle):.1f}°",
+        self.text_angle2 = self.font30.render(
+            f"{math.degrees(self.tanks[1].shoot_angle):.1f}°",
             True,
             "white",
         )
 
-        self.text_velocity1 = self.font.render(
-            f"Velocidad: {int(self.tanks[0].shoot_velocity)} m/s",
+        self.text_velocity1 = self.font30.render(
+            f"{int(self.tanks[0].shoot_velocity)} m/s",
             True,
             "white",
         )
-        self.text_velocity2 = self.font.render(
-            f"Velocidad: {int(self.tanks[1].shoot_velocity)} m/s",
+        self.text_velocity2 = self.font30.render(
+            f"{int(self.tanks[1].shoot_velocity)} m/s",
             True,
             "white",
         )
 
-        pygame.draw.rect(
-            screen, "Black", pygame.Rect(self.left, self.top, self.width, self.height)
-        )
-        pygame.draw.rect(
-            screen, "Grey", pygame.Rect(self.left, self.top, self.width, self.height), 2
-        )
-        pygame.draw.rect(
-            screen,
-            "Black",
-            pygame.Rect(self.left + 900, self.top, self.width, self.height),
-        )
-        pygame.draw.rect(
-            screen,
-            "Grey",
-            pygame.Rect(self.left + 900, self.top, self.width, self.height),
-            2,
-        )
-        pygame.draw.rect(
-            screen,
-            "Black",
-            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
-        )
-        pygame.draw.rect(
-            screen,
-            "Grey",
-            pygame.Rect(self.left + 200, self.top, self.width + 60, self.height),
-            2,
-        )
-        pygame.draw.rect(
-            screen,
-            "Black",
-            pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
-        )
-        pygame.draw.rect(
-            screen,
-            "Grey",
-            pygame.Rect(self.left + 640, self.top, self.width + 60, self.height),
-            2,
-        )
-
-        screen.blit(self.text_angle1, (self.left + 5, self.top + 5))
-        screen.blit(self.text_angle2, (self.left + 905, self.top + 5))
-        screen.blit(self.text_velocity1, (self.left + 205, self.top + 5))
-        screen.blit(self.text_velocity2, (self.left + 645, self.top + 5))
+        screen.blit(self.text_angle1,
+                    ((constants.WINDOWS_SIZE[0]*0.07), constants.WINDOWS_SIZE[1] - (constants.HUD_HEIGHT*0.7)))
+        screen.blit(self.text_angle2,
+                    ((constants.WINDOWS_SIZE[0]*0.87), constants.WINDOWS_SIZE[1] - (constants.HUD_HEIGHT*0.7)))
+        screen.blit(self.text_velocity1,
+                    ((constants.WINDOWS_SIZE[0]*0.21), constants.WINDOWS_SIZE[1] - (constants.HUD_HEIGHT*0.7)))
+        screen.blit(self.text_velocity2,
+                    ((constants.WINDOWS_SIZE[0]*0.7), constants.WINDOWS_SIZE[1] - (constants.HUD_HEIGHT*0.7)))
 
         if constants.DEVELOPMENT_MODE:
             screen.blit(
