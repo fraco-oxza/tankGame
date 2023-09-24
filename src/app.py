@@ -625,7 +625,7 @@ class WinnerScreen(Drawable):
     def __init__(self, tank_game: TankGame):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
         self.tank_game = tank_game
-        self.pos_fuegos = []
+        self.pos_fuegos = pygame.Vector2
         self.text_winner_info = None
         self.text_winner_score = None
         self.text_score1 = None
@@ -633,6 +633,10 @@ class WinnerScreen(Drawable):
         self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
         self.font100.set_bold(True)
         self.font100.set_italic(True)
+        self.vx = random.uniform(-1, 1)
+        self.vy = random.uniform(-5, -1)
+        # self.color = ["#cccccc","ffffff","aaaaaa"]
+        self.radio = 2
 
     def winner_mensaje(self, screen: pygame.surface.Surface):
         """
@@ -711,9 +715,21 @@ class WinnerScreen(Drawable):
             15,
         )
 
+    def fuegos_artificiales(self, screen: pygame.surface.Surface):
+        color = ["#cccccc", "#000000", "#aaaaaa"]
+        posiciones = [pygame.Vector2(500, 500), pygame.Vector2(600, 600), pygame.Vector2(400, 400)]
+        self.pos_fuegos = pygame.Vector2(random.randint(0, len(posiciones) - 1))
+        pos_x = int(self.pos_fuegos.x)
+        pos_y = int(self.pos_fuegos.y)
+        for i in range(len(color)):
+            pos_x += self.vx
+            pos_y += self.vy
+            pygame.draw.circle(screen, color[i], (pos_x, pos_y), self.radio)
+
     def draw(self, screen: pygame.surface.Surface) -> None:
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
+            self.fuegos_artificiales(screen)
 
 
 class Impact:
@@ -1010,6 +1026,7 @@ class TankGame:
             if keys_pressed[pygame.K_SPACE]:
                 break
             self.render()
+
 
 def main():
     tank_game = TankGame()
