@@ -949,7 +949,7 @@ class TankGame:
                 actual_radius_position = (((self.tanks[
                                                 self.actual_player].position.x - self.cannonball.position.x) ** 2) + ((
                             (self.tanks[self.actual_player].position.y - self.cannonball.position.y) ** 2))) ** 0.5
-                if actual_radius_position >= 20:
+                if actual_radius_position >= constants.TANK_RADIO:
                     self.running = False
                     self.winner = self.actual_player
                     return TankImpact(self.cannonball.position)
