@@ -13,10 +13,6 @@ import pygame
 import constants
 
 
-def sigmoid(x: float) -> float:
-    return 1.0 / (1 + math.exp(-x))
-
-
 def resource_path(relative_path: str):
     path = getattr(
         sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
@@ -335,7 +331,7 @@ class Player:
                            (cannonball_position.x - tank_position.x) ** 2
                            + (cannonball_position.y - tank_position.y) ** 2
                    ) ** (1 / 2)
-        if isinstance(impact, TerrainImpact):
+        if impact.impact_type == ImpactType.TERRAIN:
             if distance <= constants.TANK_RADIO * 2:
                 self.points = self.points + 100
             elif distance <= constants.TANK_RADIO + 200:
@@ -343,7 +339,7 @@ class Player:
             else:
                 self.points = self.points - (self.points // 3)
 
-        elif isinstance(impact, TankImpact):
+        elif impact.impact_type == ImpactType.TANK:
             self.points += 10000
 
 
@@ -732,23 +728,19 @@ class WinnerScreen(Drawable):
             self.fuegos_artificiales(screen)
 
 
+class ImpactType:
+    TERRAIN = 0
+    BORDER = 1
+    TANK = 2
+
+
 class Impact:
     position: pygame.Vector2
+    impact_type: int
 
-    def __init__(self, position: pygame.Vector2) -> None:
+    def __init__(self, position: pygame.Vector2, impact_type: int) -> None:
         self.position = position
-
-
-class TerrainImpact(Impact):
-    pass
-
-
-class TankImpact(Impact):
-    pass
-
-
-class BorderImpact(Impact):
-    pass
+        self.impact_type = impact_type
 
 
 class TankGame:
@@ -939,20 +931,20 @@ class TankGame:
                 self.cannonball.position.x < 0
                 or self.cannonball.position.x > constants.WINDOWS_SIZE[0]
         ):
-            return BorderImpact(self.cannonball.position)
+            return Impact(self.cannonball.position, ImpactType.BORDER)
 
         if self.terrain.collides_with(self.cannonball.position):
-            return TerrainImpact(self.cannonball.position)
+            return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
             if tank.collides_with(self.cannonball.position):
                 actual_radius_position = (((self.tanks[
                                                 self.actual_player].position.x - self.cannonball.position.x) ** 2) + ((
-                            (self.tanks[self.actual_player].position.y - self.cannonball.position.y) ** 2))) ** 0.5
+                        (self.tanks[self.actual_player].position.y - self.cannonball.position.y) ** 2))) ** 0.5
                 if actual_radius_position >= 20:
                     self.running = False
                     self.winner = self.actual_player
-                    return TankImpact(self.cannonball.position)
+                    return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     print("SUICIDIO")
 
@@ -1005,15 +997,14 @@ class TankGame:
                     break
                 self.render()
 
-            if isinstance(self.last_state, Impact):
+            if self.last_state is not None:
                 other_player = (self.actual_player + 1) % 2
                 self.tanks[self.actual_player].player.score(
                     self.last_state, self.tanks[other_player].position
                 )
 
             if (
-                    not isinstance(self.last_state, BorderImpact)
-                    and self.cannonball is not None
+                    (self.last_state.impact_type != ImpactType.BORDER) and self.cannonball is not None
             ):
                 self.cannonball.kill()
                 self.old_cannonballs.append(self.cannonball)
