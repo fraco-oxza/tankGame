@@ -60,7 +60,6 @@ class WinnerScreen extends Drawable{
     +winner_mensaje(Surface)
     +fuegos_artificiales(Surface)
     +draw(Surface): None
-
 }
 
 class Terrain extends Drawable {
@@ -99,8 +98,10 @@ class Tank extends Collidable  {
 }
 
 class Player {
-    - points: double
+    +name: str
+    + points: double
     +score(position_cannonball, position) : int
+    +score(impact: Impact, tank_position: pygame.Vector2)
 }
 class WinnerScreen extends Drawable
 {
@@ -109,7 +110,8 @@ class WinnerScreen extends Drawable
 }
 class Impact:
 {
-    -position: pygame.Vector2
+    +position: pygame.Vector2
+    +impact_type: int
 
 }
 
@@ -135,7 +137,12 @@ class Constants {
     +White:color
     +Menu :color
 }
-
+class ImpactType{
+    +TERRAIN :int
+    +BORDER :int
+    +TANK :int
+    +SUICIDIO int
+}
 TankGame -- Constants
 WinnerScreen *-->  TankGame
 TankGame *--> Tank
@@ -143,5 +150,7 @@ TankGame o--> Cannonball
 TankGame *--> Terrain
 Tank *--> Player
 HUD *--> Tank
+Impact *-->ImpactType
+TankGame *-->Impact
 
 @enduml
