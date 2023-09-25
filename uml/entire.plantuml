@@ -148,6 +148,7 @@ WinnerScreen *-->  TankGame
 TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
+TankGame o-->Background
 Tank *--> Player
 HUD *--> Tank
 Impact *-->ImpactType
