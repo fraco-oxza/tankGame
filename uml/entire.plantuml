@@ -31,10 +31,7 @@ class Cannonball extends Drawable {
 interface Drawable {
     + draw(Surface)
 }
-class Background extends Drawable{
-    +sky()
-    +draw(screen: pygame.surface.Surface)
-}
+
 class HUD extends Drawable{
     + tanks: list[Tank]
     + left: int
@@ -42,27 +39,35 @@ class HUD extends Drawable{
     + width: int
     + height: int
 
+class WinnerScreen extends Drawable{
+    +winner_mensaje(Surface)
+    +fuegos_artificiales((Surface)
+    +draw(Surface): None
+
+}
+
 class Terrain extends Drawable {
     +gruond_lines: List<Int>
 
-    + Terrain(mountains: int, valleys: int)
-    +increase_mountain(lista: list, indexInicio: int, indexFinal: int):list
-    +decreaseMountain(lista: list, indexInicio: int, indexFinal: int):list
-    +complete_list():list
+    + generate_terrain(mountains: int, valleys: int)
+    +mountain(i: int, j: int, height: int):
+    +valley( inicio: int, fin: int, profundidad: int)
     +draw( screen: pygame.surface.Surface)
-    +collidesWith(self, point: pygame.Vector2): bool
+    +collidesWith( point: pygame.Vector2): bool
 }
 class Collidable {
  +collides_with(Point)) : Boolean
 }
-class Terrain {
-    + Terrain(List<Point>):
-    + isInside(Point): Boolean
-}
-class Background(Drawable){
 
-    + sky():sky_rect, sky
-    + draw(Surface):None
+class Background extends Drawable{
+    +sky_image: pygame.Surface
+    +snowflakes: list[pygame.Vector2]
+    +wind: float
+    +wind_target: float
+
+    + add_random_snowflake()
+    + draw_snowflakes(Surface)
+    +draw(Surface):None
 }
 class Tank extends Collidable  {
     - player: Player
@@ -105,7 +110,7 @@ class Constants {
 }
 
 TankGame -- Constants
-
+WinnerScreen *-->  TankGame
 TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
