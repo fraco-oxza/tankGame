@@ -3,7 +3,6 @@
 top to bottom direction
 skinparam linetype ortho
 
-' Fco
 class TankGame {
     + terrain: Terrain
     + tanks: list[Tank]
@@ -18,6 +17,9 @@ class TankGame {
     + TankGame():
     + render(): None
     + check_running(): bool
+    + cannonball_travel(): None
+    + wait_on_space(): None
+    + check_last_state(): None
     + process_input(): None
     + process_cannonball_trajectory(): None
     + wait_release_space(): None
