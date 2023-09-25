@@ -87,6 +87,7 @@ class Background extends Drawable{
     + draw_snowflakes(Surface)
     + draw(Surface):None
     +tick(dt: float): None
+
 }
 class Tank extends Collidable  {
     - player: Player
