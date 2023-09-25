@@ -35,6 +35,11 @@ class Collidable:
 
     @abstractmethod
     def collides_with(self, point: pygame.Vector2) -> bool:
+        """
+        Esta funcion es la encargada de decir si self, es decir la instancia colisionable
+        ya colisionó con un punto. Debe retornar True en caso de que colisione
+        y False en otro caso.
+        """
         raise NotImplementedError
 
 
@@ -62,10 +67,7 @@ class Background(Drawable):
     wind_target: float
 
     def __init__(self):
-        """
-        Initialize the class by loading the images and creating the snowflakes.
-        """
-
+        """Initialize the class by loading the images and creating the snowflakes."""
         image_size = pygame.Vector2(
             constants.WINDOWS_SIZE[0], (9 / 16) * constants.WINDOWS_SIZE[0]
         )
@@ -80,9 +82,7 @@ class Background(Drawable):
         self.wind_target = 0
 
     def add_random_snowflake(self):
-        """
-        Add a snowflake at a random valid position within the map.
-        """
+        """Add a snowflake at a random valid position within the map."""
         self.snowflakes.append(
             pygame.Vector2(
                 randint(0, constants.WINDOWS_SIZE[0]),
@@ -117,9 +117,7 @@ class Background(Drawable):
             snowflake.x += self.wind
 
     def draw_snowflakes(self, screen: pygame.surface.Surface):
-        """
-        This function draws each snowflake present in the list of snowflakes.
-        """
+        """This function draws each snowflake present in the list of snowflakes."""
         for snowflake in self.snowflakes:
             pygame.draw.circle(screen, "#ffffff", snowflake, 1)
 
@@ -563,7 +561,6 @@ class Tank(Drawable, Collidable):
         y calcula la  posición del proyectil después del disparo.
         También crea y retorna el objeto Cannonball con estos atributos.
         """
-
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
         # the -1 is since in this system the vertical coordinates are inverted
         v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
@@ -1274,6 +1271,10 @@ class TankGame:
 
 
 def main():
+    """
+    From this function the program is started, creating the only instance of 
+    TankGame that exists.
+    """
     tank_game = TankGame()
     tank_game.start()
 
