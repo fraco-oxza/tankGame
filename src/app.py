@@ -14,6 +14,13 @@ import constants
 
 
 def resource_path(relative_path: str):
+    """
+    This function is responsible for loading the resources from the resources
+    folder. It is conditional, since when the program is packaged in an 
+    executable, the folder directory changes and other directories must be 
+    used. When the _MEIPASS environment variable is set, it means it is 
+    packaged.
+    """
     path = getattr(
         sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
     )
@@ -542,7 +549,7 @@ class HUD(Drawable):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
-        self.suicidio = VentanaSuicidio(self.tank_game)
+        self.self_impact_windows = SelfImpactWindows(self.tank_game)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -692,7 +699,7 @@ class HUD(Drawable):
             self.tank_game.last_state is not None
             and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
         ):
-            self.suicidio.loser_mensaje(screen)
+            self.self_impact_windows.draw(screen)
 
         if constants.DEVELOPMENT_MODE:
             screen.blit(
@@ -875,7 +882,11 @@ class Impact:
         self.impact_type = impact_type
 
 
-class VentanaSuicidio:
+class SelfImpactWindows(Drawable):
+    """
+    This class represents a warning that is drawable, used when a tank shoots 
+    itself. In this case there are no winners and be warned
+    """
     def __init__(self, tank_game: TankGame):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
         self.tank_game = tank_game
@@ -888,7 +899,7 @@ class VentanaSuicidio:
         self.font100.set_bold(True)
         self.font100.set_italic(True)
 
-    def loser_mensaje(self, screen: pygame.surface.Surface):
+    def draw(self, screen: pygame.surface.Surface):
         center = (360, 260)
         transparency = 220
         rect_surface = pygame.Surface((900, 500))
@@ -1012,7 +1023,7 @@ class TankGame:
         if self.winner is not None:
             self.winner_msj.draw(self.screen)
         self.hud.draw(self.screen)
-        self.background.tick(1.0/self.fps)
+        self.background.tick(1.0/(self.fps+0.1))
 
         pygame.display.flip()
         self.clock.tick(constants.FPS)
