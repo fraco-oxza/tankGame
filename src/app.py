@@ -98,6 +98,11 @@ class Terrain(Drawable, Collidable):
     ground_lines: list[int]
 
     def generate_terrain(self, mountains: int, valley: int):
+        """
+        Esta función genera el terreno aleatorio,  dividiendolo en segmentos,
+        donde se agregan deformaciones  (usando las funciones montañas y valles).
+        Las montañas y valles se generan dentro de segmentos específicos y se determinan aleatoriamente.
+        """
         deformations = mountains + valley
         segment_size = constants.WINDOWS_SIZE[0] // deformations
         segment_start = 0
@@ -181,6 +186,10 @@ class Terrain(Drawable, Collidable):
         random.seed()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        Esta función dibuja diferentes capas del terreno utilizando diferentes colores y alturas,
+        Esto permite simular el sustrato del suelo
+        """
         for i, line in enumerate(self.ground_lines):
             pygame.draw.rect(
                 screen,
@@ -247,6 +256,10 @@ class Terrain(Drawable, Collidable):
                 )
 
     def collides_with(self, point: pygame.Vector2) -> bool:
+        """
+        Esta función se encarga de verificar si la posición de la bala colisionó o no con el terreno,
+        esto lo hace comparando la altura del terreno en la línea correspondiente al punto con la coordenada del cañón
+        """
         line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
 
         return point.y > (constants.WINDOWS_SIZE[1] - self.ground_lines[line_index])
