@@ -5,7 +5,7 @@ import os
 import random
 import sys
 from abc import abstractmethod
-from random import Random, randint
+from random import randint
 from typing import Optional
 
 import pygame
@@ -16,9 +16,9 @@ import constants
 def resource_path(relative_path: str):
     """
     This function is responsible for loading the resources from the resources
-    folder. It is conditional, since when the program is packaged in an 
-    executable, the folder directory changes and other directories must be 
-    used. When the _MEIPASS environment variable is set, it means it is 
+    folder. It is conditional, since when the program is packaged in an
+    executable, the folder directory changes and other directories must be
+    used. When the _MEIPASS environment variable is set, it means it is
     packaged.
     """
     path = getattr(
@@ -29,8 +29,8 @@ def resource_path(relative_path: str):
 
 class Collidable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a otras clases, donde se espera
-    haya colisiones.
+    Clase que contiene un método abstracto que se pasa a través de Override a 
+    otras clases, donde se espera haya colisiones.
     """
 
     @abstractmethod
@@ -40,8 +40,9 @@ class Collidable:
 
 class Drawable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a otras clases, donde se crearán
-    elementos visuales que serán mostrados por medio de la interfaz.
+    Clase que contiene un método abstracto que se pasa a través de Override a 
+    otras clases, donde se crearán elementos visuales que serán mostrados por 
+    medio de la interfaz.
     """
 
     @abstractmethod
@@ -83,9 +84,9 @@ class Background(Drawable):
             if snowflake.y > (constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT):
                 snowflake.y -= constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT
             if abs(self.wind - self.wind_target) < 1e-9:
-                self.wind_target = (random.random() - 0.5) * 5.0
+                self.wind_target = (random.random() - 0.5) * 10.0
             wind_diff = self.wind_target - self.wind
-            self.wind += math.tanh(wind_diff) * 1e-6
+            self.wind += math.tanh(wind_diff) * dt * 1e-3
 
             snowflake.x += self.wind
 
@@ -105,8 +106,8 @@ class Background(Drawable):
 
 class Terrain(Drawable, Collidable):
     """
-    Esta clase representa al terreno, permite generar y dibujarlo aleatoriamente por cada partida,
-    además comprueba colisiones con este
+    Esta clase representa al terreno, permite generar y dibujarlo aleatoriamente
+    por cada partida, además comprueba colisiones con este
     """
 
     ground_lines: list[int]
@@ -114,8 +115,10 @@ class Terrain(Drawable, Collidable):
     def generate_terrain(self, mountains: int, valley: int):
         """
         Esta función genera el terreno aleatorio,  dividiendolo en segmentos,
-        donde se agregan deformaciones  (usando las funciones montañas y valles).
-        Las montañas y valles se generan dentro de segmentos específicos y se determinan aleatoriamente.
+        donde se agregan deformaciones  (usando las funciones montañas y 
+        valles).
+        Las montañas y valles se generan dentro de segmentos específicos y se 
+        determinan aleatoriamente.
         """
         deformations = mountains + valley
         segment_size = constants.WINDOWS_SIZE[0] // deformations
@@ -149,10 +152,11 @@ class Terrain(Drawable, Collidable):
 
     def mountain(self, i: int, j: int, height: int):
         """
-        Esta función montañas va desde un punto de inicio, hasta un punto final,incluyendo su
-        punto medio para que sean simétricas. El primer for incluye en la lista ground_lines
-        los valores que van creciendo hasta el punto medio, mientras que el segundo for los
-        valores que van decreciendo desde el punto medio hasta el punto final
+        Esta función montañas va desde un punto de inicio, hasta un punto final,
+        incluyendo su punto medio para que sean simétricas. El primer for 
+        incluye en la lista ground_lines los valores que van creciendo hasta el 
+        punto medio, mientras que el segundo for los valores que van decreciendo 
+        desde el punto medio hasta el punto final
         """
         m = (i + j) // 2
         original_max = (m - i - 1) ** 2
@@ -170,10 +174,11 @@ class Terrain(Drawable, Collidable):
 
     def valley(self, inicio: int, fin: int, profundidad: int):
         """
-        Esta función valles desde un punto de inicio, hasta un punto final,incluyendo su
-        punto medio para que sean simétricos. El primer for incluye en la lista ground_lines
-        los valores que van decreciendo hasta el punto medio, mientras que el segundo for los
-        valores que van creciendo desde el punto medio hasta el final
+        Esta función valles desde un punto de inicio, hasta un punto final,
+        incluyendo su punto medio para que sean simétricos. El primer for 
+        incluye en la lista ground_lines los valores que van decreciendo hasta 
+        el punto medio, mientras que el segundo for los valores que van 
+        creciendo desde el punto medio hasta el final
         """
         m = (inicio + fin) // 2
         original_max = (m - inicio - 1) ** 2
@@ -201,8 +206,8 @@ class Terrain(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función dibuja diferentes capas del terreno utilizando diferentes colores y alturas,
-        Esto permite simular el sustrato del suelo
+        Esta función dibuja diferentes capas del terreno utilizando diferentes 
+        colores y alturas, esto permite simular el sustrato del suelo
         """
         for i, line in enumerate(self.ground_lines):
             pygame.draw.rect(
@@ -271,8 +276,9 @@ class Terrain(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
-        Esta función se encarga de verificar si la posición de la bala colisionó o no con el terreno,
-        esto lo hace comparando la altura del terreno en la línea correspondiente al punto con la coordenada del cañón
+        Esta función se encarga de verificar si la posición de la bala colisionó
+        o no con el terreno, esto lo hace comparando la altura del terreno en la
+        línea correspondiente al punto con la coordenada del cañón
         """
         line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
 
@@ -281,8 +287,9 @@ class Terrain(Drawable, Collidable):
 
 class Cannonball(Drawable):
     """
-    Esta clase representa una bala de cañón en movimiento,
-    proporciona funcionalidades para actualizar su posición, dibujar su trayectoria y obtener información.
+    Esta clase representa una bala de cañón en movimiento, proporciona 
+    funcionalidades para actualizar su posición, dibujar su trayectoria y 
+    obtener información.
     """
 
     position: pygame.Vector2
@@ -302,8 +309,9 @@ class Cannonball(Drawable):
 
     def tick(self, dt: float):
         """
-        Esta función va actualizando la posición de la bala por cada intervalo de tiempo, su propósito es simular el movimiento y comportamiento
-        de la parábola que dibuja la bala del cañón
+        Esta función va actualizando la posición de la bala por cada intervalo 
+        de tiempo, su propósito es simular el movimiento y comportamiento de la 
+        parábola que dibuja la bala del cañón
         """
         if self.position.y < self.max_height:
             self.max_height = int(self.position.y)
@@ -322,15 +330,17 @@ class Cannonball(Drawable):
 
     def kill(self):
         """
-         Esta función "desactiva" la bala de cañón para indicar qye ya no está en uso,
-        para esto elimina el atributo trajectory del objeto y establece el estado de vida en False
+        Esta función "desactiva" la bala de cañón para indicar qye ya no está en 
+        uso, para esto elimina el atributo trajectory del objeto y establece el 
+        estado de vida en False
         """
         del self.trajectory
         self.is_alive = False
 
     def draw_trajectory(self, screen: pygame.surface.Surface):
         """
-        Esta función dibuja la trayectoria de la bala, por cada punto en la lista trayectory dibuja un circulo.
+        Esta función dibuja la trayectoria de la bala, por cada punto en la 
+        lista trajectory dibuja un circulo.
         """
         for point in self.trajectory:
             pygame.draw.circle(
@@ -339,8 +349,8 @@ class Cannonball(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función se encarga de dibujar la trayectoria con la figura de misil de la bala,
-        y si está vivo, dibuja un efecto de fuego
+        Esta función se encarga de dibujar la trayectoria con la figura de misil
+        de la bala, y si está vivo, dibuja un efecto de fuego
         """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
@@ -356,20 +366,22 @@ class Cannonball(Drawable):
             4,
         )
 
-        fire_x = tail_x - 6 * angle_x
-        fire_y = tail_y - 6 * angle_y
         if self.is_alive:
+            fire_x = tail_x - 6 * angle_x
+            fire_y = tail_y - 6 * angle_y
             pygame.draw.line(screen, "#fbb741", (tail_x, tail_y), (fire_x, fire_y), 6)
 
     def get_max_height(self) -> int:
         """
-        esta función se encarga de retornar la altura máxima del lanzamiento de la bala
+        esta función se encarga de retornar la altura máxima del lanzamiento de 
+        la bala
         """
         return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
-        esta función se encarga de retornar la distancia máxima entre la bala y el tanque que la lanzó
+        esta función se encarga de retornar la distancia máxima entre la bala y 
+        el tanque que la lanzó
         """
         return (
             (self.position.x - tank_position.x) ** 2
@@ -379,8 +391,9 @@ class Cannonball(Drawable):
 
 class Player:
     """
-    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador, a través
-    del cálculo de la distancia con la bala lanzada y el tanque en objetivo
+    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador, 
+    a través del cálculo de la distancia con la bala lanzada y el tanque en 
+    objetivo
     """
 
     name: str
@@ -392,9 +405,9 @@ class Player:
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
         """
-        Función que se encarga de asignar el puntaje mediante el cálculo de la distancia
-        cuando la bala cae con el tanque objetivo, mientras la bala caiga más cerca se le
-        asigna más puntaje al jugador
+        Función que se encarga de asignar el puntaje mediante el cálculo de la 
+        distancia cuando la bala cae con el tanque objetivo, mientras la bala 
+        caiga más cerca se le asigna más puntaje al jugador
         """
         cannonball_position = impact.position
         distance = (
@@ -416,7 +429,8 @@ class Player:
 class Tank(Drawable, Collidable):
     """
     Esta clase representa un tanque en el juego,
-    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar una bala de cañón en una dirección y velocidad específica
+    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar 
+    una bala de cañón en una dirección y velocidad específica
     """
 
     player: Player
@@ -434,8 +448,9 @@ class Tank(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función se encarga de dibujar el tanque y actualiza la posiciónd del cañón del tanque
-        según su ángulo. Además, si está activado el modo desarrollador dibuja la hitbox
+        Esta función se encarga de dibujar el tanque y actualiza la posición del
+        cañón del tanque según su ángulo. Además, si está activado el modo 
+        desarrollador dibuja la hitbox
         """
         if constants.DEVELOPMENT_MODE:
             pygame.draw.circle(
@@ -505,8 +520,8 @@ class Tank(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
-        Esta función se encarga de revisar si el tanque fue golpeado por la bala del cañón
-        retornado True o False según corresponda
+        Esta función se encarga de revisar si el tanque fue golpeado por la bala
+        del cañón retornado True o False según corresponda
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
@@ -533,7 +548,8 @@ class Tank(Drawable, Collidable):
 
 class HUD(Drawable):
     """
-    Esta clase es responsable de mostrar elementos relacionados con la información en pantalla que no es parte del terreno o del juego en sí
+    Esta clase es responsable de mostrar elementos relacionados con la 
+    información en pantalla que no es parte del terreno o del juego en sí
     """
 
     tanks: list[Tank]
@@ -558,9 +574,11 @@ class HUD(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función  permite mostrar en pantalla todo lo relacionado a la información de cada tanque tales como angulo y velocidad de disparo, puntaje,
-        máxima altura, máxima distancia, también verifica si el tanque se suicidó para llamar a la función correspondiente.
-        Además, si el modo desarrollador está activado muestra los FPS.
+        Esta función  permite mostrar en pantalla todo lo relacionado a la 
+        información de cada tanque tales como angulo y velocidad de disparo, 
+        puntaje, máxima altura, máxima distancia, también verifica si el tanque 
+        se suicidó para llamar a la función correspondiente. Además, si el modo 
+        desarrollador está activado muestra los FPS.
         """
         self.tanks[0].shoot_angle %= 2.0 * math.pi
         self.tanks[1].shoot_angle %= 2.0 * math.pi
@@ -631,23 +649,23 @@ class HUD(Drawable):
         else:
             color_score1 = "red"
 
-        self.text_score1 = self.font.render(
+        text_score1 = self.font.render(
             f"Puntaje: {self.tanks[0].player.points} puntos",
             True,
             color_score1,
         )
-        screen.blit(self.text_score1, pygame.Vector2(100, 875))
+        screen.blit(text_score1, pygame.Vector2(100, 875))
         if self.tanks[1].player.points >= self.tanks[1].player.points:
             color_score2 = "green"
         else:
             color_score2 = "red"
 
-        self.text_score2 = self.font.render(
+        text_score2 = self.font.render(
             f"Puntaje: {self.tanks[1].player.points} puntos",
             True,
             color_score2,
         )
-        screen.blit(self.text_score2, pygame.Vector2(750, 875))
+        screen.blit(text_score2, pygame.Vector2(750, 875))
 
         self.text_angle2 = self.font30.render(
             f"{math.degrees(self.tanks[1].shoot_angle):.1f}°",
@@ -713,7 +731,8 @@ class HUD(Drawable):
 
     def show_instructions(self, screen: pygame.surface.Surface):
         """
-        Esta función permite mostrar al inicio del juego una imagen con las instrucciones necesarias para el/los jugadores
+        Esta función permite mostrar al inicio del juego una imagen con las 
+        instrucciones necesarias para el/los jugadores
         """
         screen.fill("#151f28")
 
@@ -742,13 +761,15 @@ class HUD(Drawable):
 
 class WinnerScreen(Drawable):
     """
-    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el ganador, mostrando su puntaje y
-    el correspondiente tanque para una mejor distinción.
+    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el 
+    ganador, mostrando su puntaje y el correspondiente tanque para una mejor 
+    distinción.
     """
 
     def __init__(self, tank_game: TankGame):
         """
-        Constructor que inicializa todas los elementos necesarios para monstrar el mensaje de victoria.
+        Constructor que inicializa todas los elementos necesarios para monstrar 
+        el mensaje de victoria.
         """
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
         self.tank_game = tank_game
@@ -762,18 +783,18 @@ class WinnerScreen(Drawable):
         self.font100.set_italic(True)
         self.vx = random.uniform(-1, 1)
         self.vy = random.uniform(-5, -1)
-        # self.color = ["#cccccc","ffffff","aaaaaa"]
         self.radio = 2
 
     def winner_mensaje(self, screen: pygame.surface.Surface):
         """
-        Esta función crea el mensaje de ganador, haciendo una ventana que muestre
-        toda la información que el ganador sacó de la partida, incluyendo su puntaje, y como
-        adicional se dibuja el tanque del color ganador
+        Esta función crea el mensaje de ganador, haciendo una ventana que
+        muestre toda la información que el ganador sacó de la partida, 
+        incluyendo su puntaje, y como adicional se dibuja el tanque del color 
+        ganador
         """
         if self.tank_game.winner is None:
             # Si no hay ganador, no se ejecuta
-            return 
+            return
 
         center = (360, 260)
         transparency = 220
@@ -848,8 +869,9 @@ class WinnerScreen(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Función que en el caso de que haya un ganador y aún no se muestre en pantalla, redigirá hacia otra función donde
-        el mensaje se creará y será presentado al usuario por medio de la interfaz.
+        Función que en el caso de que haya un ganador y aún no se muestre en
+        pantalla, redigirá hacia otra función donde el mensaje se creará y será
+        presentado al usuario por medio de la interfaz.
         """
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
@@ -869,9 +891,9 @@ class ImpactType:
 
 class Impact:
     """
-    Clase encargada de encontrar la posición en la que la bala impacta y determinar
-    mediante el atributo impact_type con qué impacta terreno, borde, tanque o si es un
-    suicidio
+    Clase encargada de encontrar la posición en la que la bala impacta y 
+    determinar mediante el atributo impact_type con qué impacta terreno, borde, 
+    tanque o si es un suicidio
     """
 
     position: pygame.Vector2
@@ -884,9 +906,10 @@ class Impact:
 
 class SelfImpactWindows(Drawable):
     """
-    This class represents a warning that is drawable, used when a tank shoots 
+    This class represents a warning that is drawable, used when a tank shoots
     itself. In this case there are no winners and be warned
     """
+
     def __init__(self, tank_game: TankGame):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
         self.tank_game = tank_game
@@ -1003,12 +1026,10 @@ class TankGame:
 
     def render(self) -> None:
         """
-        This method is responsible for drawing each element of the window, it also
-        puts the execution to sleep for a while to make the game run at the fps,
-        specified in the FPS constant
-        :return:
+        This method is responsible for drawing each element of the window, it 
+        also puts the execution to sleep for a while to make the game run at the
+        fps, specified in the FPS constant
         """
-        # self.screen.fill("blue")
         self.background.draw(self.screen)
         self.terrain.draw(self.screen)
 
@@ -1023,7 +1044,7 @@ class TankGame:
         if self.winner is not None:
             self.winner_msj.draw(self.screen)
         self.hud.draw(self.screen)
-        self.background.tick(1.0/(self.fps+0.1))
+        self.background.tick(1.0 / (self.fps + 0.1))
 
         pygame.display.flip()
         self.clock.tick(constants.FPS)
@@ -1034,7 +1055,6 @@ class TankGame:
         This method checks if the player has sent the signal to close the window and
         stops the execution if this is the case, it is also responsible for cleaning
         any position that has been left unused.
-        :return:
         """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -1051,9 +1071,7 @@ class TankGame:
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_angle += math.radians(1) * (
-                    constants.FPS / self.fps
-                )
+                playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
                     constants.FPS / self.fps
@@ -1061,9 +1079,7 @@ class TankGame:
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_angle -= math.radians(1) * (
-                    constants.FPS / self.fps
-                )
+                playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
                     constants.FPS / self.fps
@@ -1075,7 +1091,9 @@ class TankGame:
             else:
                 playing_tank.shoot_velocity += 0.1 * (constants.FPS / self.fps)
 
-            playing_tank.shoot_velocity = min(constants.SHOOT_MAX_SPEED, playing_tank.shoot_velocity)
+            playing_tank.shoot_velocity = min(
+                constants.SHOOT_MAX_SPEED, playing_tank.shoot_velocity
+            )
 
         if keys_pressed[pygame.K_LEFT]:
             if keys_pressed[pygame.K_LSHIFT]:
@@ -1130,11 +1148,11 @@ class TankGame:
                         )
                     )
                 ) ** 0.5
+
                 if actual_radius_position > constants.TANK_RADIO:
                     self.winner = self.actual_player
                     return Impact(self.cannonball.position, ImpactType.TANK)
-                else:
-                    return Impact(self.cannonball.position, ImpactType.SUICIDIO)
+                return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
@@ -1151,9 +1169,11 @@ class TankGame:
 
     def start(self) -> None:
         """
-        Esta función muestra las instrucciones básicas para después dar paso al juego como tal.
-        Se encarga de gestionar la situación actual, como cual jugador es el turno, el ángulo del cañon o si se ha
-        decidido disparar, donde en cuyo caso se comprobará si la bala sigue avanzando o si ha impactado con algo.
+        Esta función muestra las instrucciones básicas para después dar paso al
+        juego como tal. Se encarga de gestionar la situación actual, como cual
+        jugador es el turno, el ángulo del cañon o si se ha decidido disparar, 
+        donde en cuyo caso se comprobará si la bala sigue avanzando o si ha 
+        impactado con algo.
         """
         self.hud.show_instructions(self.screen)
         pygame.display.flip()
