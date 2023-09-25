@@ -36,9 +36,9 @@ class Collidable:
     @abstractmethod
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
-        Esta funcion es la encargada de decir si self, es decir la instancia colisionable
-        ya colisionó con un punto. Debe retornar True en caso de que colisione
-        y False en otro caso.
+        Esta funcion es la encargada de decir si self, es decir la instancia
+        colisionable ya colisionó con un punto. Debe retornar True en caso de
+        que colisione y False en otro caso.
         """
         raise NotImplementedError
 
@@ -52,6 +52,10 @@ class Drawable:
 
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        Esta funcion se encarga de dibujar una instancia, a traves de la screen
+        que se le pasa en los parametros. No se debe hacer el pygame.display.flip
+        """
         raise NotImplementedError
 
 
@@ -1192,6 +1196,47 @@ class TankGame:
             self.check_running()
             self.render()
 
+    def cannonball_travel(self) -> None:
+        """
+        This function is responsible for drawing the projectile's parabolic path,
+        making it advance, and then drawing it.
+        """
+        while self.running and self.last_state is None:
+            self.check_running()
+            self.last_state = self.process_cannonball_trajectory()
+            self.render()
+
+    def wait_on_space(self) -> None:
+        """
+        This function will pause most of the game logic but won't completely
+        block the execution. Updates of the background or similar elements will
+        be displayed, but the game won't progress to menus or actions.
+        """
+        while self.running:
+            self.check_running()
+            keys_pressed = pygame.key.get_pressed()
+            if keys_pressed[pygame.K_SPACE]:
+                break
+            self.render()
+
+    def check_last_state(self) -> None:
+        """
+        This function is responsible for checking what happened in the last shot
+        and modifying the class fields to adapt to the outcome.
+        """
+        if self.last_state is not None:
+            other_player = (self.actual_player + 1) % 2
+            self.tanks[self.actual_player].player.score(
+                self.last_state, self.tanks[other_player].position
+            )
+
+        if (
+            self.last_state is not None
+            and self.last_state.impact_type != ImpactType.BORDER
+        ) and self.cannonball is not None:
+            self.cannonball.kill()
+            self.old_cannonballs.append(self.cannonball)
+
     def start(self) -> None:
         """
         Esta función muestra las instrucciones básicas para después dar paso al
@@ -1220,11 +1265,7 @@ class TankGame:
                 self.process_input()
                 self.render()
 
-            # Travel of the cannonball
-            while self.running and self.last_state is None:
-                self.check_running()
-                self.last_state = self.process_cannonball_trajectory()
-                self.render()
+            self.cannonball_travel()
 
             if (
                 self.last_state is not None
@@ -1233,26 +1274,9 @@ class TankGame:
                 break
 
             self.wait_release_space()
+            self.wait_on_space()
 
-            while self.running:
-                self.check_running()
-                keys_pressed = pygame.key.get_pressed()
-                if keys_pressed[pygame.K_SPACE]:
-                    break
-                self.render()
-
-            if self.last_state is not None:
-                other_player = (self.actual_player + 1) % 2
-                self.tanks[self.actual_player].player.score(
-                    self.last_state, self.tanks[other_player].position
-                )
-
-            if (
-                self.last_state is not None
-                and self.last_state.impact_type != ImpactType.BORDER
-            ) and self.cannonball is not None:
-                self.cannonball.kill()
-                self.old_cannonballs.append(self.cannonball)
+            self.check_last_state()
 
             self.cannonball = None
             self.last_state = None
@@ -1272,7 +1296,7 @@ class TankGame:
 
 def main():
     """
-    From this function the program is started, creating the only instance of 
+    From this function the program is started, creating the only instance of
     TankGame that exists.
     """
     tank_game = TankGame()
