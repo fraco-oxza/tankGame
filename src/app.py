@@ -85,7 +85,6 @@ class Background(Drawable):
                 randint(0, constants.WINDOWS_SIZE[1]),
             )
         )
-
     def tick(self, dt: float) -> None:
         for snowflake in self.snowflakes:
             snowflake.y += 1  # gravity
