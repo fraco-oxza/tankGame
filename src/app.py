@@ -95,6 +95,10 @@ class Background(Drawable):
 
 
 class Terrain(Drawable, Collidable):
+    """
+    Esta clase representa al terreno, permite generar y dibujarlo aleatoriamente por cada partida,
+    además comprueba colisiones con este
+    """
     ground_lines: list[int]
 
     def generate_terrain(self, mountains: int, valley: int):
@@ -266,6 +270,10 @@ class Terrain(Drawable, Collidable):
 
 
 class Cannonball(Drawable):
+    """
+    Esta clase representa una bala de cañón en movimiento,
+    proporciona funcionalidades para actualizar su posición, dibujar su trayectoria y obtener información.
+    """
     position: pygame.Vector2
     velocity: pygame.Vector2
     trajectory: list[pygame.Vector2]
@@ -395,6 +403,10 @@ class Player:
 
 
 class Tank(Drawable, Collidable):
+    """
+    Esta clase representa un tanque en el juego,
+    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar una bala de cañón en una dirección y velocidad específica
+    """
     player: Player
     color: pygame.Color
     position: pygame.Vector2
@@ -509,7 +521,7 @@ class Tank(Drawable, Collidable):
 
 class HUD(Drawable):
     """
-    Esta clase es la encargada de mostrar todo lo que no es parte del terreno/juego en sí
+    Esta clase es responsable de mostrar elementos relacionados con la información en pantalla que no es parte del terreno o del juego en sí
     """
     tanks: list[Tank]
     left = 100
