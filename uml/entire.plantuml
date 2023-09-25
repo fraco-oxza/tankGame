@@ -26,6 +26,20 @@ class TankGame {
 class Cannonball extends Drawable {
     - position: Point
     - velocity: Velocity
+    - trajectory: list[pygame.Vector2]
+    - max_height: int
+    - max_distance: int
+    - is_alive: bool
+
+    +tick(dt: float)
+    +kill():
+    +draw_trajectory(screen: pygame.surface.Surface):
+    +draw(screen: pygame.surface.Surface)
+    +get_max_height(): int
+    +calculate_distance_to(tank_position: pygame.Vector2): int
+
+
+
 }
 
 interface Drawable {
@@ -38,10 +52,13 @@ class HUD extends Drawable{
     + top: int
     + width: int
     + height: int
+ +draw(screen: pygame.surface.Surface)
+ +show_instructions(screen: pygame.surface.Surface)
 
+ }
 class WinnerScreen extends Drawable{
     +winner_mensaje(Surface)
-    +fuegos_artificiales((Surface)
+    +fuegos_artificiales(Surface)
     +draw(Surface): None
 
 }
@@ -84,6 +101,16 @@ class Tank extends Collidable  {
 class Player {
     - points: double
     +score(position_cannonball, position) : int
+}
+class WinnerScreen extends Drawable
+{
+    +winner_mensaje(screen: pygame.surface.Surface)
+    +fuegos_artificiales(screen: pygame.surface.Surface)
+}
+class Impact:
+{
+    -position: pygame.Vector2
+
 }
 
 class Constants {
