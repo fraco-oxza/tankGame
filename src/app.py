@@ -263,7 +263,7 @@ class Cannonball(Drawable):
     def tick(self, dt: float):
         """
         Esta función va actualizando la posición de la bala por cada intervalo de tiempo, su propósito es simular el movimiento y comportamiento
-        de la bala del cañón
+        de la parábola que dibuja la bala del cañón
         """
         if self.position.y < self.max_height:
             self.max_height = int(self.position.y)
