@@ -731,6 +731,10 @@ class WinnerScreen(Drawable):
 
 
 class ImpactType:
+    """
+    Clase encargada de definir el tipo de ambiente con lo que impactó la bala,
+    a cada tipo se le asigna un número
+    """
     TERRAIN = 0
     BORDER = 1
     TANK = 2
