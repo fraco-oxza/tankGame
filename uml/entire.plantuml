@@ -11,7 +11,9 @@ class TankGame {
     + screen: pygame.Surface
     + running: bool
     + actual_player: int
-    + winner: Optional[int
+    + winner: Optional[int]
+    +winner_msj: Optional[WinnerScreen]
+    +last_state: Optional[Impact]
 
     + TankGame():
     + render(): None
