@@ -21,12 +21,20 @@ def resource_path(relative_path: str):
 
 
 class Collidable:
+    """
+    Clase que contiene un método abstracto que se pasa a través de Override a otras clases, donde se espera
+    haya colisiones.
+    """
     @abstractmethod
     def collides_with(self, point: pygame.Vector2) -> bool:
         raise NotImplementedError
 
 
 class Drawable:
+    """
+    Clase que contiene un método abstracto que se pasa a través de Override a otras clases, donde se crearán
+    elementos visuales que serán mostrados por medio de la interfaz.
+    """
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
         raise NotImplementedError
@@ -672,10 +680,15 @@ class HUD(Drawable):
             (constants.WINDOWS_SIZE[0] - size[0], constants.WINDOWS_SIZE[1] - size[1]),
         )
 
-
-
 class WinnerScreen(Drawable):
+    """
+    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el ganador, mostrando su puntaje y
+    el correspondiente tanque para una mejor distinción.
+    """
     def __init__(self, tank_game: TankGame):
+        """
+        Constructor que inicializa todas los elementos necesarios para monstrar el mensaje de victoria.
+        """
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
         self.tank_game = tank_game
         self.pos_fuegos = pygame.Vector2
@@ -768,8 +781,11 @@ class WinnerScreen(Drawable):
             15,
         )
 
-
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        Función que en el caso de que haya un ganador y aún no se muestre en pantalla, redigirá hacia otra función donde
+        el mensaje se creará y será presentado al usuario por medio de la interfaz.
+        """
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
 
@@ -1048,6 +1064,11 @@ class TankGame:
             self.render()
 
     def start(self) -> None:
+        """
+        Esta función muestra las instrucciones básicas para después dar paso al juego como tal.
+        Se encarga de gestionar la situación actual, como cual jugador es el turno, el ángulo del cañon o si se ha
+        decidido disparar, donde en cuyo caso se comprobará si la bala sigue avanzando o si ha impactado con algo.
+        """
         self.hud.show_instructions(self.screen)
         pygame.display.flip()
 
