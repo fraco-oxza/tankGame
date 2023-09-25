@@ -29,7 +29,7 @@ def resource_path(relative_path: str):
 
 class Collidable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a 
+    Clase que contiene un método abstracto que se pasa a través de Override a
     otras clases, donde se espera haya colisiones.
     """
 
@@ -40,8 +40,8 @@ class Collidable:
 
 class Drawable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a 
-    otras clases, donde se crearán elementos visuales que serán mostrados por 
+    Clase que contiene un método abstracto que se pasa a través de Override a
+    otras clases, donde se crearán elementos visuales que serán mostrados por
     medio de la interfaz.
     """
 
@@ -51,12 +51,21 @@ class Drawable:
 
 
 class Background(Drawable):
+    """
+    This class represents the game background, which loads an image and creates
+    animations of falling snow with wind.
+    """
+
     sky_image: pygame.Surface
     snowflakes: list[pygame.Vector2]
     wind: float
     wind_target: float
 
     def __init__(self):
+        """
+        Initialize the class by loading the images and creating the snowflakes.
+        """
+
         image_size = pygame.Vector2(
             constants.WINDOWS_SIZE[0], (9 / 16) * constants.WINDOWS_SIZE[0]
         )
@@ -71,6 +80,9 @@ class Background(Drawable):
         self.wind_target = 0
 
     def add_random_snowflake(self):
+        """
+        Add a snowflake at a random valid position within the map.
+        """
         self.snowflakes.append(
             pygame.Vector2(
                 randint(0, constants.WINDOWS_SIZE[0]),
@@ -79,27 +91,43 @@ class Background(Drawable):
         )
 
     def tick(self, dt: float) -> None:
+        """
+        This function is responsible for advancing the snowflakes and
+        repositioning them if they have gone off the map.
+        """
         for snowflake in self.snowflakes:
-            snowflake.y += 1  # gravity
+            snowflake.y += constants.GRAVITY / 10.0  # gravity
+
+            # Corner case down
             if snowflake.y > (constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT):
                 snowflake.y -= constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT
-            if abs(self.wind - self.wind_target) < 1e-9:
-                self.wind_target = (random.random() - 0.5) * 10.0
-            wind_diff = self.wind_target - self.wind
-            self.wind += math.tanh(wind_diff) * dt * 1e-3
 
-            snowflake.x += self.wind
-
+            # Corner case sides
             if snowflake.x > constants.WINDOWS_SIZE[0]:
                 snowflake.x -= constants.WINDOWS_SIZE[0]
             elif snowflake.x < 0:
                 snowflake.x += constants.WINDOWS_SIZE[0]
 
+            if abs(self.wind - self.wind_target) < 1e-9:
+                self.wind_target = (random.random() - 0.5) * 10.0
+
+            wind_diff = self.wind_target - self.wind
+            self.wind += math.tanh(wind_diff) * dt * 1e-3
+
+            snowflake.x += self.wind
+
     def draw_snowflakes(self, screen: pygame.surface.Surface):
+        """
+        This function draws each snowflake present in the list of snowflakes.
+        """
         for snowflake in self.snowflakes:
             pygame.draw.circle(screen, "#ffffff", snowflake, 1)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        This function is responsible for drawing the background and the
+        snowflakes.
+        """
         screen.blit(self.sky_image, self.sky_rect.topleft)
         self.draw_snowflakes(screen)
 
@@ -115,9 +143,9 @@ class Terrain(Drawable, Collidable):
     def generate_terrain(self, mountains: int, valley: int):
         """
         Esta función genera el terreno aleatorio,  dividiendolo en segmentos,
-        donde se agregan deformaciones  (usando las funciones montañas y 
+        donde se agregan deformaciones  (usando las funciones montañas y
         valles).
-        Las montañas y valles se generan dentro de segmentos específicos y se 
+        Las montañas y valles se generan dentro de segmentos específicos y se
         determinan aleatoriamente.
         """
         deformations = mountains + valley
@@ -153,9 +181,9 @@ class Terrain(Drawable, Collidable):
     def mountain(self, i: int, j: int, height: int):
         """
         Esta función montañas va desde un punto de inicio, hasta un punto final,
-        incluyendo su punto medio para que sean simétricas. El primer for 
-        incluye en la lista ground_lines los valores que van creciendo hasta el 
-        punto medio, mientras que el segundo for los valores que van decreciendo 
+        incluyendo su punto medio para que sean simétricas. El primer for
+        incluye en la lista ground_lines los valores que van creciendo hasta el
+        punto medio, mientras que el segundo for los valores que van decreciendo
         desde el punto medio hasta el punto final
         """
         m = (i + j) // 2
@@ -175,9 +203,9 @@ class Terrain(Drawable, Collidable):
     def valley(self, inicio: int, fin: int, profundidad: int):
         """
         Esta función valles desde un punto de inicio, hasta un punto final,
-        incluyendo su punto medio para que sean simétricos. El primer for 
-        incluye en la lista ground_lines los valores que van decreciendo hasta 
-        el punto medio, mientras que el segundo for los valores que van 
+        incluyendo su punto medio para que sean simétricos. El primer for
+        incluye en la lista ground_lines los valores que van decreciendo hasta
+        el punto medio, mientras que el segundo for los valores que van
         creciendo desde el punto medio hasta el final
         """
         m = (inicio + fin) // 2
@@ -206,7 +234,7 @@ class Terrain(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función dibuja diferentes capas del terreno utilizando diferentes 
+        Esta función dibuja diferentes capas del terreno utilizando diferentes
         colores y alturas, esto permite simular el sustrato del suelo
         """
         for i, line in enumerate(self.ground_lines):
@@ -287,8 +315,8 @@ class Terrain(Drawable, Collidable):
 
 class Cannonball(Drawable):
     """
-    Esta clase representa una bala de cañón en movimiento, proporciona 
-    funcionalidades para actualizar su posición, dibujar su trayectoria y 
+    Esta clase representa una bala de cañón en movimiento, proporciona
+    funcionalidades para actualizar su posición, dibujar su trayectoria y
     obtener información.
     """
 
@@ -309,8 +337,8 @@ class Cannonball(Drawable):
 
     def tick(self, dt: float):
         """
-        Esta función va actualizando la posición de la bala por cada intervalo 
-        de tiempo, su propósito es simular el movimiento y comportamiento de la 
+        Esta función va actualizando la posición de la bala por cada intervalo
+        de tiempo, su propósito es simular el movimiento y comportamiento de la
         parábola que dibuja la bala del cañón
         """
         if self.position.y < self.max_height:
@@ -330,8 +358,8 @@ class Cannonball(Drawable):
 
     def kill(self):
         """
-        Esta función "desactiva" la bala de cañón para indicar qye ya no está en 
-        uso, para esto elimina el atributo trajectory del objeto y establece el 
+        Esta función "desactiva" la bala de cañón para indicar qye ya no está en
+        uso, para esto elimina el atributo trajectory del objeto y establece el
         estado de vida en False
         """
         del self.trajectory
@@ -339,7 +367,7 @@ class Cannonball(Drawable):
 
     def draw_trajectory(self, screen: pygame.surface.Surface):
         """
-        Esta función dibuja la trayectoria de la bala, por cada punto en la 
+        Esta función dibuja la trayectoria de la bala, por cada punto en la
         lista trajectory dibuja un circulo.
         """
         for point in self.trajectory:
@@ -373,14 +401,14 @@ class Cannonball(Drawable):
 
     def get_max_height(self) -> int:
         """
-        esta función se encarga de retornar la altura máxima del lanzamiento de 
+        esta función se encarga de retornar la altura máxima del lanzamiento de
         la bala
         """
         return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
-        esta función se encarga de retornar la distancia máxima entre la bala y 
+        esta función se encarga de retornar la distancia máxima entre la bala y
         el tanque que la lanzó
         """
         return (
@@ -391,8 +419,8 @@ class Cannonball(Drawable):
 
 class Player:
     """
-    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador, 
-    a través del cálculo de la distancia con la bala lanzada y el tanque en 
+    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
+    a través del cálculo de la distancia con la bala lanzada y el tanque en
     objetivo
     """
 
@@ -405,8 +433,8 @@ class Player:
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
         """
-        Función que se encarga de asignar el puntaje mediante el cálculo de la 
-        distancia cuando la bala cae con el tanque objetivo, mientras la bala 
+        Función que se encarga de asignar el puntaje mediante el cálculo de la
+        distancia cuando la bala cae con el tanque objetivo, mientras la bala
         caiga más cerca se le asigna más puntaje al jugador
         """
         cannonball_position = impact.position
@@ -429,7 +457,7 @@ class Player:
 class Tank(Drawable, Collidable):
     """
     Esta clase representa un tanque en el juego,
-    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar 
+    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar
     una bala de cañón en una dirección y velocidad específica
     """
 
@@ -449,7 +477,7 @@ class Tank(Drawable, Collidable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
         Esta función se encarga de dibujar el tanque y actualiza la posición del
-        cañón del tanque según su ángulo. Además, si está activado el modo 
+        cañón del tanque según su ángulo. Además, si está activado el modo
         desarrollador dibuja la hitbox
         """
         if constants.DEVELOPMENT_MODE:
@@ -548,7 +576,7 @@ class Tank(Drawable, Collidable):
 
 class HUD(Drawable):
     """
-    Esta clase es responsable de mostrar elementos relacionados con la 
+    Esta clase es responsable de mostrar elementos relacionados con la
     información en pantalla que no es parte del terreno o del juego en sí
     """
 
@@ -574,10 +602,10 @@ class HUD(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función  permite mostrar en pantalla todo lo relacionado a la 
-        información de cada tanque tales como angulo y velocidad de disparo, 
-        puntaje, máxima altura, máxima distancia, también verifica si el tanque 
-        se suicidó para llamar a la función correspondiente. Además, si el modo 
+        Esta función  permite mostrar en pantalla todo lo relacionado a la
+        información de cada tanque tales como angulo y velocidad de disparo,
+        puntaje, máxima altura, máxima distancia, también verifica si el tanque
+        se suicidó para llamar a la función correspondiente. Además, si el modo
         desarrollador está activado muestra los FPS.
         """
         self.tanks[0].shoot_angle %= 2.0 * math.pi
@@ -731,7 +759,7 @@ class HUD(Drawable):
 
     def show_instructions(self, screen: pygame.surface.Surface):
         """
-        Esta función permite mostrar al inicio del juego una imagen con las 
+        Esta función permite mostrar al inicio del juego una imagen con las
         instrucciones necesarias para el/los jugadores
         """
         screen.fill("#151f28")
@@ -761,14 +789,14 @@ class HUD(Drawable):
 
 class WinnerScreen(Drawable):
     """
-    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el 
-    ganador, mostrando su puntaje y el correspondiente tanque para una mejor 
+    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el
+    ganador, mostrando su puntaje y el correspondiente tanque para una mejor
     distinción.
     """
 
     def __init__(self, tank_game: TankGame):
         """
-        Constructor que inicializa todas los elementos necesarios para monstrar 
+        Constructor que inicializa todas los elementos necesarios para monstrar
         el mensaje de victoria.
         """
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
@@ -788,8 +816,8 @@ class WinnerScreen(Drawable):
     def winner_mensaje(self, screen: pygame.surface.Surface):
         """
         Esta función crea el mensaje de ganador, haciendo una ventana que
-        muestre toda la información que el ganador sacó de la partida, 
-        incluyendo su puntaje, y como adicional se dibuja el tanque del color 
+        muestre toda la información que el ganador sacó de la partida,
+        incluyendo su puntaje, y como adicional se dibuja el tanque del color
         ganador
         """
         if self.tank_game.winner is None:
@@ -891,8 +919,8 @@ class ImpactType:
 
 class Impact:
     """
-    Clase encargada de encontrar la posición en la que la bala impacta y 
-    determinar mediante el atributo impact_type con qué impacta terreno, borde, 
+    Clase encargada de encontrar la posición en la que la bala impacta y
+    determinar mediante el atributo impact_type con qué impacta terreno, borde,
     tanque o si es un suicidio
     """
 
@@ -1026,7 +1054,7 @@ class TankGame:
 
     def render(self) -> None:
         """
-        This method is responsible for drawing each element of the window, it 
+        This method is responsible for drawing each element of the window, it
         also puts the execution to sleep for a while to make the game run at the
         fps, specified in the FPS constant
         """
@@ -1171,8 +1199,8 @@ class TankGame:
         """
         Esta función muestra las instrucciones básicas para después dar paso al
         juego como tal. Se encarga de gestionar la situación actual, como cual
-        jugador es el turno, el ángulo del cañon o si se ha decidido disparar, 
-        donde en cuyo caso se comprobará si la bala sigue avanzando o si ha 
+        jugador es el turno, el ángulo del cañon o si se ha decidido disparar,
+        donde en cuyo caso se comprobará si la bala sigue avanzando o si ha
         impactado con algo.
         """
         self.hud.show_instructions(self.screen)
