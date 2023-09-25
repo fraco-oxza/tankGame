@@ -714,21 +714,10 @@ class WinnerScreen(Drawable):
             15,
         )
 
-    def fuegos_artificiales(self, screen: pygame.surface.Surface):
-        color = ["#cccccc", "#000000", "#aaaaaa"]
-        posiciones = [pygame.Vector2(500, 500), pygame.Vector2(600, 600), pygame.Vector2(400, 400)]
-        self.pos_fuegos = pygame.Vector2(random.randint(0, len(posiciones) - 1))
-        pos_x = int(self.pos_fuegos.x)
-        pos_y = int(self.pos_fuegos.y)
-        for i in range(len(color)):
-            pos_x += self.vx
-            pos_y += self.vy
-            pygame.draw.circle(screen, color[i], (pos_x, pos_y), self.radio)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
-            self.fuegos_artificiales(screen)
 
 
 class ImpactType:
