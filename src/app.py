@@ -281,17 +281,27 @@ class Cannonball(Drawable):
             self.trajectory.append(pygame.Vector2(self.position.x, self.position.y))
 
     def kill(self):
+        """
+         Esta función "desactiva" la bala de cañón para indicar qye ya no está en uso,
+        para esto elimina el atributo trajectory del objeto y establece el estado de vida en False
+        """
         del self.trajectory
         self.is_alive = False
 
     def draw_trajectory(self, screen: pygame.surface.Surface):
+        """
+        Esta función dibuja la trayectoria de la bala, por cada punto en la lista trayectory dibuja un circulo.
+        """
         for point in self.trajectory:
             pygame.draw.circle(
                 screen, "#000000", (point.x, point.y - constants.HUD_HEIGHT), 1
             )
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        # missile
+        """
+        Esta función se encarga de dibujar la trayectoria con la figura de misil de la bala,
+        y si está vivo, dibuja un efecto de fuego
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
