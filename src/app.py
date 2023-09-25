@@ -955,7 +955,7 @@ class SelfImpactWindows(Drawable):
         """
         This function draws a message indicating self-impact, serving as an
         easter egg for the players.
-        """ 
+        """
         center = (360, 260)
         transparency = 220
         rect_surface = pygame.Surface((900, 500))
