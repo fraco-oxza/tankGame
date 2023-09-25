@@ -456,6 +456,7 @@ class HUD(Drawable):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
+        self.suicidio = VentanaSuicidio(self.tank_game)
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -579,6 +580,9 @@ class HUD(Drawable):
         screen.blit(self.text_velocity2,
                     ((constants.WINDOWS_SIZE[0] * 0.7), constants.WINDOWS_SIZE[1] - (constants.HUD_HEIGHT * 0.7)))
 
+        if self.tank_game.last_state is not None and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO:
+            self.suicidio.loser_mensaje(screen)
+
         if constants.DEVELOPMENT_MODE:
             screen.blit(
                 self.font.render(
@@ -614,7 +618,6 @@ class HUD(Drawable):
             (constants.WINDOWS_SIZE[0] - size[0], constants.WINDOWS_SIZE[1] - size[1]),
         )
 
-        pygame.display.flip()
 
 
 class WinnerScreen(Drawable):
@@ -732,6 +735,7 @@ class ImpactType:
     TERRAIN = 0
     BORDER = 1
     TANK = 2
+    SUICIDIO = 3
 
 
 class Impact:
@@ -741,6 +745,35 @@ class Impact:
     def __init__(self, position: pygame.Vector2, impact_type: int) -> None:
         self.position = position
         self.impact_type = impact_type
+
+
+class VentanaSuicidio():
+    def __init__(self, tank_game: TankGame):
+        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
+        self.tank_game = tank_game
+        self.pos_fuegos = pygame.Vector2
+        self.text_winner_info = None
+        self.text_winner_score = None
+        self.text_score1 = None
+        self.text_score2 = None
+        self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 60)
+        self.font100.set_bold(True)
+        self.font100.set_italic(True)
+
+    def loser_mensaje(self, screen: pygame.surface.Surface):
+        center = (360, 260)
+        transparency = 220
+        rect_surface = pygame.Surface((900, 500))
+        rect_surface.fill("#CCCCCC")
+        rect_surface.set_alpha(transparency)
+        rect_x1, rect_y1 = constants.H_WINNER
+        screen.blit(rect_surface, (rect_x1, rect_y1))
+        self.text_winner_info = self.font100.render(
+            "ES MALO EL SUICIDIO",
+            True,
+            "red",
+        )
+        screen.blit(self.text_winner_info, center)
 
 
 class TankGame:
@@ -759,6 +792,7 @@ class TankGame:
     actual_player: int
     winner: Optional[int]
     winner_msj: Optional[WinnerScreen]
+    last_state: Optional[Impact]
 
     def __init__(self) -> None:
         """
@@ -938,15 +972,15 @@ class TankGame:
 
         for tank in self.tanks:
             if tank.collides_with(self.cannonball.position):
+                self.running = False
                 actual_radius_position = (((self.tanks[
                                                 self.actual_player].position.x - self.cannonball.position.x) ** 2) + ((
                         (self.tanks[self.actual_player].position.y - self.cannonball.position.y) ** 2))) ** 0.5
-                if actual_radius_position >= 20:
-                    self.running = False
+                if actual_radius_position > constants.TANK_RADIO:
                     self.winner = self.actual_player
                     return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
-                    print("SUICIDIO")
+                    return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
@@ -963,6 +997,7 @@ class TankGame:
 
     def start(self) -> None:
         self.hud.show_instructions(self.screen)
+        pygame.display.flip()
 
         while self.running:
             self.check_running()
@@ -988,6 +1023,9 @@ class TankGame:
                 self.last_state = self.process_cannonball_trajectory()
                 self.render()
 
+            if self.last_state.impact_type == ImpactType.SUICIDIO:
+                break
+
             self.wait_release_space()
 
             while self.running:
@@ -1008,6 +1046,7 @@ class TankGame:
             ):
                 self.cannonball.kill()
                 self.old_cannonballs.append(self.cannonball)
+
             self.cannonball = None
             self.last_state = None
 
@@ -1016,10 +1055,9 @@ class TankGame:
             self.render()
 
         self.running = True
-        while self.running and self.winner is not None:
+        while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
-
             if keys_pressed[pygame.K_SPACE]:
                 break
             self.render()
