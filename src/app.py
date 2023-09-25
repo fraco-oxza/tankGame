@@ -322,9 +322,15 @@ class Cannonball(Drawable):
             pygame.draw.line(screen, "#fbb741", (tail_x, tail_y), (fire_x, fire_y), 6)
 
     def get_max_height(self) -> int:
+        """
+        esta función se encarga de retornar la altura máxima del lanzamiento de la bala
+        """
         return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
+        """
+        esta función se encarga de retornar la distancia máxima entre la bala y el tanque que la lanzó
+        """
         return (
                 (self.position.x - tank_position.x) ** 2
                 + (self.position.y - tank_position.y) ** 2
@@ -382,7 +388,10 @@ class Tank(Drawable, Collidable):
         self.shoot_velocity = 145  # m/s
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        # hit box
+        """
+        Esta función se encarga de dibujar el tanque y actualiza la posiciónd del cañón del tanque
+        según su ángulo. Además, si está activado el modo desarrollador dibuja la hitbox
+        """
         if constants.DEVELOPMENT_MODE:
             pygame.draw.circle(
                 screen,
@@ -450,6 +459,10 @@ class Tank(Drawable, Collidable):
         )
 
     def collides_with(self, point: pygame.Vector2) -> bool:
+        """
+        Esta función se encarga de revisar si el tanque fue golpeado por la bala del cañón
+        retornado True o False según corresponda
+        """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                 1 / 2
         ) <= constants.TANK_RADIO:
@@ -457,6 +470,12 @@ class Tank(Drawable, Collidable):
         return False
 
     def shoot(self) -> Cannonball:
+        """
+        Esta función calcula las direcciones para disparar el proyectil,
+        y calcula la  posición del proyectil después del disparo.
+        También crea y retorna el objeto Cannonball con estos atributos.
+        """
+
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
         # the -1 is since in this system the vertical coordinates are inverted
         v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
