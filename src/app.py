@@ -51,6 +51,10 @@ class Drawable:
 
 
 class Background(Drawable):
+    """
+    Clase encargada del fondo del juego, se carga la imágen de fondo y dibuja los copos
+    de nieve, de acuerdo al viento
+    """
     sky_image: pygame.Surface
     snowflakes: list[pygame.Vector2]
     wind: float
