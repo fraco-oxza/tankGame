@@ -75,6 +75,10 @@ class Background(Drawable):
         self.wind_target = 0
 
     def add_random_snowflake(self):
+        """
+        Agrega a la lista de posiciones de copos de nieve, posiciones aleatorias de
+        acuerdo al tamaño de la pantalla
+        """
         self.snowflakes.append(
             pygame.Vector2(
                 randint(0, constants.WINDOWS_SIZE[0]),
@@ -100,6 +104,9 @@ class Background(Drawable):
                 snowflake.x += constants.WINDOWS_SIZE[0]
 
     def draw_snowflakes(self, screen: pygame.surface.Surface):
+        """
+        Dibuja los copos de nieve que están en la lista
+        """
         for snowflake in self.snowflakes:
             pygame.draw.circle(screen, "#ffffff", snowflake, 1)
 
