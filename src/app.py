@@ -261,6 +261,10 @@ class Cannonball(Drawable):
         self.trajectory = []
 
     def tick(self, dt: float):
+        """
+        Esta función va actualizando la posición de la bala por cada intervalo de tiempo, su propósito es simular el movimiento y comportamiento
+        de la bala del cañón
+        """
         if self.position.y < self.max_height:
             self.max_height = int(self.position.y)
         self.position += self.velocity * dt
@@ -454,6 +458,9 @@ class Tank(Drawable, Collidable):
 
 
 class HUD(Drawable):
+    """
+    Esta clase es la encargada de mostrar todo lo que no es parte del terreno/juego en sí
+    """
     tanks: list[Tank]
     left = 100
     top = constants.WINDOWS_SIZE[1] - int((3 / 5) * constants.HUD_HEIGHT)
@@ -474,6 +481,11 @@ class HUD(Drawable):
         self.text_cannonball_info = None
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        Esta función  permite mostrar en pantalla todo lo relacionado a la información de cada tanque tales como angulo y velocidad de disparo, puntaje,
+        máxima altura, máxima distancia, también verifica si el tanque se suicidó para llamar a la función correspondiente.
+        Además, si el modo desarrollador está activado muestra los FPS.
+        """
         self.tanks[0].shoot_angle %= 2.0 * math.pi
         self.tanks[1].shoot_angle %= 2.0 * math.pi
 
@@ -604,6 +616,9 @@ class HUD(Drawable):
             )
 
     def show_instructions(self, screen: pygame.surface.Surface):
+        """
+        Esta función permite mostrar al inicio del juego una imagen con las instrucciones necesarias para el/los jugadores
+        """
         screen.fill("#151f28")
 
         instructions = pygame.image.load(resource_path("images/instructions.png"))
