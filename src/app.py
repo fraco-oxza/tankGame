@@ -318,6 +318,11 @@ class Cannonball(Drawable):
 
 
 class Player:
+    """
+    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador, a través
+    del cálculo de la distancia con la bala lanzada y el tanque en objetivo
+    """
+
     name: str
     points: int
 
@@ -326,6 +331,11 @@ class Player:
         self.points = points
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
+        """
+        Función que se encarga de asignar el puntaje mediante el cálculo de la distancia
+        cuando la bala cae con el tanque objetivo, mientras la bala caiga más cerca se le
+        asigna más puntaje al jugador
+        """
         cannonball_position = impact.position
         distance = (
                            (cannonball_position.x - tank_position.x) ** 2
@@ -728,6 +738,11 @@ class ImpactType:
 
 
 class Impact:
+    """
+    Clase encargada de encontrar la posición en la que la bala impacta y determinar
+    mediante el atributo impact_type con qué impacta terreno, borde, tanque o si es un
+    suicidio
+    """
     position: pygame.Vector2
     impact_type: int
 
