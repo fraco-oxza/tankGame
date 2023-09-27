@@ -329,6 +329,8 @@ class Cannonball(Drawable):
     max_height: int
     max_distance: int
     is_alive: bool
+    damage: int
+    radius_damage: int
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
@@ -906,6 +908,9 @@ class WinnerScreen(Drawable):
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
 
+
+class Proyectil150(Cannonball):
+    pass
 
 class ImpactType:
     """
