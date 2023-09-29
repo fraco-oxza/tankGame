@@ -432,7 +432,7 @@ class SelectCannonball(Drawable):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
         self.text_cannonball_info = None
         self.cannonball60 = Cannonball60mm()
-        self.disponibles_60 = self.cannonball150.units_available
+        self.disponibles_60 = self.cannonball60.units_available
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
