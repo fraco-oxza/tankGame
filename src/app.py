@@ -454,7 +454,7 @@ class Cannonball150mm(Cannonball):
     def __init__(self):
         self.damage = 50
         self.radius_damage = 30
-        self.units_available =3
+        self.units_available = 3
 
 class Player:
     """
