@@ -484,6 +484,16 @@ class Cannonball60mm(Cannonball):
         self.units_available = 3
 
 
+class Cannonball80mm(Cannonball):
+    damage: int
+    radius_damage: int
+    units_available: int
+
+    def __init__(self):
+        self.damage = 40
+        self.radius_damage = 20
+        self.units_available = 10
+
 class Player:
     """
     Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
