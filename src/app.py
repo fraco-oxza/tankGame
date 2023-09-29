@@ -435,7 +435,7 @@ class SelectCannonball(Drawable):
         rect_x1, rect_y1 = (350, 300)
         screen.blit(rect_surface, (rect_x1, rect_y1))
 
-    def cannonball_150_mm(self):
+    def cannonball_150_mm(self, screen: pygame.surface):
         pass
 
     def cannonball_80_mm(self):
@@ -450,17 +450,51 @@ class SelectCannonball(Drawable):
         self.cannoball_60_mm(screen)
 
 
-class Cannonball150mm(Cannonball):
+class Cannonball105mm(Cannonball):
     damage: int
     radius_damage: int
     units_available: int
-
     def __init__(self):
         self.damage = 50
         self.radius_damage = 30
         self.units_available = 3
 
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        travel_angle = math.atan2(self.velocity.y, self.velocity.x)
+        angle_x = math.cos(travel_angle)
+        angle_y = math.sin(travel_angle)
+        pygame.draw.line(screen, "gray", (angle_x, angle_y), (angle_x + 5, angle_y - 10), 4)
+        pygame.draw.circle(screen, "black", (angle_x, angle_y), 8)
+        pygame.draw.line(screen, "orange", (angle_x + 5, angle_y - 10), (angle_x + 8, angle_y - 13), 4)
 
+    def remove_unit(self):
+        if self.units_available > 0:
+            self.units_available -= 1
+
+
+class Cannonball80mm(Cannonball):
+    damage: int
+    radius_damage: int
+    units_available: int
+
+    def __init__(self):
+        self.damage = 40
+        self.radius_damage = 20
+        self.units_available = 10
+
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        pass
+
+
+class Cannonball60mm(Cannonball):
+    damage: int
+    radius_damage: int
+    units_available: int
+
+    def __init__(self):
+        self.damage = 30
+        self.radius_damage = 10
+        self.units_available = 3
 class Player:
     """
     Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
