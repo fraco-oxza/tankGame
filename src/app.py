@@ -423,8 +423,10 @@ class Cannonball(Drawable):
 
 
 class SelectCannonball(Drawable):
-    def __init__(self):
-        pass
+    valor: int
+
+    def __init__(self, valor):
+        self.valor = valor
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
@@ -439,11 +441,13 @@ class SelectCannonball(Drawable):
     def cannonball_80_mm(self):
         pass
 
-    def cannoball_60_mm(self):
-        pass
+    def cannoball_60_mm(self, screen: pygame.surface):
+        rect = pygame.Rect(450, 470, 50, 80)
+        pygame.draw.rect(screen, "#cccccc", rect)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.selection_screen(screen)
+        self.cannoball_60_mm(screen)
 
 
 class Cannonball150mm(Cannonball):
@@ -1058,7 +1062,7 @@ class TankGame:
         self.tanks = []
         self.old_cannonballs = []
         self.actual_player = randint(0, 1)
-        self.select_Cannonball = SelectCannonball()
+        self.select_Cannonball = SelectCannonball(0)
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
 
         mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
@@ -1181,19 +1185,19 @@ class TankGame:
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
 
-        if keys_pressed[pygame.K_SPACE]:
+        if keys_pressed[pygame.K_SPACE] and self.show_screen == False:
             self.cannonball = playing_tank.shoot()
-        if keys_pressed[pygame.K_TAB] and self.show_screen == False:
+        if keys_pressed[pygame.K_TAB] and self.show_screen == False and self.show_screen == 0:
             self.show_screen = True
+
         if (keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[
             pygame.K_3]) and self.show_screen == True:
             if keys_pressed[pygame.K_1]:
-                self.select_Cannonball = 1
-                print(self.select_Cannonball)
+                self.select_Cannonball = SelectCannonball(1)
             elif keys_pressed[pygame.K_2]:
-                self.select_Cannonball = 2
+                self.select_Cannonball = SelectCannonball(2)
             else:
-                self.select_Cannonball = 3
+                self.select_Cannonball = SelectCannonball(3)
             self.show_screen = False
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
