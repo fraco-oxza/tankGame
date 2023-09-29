@@ -456,6 +456,7 @@ class Cannonball150mm(Cannonball):
         self.radius_damage = 30
         self.units_available = 3
 
+
 class Player:
     """
     Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
@@ -1029,7 +1030,7 @@ class TankGame:
     winner: Optional[int]
     winner_msj: WinnerScreen
     last_state: Optional[Impact]
-    select_Cannonball: SelectCannonball
+    select_Cannonball: Optional[SelectCannonball]
     show_screen: bool
 
     def __init__(self) -> None:
@@ -1186,6 +1187,13 @@ class TankGame:
             self.show_screen = True
         if (keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[
             pygame.K_3]) and self.show_screen == True:
+            if keys_pressed[pygame.K_1]:
+                self.select_Cannonball = 1
+                print(self.select_Cannonball)
+            elif keys_pressed[pygame.K_2]:
+                self.select_Cannonball = 2
+            else:
+                self.select_Cannonball = 3
             self.show_screen = False
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
