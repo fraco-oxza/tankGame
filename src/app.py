@@ -426,40 +426,63 @@ class SelectCannonball(Drawable):
     valor: int
     cannonball60: Cannonball60mm
     disponibles_60: int
+    cannonball80: Cannonball60mm
+    disponibles_80: int
+    cannonball150: Cannonball60mm
+    disponibles_150: int
 
     def __init__(self, valor):
         self.valor = valor
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
-        self.text_cannonball_info = None
+        self.text_cannonball60_info = None
+        self.text_cannonball80_info = None
+        self.text_cannonball150_info = None
         self.cannonball60 = Cannonball60mm()
         self.disponibles_60 = self.cannonball60.units_available
+        self.cannonball80 = Cannonball80mm()
+        self.disponibles_80 = self.cannonball80.units_available
+        self.cannonball150 = Cannonball150mm()
+        self.disponibles_150 = self.cannonball150.units_available
+
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
-        rect_surface = pygame.Surface((600, 300))
+        rect_surface = pygame.Surface((700, 300))
         rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = (350, 300)
+        rect_x1, rect_y1 = (300, 300)
         screen.blit(rect_surface, (rect_x1, rect_y1))
 
-    def cannonball_150_mm(self):
-        pass
+    def cannonball_150_mm(self, screen: pygame.surface):
+        self.text_cannonball150_info = self.font.render(
+            f"Unidades Diponibles: {self.disponibles_150}",
+            True,
+            "white",
+        )
+        screen.blit(self.text_cannonball150_info, pygame.Vector2(790, 570))
 
-    def cannonball_80_mm(self):
-        pass
+    def cannonball_80_mm(self, screen: pygame.surface):
+        self.text_cannonball80_info = self.font.render(
+            f"Unidades Diponibles: {self.disponibles_80}",
+            True,
+            "white",
+        )
+        screen.blit(self.text_cannonball80_info, pygame.Vector2(570, 570))
 
     def cannoball_60_mm(self, screen: pygame.surface):
-        rect = pygame.Rect(450, 470, 50, 80)
+        rect = pygame.Rect(400, 470, 50, 80)
         pygame.draw.rect(screen, "#cccccc", rect)
-        self.text_cannonball_info = self.font.render(
+        self.text_cannonball60_info = self.font.render(
             f"Unidades Diponibles: {self.disponibles_60}",
             True,
             "white",
         )
-        screen.blit(self.text_cannonball_info, pygame.Vector2(400, 570))
+        screen.blit(self.text_cannonball60_info, pygame.Vector2(350, 570))
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.selection_screen(screen)
         self.cannoball_60_mm(screen)
+        self.cannonball_80_mm(screen)
+        self.cannonball_150_mm(screen)
 
 
 class Cannonball150mm(Cannonball):
