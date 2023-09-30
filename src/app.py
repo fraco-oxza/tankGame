@@ -428,6 +428,8 @@ class SelectCannonball(Drawable):
     cannonball80: Cannonball80mm
     cannonball105: Cannonball105mm
 
+    tank: Tank
+
     def __init__(self, valor):
         self.valor = valor
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
@@ -467,6 +469,9 @@ class SelectCannonball(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.selection_screen(screen)
+        self.cannoball_60_mm(screen)
+        self.cannonball_80_mm(screen)
+        self.cannonball_105_mm(screen)
 
 
 class Cannonball105mm(Cannonball):
@@ -536,7 +541,7 @@ class Player:
 class CannonballType:
     MM60 = 0,
     MM80 = 1,
-    MM150 = 2
+    MM105 = 2
 
 
 class Tank(Drawable, Collidable):
@@ -545,7 +550,6 @@ class Tank(Drawable, Collidable):
     cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar
     una bala de cañón en una dirección y velocidad específica
     """
-
     player: Player
     color: pygame.Color
     position: pygame.Vector2
@@ -553,6 +557,7 @@ class Tank(Drawable, Collidable):
     shoot_angle: float  # rad //
     actual: int  # bala seleccionada
     available: list[int]
+    life: int
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
         self.player = player
@@ -562,6 +567,7 @@ class Tank(Drawable, Collidable):
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
         self.available = [3, 10, 3]
+        self.life = 100
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -634,12 +640,19 @@ class Tank(Drawable, Collidable):
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
 
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2, ) -> bool:
         """
         Esta función se encarga de revisar si el tanque fue golpeado por la bala
         del cañón retornado True o False según corresponda
         """
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+        if CannonballType == CannonballType.MM60:
+            pass
+
+        elif CannonballType == CannonballType.MM80:
+            pass
+        elif CannonballType == CannonballType.MM105:
+            pass
+        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                 1 / 2
         ) <= constants.TANK_RADIO:
             return True
@@ -1004,10 +1017,6 @@ class WinnerScreen(Drawable):
         """
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
-
-
-class Proyectil150(Cannonball):
-    pass
 
 
 class ImpactType:
