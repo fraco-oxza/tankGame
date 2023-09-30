@@ -35,7 +35,8 @@ class Cannonball extends Drawable {
     - max_distance: int
     - is_alive: bool
 
-    +tick(dt: float)
+    +Cannonball(Position, Velocity):
+    +tick(dt: float):
     +kill():
     +draw_trajectory(screen: pygame.surface.Surface):
     +draw(screen: pygame.surface.Surface)
@@ -56,11 +57,13 @@ class HUD extends Drawable{
     + top: int
     + width: int
     + height: int
+ + HUD(TankGame)
  +draw(screen: pygame.surface.Surface)
  +show_instructions(screen: pygame.surface.Surface)
 
  }
 class WinnerScreen extends Drawable{
+    + WinnerScreen():
     +winner_mensaje(Surface)
     +fuegos_artificiales(Surface)
     +draw(Surface): None
@@ -69,6 +72,7 @@ class WinnerScreen extends Drawable{
 class Terrain extends Drawable {
     +gruond_lines: List<Int>
 
+    +Terrain(int, int)
     + generate_terrain(mountains: int, valleys: int)
     +mountain(i: int, j: int, height: int):
     +valley( inicio: int, fin: int, profundidad: int)
@@ -85,6 +89,7 @@ class Background extends Drawable{
     +wind: float
     +wind_target: float
 
+    + Background()
     + add_random_snowflake()
     + draw_snowflakes(Surface)
     + draw(Surface):None
@@ -98,6 +103,7 @@ class Tank extends Collidable  {
     -shoot_velocity: float
     -shoot_angle: float
 
+    +Tank(Position)
     +draw(Surface) : None
     +collides_with(Point)) : Boolean
     +shoot(): Cannonball:
@@ -106,19 +112,24 @@ class Tank extends Collidable  {
 class Player {
     +name: str
     + points: double
+    +Player(str, int)
     +score(position_cannonball, position) : int
     +score(impact: Impact, tank_position: pygame.Vector2)
+
+
 }
 class WinnerScreen extends Drawable
 {
+    + WinnerScreen()
     +winner_mensaje(screen: pygame.surface.Surface)
     +fuegos_artificiales(screen: pygame.surface.Surface)
 }
-class Impact:
+class Impact
 {
     +position: pygame.Vector2
     +impact_type: int
 
+    +Impact(Position, ImpactType)
 }
 
 class Constants {
@@ -149,15 +160,23 @@ class ImpactType{
     +TANK :int
     +SUICIDIO int
 }
+class SelfImpactWindows extends Drawable {
+    + SelfImpactWindows():
+    + draw(): None
+}
+
 TankGame -- Constants
-WinnerScreen *-->  TankGame
+
+WinnerScreen *--> TankGame
 TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
-TankGame o-->Background
+TankGame o--> Background
+TankGame o--> Impact
 Tank *--> Player
 HUD *--> Tank
-Impact *-->ImpactType
-TankGame *-->Impact
+HUD *--> SelfImpactWindows
+Impact *--> ImpactType
+TankGame *--> Impact
 
 @enduml
