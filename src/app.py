@@ -550,8 +550,8 @@ class Player:
 
 
 class CannonballType:
-    MM60 = 0,
-    MM80 = 1,
+    MM60 = 0
+    MM80 = 1
     MM105 = 2
 
 
