@@ -684,7 +684,7 @@ class Tank(Drawable, Collidable):
 class HUD(Drawable):
     """
     Esta clase es responsable de mostrar elementos relacionados con la
-    información en pantalla que no es parte del terreno o del juego en sí
+    información en pantalla que no es parte del terreno o del juego en sí  :)
     """
 
     tanks: list[Tank]
