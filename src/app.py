@@ -1247,6 +1247,7 @@ class TankGame:
 
         if keys_pressed[pygame.K_SPACE] and self.show_screen == False:
             self.cannonball = playing_tank.shoot()
+
         if keys_pressed[pygame.K_TAB] and self.show_screen == False and self.show_screen == 0:
             self.show_screen = True
 
