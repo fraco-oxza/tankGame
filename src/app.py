@@ -569,7 +569,8 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
-        self.select = SelectCannonball(0)
+        self.available = [3, 10, 3]
+        self.select = SelectCannonball(0, self.available)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
