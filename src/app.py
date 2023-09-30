@@ -578,7 +578,7 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
-        self.available = [3, 10, 3]
+        self.available = [3, 10, 5]
         self.life = 100
 
     def collides_with(self, point: pygame.Vector2) -> bool:
@@ -611,17 +611,17 @@ class Tank(Drawable, Collidable):
         if self.actual == CannonballType.MM60:
             if self.available[0] > 0:
                 self.available[0] = self.available[0] - 1
-
+                print("d 1")
                 return Cannonball60mm(start_point, start_velocity)
         elif self.actual == 1:
             if self.available[1] > 0:
                 self.available[1] = self.available[1] - 1
-
+                print("d 2")
                 return Cannonball80mm(start_point, start_velocity)
         else:
             if self.available[2] > 0:
                 self.available[2] = self.available[2] - 1
-
+                print("d 3")
                 return Cannonball105mm(start_point, start_velocity)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -718,35 +718,6 @@ class Tank(Drawable, Collidable):
         ) <= constants.TANK_RADIO:
             return True
         return False
-
-    def shoot(self) -> Cannonball:
-        """
-        Esta función calcula las direcciones para disparar el proyectil,
-        y calcula la  posición del proyectil después del disparo.
-        También crea y retorna el objeto Cannonball con estos atributos.
-        """
-        v_x = self.shoot_velocity * math.cos(self.shoot_angle)
-        # the -1 is since in this system the vertical coordinates are inverted
-        v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
-
-        new_x = self.position.x + 20 * math.cos(self.shoot_angle)
-        new_y = self.position.y - 20 * math.sin(self.shoot_angle)
-
-        start_point = pygame.Vector2(new_x, new_y)
-        start_velocity = pygame.Vector2(v_x, v_y)
-
-        if self.actual == CannonballType.MM60:
-            if self.available[0] > 0:
-                self.available[0] = self.available[0] - 1
-                return Cannonball60mm(start_point, start_velocity)
-        elif self.actual == 1:
-            if self.available[1] > 0:
-                self.available[1] = self.available[1] - 1
-                return Cannonball80mm(start_point, start_velocity)
-        else:
-            if self.available[2] > 0:
-                self.available[2] = self.available[2] - 1
-                return Cannonball105mm(start_point, start_velocity)
 
 
 class HUD(Drawable):
