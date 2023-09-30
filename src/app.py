@@ -475,7 +475,9 @@ class SelectCannonball(Drawable):
 
 
 class Cannonball105mm(Cannonball):
-
+    damage: int
+    radius_damage: int
+    units_available: int
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         super().__init__(position, velocity)
         self.damage = 50
@@ -484,6 +486,9 @@ class Cannonball105mm(Cannonball):
 
 
 class Cannonball60mm(Cannonball):
+    damage: int
+    radius_damage: int
+    units_available: int
 
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         super().__init__(position, velocity)
@@ -493,7 +498,9 @@ class Cannonball60mm(Cannonball):
 
 
 class Cannonball80mm(Cannonball):
-
+    damage: int
+    radius_damage: int
+    units_available: int
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         super().__init__(position, velocity)
         self.damage = 40
@@ -646,13 +653,19 @@ class Tank(Drawable, Collidable):
         del cañón retornado True o False según corresponda
         """
         if CannonballType == CannonballType.MM60:
-            pass
+            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                    1 / 2) <= Cannonball60mm.radius_damage:
+                self.life = - 30
 
         elif CannonballType == CannonballType.MM80:
-            pass
+            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                    1 / 2) <= Cannonball80mm.radius_damage:
+                self.life = -40
         elif CannonballType == CannonballType.MM105:
-            pass
-        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                    1 / 2) <= Cannonball105mm.radius_damage:
+                self.life = -50
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                 1 / 2
         ) <= constants.TANK_RADIO:
             return True
