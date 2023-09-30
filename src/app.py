@@ -423,19 +423,18 @@ class Cannonball(Drawable):
 
 
 class SelectCannonball(Drawable):
-    valor: int
     cannonball60: Cannonball60mm
     cannonball80: Cannonball80mm
     cannonball105: Cannonball105mm
+    tank_game: TankGame
     available: list[int]
 
-    def __init__(self, valor, available: list[int]):
-        self.valor = valor
+    def __init__(self, tank_game: TankGame):
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
         self.text_cannonball60_info = None
         self.text_cannonball80_info = None
         self.text_cannonball105_info = None
-        self.available = available
+        self.tank_game = tank_game
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
@@ -468,7 +467,9 @@ class SelectCannonball(Drawable):
         )
         screen.blit(self.text_cannonball60_info, pygame.Vector2(350, 370))
 
+
     def draw(self, screen: pygame.surface.Surface) -> None:
+        self.available = self.tank_game.tanks[self.tank_game.actual_player].available
         self.selection_screen(screen)
         self.cannonball_60_mm(screen)
         self.cannonball_80_mm(screen)
@@ -479,6 +480,7 @@ class Cannonball105mm(Cannonball):
     damage: int
     radius_damage: int
     units_available: int
+
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         super().__init__(position, velocity)
         self.damage = 50
@@ -502,6 +504,7 @@ class Cannonball80mm(Cannonball):
     damage: int
     radius_damage: int
     units_available: int
+
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         super().__init__(position, velocity)
         self.damage = 40
@@ -577,7 +580,6 @@ class Tank(Drawable, Collidable):
         self.actual = CannonballType.MM60
         self.available = [3, 10, 3]
         self.life = 100
-        self.select = SelectCannonball(0, self.available)
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
@@ -1234,7 +1236,8 @@ class TankGame:
         )
 
         self.hud = HUD(self.tanks, self)
-        self.select_Cannonball = SelectCannonball(0, self.tanks[self.actual_player].available)
+        self.select_Cannonball = SelectCannonball(self)
+
     def render(self) -> None:
         """
         This method is responsible for drawing each element of the window, it
@@ -1324,11 +1327,11 @@ class TankGame:
         if (keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[
             pygame.K_3]) and self.show_screen == True:
             if keys_pressed[pygame.K_1]:
-                self.select_Cannonball = SelectCannonball(1, self.tanks[self.actual_player].available)
+                self.tanks[self.actual_player].actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
-                self.select_Cannonball = SelectCannonball(2, self.tanks[self.actual_player].available)
+                self.tanks[self.actual_player].actual = CannonballType.MM80
             else:
-                self.select_Cannonball = SelectCannonball(3, self.tanks[self.actual_player].available)
+                self.tanks[self.actual_player].actual = CannonballType.MM105
             self.show_screen = False
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
