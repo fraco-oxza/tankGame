@@ -538,6 +538,11 @@ class Player:
             self.points += 10000
 
 
+class CannonballType:
+    MM60 = 0,
+    MM80 = 1,
+    MM150 = 2
+
 class Tank(Drawable, Collidable):
     """
     Esta clase representa un tanque en el juego,
@@ -550,6 +555,9 @@ class Tank(Drawable, Collidable):
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
+    # bala seleccionada
+    actual: int
+    available: list[int]
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
         self.player = player
@@ -655,7 +663,18 @@ class Tank(Drawable, Collidable):
         new_x = self.position.x + 20 * math.cos(self.shoot_angle)
         new_y = self.position.y - 20 * math.sin(self.shoot_angle)
 
-        return Cannonball(pygame.Vector2(new_x, new_y), pygame.Vector2(v_x, v_y))
+        start_point = pygame.Vector2(new_x, new_y)
+        start_velocity = pygame.Vector2(v_x, v_y)
+
+        if self.actual == CannonballType.MM60:
+
+            return Cannonball60mm(start_point, start_velocity)
+        elif self.actual == 1:
+
+            return Cannonball80mm(start_point, start_velocity)
+        else:
+            
+            return Cannonball150mm(start_point, start_velocity)
 
 
 class HUD(Drawable):
