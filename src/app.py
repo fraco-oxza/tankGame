@@ -427,15 +427,15 @@ class SelectCannonball(Drawable):
     cannonball60: Cannonball60mm
     cannonball80: Cannonball60mm
     cannonball150: Cannonball60mm
-    available: Tank.available
+    tank: Tank
 
-    def __init__(self, valor, available: list[int]):
+    def __init__(self, valor):
         self.valor = valor
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
         self.text_cannonball60_info = None
         self.text_cannonball80_info = None
         self.text_cannonball150_info = None
-        self.available = available
+        self.tank = Tank()
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
@@ -446,7 +446,7 @@ class SelectCannonball(Drawable):
 
     def cannonball_150_mm(self, screen: pygame.surface):
         self.text_cannonball150_info = self.font.render(
-            f"Unidades Diponibles: {self.available[2]}",
+            f"Unidades Diponibles: {self.tank.available[2]}",
             True,
             "white",
         )
@@ -454,7 +454,7 @@ class SelectCannonball(Drawable):
 
     def cannonball_80_mm(self, screen: pygame.surface):
         self.text_cannonball80_info = self.font.render(
-            f"Unidades Diponibles: {self.available[1]}",
+            f"Unidades Diponibles: {self.tank.available[1]}",
             True,
             "white",
         )
@@ -462,7 +462,7 @@ class SelectCannonball(Drawable):
 
     def cannoball_60_mm(self, screen: pygame.surface):
         self.text_cannonball60_info = self.font.render(
-            f"Unidades Diponibles: {self.available[0]}",
+            f"Unidades Diponibles: {self.tank.available[0]}",
             True,
             "white",
         )
@@ -557,10 +557,8 @@ class Tank(Drawable, Collidable):
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
-    # bala seleccionada
-    actual: int
+    actual: int  # bala seleccionada
     available: list[int]
-    select: SelectCannonball
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
         self.player = player
@@ -570,7 +568,6 @@ class Tank(Drawable, Collidable):
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
         self.available = [3, 10, 3]
-        self.select = SelectCannonball(0, self.available)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -620,7 +617,6 @@ class Tank(Drawable, Collidable):
             ),
         )
 
-        # decoration IN PROCESS, IS UGLY NOW
         for i in range(6):
             pygame.draw.circle(
                 screen,
@@ -672,22 +668,23 @@ class Tank(Drawable, Collidable):
         start_velocity = pygame.Vector2(v_x, v_y)
 
         if self.actual == CannonballType.MM60:
-
-            self.select.cannoball_60_mm(pygame.surface.Surface)
-            return Cannonball60mm(start_point, start_velocity)
+            if self.available[0] > 0:
+                self.available[0] = self.available[0] - 1
+                return Cannonball60mm(start_point, start_velocity)
         elif self.actual == 1:
-
-            self.select.cannonball_80_mm(pygame.surface.Surface)
-            return Cannonball80mm(start_point, start_velocity)
+            if self.available[1] > 0:
+                self.available[1] = self.available[1] - 1
+                return Cannonball80mm(start_point, start_velocity)
         else:
-            self.select.cannonball_150_mm(pygame.surface.Surface)
-            return Cannonball150mm(start_point, start_velocity)
+            if self.available[2] > 0:
+                self.available[2] = self.available[2] - 1
+                return Cannonball150mm(start_point, start_velocity)
 
 
 class HUD(Drawable):
     """
     Esta clase es responsable de mostrar elementos relacionados con la
-    información en pantalla que no es parte del terreno o del juego en sí
+    información en pantalla que no es parte del terreno o del juego en sí  :)
     """
 
     tanks: list[Tank]
@@ -1015,6 +1012,10 @@ class WinnerScreen(Drawable):
             self.winner_mensaje(screen)
 
 
+class Proyectil150(Cannonball):
+    pass
+
+
 class ImpactType:
     """
     Clase encargada de definir el tipo de ambiente con lo que impactó la bala,
@@ -1125,7 +1126,7 @@ class TankGame:
         self.tanks = []
         self.old_cannonballs = []
         self.actual_player = randint(0, 1)
-        self.select_Cannonball = SelectCannonball(0, self.tanks[self.actual_player].available)
+        self.select_Cannonball = SelectCannonball(0)
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
 
         mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
