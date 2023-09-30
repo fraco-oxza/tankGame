@@ -427,14 +427,15 @@ class SelectCannonball(Drawable):
     cannonball60: Cannonball60mm
     cannonball80: Cannonball60mm
     cannonball150: Cannonball60mm
-    tank: Tank
-    def __init__(self, valor):
+    available: Tank.available
+
+    def __init__(self, valor, available: list[int]):
         self.valor = valor
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
         self.text_cannonball60_info = None
         self.text_cannonball80_info = None
         self.text_cannonball150_info = None
-        self.tank = Tank()
+        self.available = available
 
     def selection_screen(self, screen: pygame.surface):
         transparency = 140
@@ -445,7 +446,7 @@ class SelectCannonball(Drawable):
 
     def cannonball_150_mm(self, screen: pygame.surface):
         self.text_cannonball150_info = self.font.render(
-            f"Unidades Diponibles: {self.tank.available[2]}",
+            f"Unidades Diponibles: {self.available[2]}",
             True,
             "white",
         )
@@ -453,7 +454,7 @@ class SelectCannonball(Drawable):
 
     def cannonball_80_mm(self, screen: pygame.surface):
         self.text_cannonball80_info = self.font.render(
-            f"Unidades Diponibles: {self.tank.available[1]}",
+            f"Unidades Diponibles: {self.available[1]}",
             True,
             "white",
         )
@@ -461,7 +462,7 @@ class SelectCannonball(Drawable):
 
     def cannoball_60_mm(self, screen: pygame.surface):
         self.text_cannonball60_info = self.font.render(
-            f"Unidades Diponibles: {self.tank.available[0]}",
+            f"Unidades Diponibles: {self.available[0]}",
             True,
             "white",
         )
@@ -543,6 +544,7 @@ class CannonballType:
     MM80 = 1,
     MM150 = 2
 
+
 class Tank(Drawable, Collidable):
     """
     Esta clase representa un tanque en el juego,
@@ -558,6 +560,7 @@ class Tank(Drawable, Collidable):
     # bala seleccionada
     actual: int
     available: list[int]
+    select: SelectCannonball
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
         self.player = player
@@ -566,6 +569,7 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
+        self.select = SelectCannonball(0)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -668,12 +672,14 @@ class Tank(Drawable, Collidable):
 
         if self.actual == CannonballType.MM60:
 
+            self.select.cannoball_60_mm(pygame.surface.Surface)
             return Cannonball60mm(start_point, start_velocity)
         elif self.actual == 1:
 
+            self.select.cannonball_80_mm(pygame.surface.Surface)
             return Cannonball80mm(start_point, start_velocity)
         else:
-            
+            self.select.cannonball_150_mm(pygame.surface.Surface)
             return Cannonball150mm(start_point, start_velocity)
 
 
@@ -1008,10 +1014,6 @@ class WinnerScreen(Drawable):
             self.winner_mensaje(screen)
 
 
-class Proyectil150(Cannonball):
-    pass
-
-
 class ImpactType:
     """
     Clase encargada de definir el tipo de ambiente con lo que impactó la bala,
@@ -1122,7 +1124,7 @@ class TankGame:
         self.tanks = []
         self.old_cannonballs = []
         self.actual_player = randint(0, 1)
-        self.select_Cannonball = SelectCannonball(0)
+        self.select_Cannonball = SelectCannonball(0, self.tanks[self.actual_player].available)
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
 
         mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
