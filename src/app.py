@@ -707,21 +707,27 @@ class Tank(Drawable, Collidable):
         """
         Esta función se encarga de quitar vida al tanque según la bala que impactó
         """
-        if CannonballType == CannonballType.MM60:
+        if self.actual == CannonballType.MM60:
+            print("1 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball60mm.radius_damage:
                 self.life = - 30
+                print("h")
                 return True
 
-        elif CannonballType == CannonballType.MM80:
+        elif self.actual == CannonballType.MM80:
+            print("2 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball80mm.radius_damage:
                 self.life = -40
+                print("j")
                 return True
-        elif CannonballType == CannonballType.MM105:
+        elif self.actual == CannonballType.MM105:
+            print("3 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball105mm.radius_damage:
                 self.life = -50
+                print("k")
                 return True
         if self.life < 0:
             self.life = 0
@@ -1373,12 +1379,16 @@ class TankGame:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
+            hola = tank.life_collides(self.cannonball.position)
+            print(hola)
             if tank.life_collides(self.cannonball.position):
-                self.running = False
+                print(self.tanks[self.actual_player].life)
+
                 print(self.tanks[self.actual_player].life)
                 if self.tanks[self.actual_player].life == 0:
                     self.winner = self.actual_player
                     return Impact(self.cannonball.position, ImpactType.TANK)
+                self.running = False
                 return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
