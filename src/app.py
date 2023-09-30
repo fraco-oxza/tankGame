@@ -428,6 +428,7 @@ class SelectCannonball(Drawable):
     cannonball80: Cannonball60mm
     cannonball150: Cannonball60mm
     tank: Tank
+
     def __init__(self, valor):
         self.valor = valor
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
@@ -543,6 +544,7 @@ class CannonballType:
     MM80 = 1,
     MM150 = 2
 
+
 class Tank(Drawable, Collidable):
     """
     Esta clase representa un tanque en el juego,
@@ -555,8 +557,7 @@ class Tank(Drawable, Collidable):
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
-    # bala seleccionada
-    actual: int
+    actual: int  # bala seleccionada
     available: list[int]
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
@@ -566,6 +567,7 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
+        self.available = [3, 10, 3]
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -615,7 +617,6 @@ class Tank(Drawable, Collidable):
             ),
         )
 
-        # decoration IN PROCESS, IS UGLY NOW
         for i in range(6):
             pygame.draw.circle(
                 screen,
@@ -667,14 +668,17 @@ class Tank(Drawable, Collidable):
         start_velocity = pygame.Vector2(v_x, v_y)
 
         if self.actual == CannonballType.MM60:
-
-            return Cannonball60mm(start_point, start_velocity)
+            if self.available[0] > 0:
+                self.available[0] = self.available[0] - 1
+                return Cannonball60mm(start_point, start_velocity)
         elif self.actual == 1:
-
-            return Cannonball80mm(start_point, start_velocity)
+            if self.available[1] > 0:
+                self.available[1] = self.available[1] - 1
+                return Cannonball80mm(start_point, start_velocity)
         else:
-            
-            return Cannonball150mm(start_point, start_velocity)
+            if self.available[2] > 0:
+                self.available[2] = self.available[2] - 1
+                return Cannonball150mm(start_point, start_velocity)
 
 
 class HUD(Drawable):
