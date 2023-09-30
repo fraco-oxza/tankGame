@@ -711,18 +711,23 @@ class Tank(Drawable, Collidable):
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball60mm.radius_damage:
                 self.life = - 30
+                return True
 
         elif CannonballType == CannonballType.MM80:
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball80mm.radius_damage:
                 self.life = -40
+                return True
         elif CannonballType == CannonballType.MM105:
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                     1 / 2) <= Cannonball105mm.radius_damage:
                 self.life = -50
+                return True
         if self.life < 0:
             self.life = 0
-        return True
+            return True
+        return False
+
 
 
 class HUD(Drawable):
