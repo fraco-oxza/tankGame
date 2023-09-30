@@ -9,6 +9,8 @@ from random import randint
 from typing import Optional
 
 import pygame
+from pygame.color import Color
+from pygame.font import Font
 
 import constants
 
@@ -61,27 +63,12 @@ class Drawable:
         raise NotImplementedError
 
 
-class Background(Drawable):
-    """
-    This class represents the game background, which loads an image and creates
-    animations of falling snow with wind.
-    """
-
-    sky_image: pygame.Surface
+class SnowStorm(Drawable):
     snowflakes: list[pygame.Vector2]
     wind: float
     wind_target: float
 
     def __init__(self):
-        """Initialize the class by loading the images and creating the snowflakes."""
-        image_size = pygame.Vector2(
-            constants.WINDOWS_SIZE[0],
-            (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
-        )
-        self.sky_image = pygame.transform.scale(
-            pygame.image.load(resource_path("images/sky.jpg")), image_size
-        )
-        self.sky_rect = self.sky_image.get_rect()
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
@@ -106,8 +93,8 @@ class Background(Drawable):
             snowflake.y += constants.GRAVITY / 10.0  # gravity
 
             # Corner case down
-            if snowflake.y > (constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT):
-                snowflake.y -= constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT
+            if snowflake.y > (constants.WINDOWS_SIZE[1]):
+                snowflake.y -= constants.WINDOWS_SIZE[1]
 
             # Corner case sides
             if snowflake.x > constants.WINDOWS_SIZE[0]:
@@ -119,7 +106,7 @@ class Background(Drawable):
                 self.wind_target = (random.random() - 0.5) * 10.0
 
             wind_diff = self.wind_target - self.wind
-            self.wind += math.tanh(wind_diff) * dt * 1e-3
+            self.wind += math.tanh(wind_diff) * dt * 1e-5
 
             snowflake.x += self.wind
 
@@ -129,12 +116,33 @@ class Background(Drawable):
             pygame.draw.circle(screen, "#ffffff", snowflake, 1)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        self.draw_snowflakes(screen)
+
+
+class Background(Drawable):
+    """
+    This class represents the game background, which loads an image and creates
+    animations of falling snow with wind.
+    """
+    sky_image: pygame.Surface
+
+    def __init__(self):
+        """Initialize the class by loading the images and creating the snowflakes."""
+        image_size = pygame.Vector2(
+            constants.WINDOWS_SIZE[0],
+            (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
+        )
+        self.sky_image = pygame.transform.scale(
+            pygame.image.load(resource_path("images/sky.jpg")), image_size
+        )
+        self.sky_rect = self.sky_image.get_rect()
+
+    def draw(self, screen: pygame.surface.Surface) -> None:
         """
         This function is responsible for drawing the background and the
         snowflakes.
         """
         screen.blit(self.sky_image, self.sky_rect.topleft)
-        self.draw_snowflakes(screen)
 
 
 class Terrain(Drawable, Collidable):
@@ -1116,6 +1124,40 @@ class SelfImpactWindows(Drawable):
         screen.blit(self.text_winner_info, center)
 
 
+class Menu(Drawable, Collidable):
+    fontTitle: Font
+    storm: SnowStorm
+    box_size = (500, 300)
+    box_pos: Optional[(float, float)]
+
+    def __init__(self):
+        self.fontTitle = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 43)
+        self.storm = SnowStorm()
+        self.box_pos = None
+
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        screen.fill("#434C5E")
+        self.storm.draw(screen)
+
+        size = screen.get_size()
+        self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
+
+        self.fontTitle.set_bold(True)
+        title = self.fontTitle.render("Tank Game", True, "#B48EAD")
+        screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
+
+        options_box = pygame.rect.Rect(*self.box_pos, self.box_size[0],
+                                       self.box_size[1])
+        pygame.draw.rect(screen, "#2E3440", options_box, 0, 10)
+
+    def tick(self, dt: float):
+        self.storm.tick(dt)
+
+    def collides_with(self, point: pygame.Vector2) -> bool:
+        return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
+                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1])
+
+
 class TankGame:
     """
     This class represents the complete game, it is responsible for maintaining the
@@ -1148,6 +1190,7 @@ class TankGame:
         pygame.display.set_icon(icon)
 
         self.background = Background()
+        self.snow_storm = SnowStorm()
         self.terrain = Terrain(constants.MOUNTAINS, constants.VALLEYS)
         self.fps = float(constants.FPS)
         self.winner_msj = WinnerScreen(self)
@@ -1158,6 +1201,7 @@ class TankGame:
         self.last_state = None
         self.show_screen = False
         self.cannonball = None
+        self.menu = Menu()
         self.tanks = []
         self.old_cannonballs = []
         self.actual_player = randint(0, 1)
@@ -1212,6 +1256,7 @@ class TankGame:
         fps, specified in the FPS constant
         """
         self.background.draw(self.screen)
+        self.snow_storm.draw(self.screen)
         self.terrain.draw(self.screen)
         for tank in self.tanks:
             tank.draw(self.screen)
@@ -1224,7 +1269,7 @@ class TankGame:
         if self.winner is not None:
             self.winner_msj.draw(self.screen)
         self.hud.draw(self.screen)
-        self.background.tick(1.0 / (self.fps + 0.1))
+        self.snow_storm.tick(1.0 / (self.fps + 0.1))
         if self.show_screen:
             self.select_Cannonball.draw(self.screen)
         pygame.display.flip()
@@ -1402,6 +1447,20 @@ class TankGame:
             self.cannonball.kill()
             self.old_cannonballs.append(self.cannonball)
 
+    def start_menu(self):
+        while self.running:
+            self.check_running()
+            self.menu.draw(self.screen)
+            self.menu.tick((1.0 / (self.fps + 0.1)))
+
+            ms = pygame.mouse.get_pos()
+            if self.menu.collides_with(pygame.Vector2(*ms)):
+                break
+
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
     def start(self) -> None:
         """
         Esta función muestra las instrucciones básicas para después dar paso al
@@ -1410,6 +1469,8 @@ class TankGame:
         donde en cuyo caso se comprobará si la bala sigue avanzando o si ha
         impactado con algo.
         """
+        self.start_menu()
+
         self.hud.show_instructions(self.screen)
         pygame.display.flip()
 
@@ -1451,7 +1512,8 @@ class TankGame:
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
 
-        self.running = True
+        if self.winner is not None:
+            self.running = True
         while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
