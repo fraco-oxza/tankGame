@@ -440,7 +440,7 @@ class SelectCannonball(Drawable):
         transparency = 140
         rect_surface = pygame.Surface((700, 300))
         rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = (300, 100)
+        rect_x1, rect_y1 = (300, 250)
         screen.blit(rect_surface, (rect_x1, rect_y1))
 
     def cannonball_105_mm(self, screen: pygame.surface):
@@ -449,7 +449,7 @@ class SelectCannonball(Drawable):
             True,
             "white",
         )
-        screen.blit(self.text_cannonball105_info, pygame.Vector2(790, 370))
+        screen.blit(self.text_cannonball105_info, pygame.Vector2(790, 520))
 
     def cannonball_80_mm(self, screen: pygame.surface):
         self.text_cannonball80_info = self.font.render(
@@ -457,7 +457,7 @@ class SelectCannonball(Drawable):
             True,
             "white",
         )
-        screen.blit(self.text_cannonball80_info, pygame.Vector2(570, 370))
+        screen.blit(self.text_cannonball80_info, pygame.Vector2(570, 520))
 
     def cannonball_60_mm(self, screen: pygame.surface):
         self.text_cannonball60_info = self.font.render(
@@ -465,7 +465,7 @@ class SelectCannonball(Drawable):
             True,
             "white",
         )
-        screen.blit(self.text_cannonball60_info, pygame.Vector2(350, 370))
+        screen.blit(self.text_cannonball60_info, pygame.Vector2(350, 520))
 
 
     def draw(self, screen: pygame.surface.Surface) -> None:
