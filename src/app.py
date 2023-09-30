@@ -613,12 +613,12 @@ class Tank(Drawable, Collidable):
                 self.available[0] = self.available[0] - 1
                 print("d 1")
                 return Cannonball60mm(start_point, start_velocity)
-        elif self.actual == 1:
+        elif self.actual == CannonballType.MM80:
             if self.available[1] > 0:
                 self.available[1] = self.available[1] - 1
                 print("d 2")
                 return Cannonball80mm(start_point, start_velocity)
-        else:
+        elif self.actual == CannonballType.MM105:
             if self.available[2] > 0:
                 self.available[2] = self.available[2] - 1
                 print("d 3")
