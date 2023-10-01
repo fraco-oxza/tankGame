@@ -340,7 +340,6 @@ class Cannonball(Drawable):
     max_distance: int
     is_alive: bool
 
-
     def __init__(self, position: pygame.Vector2, velocity: pygame.Vector2):
         self.position = position
         self.velocity = velocity
@@ -711,31 +710,28 @@ class Tank(Drawable, Collidable):
         if self.actual == CannonballType.MM60:
             print("1 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= 30:
-                self.life = self.life - 30
+                    1 / 2) <= Cannonball60mm.radius_damage:
+                self.life = - 30
                 print("h")
-                if self.life < 0:
-                    self.life = 0
                 return True
 
         elif self.actual == CannonballType.MM80:
             print("2 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= 20:
-                self.life = self.life - 40
+                    1 / 2) <= Cannonball80mm.radius_damage:
+                self.life = -40
                 print("j")
-                if self.life < 0:
-                    self.life = 0
                 return True
         elif self.actual == CannonballType.MM105:
             print("3 ero")
             if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= 10:
-                self.life = self.life - 50
+                    1 / 2) <= Cannonball105mm.radius_damage:
+                self.life = -50
                 print("k")
-                if self.life < 0:
-                    self.life = 0
                 return True
+        if self.life < 0:
+            self.life = 0
+            return True
         return False
 
 
@@ -1383,17 +1379,17 @@ class TankGame:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
+            hola = tank.life_collides(self.cannonball.position)
+            print(hola)
+            if tank.life_collides(self.cannonball.position):
+                print(self.tanks[self.actual_player].life)
 
-            distance = ((tank.position.x - self.cannonball.position.x) ** 2 + (
-                        tank.position.y - self.cannonball.position.y) * +2) ** (1 / 2)
-            if distance <= constants.TANK_RADIO:
-                return Impact(self.cannonball.position, ImpactType.SUICIDIO)
-            elif tank.life_collides(self.cannonball.position):
                 print(self.tanks[self.actual_player].life)
                 if self.tanks[self.actual_player].life == 0:
                     self.winner = self.actual_player
                     return Impact(self.cannonball.position, ImpactType.TANK)
                 self.running = False
+                return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
