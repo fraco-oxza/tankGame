@@ -1168,7 +1168,7 @@ class Menu(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
 
 
@@ -1348,16 +1348,16 @@ class TankGame:
             self.cannonball = playing_tank.shoot()
 
         if (
-            keys_pressed[pygame.K_TAB]
-            and not self.show_screen
-            and self.show_screen == 0
+                keys_pressed[pygame.K_TAB]
+                and not self.show_screen
+                and self.show_screen == 0
         ):
             self.show_screen = True
 
         if (
-            keys_pressed[pygame.K_1]
-            or keys_pressed[pygame.K_2]
-            or keys_pressed[pygame.K_3]
+                keys_pressed[pygame.K_1]
+                or keys_pressed[pygame.K_2]
+                or keys_pressed[pygame.K_3]
         ) and self.show_screen:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
@@ -1389,7 +1389,7 @@ class TankGame:
 
         for tank in self.tanks:
             other_player = (self.actual_player + 1) % 2
-            if self.tanks[other_player].collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
+            if tank.collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
                 actual_radius_position = (
                                                  (
                                                          (
@@ -1410,7 +1410,6 @@ class TankGame:
                                          ) ** 0.5
 
                 if actual_radius_position > constants.TANK_RADIO:
-                    print(other_player, ": ", self.tanks[other_player].life)
                     if self.tanks[other_player].life == 0:
                         self.winner = self.actual_player
                         self.running = False
@@ -1447,21 +1446,23 @@ class TankGame:
                """
         if cannonball_type == 0:
             if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
-                    1 / 2) <= 10:
-                tank.life = - 30
+                    1 / 2) <= constants.TANK_RADIO + 10:
+                tank.life = tank.life - 30
                 if tank.life < 0:
                     tank.life = 0
 
         elif cannonball_type == 1:
             if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
-                    1 / 2) <= 20:
-                tank.life = -40
+                    1 / 2) <= constants.TANK_RADIO + 20:
+                tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
+            print(((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
+                    1 / 2))
             if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
-                    1 / 2) <= 30:
-                tank.life = -50
+                    1 / 2) <= constants.TANK_RADIO + 30:
+                tank.life = tank.life - 50
                 if tank.life < 0:
                     tank.life = 0
 
@@ -1484,7 +1485,6 @@ class TankGame:
         and modifying the class fields to adapt to the outcome.
         """
         if self.last_state is not None:
-            print("voy a calcular")
             other_player = (self.actual_player + 1) % 2
             self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
             self.tanks[self.actual_player].player.score(
