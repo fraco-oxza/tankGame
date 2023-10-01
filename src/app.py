@@ -703,7 +703,7 @@ class Tank(Drawable, Collidable):
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
 
-    def life_collides(self, point: pygame.Vector2, ) -> bool:
+    def life_collides(self, point: pygame.Vector2, ) -> None:
         """
         Esta función se encarga de quitar vida al tanque según la bala que impactó
         """
@@ -722,7 +722,6 @@ class Tank(Drawable, Collidable):
                 self.life = -50
         if self.life < 0:
             self.life = 0
-        return True
 
 
 class HUD(Drawable):
