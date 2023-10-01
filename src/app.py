@@ -1414,9 +1414,11 @@ class TankGame:
 
                 if actual_radius_position > constants.TANK_RADIO:
                     if self.tanks[other_player].life == 0:
+                        print("adios")
                         self.winner = self.actual_player
                         self.running = False
                     elif self.tanks[self.actual_player].life == 0:
+                        print("chao")
                         self.winner = other_player
                         self.running = False
                     elif other_player_position.real < constants.TANK_RADIO:  # por qué da un numero complejo?
@@ -1460,6 +1462,8 @@ class TankGame:
                     tank.life = 0
 
         elif cannonball_type == 1:
+            print(((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
+                    1 / 2))
             if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
                     1 / 2) <= constants.TANK_RADIO + 20:
                 tank.life = tank.life - 40
