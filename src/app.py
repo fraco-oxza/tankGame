@@ -17,6 +17,7 @@ import constants
 
 # variable global, para mostrar pantalla de seleccion de bala
 
+
 def resource_path(relative_path: str):
     """
     This function is responsible for loading the resources from the resources
@@ -38,7 +39,7 @@ class Collidable:
     """
 
     @abstractmethod
-    def collides_with(self, point: pygame.Vector2, actual: int) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
         """
         Esta funcion es la encargada de decir si self, es decir la instancia
         colisionable ya colisionó con un punto. Debe retornar True en caso de
@@ -574,7 +575,7 @@ class Tank(Drawable, Collidable):
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
-    actual: int
+    actual: int  # bala seleccionada
     available: list[int]
     select: SelectCannonball
     life: int
@@ -1116,13 +1117,19 @@ class SelfImpactWindows(Drawable):
 class Menu(Drawable, Collidable):
     fontTitle: Font
     storm: SnowStorm
-    box_size = (500, 300)
-    box_pos: Optional[(float, float)]
+    box_size = (200, 100)
+    box_pos: Optional[tuple[float, float]]
+    botton_color: str
+    hover_botton_color: str
+    is_hover: bool
 
     def __init__(self):
         self.fontTitle = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 43)
         self.storm = SnowStorm()
         self.box_pos = None
+        self.botton_color = "#2E3440"
+        self.hover_botton_color = "#3b4252"
+        self.is_hover = False
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         screen.fill("#434C5E")
@@ -1133,18 +1140,36 @@ class Menu(Drawable, Collidable):
 
         self.fontTitle.set_bold(True)
         title = self.fontTitle.render("Tank Game", True, "#B48EAD")
+        self.fontTitle.set_bold(False)
         screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
 
-        options_box = pygame.rect.Rect(*self.box_pos, self.box_size[0],
-                                       self.box_size[1])
-        pygame.draw.rect(screen, "#2E3440", options_box, 0, 10)
+        options_box = pygame.rect.Rect(
+            *self.box_pos, self.box_size[0], self.box_size[1]
+        )
+        pygame.draw.rect(
+            screen,
+            self.botton_color if not self.is_hover else self.hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+
+        play = self.fontTitle.render("Jugar", True, "#B48EAD")
+        screen.blit(
+            play,
+            (
+                self.box_pos[0] + self.box_size[0] / 2 - play.get_size()[0] / 2,
+                self.box_pos[1] + self.box_size[1] / 2 - play.get_size()[1] / 2,
+            ),
+        )
 
     def tick(self, dt: float):
         self.storm.tick(dt)
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1])
+            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+        )
 
 
 class TankGame:
@@ -1322,11 +1347,18 @@ class TankGame:
         if keys_pressed[pygame.K_SPACE] and not self.show_screen:
             self.cannonball = playing_tank.shoot()
 
-        if keys_pressed[pygame.K_TAB] and not self.show_screen and self.show_screen == 0:
+        if (
+            keys_pressed[pygame.K_TAB]
+            and not self.show_screen
+            and self.show_screen == 0
+        ):
             self.show_screen = True
 
-        if (keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[
-            pygame.K_3]) and self.show_screen:
+        if (
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
+        ) and self.show_screen:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
@@ -1474,6 +1506,10 @@ class TankGame:
 
             ms = pygame.mouse.get_pos()
             if self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual):
+
+            self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms))
+
+            if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
                 break
 
             pygame.display.flip()
