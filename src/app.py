@@ -38,7 +38,7 @@ class Collidable:
     """
 
     @abstractmethod
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2, actual: int) -> bool:
         """
         Esta funcion es la encargada de decir si self, es decir la instancia
         colisionable ya colisionó con un punto. Debe retornar True en caso de
@@ -315,7 +315,7 @@ class Terrain(Drawable, Collidable):
                     ),
                 )
 
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
         Esta función se encarga de verificar si la posición de la bala colisionó
         o no con el terreno, esto lo hace comparando la altura del terreno en la
@@ -574,7 +574,7 @@ class Tank(Drawable, Collidable):
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
-    actual: int  # bala seleccionada
+    actual: int
     available: list[int]
     select: SelectCannonball
     life: int
@@ -589,7 +589,7 @@ class Tank(Drawable, Collidable):
         self.available = [3, 10, 3]
         self.life = 100
 
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
         Esta función se encarga de revisar si el tanque fue golpeado por la bala
         del cañón retornado True o False según corresponda
@@ -597,6 +597,18 @@ class Tank(Drawable, Collidable):
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
                 1 / 2
         ) <= constants.TANK_RADIO:
+            return True
+        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                1 / 2
+        ) <= 10 and cannon == 0:
+            return True
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                1 / 2
+        ) <= 20 and cannon == 1:
+            return True
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+                1 / 2
+        ) <= 30 and cannon == 2:
             return True
         return False
 
@@ -619,17 +631,14 @@ class Tank(Drawable, Collidable):
         if self.actual == CannonballType.MM60:
             if self.available[0] > 0:
                 self.available[0] = self.available[0] - 1
-                print("d 1")
                 return Cannonball60mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM80:
             if self.available[1] > 0:
                 self.available[1] = self.available[1] - 1
-                print("d 2")
                 return Cannonball80mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM105:
             if self.available[2] > 0:
                 self.available[2] = self.available[2] - 1
-                print("d 3")
                 return Cannonball105mm(start_point, start_velocity)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -702,26 +711,6 @@ class Tank(Drawable, Collidable):
         pygame.draw.line(
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
-
-    def life_collides(self, point: pygame.Vector2, ) -> None:
-        """
-        Esta función se encarga de quitar vida al tanque según la bala que impactó
-        """
-        if CannonballType == CannonballType.MM60:
-            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= Cannonball60mm.radius_damage:
-                self.life = - 30
-
-        elif CannonballType == CannonballType.MM80:
-            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= Cannonball80mm.radius_damage:
-                self.life = -40
-        elif CannonballType == CannonballType.MM105:
-            if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                    1 / 2) <= Cannonball105mm.radius_damage:
-                self.life = -50
-        if self.life < 0:
-            self.life = 0
 
 
 class HUD(Drawable):
@@ -1153,7 +1142,7 @@ class Menu(Drawable, Collidable):
     def tick(self, dt: float):
         self.storm.tick(dt)
 
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
                 self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1])
 
@@ -1342,7 +1331,7 @@ class TankGame:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
                 self.tanks[self.actual_player].actual = CannonballType.MM80
-            else:
+            elif keys_pressed[pygame.K_3]:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
             self.show_screen = False
 
@@ -1363,12 +1352,12 @@ class TankGame:
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
-        if self.terrain.collides_with(self.cannonball.position):
+        if self.terrain.collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
-            if tank.collides_with(self.cannonball.position):
-                self.running = False
+            other_player = (self.actual_player + 1) % 2
+            if self.tanks[other_player].collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
                 actual_radius_position = (
                                                  (
                                                          (
@@ -1389,9 +1378,13 @@ class TankGame:
                                          ) ** 0.5
 
                 if actual_radius_position > constants.TANK_RADIO:
-                    self.winner = self.actual_player
+                    print(other_player, ": ", self.tanks[other_player].life)
+                    if self.tanks[other_player].life == 0:
+                        self.winner = self.actual_player
+                        self.running = False
                     return Impact(self.cannonball.position, ImpactType.TANK)
-                return Impact(self.cannonball.position, ImpactType.SUICIDIO)
+                else:
+                    return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
@@ -1416,6 +1409,30 @@ class TankGame:
             self.last_state = self.process_cannonball_trajectory()
             self.render()
 
+    def life_tank(self, point: pygame.Vector2, tank: Tank, cannonball_type: int):
+        """
+               Esta función se encarga de quitar vida al tanque según la bala que impactó
+               """
+        if cannonball_type == 0:
+            if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
+                    1 / 2) <= 10:
+                tank.life = - 30
+                if tank.life < 0:
+                    tank.life = 0
+
+        elif cannonball_type == 1:
+            if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
+                    1 / 2) <= 20:
+                tank.life = -40
+                if tank.life < 0:
+                    tank.life = 0
+        elif cannonball_type == 2:
+            if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
+                    1 / 2) <= 30:
+                tank.life = -50
+                if tank.life < 0:
+                    tank.life = 0
+
     def wait_on_space(self) -> None:
         """
         This function will pause most of the game logic but won't completely
@@ -1435,7 +1452,9 @@ class TankGame:
         and modifying the class fields to adapt to the outcome.
         """
         if self.last_state is not None:
+            print("voy a calcular")
             other_player = (self.actual_player + 1) % 2
+            self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
             self.tanks[self.actual_player].player.score(
                 self.last_state, self.tanks[other_player].position
             )
@@ -1454,7 +1473,7 @@ class TankGame:
             self.menu.tick((1.0 / (self.fps + 0.1)))
 
             ms = pygame.mouse.get_pos()
-            if self.menu.collides_with(pygame.Vector2(*ms)):
+            if self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual):
                 break
 
             pygame.display.flip()
