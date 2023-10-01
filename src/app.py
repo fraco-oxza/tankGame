@@ -183,9 +183,9 @@ class Terrain(Drawable, Collidable):
                 self.valley(start, end, deep)
             else:
                 max_height = (
-                    constants.WINDOWS_SIZE[1]
-                    - constants.HUD_HEIGHT
-                    - constants.SEA_LEVEL
+                        constants.WINDOWS_SIZE[1]
+                        - constants.HUD_HEIGHT
+                        - constants.SEA_LEVEL
                 )
                 height = randint(max_height // 4, 3 * (max_height // 4))
                 self.mountain(start, end, height)
@@ -239,7 +239,7 @@ class Terrain(Drawable, Collidable):
 
     def __init__(self, mountains: int, valleys: int):
         self.ground_lines = [constants.SEA_LEVEL] * (
-            constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -362,12 +362,12 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
         if (
-            len(self.trajectory) == 0
-            or (
+                len(self.trajectory) == 0
+                or (
                 (self.trajectory[-1].x - self.position.x) ** 2
                 + (self.trajectory[-1].y - self.position.y) ** 2
-            )
-            > 50
+        )
+                > 50
         ):
             self.trajectory.append(pygame.Vector2(self.position.x, self.position.y))
 
@@ -427,8 +427,8 @@ class Cannonball(Drawable):
         el tanque que la lanzó
         """
         return (
-            (self.position.x - tank_position.x) ** 2
-            + (self.position.y - tank_position.y) ** 2
+                (self.position.x - tank_position.x) ** 2
+                + (self.position.y - tank_position.y) ** 2
         ) ** (1 / 2)
 
 
@@ -544,9 +544,9 @@ class Player:
         """
         cannonball_position = impact.position
         distance = (
-            (cannonball_position.x - tank_position.x) ** 2
-            + (cannonball_position.y - tank_position.y) ** 2
-        ) ** (1 / 2)
+                           (cannonball_position.x - tank_position.x) ** 2
+                           + (cannonball_position.y - tank_position.y) ** 2
+                   ) ** (1 / 2)
         if impact.impact_type == ImpactType.TERRAIN:
             if distance <= constants.TANK_RADIO * 2:
                 self.points = self.points + 100
@@ -598,19 +598,19 @@ class Tank(Drawable, Collidable):
         del cañón retornado True o False según corresponda
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= constants.TANK_RADIO:
             return True
         elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 10 and cannon == 0:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 20 and cannon == 1:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 30 and cannon == 2:
             return True
         return False
@@ -884,8 +884,8 @@ class HUD(Drawable):
         )
 
         if (
-            self.tank_game.last_state is not None
-            and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
+                self.tank_game.last_state is not None
+                and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
         ):
             self.self_impact_windows.draw(screen)
 
@@ -1172,7 +1172,7 @@ class Menu(Drawable, Collidable):
         if self.box_pos == None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
 
 
@@ -1242,7 +1242,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
                 player1,
@@ -1257,7 +1257,7 @@ class TankGame:
                     constants.WINDOWS_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
                 player2,
@@ -1318,7 +1318,7 @@ class TankGame:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                    constants.FPS / self.fps
+                        constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
@@ -1326,7 +1326,7 @@ class TankGame:
                 playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                    constants.FPS / self.fps
+                        constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -1352,16 +1352,16 @@ class TankGame:
             self.cannonball = playing_tank.shoot()
 
         if (
-            keys_pressed[pygame.K_TAB]
-            and not self.show_screen
-            and self.show_screen == 0
+                keys_pressed[pygame.K_TAB]
+                and not self.show_screen
+                and self.show_screen == 0
         ):
             self.show_screen = True
 
         if (
-            keys_pressed[pygame.K_1]
-            or keys_pressed[pygame.K_2]
-            or keys_pressed[pygame.K_3]
+                keys_pressed[pygame.K_1]
+                or keys_pressed[pygame.K_2]
+                or keys_pressed[pygame.K_3]
         ) and self.show_screen:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
@@ -1384,13 +1384,13 @@ class TankGame:
         self.cannonball.tick((1.0 / self.fps) * constants.X_SPEED)
 
         if (
-            self.cannonball.position.x < 0
-            or self.cannonball.position.x > constants.WINDOWS_SIZE[0]
+                self.cannonball.position.x < 0
+                or self.cannonball.position.x > constants.WINDOWS_SIZE[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
         if self.terrain.collides_with(
-            self.cannonball.position, self.tanks[self.actual_player].actual
+                self.cannonball.position, self.tanks[self.actual_player].actual
         ):
             other_player = (self.actual_player + 1) % 2
             if self.tanks[other_player].life == 0:
@@ -1404,35 +1404,22 @@ class TankGame:
         for tank in self.tanks:
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
-                self.cannonball.position, self.tanks[self.actual_player].actual
+                    self.cannonball.position, self.tanks[self.actual_player].actual
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
-                other_player_position = self.calculate_distance(other_player)
 
                 if actual_radius_position > constants.TANK_RADIO:
-                    if self.tanks[other_player].life == 0:
-                        print("adios")
-                        self.winner = self.actual_player
-                        self.running = False
-                    elif self.tanks[self.actual_player].life == 0:
-                        print("chao")
-                        self.winner = other_player
-                        self.running = False
-                    elif (
-                        other_player_position.real < constants.TANK_RADIO
-                    ):  # por qué da un numero complejo?
-                        print("hola")
-                        return Impact(self.cannonball.position, ImpactType.TANK)
+                    return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
     def calculate_distance(self, player: int):
-        actual_radius = (
+        actual_radius = math.sqrt(
             ((self.tanks[player].position.x - self.cannonball.position.x) ** 2)
-            + (((self.tanks[player].position.y - self.cannonball.position.y) ** 2))
-        ) ** 0.5
+            + ((self.tanks[player].position.y - self.cannonball.position.y) ** 2)
+        )
         return actual_radius
 
     def wait_release_space(self) -> None:
@@ -1461,28 +1448,24 @@ class TankGame:
         Esta función se encarga de quitar vida al tanque según la bala que impactó
         """
         if cannonball_type == 0:
-            if (
-                (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) ** (1 / 2) <= constants.TANK_RADIO + 10:
+            if math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+            ) <= constants.TANK_RADIO + 10:
                 tank.life = tank.life - 30
                 if tank.life < 0:
                     tank.life = 0
 
         elif cannonball_type == 1:
-            print(
-                ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2)
-                ** (1 / 2)
-            )
-            if (
-                (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) ** (1 / 2) <= constants.TANK_RADIO + 20:
+            if math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+            ) <= constants.TANK_RADIO + 20:
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
-            if (
-                (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) ** (1 / 2) <= constants.TANK_RADIO + 30:
+            if math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+            ) <= constants.TANK_RADIO + 30:
                 tank.life = tank.life - 50
                 if tank.life < 0:
                     tank.life = 0
@@ -1518,8 +1501,8 @@ class TankGame:
             )
 
         if (
-            self.last_state is not None
-            and self.last_state.impact_type != ImpactType.BORDER
+                self.last_state is not None
+                and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
             self.cannonball.kill()
             self.old_cannonballs.append(self.cannonball)
@@ -1575,27 +1558,33 @@ class TankGame:
             self.cannonball_travel()
 
             if (
-                self.last_state is not None
-                and self.last_state.impact_type == ImpactType.SUICIDIO
+                    self.last_state is not None
+                    and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
-            """if self.last_state is not None:
-                other_player = (self.actual_player + 1) % 2
-                self.life_tank(self.last_state.position, self.tanks[other_player],
-                               self.tanks[self.actual_player].actual)
-                print(other_player, ":", self.tanks[other_player].life)
-                print(self.actual_player, ":", self.tanks[self.actual_player].life)
-                """
+
             self.wait_release_space()
             self.wait_on_space()
 
             self.check_last_state()
+
             self.cannonball = None
             self.last_state = None
 
             self.wait_release_space()
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
+
+            are_tanks_without_live = False
+            for tank in self.tanks:
+                if tank.life == 0:
+                    self.winner = (self.actual_player + 1) % 2
+                    self.running = False
+                    are_tanks_without_live = True
+                    break
+
+            if are_tanks_without_live:
+                break
 
         self.running = True
         while self.running:
