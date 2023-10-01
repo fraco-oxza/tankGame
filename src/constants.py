@@ -1,4 +1,5 @@
 import random
+
 GRAVITY = 9.8  # m/s^2
 DEVELOPMENT_MODE = False
 WINDOWS_SIZE = (1280, 920)
