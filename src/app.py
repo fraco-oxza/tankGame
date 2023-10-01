@@ -1367,10 +1367,28 @@ class TankGame:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
-            if tank.life_collides(self.cannonball.position):
+            if tank.collides_with(self.cannonball.position):
                 self.running = False
-                print(self.tanks[self.actual_player].life)
-                if self.tanks[self.actual_player].life == 0:
+                actual_radius_position = (
+                                                 (
+                                                         (
+                                                                 self.tanks[self.actual_player].position.x
+                                                                 - self.cannonball.position.x
+                                                         )
+                                                         ** 2
+                                                 )
+                                                 + (
+                                                     (
+                                                             (
+                                                                     self.tanks[self.actual_player].position.y
+                                                                     - self.cannonball.position.y
+                                                             )
+                                                             ** 2
+                                                     )
+                                                 )
+                                         ) ** 0.5
+
+                if actual_radius_position > constants.TANK_RADIO:
                     self.winner = self.actual_player
                     return Impact(self.cannonball.position, ImpactType.TANK)
                 return Impact(self.cannonball.position, ImpactType.SUICIDIO)
