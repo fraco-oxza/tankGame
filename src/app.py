@@ -1166,7 +1166,9 @@ class Menu(Drawable, Collidable):
     def tick(self, dt: float):
         self.storm.tick(dt)
 
-    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
+        if self.box_pos == None:
+            return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
                 self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
@@ -1526,8 +1528,8 @@ class TankGame:
             self.menu.tick((1.0 / (self.fps + 0.1)))
 
             ms = pygame.mouse.get_pos()
-            if self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual):
-                self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual)
+
+            self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms))
 
             if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
                 break
