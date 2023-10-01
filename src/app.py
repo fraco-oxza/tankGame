@@ -1413,6 +1413,9 @@ class TankGame:
                     if self.tanks[other_player].life == 0:
                         self.winner = self.actual_player
                         self.running = False
+                    elif self.tanks[self.actual_player].life == 0:
+                        self.winner = other_player
+                        self.running = False
                     return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
@@ -1458,8 +1461,6 @@ class TankGame:
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
-            print(((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
-                    1 / 2))
             if ((point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2) ** (
                     1 / 2) <= constants.TANK_RADIO + 30:
                 tank.life = tank.life - 50
@@ -1486,7 +1487,8 @@ class TankGame:
         """
         if self.last_state is not None:
             other_player = (self.actual_player + 1) % 2
-            self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
+            # self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
+
             self.tanks[self.actual_player].player.score(
                 self.last_state, self.tanks[other_player].position
             )
@@ -1555,6 +1557,12 @@ class TankGame:
                 break
 
             self.wait_release_space()
+            if self.last_state is not None:
+                other_player = (self.actual_player + 1) % 2
+                self.life_tank(self.last_state.position, self.tanks[other_player],
+                               self.tanks[self.actual_player].actual)
+                print(other_player, ":", self.tanks[other_player].life)
+                print(self.actual_player, ":", self.tanks[self.actual_player].life)
             self.wait_on_space()
 
             self.check_last_state()
