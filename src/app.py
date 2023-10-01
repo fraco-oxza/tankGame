@@ -1386,31 +1386,20 @@ class TankGame:
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
         if self.terrain.collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
+            other_player = (self.actual_player + 1) % 2
+            if self.tanks[other_player].life == 0:
+                self.winner = self.actual_player
+                self.running = False
+            elif self.tanks[self.actual_player].life == 0:
+                self.winner = other_player
+                self.running = False
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(self.cannonball.position, self.tanks[self.actual_player].actual):
-                actual_radius_position = (
-                                                 (
-                                                         (
-                                                                 self.tanks[self.actual_player].position.x
-                                                                 - self.cannonball.position.x
-                                                         )
-                                                         ** 2
-                                                 )
-                                                 + (
-                                                     (
-                                                             (
-                                                                     self.tanks[self.actual_player].position.y
-                                                                     - self.cannonball.position.y
-                                                             )
-                                                             ** 2
-                                                     )
-                                                 )
-                                         ) ** 0.5
-                other_player_position = (((self.tanks[other_player].position.x - self.cannonball.position.x) ** 2) - (
-                            (self.tanks[other_player].position.y - self.cannonball.position.y) ** 2)) ** 0.5
+                actual_radius_position = self.calculate_distance(self.actual_player)
+                other_player_position = self.calculate_distance(other_player)
 
                 if actual_radius_position > constants.TANK_RADIO:
                     if self.tanks[other_player].life == 0:
@@ -1428,6 +1417,27 @@ class TankGame:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
+
+    def calculate_distance(self, player: int):
+        actual_radius = (
+                                (
+                                        (
+                                                self.tanks[player].position.x
+                                                - self.cannonball.position.x
+                                        )
+                                        ** 2
+                                )
+                                + (
+                                    (
+                                            (
+                                                    self.tanks[player].position.y
+                                                    - self.cannonball.position.y
+                                            )
+                                            ** 2
+                                    )
+                                )
+                        ) ** 0.5
+        return actual_radius
 
     def wait_release_space(self) -> None:
         """
@@ -1496,7 +1506,7 @@ class TankGame:
         """
         if self.last_state is not None:
             other_player = (self.actual_player + 1) % 2
-            #self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
+            self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
 
             self.tanks[self.actual_player].player.score(
                 self.last_state, self.tanks[other_player].position
@@ -1564,18 +1574,17 @@ class TankGame:
                     and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
-
-            self.wait_release_space()
-            if self.last_state is not None:
+            """if self.last_state is not None:
                 other_player = (self.actual_player + 1) % 2
                 self.life_tank(self.last_state.position, self.tanks[other_player],
                                self.tanks[self.actual_player].actual)
                 print(other_player, ":", self.tanks[other_player].life)
                 print(self.actual_player, ":", self.tanks[self.actual_player].life)
+                """
+            self.wait_release_space()
             self.wait_on_space()
 
             self.check_last_state()
-
             self.cannonball = None
             self.last_state = None
 
