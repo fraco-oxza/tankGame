@@ -1512,8 +1512,7 @@ class TankGame:
             self.actual_player = (self.actual_player + 1) % 2  # Swap actual player
             self.render()
 
-        if self.winner is not None:
-            self.running = True
+        self.running = True
         while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
