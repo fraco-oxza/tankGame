@@ -1367,6 +1367,7 @@ class TankGame:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
             self.show_screen = False
 
+    @property
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
         This method is responsible for moving the cannonball and seeing what happens,
@@ -1408,6 +1409,8 @@ class TankGame:
                                                      )
                                                  )
                                          ) ** 0.5
+                other_player_position = (((self.tanks[other_player].position.x - self.cannonball.position.x) ** 2) - (
+                            (self.tanks[other_player].position.y - self.cannonball.position.y) ** 2)) ** 0.5
 
                 if actual_radius_position > constants.TANK_RADIO:
                     if self.tanks[other_player].life == 0:
@@ -1416,7 +1419,9 @@ class TankGame:
                     elif self.tanks[self.actual_player].life == 0:
                         self.winner = other_player
                         self.running = False
-                    return Impact(self.cannonball.position, ImpactType.TANK)
+                    elif other_player_position.real < constants.TANK_RADIO:  # por qué da un numero complejo?
+                        print("hola")
+                        return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
@@ -1440,7 +1445,7 @@ class TankGame:
         """
         while self.running and self.last_state is None:
             self.check_running()
-            self.last_state = self.process_cannonball_trajectory()
+            self.last_state = self.process_cannonball_trajectory
             self.render()
 
     def life_tank(self, point: pygame.Vector2, tank: Tank, cannonball_type: int):
@@ -1487,7 +1492,7 @@ class TankGame:
         """
         if self.last_state is not None:
             other_player = (self.actual_player + 1) % 2
-            # self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
+            #self.life_tank(self.last_state.position, self.tanks[other_player], self.tanks[self.actual_player].actual)
 
             self.tanks[self.actual_player].player.score(
                 self.last_state, self.tanks[other_player].position
