@@ -1506,8 +1506,7 @@ class TankGame:
 
             ms = pygame.mouse.get_pos()
             if self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual):
-
-            self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms))
+                self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms), self.tanks[self.actual_player].actual)
 
             if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
                 break
@@ -1579,7 +1578,7 @@ class TankGame:
 def main():
     """
     From this function the program is started, creating the only instance of
-    TankGame that exists.
+    TankGame that exists...
     """
     tank_game = TankGame()
     tank_game.start()
