@@ -259,63 +259,9 @@ class Terrain(Drawable, Collidable):
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
                     constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT,
-                    constants.TERRAIN_LINE_WIDTH,
-                    20,
+                    constants.TERRAIN_LINE_WIDTH,line
                 ),
             )
-            if line >= 20:
-                pygame.draw.rect(
-                    screen,
-                    "#c8dfe2",
-                    pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
-                        constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT + 20,
-                        constants.TERRAIN_LINE_WIDTH,
-                        40,
-                    ),
-                )
-            else:
-                continue
-
-            if line >= 60:
-                pygame.draw.rect(
-                    screen,
-                    "#50707f",
-                    pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
-                        constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT + 60,
-                        constants.TERRAIN_LINE_WIDTH,
-                        60,
-                    ),
-                )
-            else:
-                continue
-
-            if line >= 120:
-                pygame.draw.rect(
-                    screen,
-                    "#415c6b",
-                    pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
-                        constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT + 120,
-                        constants.TERRAIN_LINE_WIDTH,
-                        120,
-                    ),
-                )
-            else:
-                continue
-
-            if line >= 240:
-                pygame.draw.rect(
-                    screen,
-                    "#2e4957",
-                    pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
-                        constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT + 240,
-                        constants.TERRAIN_LINE_WIDTH,
-                        line - 240,
-                    ),
-                )
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
@@ -1472,6 +1418,8 @@ class TankGame:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
+            if self.cannonball is None:
+                return
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
                     self.cannonball.position, self.tanks[self.actual_player].actual
@@ -1578,6 +1526,21 @@ class TankGame:
         ) and self.cannonball is not None:
             self.cannonball.kill()
             self.old_cannonballs.append(self.cannonball)
+        if self.last_state is not None:
+            self.terrain_destruction()
+
+    def terrain_destruction(self):
+        radius = self.cannonball.radius_damage
+        if self.last_state.impact_type != ImpactType.BORDER:
+            j = 0
+            for i in range(int(self.last_state.position.x) - radius, int(self.last_state.position.x) + radius):
+                if i <= self.last_state.position.x:
+                    self.terrain.ground_lines[i] -= radius/2 - j
+                    j -= 1
+                else:
+                    self.terrain.ground_lines[i] -= radius/2 - j
+                    j += 1
+
 
     def start_menu(self):
         while self.running:
