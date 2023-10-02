@@ -6,24 +6,31 @@ skinparam linetype ortho
 class TankGame {
     + terrain: Terrain
     + tanks: list[Tank]
-    + cannonBall: Optional[Cannonball]
     + screen: pygame.Surface
+    + cannonball: Optional[Cannonball]
+    +old_cannonballs : listCannonball]
     + running: bool
     + actual_player: int
     + winner: Optional[int]
     +winner_msj: Optional[WinnerScreen]
     +last_state: Optional[Impact]
+    +select_Cannonball : Optional[SelectCannonball]
+    show_screen: bool
 
     + TankGame():
     + render(): None
     + check_running(): bool
-    + cannonball_travel(): None
-    + wait_on_space(): None
-    + check_last_state(): None
     + process_input(): None
     + process_cannonball_trajectory(): None
+    +calculate_distance
     + wait_release_space(): None
-    + start(): None
+    + cannonball_travel(): None
+    +life_tank
+    + wait_on_space(): None
+    + check_last_state(): None
+    + start_menu(): None
+    +start()
+    +main()
 
 }
 
@@ -42,11 +49,16 @@ class Cannonball extends Drawable {
     +draw(screen: pygame.surface.Surface)
     +get_max_height(): int
     +calculate_distance_to(tank_position: pygame.Vector2): int
-
-
+}
+class Cannonball105mm extends Cannonball{
+    +Cannonball105mm(Position, Velocity):
+    -damage: int
+    - radius_damage: int
+    - units_available: int
+    +__init__(position, velocity)
+    +draw(Surface)
 
 }
-
 interface Drawable {
     + draw(Surface)
 }
@@ -113,7 +125,6 @@ class Player {
     +name: str
     + points: double
     +Player(str, int)
-    +score(position_cannonball, position) : int
     +score(impact: Impact, tank_position: pygame.Vector2)
 
 
@@ -163,6 +174,23 @@ class ImpactType{
 class SelfImpactWindows extends Drawable {
     + SelfImpactWindows():
     + draw(): None
+}
+class SelectCannonball extends Drawable {
+    +cannonball60: Cannonball60mm
+    +cannonball80: Cannonball80mm
+    +cannonball105: Cannonball105mm
+    +tank_game TankGame
+    available: list[int]
+
+    + SelectCannonball(TankGame)
+    + selection_screen(pygame.surface)
+    +draw_cannonball_105_mm(pygame.surface)
+    +draw_cannonball_80_mm(pygame.surface)
+    +draw_cannonball_60_mm(pygame.surface)
+    +cannonball_105_mm(pygame.surface)
+    +cannonball_80_mm(pygame.surface)
+    +cannonball_60_mm(pygame.surface)
+    +draw(pygame.surface)
 }
 
 TankGame -- Constants
