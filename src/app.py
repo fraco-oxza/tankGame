@@ -432,6 +432,46 @@ class SelectCannonball(Drawable):
         rect_x1, rect_y1 = (300, 250)
         screen.blit(rect_surface, (rect_x1, rect_y1))
 
+    def draw_cannonball_105_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(870, 420)
+        pygame.draw.line(screen, "gray", position,
+                         (position.x + 70, position.y - 70), 20)
+        pygame.draw.circle(screen, "black", position, 50)
+
+        pygame.draw.line(screen, "yellow", (position.x + 70, position.y - 70),
+                         (position.x + 80, position.y - 80), 20)
+
+    def draw_cannonball_80_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(630, 380)
+        triangle = [(position.x, position.y),
+                    (position.x + 25, position.y - 50),
+                    (position.x + 50, position.y)]
+
+        pygame.draw.rect(
+            screen,
+            constants.DarkGreen,
+            pygame.Rect(
+                position.x, position.y, 50, 75
+            ))
+        pygame.draw.line(screen, "yellow", (position.x, position.y + 37.5),
+                         (position.x + 50, position.y + 37.5), 25)
+        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
+
+        pygame.draw.line(screen, "orange", (position.x + 25, position.y + 75),
+                         (position.x + 25, position.y + 100), 20)
+
+    def draw_cannonball_60_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(420, 370)
+        pygame.draw.line(
+            screen,
+            "#4b5320",
+            (position.x, position.y),
+            (position.x, position.y + 80),
+            40,
+        )
+        pygame.draw.line(screen, "#fbb741", (position.x, position.y + 60), (position.x, position.y + 80), 40)
+
+
     def cannonball_105_mm(self, screen: pygame.surface):
         self.text_cannonball105_info = self.font.render(
             f"Unidades Diponibles: {self.available[2]}",
@@ -462,6 +502,9 @@ class SelectCannonball(Drawable):
         self.cannonball_60_mm(screen)
         self.cannonball_80_mm(screen)
         self.cannonball_105_mm(screen)
+        self.draw_cannonball_105_mm(screen)
+        self.draw_cannonball_80_mm(screen)
+        self.draw_cannonball_60_mm(screen)
 
 
 class Cannonball105mm(Cannonball):
