@@ -527,7 +527,21 @@ class Cannonball80mm(Cannonball):
         self.units_available = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        triangle = [(self.position.x, self.position.y - constants.HUD_HEIGHT),
+                    (self.position.x + 5, self.position.y - 10 - constants.HUD_HEIGHT),
+                    (self.position.x + 10, self.position.y - constants.HUD_HEIGHT)]
+
+        pygame.draw.rect(
+            screen,
+            constants.DarkGreen,
+            pygame.Rect(
+                self.position.x, self.position.y - constants.HUD_HEIGHT, 10, 15
+            ))
+        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
+        pygame.draw.line(screen, "orange", (self.position.x + 5, self.position.y + 15 - constants.HUD_HEIGHT),
+                         (self.position.x + 5, self.position.y + 20 - constants.HUD_HEIGHT), 4)
+        pygame.draw.line(screen, "yellow", (self.position.x, self.position.y + 7.5 - constants.HUD_HEIGHT),
+                         (self.position.x + 10, self.position.y + 7.5 - constants.HUD_HEIGHT), 5)
 
 
 class Player:
