@@ -1203,7 +1203,6 @@ class TankGame:
     tanks: list[Tank]
     screen: pygame.Surface
     cannonball: Optional[Cannonball]
-    old_cannonballs: list[Cannonball]
     running: bool
     actual_player: int
     winner: Optional[int]
@@ -1237,7 +1236,6 @@ class TankGame:
         self.cannonball = None
         self.menu = Menu()
         self.tanks = []
-        self.old_cannonballs = []
         self.actual_player = randint(0, 1)
 
         quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
@@ -1294,9 +1292,6 @@ class TankGame:
         self.terrain.draw(self.screen)
         for tank in self.tanks:
             tank.draw(self.screen)
-
-        for old_cannonball in self.old_cannonballs:
-            old_cannonball.draw(self.screen)
 
         if self.cannonball is not None:
             self.cannonball.draw(self.screen)
@@ -1525,9 +1520,8 @@ class TankGame:
                 and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
             self.cannonball.kill()
-            self.old_cannonballs.append(self.cannonball)
-        if self.last_state is not None:
-            self.terrain_destruction()
+        # if self.last_state is not None: # Lo movi, que piensan
+            # self.terrain_destruction()
 
     def terrain_destruction(self):
         radius = self.cannonball.radius_damage
@@ -1597,6 +1591,7 @@ class TankGame:
                     and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
+            self.terrain_destruction()
 
             self.wait_release_space()
             self.wait_on_space()
