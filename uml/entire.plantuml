@@ -57,12 +57,24 @@ class Cannonball105mm extends Cannonball{
     - units_available: int
     +__init__(position, velocity)
     +draw(Surface)
-
+}
+class Cannonball60mm extends Cannonball{
+    +Cannonball60mm((Position, Velocity):
+    - damage: int
+    - radius_damage: int
+    - units_available: int
+    +draw(Surface)
+}
+ class Cannonball80mm extends Cannonball{
+    +Cannonball80mm((Position, Velocity):
+    - damage: int
+    - radius_damage: int
+    - units_available: int
+    +draw(Surface)
 }
 interface Drawable {
     + draw(Surface)
 }
-
 class HUD extends Drawable{
     + tanks: list[Tank]
     + left: int
@@ -185,8 +197,8 @@ class CannonballType{
 }
 
 class SelfImpactWindows extends Drawable {
-    + SelfImpactWindows():
-    + draw(): None
+    + SelfImpactWindows(TankGame):
+    + draw(screen: pygame.surface.Surface):
 }
 class SelectCannonball extends Drawable {
     +cannonball60: Cannonball60mm
