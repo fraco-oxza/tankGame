@@ -114,6 +114,11 @@ class Tank extends Collidable  {
     - position: Position
     -shoot_velocity: float
     -shoot_angle: float
+    +actual: int
+    +available: list[int]
+    +select: SelectCannonball
+    +life: int
+
 
     +Tank(Position)
     +draw(Surface) : None
@@ -171,6 +176,14 @@ class ImpactType{
     +TANK :int
     +SUICIDIO int
 }
+
+class CannonballType{
+    +MM60 = int
+    +MM80 = int
+    +MM105 = int
+
+}
+
 class SelfImpactWindows extends Drawable {
     + SelfImpactWindows():
     + draw(): None
@@ -191,6 +204,20 @@ class SelectCannonball extends Drawable {
     +cannonball_80_mm(pygame.surface)
     +cannonball_60_mm(pygame.surface)
     +draw(pygame.surface)
+    +tick(dt: float):
+    +
+}
+
+class Menu extends Drawable, Collidable{
+    storm: SnowStorm
+    box_size = (200, 100)
+    box_pos: Optional[tuple[float, float]]
+    botton_color: str
+    hover_botton_color: str
+    is_hover: bool
+    +Menu()
+    +draw(pygame.surface)
+    +collidesWith( point: pygame.Vector2): bool
 }
 
 TankGame -- Constants
