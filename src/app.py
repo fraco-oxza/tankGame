@@ -841,7 +841,7 @@ class HUD(Drawable):
             True,
             "white",
         )
-        if self.tanks[0].player.points >= self.tanks[1].player.points:
+        if self.tanks[0].life >= self.tanks[1].life:
             color_score1 = "green"
         else:
             color_score1 = "red"
@@ -852,7 +852,7 @@ class HUD(Drawable):
             color_score1,
         )
         screen.blit(text_score1, pygame.Vector2(100, 875))
-        if self.tanks[1].player.points >= self.tanks[1].player.points:
+        if self.tanks[1].life >= self.tanks[1].life:
             color_score2 = "green"
         else:
             color_score2 = "red"
@@ -972,9 +972,9 @@ class WinnerScreen(Drawable):
         self.tank_game = tank_game
         self.pos_fuegos = pygame.Vector2
         self.text_winner_info = None
-        self.text_winner_score = None
-        self.text_score1 = None
-        self.text_score2 = None
+        self.text_winner_life = None
+        self.text_life1 = None
+        self.text_life2 = None
         self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
         self.font100.set_bold(True)
         self.font100.set_italic(True)
@@ -1009,13 +1009,13 @@ class WinnerScreen(Drawable):
 
         points = self.tank_game.tanks[self.tank_game.winner].life
         self.font.set_bold(True)
-        self.text_winner_score = self.font.render(
+        self.text_winner_life = self.font.render(
             f"Vida: {points} puntos de vida",
             True,
             "white",
         )
         self.font.set_bold(False)
-        screen.blit(self.text_winner_score, pygame.Vector2(550, 250))
+        screen.blit(self.text_winner_life, pygame.Vector2(550, 250))
 
         pygame.draw.rect(
             screen,
