@@ -478,8 +478,9 @@ class Cannonball105mm(Cannonball):
     def draw(self, screen: pygame.surface.Surface) -> None:
         pygame.draw.line(screen, "gray", (self.position.x, self.position.y - constants.HUD_HEIGHT),
                          (self.position.x + 10, self.position.y - 14 - constants.HUD_HEIGHT), 4)
-        pygame.draw.circle(screen, "black", (self.position.x, self.position.y - constants.HUD_HEIGHT), 10)
-        pygame.draw.line(screen, "yellow", (self.position.x + 10, self.position.y - 12 - constants.HUD_HEIGHT),
+        pygame.draw.circle(screen, "black", (self.position.x, self.position.y - constants.HUD_HEIGHT), 12)
+        if self.is_alive:
+            pygame.draw.line(screen, "yellow", (self.position.x + 10, self.position.y - 12 - constants.HUD_HEIGHT),
                          (self.position.x + 10, self.position.y - 15 - constants.HUD_HEIGHT), 4)
 
 
@@ -531,17 +532,21 @@ class Cannonball80mm(Cannonball):
                     (self.position.x + 5, self.position.y - 10 - constants.HUD_HEIGHT),
                     (self.position.x + 10, self.position.y - constants.HUD_HEIGHT)]
 
+
         pygame.draw.rect(
             screen,
             constants.DarkGreen,
             pygame.Rect(
                 self.position.x, self.position.y - constants.HUD_HEIGHT, 10, 15
             ))
-        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
-        pygame.draw.line(screen, "orange", (self.position.x + 5, self.position.y + 15 - constants.HUD_HEIGHT),
-                         (self.position.x + 5, self.position.y + 20 - constants.HUD_HEIGHT), 4)
         pygame.draw.line(screen, "yellow", (self.position.x, self.position.y + 7.5 - constants.HUD_HEIGHT),
                          (self.position.x + 10, self.position.y + 7.5 - constants.HUD_HEIGHT), 5)
+        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
+        if self.is_alive:
+            pygame.draw.line(screen, "orange", (self.position.x + 5, self.position.y + 15 - constants.HUD_HEIGHT),
+                             (self.position.x + 5, self.position.y + 20 - constants.HUD_HEIGHT), 4)
+
+
 
 
 class Player:
@@ -842,7 +847,7 @@ class HUD(Drawable):
             color_score1 = "red"
 
         text_score1 = self.font.render(
-            f"Puntaje: {self.tanks[0].player.points} puntos",
+            f"Vida : {self.tanks[0].life} puntos de vida",
             True,
             color_score1,
         )
@@ -853,7 +858,7 @@ class HUD(Drawable):
             color_score2 = "red"
 
         text_score2 = self.font.render(
-            f"Puntaje: {self.tanks[1].player.points} puntos",
+            f"Vida: {self.tanks[1].life} puntos de vida",
             True,
             color_score2,
         )
@@ -1002,10 +1007,10 @@ class WinnerScreen(Drawable):
         )
         screen.blit(self.text_winner_info, center)
 
-        points = self.tank_game.tanks[self.tank_game.winner].player.points
+        points = self.tank_game.tanks[self.tank_game.winner].life
         self.font.set_bold(True)
         self.text_winner_score = self.font.render(
-            f"Puntaje: {points} puntos",
+            f"Vida: {points} puntos de vida",
             True,
             "white",
         )
