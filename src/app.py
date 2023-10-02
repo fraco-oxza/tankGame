@@ -391,29 +391,7 @@ class Cannonball(Drawable):
             )
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        Esta función se encarga de dibujar la trayectoria con la figura de misil
-        de la bala, y si está vivo, dibuja un efecto de fuego
-        """
-        travel_angle = math.atan2(self.velocity.y, self.velocity.x)
-        angle_x = math.cos(travel_angle)
-        angle_y = math.sin(travel_angle)
-        tail_x = self.position.x - 10 * angle_x
-        tail_y = self.position.y - 10 * angle_y - constants.HUD_HEIGHT
-
-        pygame.draw.line(
-            screen,
-            "#4b5320",
-            (self.position.x, self.position.y - constants.HUD_HEIGHT),
-            (tail_x, tail_y),
-            4,
-        )
-
-        if self.is_alive:
-            fire_x = tail_x - 6 * angle_x
-            fire_y = tail_y - 6 * angle_y
-            pygame.draw.line(screen, "#fbb741", (tail_x, tail_y), (fire_x, fire_y), 6)
-
+        pass
     def get_max_height(self) -> int:
         """
         esta función se encarga de retornar la altura máxima del lanzamiento de
@@ -497,6 +475,13 @@ class Cannonball105mm(Cannonball):
         self.radius_damage = 30
         self.units_available = 3
 
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        pygame.draw.line(screen, "gray", (self.position.x, self.position.y - constants.HUD_HEIGHT),
+                         (self.position.x + 10, self.position.y - 14 - constants.HUD_HEIGHT), 4)
+        pygame.draw.circle(screen, "black", (self.position.x, self.position.y - constants.HUD_HEIGHT), 10)
+        pygame.draw.line(screen, "yellow", (self.position.x + 10, self.position.y - 12 - constants.HUD_HEIGHT),
+                         (self.position.x + 10, self.position.y - 15 - constants.HUD_HEIGHT), 4)
+
 
 class Cannonball60mm(Cannonball):
     damage: int
@@ -509,6 +494,26 @@ class Cannonball60mm(Cannonball):
         self.radius_damage = 10
         self.units_available = 3
 
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        travel_angle = math.atan2(self.velocity.y, self.velocity.x)
+        angle_x = math.cos(travel_angle)
+        angle_y = math.sin(travel_angle)
+        tail_x = self.position.x - 10 * angle_x
+        tail_y = self.position.y - 10 * angle_y - constants.HUD_HEIGHT
+
+        pygame.draw.line(
+            screen,
+            "#4b5320",
+            (self.position.x, self.position.y - constants.HUD_HEIGHT),
+            (tail_x, tail_y),
+            4,
+        )
+
+        if self.is_alive:
+            fire_x = tail_x - 6 * angle_x
+            fire_y = tail_y - 6 * angle_y
+            pygame.draw.line(screen, "#fbb741", (tail_x, tail_y), (fire_x, fire_y), 6)
+
 
 class Cannonball80mm(Cannonball):
     damage: int
@@ -520,6 +525,9 @@ class Cannonball80mm(Cannonball):
         self.damage = 40
         self.radius_damage = 20
         self.units_available = 10
+
+    def draw(self, screen: pygame.surface.Surface) -> None:
+        pass
 
 
 class Player:
