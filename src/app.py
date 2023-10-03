@@ -9,7 +9,6 @@ from random import randint
 from typing import Optional
 
 import pygame
-from pygame.color import Color
 from pygame.font import Font
 
 import constants
@@ -155,6 +154,7 @@ class Terrain(Drawable, Collidable):
 
     size: tuple[int, int]
     ground_lines: list[int]
+    new_ground_lines: list[list[float]]
 
     def generate_terrain(self, mountains: int, valley: int):
         """
@@ -242,25 +242,49 @@ class Terrain(Drawable, Collidable):
 
         if constants.MAP_SEED != -1:
             random.seed(constants.MAP_SEED)
+
+        # Se genero el terreno
         self.generate_terrain(mountains, valleys)
         random.seed()
+
+        origin_color = 255
+        dest_color = 30
+
+        self.terrain_layer_colors = []
+        self.layers_num = 4
+
+        for i in range(self.layers_num):
+            self.terrain_layer_colors.append(dest_color + i*((origin_color-dest_color)/(self.layers_num-1)))
+
+
+
+        self.new_ground_lines = []
+        # Transformar a nuevo modelo
+        for height in self.ground_lines:
+            self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
+
+        print(
+        self.new_ground_lines.__len__(), self.ground_lines.__len__())
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
         Esta función dibuja diferentes capas del terreno utilizando diferentes
         colores y alturas, esto permite simular el sustrato del suelo
         """
-        for i, line in enumerate(self.ground_lines):
-            pygame.draw.rect(
-                screen,
-                constants.TERRAIN_COLOR,
-                pygame.Rect(
-                    i * constants.TERRAIN_LINE_WIDTH,
-                    self.size[1] - line,
-                    constants.TERRAIN_LINE_WIDTH,
-                    line,
-                ),
-            )
+        for i, layers in enumerate(self.new_ground_lines):
+            latest_height = -5
+            for (layer, color) in zip(layers,self.terrain_layer_colors):
+                pygame.draw.rect(
+                    screen,
+                    (color,color,color),
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        self.size[1] - latest_height - layer-3,
+                        constants.TERRAIN_LINE_WIDTH,
+                        layer+3,
+                    ),
+                )
+                latest_height += layer
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
@@ -1442,7 +1466,6 @@ class TankGame:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
             self.show_screen = False
 
-    @property
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
         This method is responsible for moving the cannonball and seeing what happens,
@@ -1532,7 +1555,7 @@ class TankGame:
         """
         while self.running and self.last_state is None:
             self.check_running()
-            self.last_state = self.process_cannonball_trajectory
+            self.last_state = self.process_cannonball_trajectory()
             self.render()
 
     def life_tank(self, point: pygame.Vector2, tank: Tank, cannonball_type: int):
