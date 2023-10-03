@@ -153,6 +153,7 @@ class Terrain(Drawable, Collidable):
     por cada partida, además comprueba colisiones con este
     """
 
+    size: tuple[int, int]
     ground_lines: list[int]
 
     def generate_terrain(self, mountains: int, valley: int):
@@ -164,7 +165,7 @@ class Terrain(Drawable, Collidable):
         determinan aleatoriamente.
         """
         deformations = mountains + valley
-        segment_size = constants.WINDOWS_SIZE[0] // deformations
+        segment_size = self.size[0] // deformations
         segment_start = 0
         segment_end = segment_size
         deformations_index = [*range(deformations)]
@@ -176,17 +177,13 @@ class Terrain(Drawable, Collidable):
             end = segment_end + randint(-segment_size // 3, 3 * (segment_size // 4))
 
             start = max(start, 0)
-            end = min(end, constants.WINDOWS_SIZE[0] - 1)
+            end = min(end, self.size[0] - 1)
 
             if i in valleys:
-                deep = randint(constants.SEA_LEVEL // 4, constants.SEA_LEVEL // 2)
+                deep = randint((self.size[1] // 4) // 4, (self.size[1] // 4) // 2)
                 self.valley(start, end, deep)
             else:
-                max_height = (
-                        constants.WINDOWS_SIZE[1]
-                        - constants.HUD_HEIGHT
-                        - constants.SEA_LEVEL
-                )
+                max_height = self.size[1] - (self.size[1] // 4)
                 height = randint(max_height // 4, 3 * (max_height // 4))
                 self.mountain(start, end, height)
 
@@ -237,9 +234,10 @@ class Terrain(Drawable, Collidable):
                 ((j - fin) ** 2) * multiplier
             )
 
-    def __init__(self, mountains: int, valleys: int):
+    def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
+        self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
-                constants.WINDOWS_SIZE[0] // constants.TERRAIN_LINE_WIDTH
+            self.size[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -258,12 +256,13 @@ class Terrain(Drawable, Collidable):
                 constants.TERRAIN_COLOR,
                 pygame.Rect(
                     i * constants.TERRAIN_LINE_WIDTH,
-                    constants.WINDOWS_SIZE[1] - line - constants.HUD_HEIGHT,
-                    constants.TERRAIN_LINE_WIDTH,line
+                    self.size[1] - line,
+                    constants.TERRAIN_LINE_WIDTH,
+                    line,
                 ),
             )
 
-    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
+    def collides_with(self, point: pygame.Vector2) -> bool:
         """
         Esta función se encarga de verificar si la posición de la bala colisionó
         o no con el terreno, esto lo hace comparando la altura del terreno en la
@@ -271,7 +270,7 @@ class Terrain(Drawable, Collidable):
         """
         line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
 
-        return point.y > (constants.WINDOWS_SIZE[1] - self.ground_lines[line_index])
+        return point.y > (self.size[1] - self.ground_lines[line_index])
 
 
 class Cannonball(Drawable):
@@ -308,12 +307,12 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
         if (
-                len(self.trajectory) == 0
-                or (
+            len(self.trajectory) == 0
+            or (
                 (self.trajectory[-1].x - self.position.x) ** 2
                 + (self.trajectory[-1].y - self.position.y) ** 2
-        )
-                > 50
+            )
+            > 50
         ):
             self.trajectory.append(pygame.Vector2(self.position.x, self.position.y))
 
@@ -332,18 +331,18 @@ class Cannonball(Drawable):
         lista trajectory dibuja un circulo.
         """
         for point in self.trajectory:
-            pygame.draw.circle(
-                screen, "#000000", (point.x, point.y - constants.HUD_HEIGHT), 1
-            )
+            pygame.draw.circle(screen, "#000000", (point.x, point.y), 1)
 
+    @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
         pass
+
     def get_max_height(self) -> int:
         """
         esta función se encarga de retornar la altura máxima del lanzamiento de
         la bala
         """
-        return constants.WINDOWS_SIZE[1] - self.max_height - constants.HUD_HEIGHT
+        return constants.WINDOWS_SIZE[1] - self.max_height
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
@@ -351,8 +350,8 @@ class Cannonball(Drawable):
         el tanque que la lanzó
         """
         return (
-                (self.position.x - tank_position.x) ** 2
-                + (self.position.y - tank_position.y) ** 2
+            (self.position.x - tank_position.x) ** 2
+            + (self.position.y - tank_position.y) ** 2
         ) ** (1 / 2)
 
 
@@ -380,31 +379,46 @@ class SelectCannonball(Drawable):
 
     def draw_cannonball_105_mm(self, screen: pygame.surface):
         position = pygame.Vector2(870, 420)
-        pygame.draw.line(screen, "gray", position,
-                         (position.x + 70, position.y - 70), 20)
+        pygame.draw.line(
+            screen, "gray", position, (position.x + 70, position.y - 70), 20
+        )
         pygame.draw.circle(screen, "black", position, 50)
 
-        pygame.draw.line(screen, "yellow", (position.x + 70, position.y - 70),
-                         (position.x + 80, position.y - 80), 20)
+        pygame.draw.line(
+            screen,
+            "yellow",
+            (position.x + 70, position.y - 70),
+            (position.x + 80, position.y - 80),
+            20,
+        )
 
     def draw_cannonball_80_mm(self, screen: pygame.surface):
         position = pygame.Vector2(630, 380)
-        triangle = [(position.x, position.y),
-                    (position.x + 25, position.y - 50),
-                    (position.x + 50, position.y)]
+        triangle = [
+            (position.x, position.y),
+            (position.x + 25, position.y - 50),
+            (position.x + 50, position.y),
+        ]
 
         pygame.draw.rect(
+            screen, constants.DarkGreen, pygame.Rect(position.x, position.y, 50, 75)
+        )
+        pygame.draw.line(
             screen,
-            constants.DarkGreen,
-            pygame.Rect(
-                position.x, position.y, 50, 75
-            ))
-        pygame.draw.line(screen, "yellow", (position.x, position.y + 37.5),
-                         (position.x + 50, position.y + 37.5), 25)
+            "yellow",
+            (position.x, position.y + 37.5),
+            (position.x + 50, position.y + 37.5),
+            25,
+        )
         pygame.draw.polygon(screen, constants.DarkGreen, triangle)
 
-        pygame.draw.line(screen, "orange", (position.x + 25, position.y + 75),
-                         (position.x + 25, position.y + 100), 20)
+        pygame.draw.line(
+            screen,
+            "orange",
+            (position.x + 25, position.y + 75),
+            (position.x + 25, position.y + 100),
+            20,
+        )
 
     def draw_cannonball_60_mm(self, screen: pygame.surface):
         position = pygame.Vector2(420, 370)
@@ -415,8 +429,13 @@ class SelectCannonball(Drawable):
             (position.x, position.y + 80),
             40,
         )
-        pygame.draw.line(screen, "#fbb741", (position.x, position.y + 60), (position.x, position.y + 80), 40)
-
+        pygame.draw.line(
+            screen,
+            "#fbb741",
+            (position.x, position.y + 60),
+            (position.x, position.y + 80),
+            40,
+        )
 
     def cannonball_105_mm(self, screen: pygame.surface):
         self.text_cannonball105_info = self.font.render(
@@ -465,12 +484,27 @@ class Cannonball105mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pygame.draw.line(screen, "gray", (self.position.x, self.position.y - constants.HUD_HEIGHT),
-                         (self.position.x + 10, self.position.y - 14 - constants.HUD_HEIGHT), 4)
-        pygame.draw.circle(screen, "black", (self.position.x, self.position.y - constants.HUD_HEIGHT), 12)
+        pygame.draw.line(
+            screen,
+            "gray",
+            (self.position.x, self.position.y),
+            (self.position.x + 10, self.position.y - 14),
+            4,
+        )
+        pygame.draw.circle(
+            screen,
+            "black",
+            (self.position.x, self.position.y),
+            12,
+        )
         if self.is_alive:
-            pygame.draw.line(screen, "yellow", (self.position.x + 10, self.position.y - 12 - constants.HUD_HEIGHT),
-                         (self.position.x + 10, self.position.y - 15 - constants.HUD_HEIGHT), 4)
+            pygame.draw.line(
+                screen,
+                "yellow",
+                (self.position.x + 10, self.position.y - 12),
+                (self.position.x + 10, self.position.y - 15),
+                4,
+            )
 
 
 class Cannonball60mm(Cannonball):
@@ -489,12 +523,12 @@ class Cannonball60mm(Cannonball):
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
         tail_x = self.position.x - 10 * angle_x
-        tail_y = self.position.y - 10 * angle_y - constants.HUD_HEIGHT
+        tail_y = self.position.y - 10 * angle_y
 
         pygame.draw.line(
             screen,
             "#4b5320",
-            (self.position.x, self.position.y - constants.HUD_HEIGHT),
+            (self.position.x, self.position.y),
             (tail_x, tail_y),
             4,
         )
@@ -517,25 +551,33 @@ class Cannonball80mm(Cannonball):
         self.units_available = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        triangle = [(self.position.x, self.position.y - constants.HUD_HEIGHT),
-                    (self.position.x + 5, self.position.y - 10 - constants.HUD_HEIGHT),
-                    (self.position.x + 10, self.position.y - constants.HUD_HEIGHT)]
-
+        triangle = [
+            (self.position.x, self.position.y),
+            (self.position.x + 5, self.position.y - 10),
+            (self.position.x + 10, self.position.y),
+        ]
 
         pygame.draw.rect(
             screen,
             constants.DarkGreen,
-            pygame.Rect(
-                self.position.x, self.position.y - constants.HUD_HEIGHT, 10, 15
-            ))
-        pygame.draw.line(screen, "yellow", (self.position.x, self.position.y + 7.5 - constants.HUD_HEIGHT),
-                         (self.position.x + 10, self.position.y + 7.5 - constants.HUD_HEIGHT), 5)
+            pygame.Rect(self.position.x, self.position.y, 10, 15),
+        )
+        pygame.draw.line(
+            screen,
+            "yellow",
+            (self.position.x, self.position.y + 7.5),
+            (self.position.x + 10, self.position.y + 7.5),
+            5,
+        )
         pygame.draw.polygon(screen, constants.DarkGreen, triangle)
         if self.is_alive:
-            pygame.draw.line(screen, "orange", (self.position.x + 5, self.position.y + 15 - constants.HUD_HEIGHT),
-                             (self.position.x + 5, self.position.y + 20 - constants.HUD_HEIGHT), 4)
-
-
+            pygame.draw.line(
+                screen,
+                "orange",
+                (self.position.x + 5, self.position.y + 15),
+                (self.position.x + 5, self.position.y + 20),
+                4,
+            )
 
 
 class Player:
@@ -560,9 +602,9 @@ class Player:
         """
         cannonball_position = impact.position
         distance = (
-                           (cannonball_position.x - tank_position.x) ** 2
-                           + (cannonball_position.y - tank_position.y) ** 2
-                   ) ** (1 / 2)
+            (cannonball_position.x - tank_position.x) ** 2
+            + (cannonball_position.y - tank_position.y) ** 2
+        ) ** (1 / 2)
         if impact.impact_type == ImpactType.TERRAIN:
             if distance <= constants.TANK_RADIO * 2:
                 self.points = self.points + 100
@@ -614,19 +656,19 @@ class Tank(Drawable, Collidable):
         del cañón retornado True o False según corresponda
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= constants.TANK_RADIO:
             return True
         elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 10 and cannon == 0:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 20 and cannon == 1:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 30 and cannon == 2:
             return True
         return False
@@ -670,29 +712,27 @@ class Tank(Drawable, Collidable):
             pygame.draw.circle(
                 screen,
                 "yellow",
-                (self.position.x, self.position.y - constants.HUD_HEIGHT),
+                (self.position.x, self.position.y),
                 constants.TANK_RADIO,
             )
         cannon_angle_x = math.cos(self.shoot_angle)
         cannon_angle_y = math.sin(self.shoot_angle)
         cannon_x = self.position.x + 20 * cannon_angle_x
-        cannon_y = self.position.y - 20 * cannon_angle_y - constants.HUD_HEIGHT
+        cannon_y = self.position.y - 20 * cannon_angle_y
         muzzle_x = cannon_x + 5 * cannon_angle_x
         muzzle_y = cannon_y - 5 * cannon_angle_y
 
         pygame.draw.rect(
             screen,
             self.color,
-            pygame.Rect(
-                self.position.x - 5, self.position.y - 2 - constants.HUD_HEIGHT, 10, 7
-            ),
+            pygame.Rect(self.position.x - 5, self.position.y - 2, 10, 7),
         )
         pygame.draw.rect(
             screen,
             self.color,
             pygame.Rect(
                 self.position.x - 12.5,
-                self.position.y + 5 - constants.HUD_HEIGHT,
+                self.position.y + 5,
                 25,
                 10,
             ),
@@ -702,7 +742,7 @@ class Tank(Drawable, Collidable):
             constants.GRAY,
             pygame.Rect(
                 self.position.x - 12.5,
-                self.position.y + 15 - constants.HUD_HEIGHT,
+                self.position.y + 15,
                 25,
                 4,
             ),
@@ -714,7 +754,7 @@ class Tank(Drawable, Collidable):
                 constants.BLACK,
                 (
                     self.position.x - 12 + 5 * i,
-                    self.position.y + 18 - constants.HUD_HEIGHT,
+                    self.position.y + 18,
                 ),
                 3,
             )
@@ -723,7 +763,7 @@ class Tank(Drawable, Collidable):
         pygame.draw.line(
             screen,
             self.color,
-            (self.position.x, self.position.y - constants.HUD_HEIGHT),
+            (self.position.x, self.position.y),
             (cannon_x, cannon_y),
             4,
         )
@@ -823,7 +863,6 @@ class HUD(Drawable):
                     "white",
                 )
                 screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
-                self.tank_game.cannonball.draw_trajectory(screen)
 
         self.text_angle1 = self.font30.render(
             f"{math.degrees(self.tanks[0].shoot_angle):.1f}°",
@@ -900,8 +939,8 @@ class HUD(Drawable):
         )
 
         if (
-                self.tank_game.last_state is not None
-                and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
+            self.tank_game.last_state is not None
+            and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
         ):
             self.self_impact_windows.draw(screen)
 
@@ -1188,7 +1227,7 @@ class Menu(Drawable, Collidable):
         if self.box_pos == None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
 
 
@@ -1203,6 +1242,7 @@ class TankGame:
     tanks: list[Tank]
     screen: pygame.Surface
     cannonball: Optional[Cannonball]
+    map_size: tuple[int, int]
     running: bool
     actual_player: int
     winner: Optional[int]
@@ -1222,9 +1262,15 @@ class TankGame:
         icon = pygame.image.load(resource_path("images/tankIcon.png"))
         pygame.display.set_icon(icon)
 
+        self.map_size = (
+            constants.WINDOWS_SIZE[0] - 2 * constants.BORDER_PADDING,
+            constants.WINDOWS_SIZE[1]
+            - constants.HUD_HEIGHT
+            - 2 * constants.BORDER_PADDING,
+        )
         self.background = Background()
         self.snow_storm = SnowStorm()
-        self.terrain = Terrain(constants.MOUNTAINS, constants.VALLEYS)
+        self.terrain = Terrain(self.map_size, constants.MOUNTAINS, constants.VALLEYS)
         self.fps = float(constants.FPS)
         self.winner_msj = WinnerScreen(self)
         self.winner = None
@@ -1238,12 +1284,12 @@ class TankGame:
         self.tanks = []
         self.actual_player = randint(0, 1)
 
-        quart_of_windows = int(constants.WINDOWS_SIZE[0] / 4)
+        quart_of_windows = int(self.map_size[0] / 4)
 
         mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
 
         tank1_x = randint(0, mid_point - quart_of_windows)
-        tank2_x = randint(mid_point + quart_of_windows, constants.WINDOWS_SIZE[0])
+        tank2_x = randint(mid_point + quart_of_windows, self.map_size[0])
 
         player1 = Player("1", 0)
         player2 = Player("2", 0)
@@ -1253,10 +1299,10 @@ class TankGame:
                 pygame.Color(50, 50, 0),
                 pygame.Vector2(
                     tank1_x,
-                    constants.WINDOWS_SIZE[1]
+                    self.map_size[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ]
+                    ]
                     - 15,
                 ),
                 player1,
@@ -1268,10 +1314,10 @@ class TankGame:
                 pygame.Color(80, 50, 50),
                 pygame.Vector2(
                     tank2_x,
-                    constants.WINDOWS_SIZE[1]
+                    self.map_size[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ]
+                    ]
                     - 15,
                 ),
                 player2,
@@ -1287,20 +1333,34 @@ class TankGame:
         also puts the execution to sleep for a while to make the game run at the
         fps, specified in the FPS constant
         """
-        self.background.draw(self.screen)
-        self.snow_storm.draw(self.screen)
-        self.terrain.draw(self.screen)
+        game_rect = pygame.surface.Surface(self.map_size)
+
+        self.background.draw(game_rect)
+        self.snow_storm.draw(game_rect)
+        self.terrain.draw(game_rect)
+
         for tank in self.tanks:
-            tank.draw(self.screen)
+            tank.draw(game_rect)
 
         if self.cannonball is not None:
-            self.cannonball.draw(self.screen)
+            self.cannonball.draw(game_rect)
         if self.winner is not None:
-            self.winner_msj.draw(self.screen)
+            self.winner_msj.draw(game_rect)
+
+        self.screen.fill(constants.HUD_BACKGROUND)
+
+        if self.last_state is not None and self.cannonball is not None:
+            self.cannonball.draw_trajectory(game_rect)
+
+        self.screen.blit(
+            game_rect, (constants.BORDER_PADDING, constants.BORDER_PADDING)
+        )
+
         self.hud.draw(self.screen)
         self.snow_storm.tick(1.0 / (self.fps + 0.1))
         if self.show_screen:
             self.select_Cannonball.draw(self.screen)
+
         pygame.display.flip()
         self.clock.tick(constants.FPS)
         self.fps = self.clock.get_fps()
@@ -1329,7 +1389,7 @@ class TankGame:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                        constants.FPS / self.fps
+                    constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
@@ -1337,7 +1397,7 @@ class TankGame:
                 playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                        constants.FPS / self.fps
+                    constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -1363,16 +1423,16 @@ class TankGame:
             self.cannonball = playing_tank.shoot()
 
         if (
-                keys_pressed[pygame.K_TAB]
-                and not self.show_screen
-                and self.show_screen == 0
+            keys_pressed[pygame.K_TAB]
+            and not self.show_screen
+            and self.show_screen == 0
         ):
             self.show_screen = True
 
         if (
-                keys_pressed[pygame.K_1]
-                or keys_pressed[pygame.K_2]
-                or keys_pressed[pygame.K_3]
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
         ) and self.show_screen:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
@@ -1395,14 +1455,12 @@ class TankGame:
         self.cannonball.tick((1.0 / self.fps) * constants.X_SPEED)
 
         if (
-                self.cannonball.position.x < 0
-                or self.cannonball.position.x > constants.WINDOWS_SIZE[0]
+            self.cannonball.position.x < 0
+            or self.cannonball.position.x > self.map_size[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
-        if self.terrain.collides_with(
-                self.cannonball.position, self.tanks[self.actual_player].actual
-        ):
+        if self.terrain.collides_with(self.cannonball.position):
             other_player = (self.actual_player + 1) % 2
             if self.tanks[other_player].life == 0:
                 self.winner = self.actual_player
@@ -1417,7 +1475,7 @@ class TankGame:
                 return
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
-                    self.cannonball.position, self.tanks[self.actual_player].actual
+                self.cannonball.position, self.tanks[self.actual_player].actual
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
 
@@ -1433,15 +1491,22 @@ class TankGame:
 
     def explotion(self):
         color_explotion = "#B71C1C"
-        particles = [(random.gauss(0, 0.5), random.uniform(0, 2 * math.pi)) for i in range(50)]
+        particles = [
+            (random.gauss(0, 0.5), random.uniform(0, 2 * math.pi)) for i in range(50)
+        ]
         other_player = (self.actual_player + 1) % 2
         for i in range(50):
             for speed, angle in particles:
                 distance = i * speed
                 x = self.tanks[other_player].position.x + distance * math.cos(angle)
-                y = self.tanks[other_player].position.y + distance * math.sin(angle) - 180
+                y = (
+                    self.tanks[other_player].position.y
+                    + distance * math.sin(angle)
+                    - 180
+                )
                 self.screen.set_at((int(x), int(y)), color_explotion)
             pygame.display.flip()
+
     def calculate_distance(self, player: int):
         actual_radius = math.sqrt(
             ((self.tanks[player].position.x - self.cannonball.position.x) ** 2)
@@ -1475,24 +1540,33 @@ class TankGame:
         Esta función se encarga de quitar vida al tanque según la bala que impactó
         """
         if cannonball_type == 0:
-            if math.sqrt(
+            if (
+                math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) <= constants.TANK_RADIO + 10:
+                )
+                <= constants.TANK_RADIO + 10
+            ):
                 tank.life = tank.life - 30
                 if tank.life < 0:
                     tank.life = 0
 
         elif cannonball_type == 1:
-            if math.sqrt(
+            if (
+                math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) <= constants.TANK_RADIO + 20:
+                )
+                <= constants.TANK_RADIO + 20
+            ):
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
-            if math.sqrt(
+            if (
+                math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-            ) <= constants.TANK_RADIO + 30:
+                )
+                <= constants.TANK_RADIO + 30
+            ):
                 tank.life = tank.life - 50
                 if tank.life < 0:
                     tank.life = 0
@@ -1528,25 +1602,27 @@ class TankGame:
             )
 
         if (
-                self.last_state is not None
-                and self.last_state.impact_type != ImpactType.BORDER
+            self.last_state is not None
+            and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
             self.cannonball.kill()
         # if self.last_state is not None: # Lo movi, que piensan
-            # self.terrain_destruction()
+        # self.terrain_destruction()
 
     def terrain_destruction(self):
         radius = self.cannonball.radius_damage
         if self.last_state.impact_type != ImpactType.BORDER:
             j = 0
-            for i in range(int(self.last_state.position.x) - radius, int(self.last_state.position.x) + radius):
+            for i in range(
+                int(self.last_state.position.x) - radius,
+                int(self.last_state.position.x) + radius,
+            ):
                 if i <= self.last_state.position.x:
-                    self.terrain.ground_lines[i] -= radius/2 - j
+                    self.terrain.ground_lines[i] -= radius / 2 - j
                     j -= 1
                 else:
-                    self.terrain.ground_lines[i] -= radius/2 - j
+                    self.terrain.ground_lines[i] -= radius / 2 - j
                     j += 1
-
 
     def start_menu(self):
         while self.running:
@@ -1599,8 +1675,8 @@ class TankGame:
             self.cannonball_travel()
 
             if (
-                    self.last_state is not None
-                    and self.last_state.impact_type == ImpactType.SUICIDIO
+                self.last_state is not None
+                and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
             self.terrain_destruction()
