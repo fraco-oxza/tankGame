@@ -1424,12 +1424,24 @@ class TankGame:
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = self.calculate_distance(other_player)
                     if other_radius_position < constants.TANK_RADIO:
+                        self.explotion()
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
 
         return None
 
+    def explotion(self):
+        color_explotion = "#B71C1C"
+        particles = [(random.gauss(0, 0.5), random.uniform(0, 2 * math.pi)) for i in range(50)]
+        other_player = (self.actual_player + 1) % 2
+        for i in range(50):
+            for speed, angle in particles:
+                distance = i * speed
+                x = self.tanks[other_player].position.x + distance * math.cos(angle)
+                y = self.tanks[other_player].position.y + distance * math.sin(angle) - 180
+                self.screen.set_at((int(x), int(y)), color_explotion)
+            pygame.display.flip()
     def calculate_distance(self, player: int):
         actual_radius = math.sqrt(
             ((self.tanks[player].position.x - self.cannonball.position.x) ** 2)
