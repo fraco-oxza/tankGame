@@ -6,8 +6,8 @@ SHOOT_MAX_SPEED = 400
 TERRAIN_LINE_WIDTH = 1  # px
 SEA_LEVEL = 200  # px
 FPS = 60
-MOUNTAINS = 3
-VALLEYS = 2
+MOUNTAINS = 0
+VALLEYS = 1
 SKY_COLOR = "#5086C1"
 TERRAIN_COLOR = "#fffafa"
 BLACK = (0, 0, 0)
@@ -25,7 +25,7 @@ MAP_SEED = -1
 SNOWFLAKES = 50
 
 # Menu constants
-BORDER_PADDING = 40
+BORDER_PADDING = 90
 HUD_BACKGROUND = "#282828"
 CantidadAnimaciones = 7
 CantidadAnimacionesSnow = 10
