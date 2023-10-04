@@ -272,16 +272,17 @@ class Terrain(Drawable, Collidable):
         for i, layers in enumerate(self.new_ground_lines):
             latest_height = -5
             for (layer, color) in zip(layers, self.terrain_layer_colors):
-                pygame.draw.rect(
-                    screen,
-                    (color, color, color),
-                    pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
-                        self.size[1] - latest_height - layer - 3,
-                        constants.TERRAIN_LINE_WIDTH,
-                        layer + 3,
-                    ),
-                )
+                if layer != 0:
+                    pygame.draw.rect(
+                        screen,
+                        (color, color, color),
+                        pygame.Rect(
+                            i * constants.TERRAIN_LINE_WIDTH,
+                            self.size[1] - latest_height - layer - 3,
+                            constants.TERRAIN_LINE_WIDTH,
+                            layer + 3,
+                        ),
+                    )
                 latest_height += layer
 
     def collides_with(self, point: pygame.Vector2) -> bool:
@@ -1645,13 +1646,16 @@ class TankGame:
                 self.last_state is not None
                 and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
-
             self.cannonball.kill()
 
         # if self.last_state is not None: # Lo movi, que piensan
         # self.terrain_destruction()
 
     def terrain_destruction(self):
+        if self.last_state.impact_type == ImpactType.BORDER:
+            # Aqui detengo porque este caso no me sirve
+            return
+
         radius = self.cannonball.radius_damage
         if self.last_state.impact_type != ImpactType.BORDER:
             j = 0
@@ -1690,7 +1694,6 @@ class TankGame:
         while self.animacion.has_next():
             self.animacion.tick(1.0 / (self.fps + 0.001))
             self.render()
-
 
     def start(self) -> None:
         """
