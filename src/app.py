@@ -1533,6 +1533,7 @@ class TankGame:
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = self.calculate_distance(other_player)
                     if other_radius_position < constants.TANK_RADIO:
+
                         self.explotion()
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
@@ -1679,6 +1680,8 @@ class TankGame:
                 j -= 1
 
     def start_menu(self):
+        soundtrack = pygame.mixer.Sound((resource_path("sounds/inicio.mp3")))
+        soundtrack.play()
         while self.running:
             self.check_running()
             self.menu.draw(self.screen)
@@ -1689,6 +1692,10 @@ class TankGame:
             self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms))
 
             if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
+                soundtrack.stop()
+                click = pygame.mixer.Sound((resource_path("sounds/click.mp3")))
+
+                click.play()
                 break
 
             pygame.display.flip()
@@ -1720,6 +1727,8 @@ class TankGame:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
+                click = pygame.mixer.Sound((resource_path("sounds/click.mp3")))
+                click.play()
                 break
             self.clock.tick(constants.FPS)
 
@@ -1740,12 +1749,17 @@ class TankGame:
                 self.last_state is not None
                 and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
+                explotion = pygame.mixer.Sound((resource_path("sounds/explotion.mp3")))
+                explotion.play()
                 break
 
             if self.last_state.impact_type != ImpactType.BORDER:
+                shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
+                shoot.play()
                 self.animacion = Explosion(
                     self.cannonball.position, self.cargar_animacion()
                 )
+
                 # Display explotion
                 self.display_explotion()
                 self.animacion = None
