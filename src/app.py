@@ -1396,11 +1396,10 @@ class TankGame:
             self.winner_msj.draw(game_rect)
 
         self.screen.fill(constants.HUD_BACKGROUND)
-        if self.animacion is not None:
-            self.animacion.draw(game_rect)
         if self.last_state is not None and self.cannonball is not None:
             self.cannonball.draw_trajectory(game_rect)
-
+        if self.animacion is not None:
+            self.animacion.draw(game_rect)
         self.screen.blit(
             game_rect, (constants.BORDER_PADDING, constants.BORDER_PADDING)
         )
