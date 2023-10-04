@@ -297,6 +297,105 @@ class Terrain(Drawable, Collidable):
         return point.y > (self.size[1] - self.ground_lines[line_index])
 
 
+class Speedometer:
+    size: int
+    min: int
+    max: int
+    actual: float
+
+    def __init__(self, size: int):
+        self.min = 0
+        self.max = 400
+        self.inc = 10
+        self.start_angle = math.radians(200)
+        self.end_angle = math.radians(-20)
+        self.font = pygame.font.Font("./resources/fonts/Roboto.ttf", 30)
+        self.font.set_bold(True)
+        self.size = size
+
+    def get_draw(self) -> pygame.Surface:
+        surface = pygame.Surface((500, 500))
+
+        pygame.draw.circle(surface, "#464646", (250, 250), 250, 40)
+        pygame.draw.circle(surface, "#232323", (250, 250), 210)
+
+        angle = (self.end_angle - self.start_angle) / (self.max - self.min)
+        for i in range(self.min, self.max + 1, self.inc):
+            x, y = 250, 250
+            a = self.start_angle + (i - self.min) * angle
+            ax, ay = math.cos(a), math.sin(a)
+            if i % 100 == 0:
+                pygame.draw.line(
+                    surface,
+                    "#cccccc",
+                    (x + (x - 70) * ax, y - (y - 70) * ay),
+                    (x + (x - 40) * ax, y - (y - 40) * ay),
+                    4,
+                )
+                if a > math.radians(90):
+                    num = self.font.render(f"{i}", True, "#ffffff")
+                    surface.blit(
+                        num,
+                        (x + (x - 70) * ax, y - (y - 70) * ay),
+                    )
+                elif a == math.radians(90):
+                    num = self.font.render(f"{i}", True, "#ffffff")
+                    surface.blit(
+                        num,
+                        (
+                            x + (x - 70) * ax - num.get_size()[0] / 2,
+                            y - (y - 70) * ay,
+                        ),
+                    )
+                else:
+                    num = self.font.render(f"{i}", True, "#ffffff")
+                    surface.blit(
+                        num,
+                        (x + (x - 70) * ax - num.get_size()[0], y - (y - 70) * ay),
+                    )
+
+            else:
+                pygame.draw.line(
+                    surface,
+                    "#cccccc",
+                    (x + (x - 60) * ax, y - (y - 60) * ay),
+                    (x + (x - 40) * ax, y - (y - 40) * ay),
+                    4,
+                )
+
+        self.font.set_bold(False)
+        sp = self.font.render("Shoot Speed", True, "#ffffff")
+        self.font.set_bold(True)
+
+        surface.blit(sp, (250 - sp.get_size()[0] / 2, 350))
+
+        pygame.draw.line(
+            surface,
+            "red",
+            (250, 250),
+            (
+                250 + 60 * math.cos(self.start_angle + angle * self.actual),
+                250 - 60 * math.sin(self.start_angle + angle * self.actual),
+            ),
+            16,
+        )
+        pygame.draw.line(
+            surface,
+            "red",
+            (
+                250 + 60 * math.cos(self.start_angle + angle * self.actual),
+                250 - 60 * math.sin(self.start_angle + angle * self.actual),
+            ),
+            (
+                250 + 140 * math.cos(self.start_angle + angle * self.actual),
+                250 - 140 * math.sin(self.start_angle + angle * self.actual),
+            ),
+            10,
+        )
+        pygame.draw.circle(surface, "red", (250, 250), 10)
+
+        return pygame.transform.scale(surface, (self.size, self.size))
+
 class Cannonball(Drawable):
     """
     Esta clase representa una bala de cañón en movimiento, proporciona
@@ -822,6 +921,7 @@ class HUD(Drawable):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = pygame.image.load(resource_path("images/Angle.png"))
+        self.speedometer = Speedometer(200)
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
@@ -977,6 +1077,10 @@ class HUD(Drawable):
             and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
         ):
             self.self_impact_windows.draw(screen)
+
+        self.speedometer.actual = self.tank_game.tanks[self.tank_game.actual_player].shoot_velocity
+        draw = self.speedometer.get_draw()
+        screen.blit(draw, (constants.WINDOWS_SIZE[0] // 2 - draw.get_size()[0]//2,constants.WINDOWS_SIZE[1] - draw.get_size()[1]) )
 
         if constants.DEVELOPMENT_MODE:
             screen.blit(
@@ -1419,6 +1523,7 @@ class TankGame:
         )
 
         self.hud.draw(self.screen)
+
         self.snow_storm.tick(1.0 / (self.fps + 0.1))
         if self.show_screen:
             self.select_Cannonball.draw(self.screen)
