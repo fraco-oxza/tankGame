@@ -183,8 +183,8 @@ class Terrain(Drawable, Collidable):
                 deep = randint((self.size[1] // 4) // 4, (self.size[1] // 4) // 2)
                 self.valley(start, end, deep)
             else:
-                max_height = self.size[1] - (self.size[1] // 4)
-                height = randint(max_height // 4, 3 * (max_height // 4))
+                max_height = (self.size[1] - constants.SEA_LEVEL) // 2
+                height = randint(max_height // 4, max_height)
                 self.mountain(start, end, height)
 
             segment_start += segment_size
@@ -237,7 +237,7 @@ class Terrain(Drawable, Collidable):
     def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
-                self.size[0] // constants.TERRAIN_LINE_WIDTH
+            self.size[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -254,15 +254,16 @@ class Terrain(Drawable, Collidable):
         self.layers_num = 4
 
         for i in range(self.layers_num):
-            self.terrain_layer_colors.append(dest_color + i * ((origin_color - dest_color) / (self.layers_num - 1)))
+            self.terrain_layer_colors.append(
+                dest_color + i * ((origin_color - dest_color) / (self.layers_num - 1))
+            )
 
         self.new_ground_lines = []
         # Transformar a nuevo modelo
         for height in self.ground_lines:
             self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
 
-        print(
-            self.new_ground_lines.__len__(), self.ground_lines.__len__())
+        print(self.new_ground_lines.__len__(), self.ground_lines.__len__())
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -271,7 +272,7 @@ class Terrain(Drawable, Collidable):
         """
         for i, layers in enumerate(self.new_ground_lines):
             latest_height = -5
-            for (layer, color) in zip(layers, self.terrain_layer_colors):
+            for layer, color in zip(layers, self.terrain_layer_colors):
                 if layer != 0:
                     pygame.draw.rect(
                         screen,
@@ -330,12 +331,12 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
         if (
-                len(self.trajectory) == 0
-                or (
+            len(self.trajectory) == 0
+            or (
                 (self.trajectory[-1].x - self.position.x) ** 2
                 + (self.trajectory[-1].y - self.position.y) ** 2
-        )
-                > 50
+            )
+            > 50
         ):
             self.trajectory.append(pygame.Vector2(self.position.x, self.position.y))
 
@@ -373,8 +374,8 @@ class Cannonball(Drawable):
         el tanque que la lanzó
         """
         return (
-                (self.position.x - tank_position.x) ** 2
-                + (self.position.y - tank_position.y) ** 2
+            (self.position.x - tank_position.x) ** 2
+            + (self.position.y - tank_position.y) ** 2
         ) ** (1 / 2)
 
 
@@ -625,9 +626,9 @@ class Player:
         """
         cannonball_position = impact.position
         distance = (
-                           (cannonball_position.x - tank_position.x) ** 2
-                           + (cannonball_position.y - tank_position.y) ** 2
-                   ) ** (1 / 2)
+            (cannonball_position.x - tank_position.x) ** 2
+            + (cannonball_position.y - tank_position.y) ** 2
+        ) ** (1 / 2)
         if impact.impact_type == ImpactType.TERRAIN:
             if distance <= constants.TANK_RADIO * 2:
                 self.points = self.points + 100
@@ -679,19 +680,19 @@ class Tank(Drawable, Collidable):
         del cañón retornado True o False según corresponda
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= constants.TANK_RADIO:
             return True
         elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 10 and cannon == 0:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 20 and cannon == 1:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-                1 / 2
+            1 / 2
         ) <= 30 and cannon == 2:
             return True
         return False
@@ -962,8 +963,8 @@ class HUD(Drawable):
         )
 
         if (
-                self.tank_game.last_state is not None
-                and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
+            self.tank_game.last_state is not None
+            and self.tank_game.last_state.impact_type == ImpactType.SUICIDIO
         ):
             self.self_impact_windows.draw(screen)
 
@@ -1250,7 +1251,7 @@ class Menu(Drawable, Collidable):
         if self.box_pos == None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
 
 
@@ -1266,7 +1267,9 @@ class Explosion(Drawable):
     def has_next(self):
         return self.t_mostrado < self.t_animacion
 
-    def __init__(self, position: pygame.Vector2, imagenes: list[pygame.surface.Surface]):
+    def __init__(
+        self, position: pygame.Vector2, imagenes: list[pygame.surface.Surface]
+    ):
         self.t_mostrado = 0.0
         self.t_animacion = 0.5
         self.image = imagenes
@@ -1275,8 +1278,8 @@ class Explosion(Drawable):
         self.center = pygame.rect.Rect
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pos_x = (self.position[0] - self.image[self.indice_actual].get_size()[0] // 2)
-        pos_y = (self.position[1] - self.image[self.indice_actual].get_size()[1] // 2)
+        pos_x = self.position[0] - self.image[self.indice_actual].get_size()[0] // 2
+        pos_y = self.position[1] - self.image[self.indice_actual].get_size()[1] // 2
         screen.blit(self.image[self.indice_actual], (pos_x, pos_y))
 
 
@@ -1351,7 +1354,7 @@ class TankGame:
                     self.map_size[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ]
+                    ]
                     - 15,
                 ),
                 player1,
@@ -1366,7 +1369,7 @@ class TankGame:
                     self.map_size[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                        ]
+                    ]
                     - 15,
                 ),
                 player2,
@@ -1438,7 +1441,7 @@ class TankGame:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                        constants.FPS / self.fps
+                    constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
@@ -1446,7 +1449,7 @@ class TankGame:
                 playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                        constants.FPS / self.fps
+                    constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -1472,16 +1475,16 @@ class TankGame:
             self.cannonball = playing_tank.shoot()
 
         if (
-                keys_pressed[pygame.K_TAB]
-                and not self.show_screen
-                and self.show_screen == 0
+            keys_pressed[pygame.K_TAB]
+            and not self.show_screen
+            and self.show_screen == 0
         ):
             self.show_screen = True
 
         if (
-                keys_pressed[pygame.K_1]
-                or keys_pressed[pygame.K_2]
-                or keys_pressed[pygame.K_3]
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
         ) and self.show_screen:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
@@ -1503,8 +1506,8 @@ class TankGame:
         self.cannonball.tick((1.0 / self.fps) * constants.X_SPEED)
 
         if (
-                self.cannonball.position.x < 0
-                or self.cannonball.position.x > self.map_size[0]
+            self.cannonball.position.x < 0
+            or self.cannonball.position.x > self.map_size[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
@@ -1523,7 +1526,7 @@ class TankGame:
                 return
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
-                    self.cannonball.position, self.tanks[self.actual_player].actual
+                self.cannonball.position, self.tanks[self.actual_player].actual
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
 
@@ -1571,10 +1574,10 @@ class TankGame:
         """
         if cannonball_type == 0:
             if (
-                    math.sqrt(
-                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                    )
-                    <= constants.TANK_RADIO + 10
+                math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                )
+                <= constants.TANK_RADIO + 10
             ):
                 tank.life = tank.life - 30
                 if tank.life < 0:
@@ -1582,20 +1585,20 @@ class TankGame:
 
         elif cannonball_type == 1:
             if (
-                    math.sqrt(
-                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                    )
-                    <= constants.TANK_RADIO + 20
+                math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                )
+                <= constants.TANK_RADIO + 20
             ):
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
             if (
-                    math.sqrt(
-                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                    )
-                    <= constants.TANK_RADIO + 30
+                math.sqrt(
+                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                )
+                <= constants.TANK_RADIO + 30
             ):
                 tank.life = tank.life - 50
                 if tank.life < 0:
@@ -1643,8 +1646,8 @@ class TankGame:
             )
 
         if (
-                self.last_state is not None
-                and self.last_state.impact_type != ImpactType.BORDER
+            self.last_state is not None
+            and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
             self.cannonball.kill()
 
@@ -1658,10 +1661,12 @@ class TankGame:
 
         radius = self.cannonball.radius_damage
         for i in range(
-                int(self.last_state.position.x) - radius,
-                int(self.last_state.position.x) + radius,
+            int(self.last_state.position.x) - radius,
+            int(self.last_state.position.x) + radius,
         ):
-            leftover_damage = math.sqrt(max(0, radius ** 2 - (self.last_state.position.x - i) ** 2))
+            leftover_damage = math.sqrt(
+                max(0, radius**2 - (self.last_state.position.x - i) ** 2)
+            )
             j = len(self.terrain.new_ground_lines[i]) - 1
             while leftover_damage != 0 and j >= 0:
                 initial_height = self.terrain.new_ground_lines[i][j]
@@ -1732,13 +1737,15 @@ class TankGame:
             self.cannonball_travel()
 
             if (
-                    self.last_state is not None
-                    and self.last_state.impact_type == ImpactType.SUICIDIO
+                self.last_state is not None
+                and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
 
             if self.last_state.impact_type != ImpactType.BORDER:
-                self.animacion = Explosion(self.cannonball.position, self.cargar_animacion())
+                self.animacion = Explosion(
+                    self.cannonball.position, self.cargar_animacion()
+                )
                 # Display explotion
                 self.display_explotion()
                 self.animacion = None
