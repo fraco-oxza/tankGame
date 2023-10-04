@@ -1684,6 +1684,15 @@ class TankGame:
             self.clock.tick(constants.FPS)
             self.fps = self.clock.get_fps()
 
+    def display_explotion(self):
+        if self.animacion is None:
+            return
+
+        while self.animacion.has_next():
+            self.animacion.tick(1.0 / (self.fps + 0.001))
+            self.render()
+
+
     def start(self) -> None:
         """
         Esta función muestra las instrucciones básicas para después dar paso al
@@ -1722,6 +1731,13 @@ class TankGame:
                     and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
                 break
+
+            if self.last_state.impact_type != ImpactType.BORDER:
+                self.animacion = Explosion(self.cannonball.position, self.cargar_animacion())
+                # Display explotion
+                self.display_explotion()
+                self.animacion = None
+
             self.terrain_destruction()
 
             self.wait_release_space()
