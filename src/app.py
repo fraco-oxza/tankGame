@@ -1543,6 +1543,8 @@ class TankGame:
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = self.calculate_distance(other_player)
                     if other_radius_position < constants.TANK_RADIO:
+
+                        self.explotion()
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
@@ -1626,7 +1628,7 @@ class TankGame:
                 break
             self.render()
 
-    def cargar_animacionTank(self):
+    def cargar_animacion(self):
         imagenes = []
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimaciones):
@@ -1637,16 +1639,6 @@ class TankGame:
 
         return imagenes
 
-    def cargar_animacionTerrain(self):
-        imagenesSnow = []
-        scale = (300, 200)
-        for i in range(1, constants.CantidadAnimacionesSnow):
-            imagenesSnow.append(pygame.image.load(resource_path(f"images/{i} snow.png")))
-
-        for i in range(imagenesSnow.__len__()):
-            imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
-
-        return imagenesSnow
     def check_last_state(self) -> None:
         """
         This function is responsible for checking what happened in the last shot
@@ -1674,10 +1666,9 @@ class TankGame:
         # self.terrain_destruction()
 
     def terrain_destruction(self):
-        if self.last_state is not None:
-            if self.last_state.impact_type == ImpactType.BORDER:
-                # Aqui detengo porque este caso no me sirve
-                return
+        if self.last_state.impact_type == ImpactType.BORDER:
+            # Aqui detengo porque este caso no me sirve
+            return
 
         radius = self.cannonball.radius_damage
         for i in range(
@@ -1772,19 +1763,12 @@ class TankGame:
                 explotion.play()
                 break
 
-            if self.last_state is not None and self.last_state != ImpactType.BORDER:
+            if self.last_state.impact_type != ImpactType.BORDER:
                 shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
                 shoot.play()
-                print("chao")
-                if self.last_state == ImpactType.TANK:
-                    self.animacion = Explosion(
-                        self.cannonball.position, self.cargar_animacionTank()
-                    )
-                    print("hola")
-                elif self.last_state == ImpactType.TERRAIN:
-                    self.animacion = Explosion(
-                        self.cannonball.position, self.cargar_animacionTerrain()
-                    )
+                self.animacion = Explosion(
+                    self.cannonball.position, self.cargar_animacion()
+                )
 
                 # Display explotion
                 self.display_explotion()
