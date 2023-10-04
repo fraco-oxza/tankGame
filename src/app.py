@@ -1657,18 +1657,21 @@ class TankGame:
             return
 
         radius = self.cannonball.radius_damage
-        if self.last_state.impact_type != ImpactType.BORDER:
-            j = 0
-            for i in range(
-                    int(self.last_state.position.x) - radius,
-                    int(self.last_state.position.x) + radius,
-            ):
-                if i <= self.last_state.position.x:
-                    self.terrain.ground_lines[i] -= radius / 2 - j
-                    j -= 1
+        for i in range(
+                int(self.last_state.position.x) - radius,
+                int(self.last_state.position.x) + radius,
+        ):
+            leftover_damage = math.sqrt(max(0, radius ** 2 - (self.last_state.position.x - i) ** 2))
+            j = len(self.terrain.new_ground_lines[i]) - 1
+            while leftover_damage != 0 and j >= 0:
+                initial_height = self.terrain.new_ground_lines[i][j]
+                if initial_height >= leftover_damage:
+                    self.terrain.new_ground_lines[i][j] -= leftover_damage
+                    leftover_damage = 0
                 else:
-                    self.terrain.ground_lines[i] -= radius / 2 - j
-                    j += 1
+                    leftover_damage -= initial_height
+                    self.terrain.new_ground_lines[i][j] = 0
+                j -= 1
 
     def start_menu(self):
         while self.running:
