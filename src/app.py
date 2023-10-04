@@ -508,25 +508,30 @@ class Cannonball105mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        travel_angle = math.atan2(self.velocity.y, self.velocity.x)
+        angle_x = math.cos(travel_angle)
+        angle_y = math.sin(travel_angle)
+        tail_x = self.position.x - 10 * angle_x
+        tail_y = self.position.y - 10 * angle_y
         pygame.draw.line(
             screen,
             "gray",
-            (self.position.x, self.position.y),
-            (self.position.x + 10, self.position.y - 14),
+            (tail_x, tail_y),
+            (tail_x + 10, tail_y - 14),
             4,
         )
         pygame.draw.circle(
             screen,
             "black",
-            (self.position.x, self.position.y),
+            (tail_x, tail_y),
             12,
         )
         if self.is_alive:
             pygame.draw.line(
                 screen,
                 "yellow",
-                (self.position.x + 10, self.position.y - 12),
-                (self.position.x + 10, self.position.y - 15),
+                (tail_x + 10, tail_y - 12),
+                (tail_x + 10, tail_y - 15),
                 4,
             )
 
@@ -575,22 +580,27 @@ class Cannonball80mm(Cannonball):
         self.units_available = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        travel_angle = math.atan2(self.velocity.y, self.velocity.x)
+        angle_x = math.cos(travel_angle)
+        angle_y = math.sin(travel_angle)
+        tail_x = self.position.x - 10 * angle_x
+        tail_y = self.position.y - 10 * angle_y
         triangle = [
-            (self.position.x, self.position.y),
-            (self.position.x + 5, self.position.y - 10),
-            (self.position.x + 10, self.position.y),
+            (tail_x, tail_y),
+            (tail_x + 5, tail_y - 10),
+            (tail_x + 10, tail_y),
         ]
 
         pygame.draw.rect(
             screen,
             constants.DarkGreen,
-            pygame.Rect(self.position.x, self.position.y, 10, 15),
+            pygame.Rect(tail_x, tail_y, 10, 15),
         )
         pygame.draw.line(
             screen,
             "yellow",
-            (self.position.x, self.position.y + 7.5),
-            (self.position.x + 10, self.position.y + 7.5),
+            (tail_x, tail_y + 7.5),
+            (tail_x + 10, tail_y + 7.5),
             5,
         )
         pygame.draw.polygon(screen, constants.DarkGreen, triangle)
@@ -598,8 +608,8 @@ class Cannonball80mm(Cannonball):
             pygame.draw.line(
                 screen,
                 "orange",
-                (self.position.x + 5, self.position.y + 15),
-                (self.position.x + 5, self.position.y + 20),
+                (tail_x + 5, tail_y + 15),
+                (tail_x + 5, tail_y + 20),
                 4,
             )
 
