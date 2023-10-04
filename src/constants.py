@@ -28,3 +28,4 @@ SNOWFLAKES = 50
 BORDER_PADDING = 40
 HUD_BACKGROUND = "#282828"
 CantidadAnimaciones = 7
+CantidadAnimacionesSnow = 10
