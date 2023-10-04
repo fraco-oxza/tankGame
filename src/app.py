@@ -1543,8 +1543,6 @@ class TankGame:
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = self.calculate_distance(other_player)
                     if other_radius_position < constants.TANK_RADIO:
-
-                        self.explotion()
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
@@ -1639,6 +1637,15 @@ class TankGame:
 
         return imagenes
 
+    def cargar_animacionTerrain(self):
+        imagenesSnow = []
+        scale = (300, 200)
+        for i in range(1, constants.CantidadAnimacionesSnow):
+            imagenesSnow.append(pygame.image.load(resource_path(f"images/{i} snow.png")))
+
+        for i in range(imagenesSnow.__len__()):
+            imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
+        return imagenesSnow
     def check_last_state(self) -> None:
         """
         This function is responsible for checking what happened in the last shot
@@ -1763,13 +1770,17 @@ class TankGame:
                 explotion.play()
                 break
 
-            if self.last_state.impact_type != ImpactType.BORDER:
+            if self.last_state.impact_type != ImpactType.BORDER:  # por qué .impact_type???
                 shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
                 shoot.play()
-                self.animacion = Explosion(
-                    self.cannonball.position, self.cargar_animacion()
-                )
-
+                if self.last_state.impact_type == ImpactType.TANK:
+                    self.animacion = Explosion(
+                        self.cannonball.position, self.cargar_animacion()
+                    )
+                elif self.last_state.impact_type == ImpactType.TERRAIN:
+                    self.animacion = Explosion(
+                        self.cannonball.position, self.cargar_animacionTerrain()
+                    )
                 # Display explotion
                 self.display_explotion()
                 self.animacion = None
