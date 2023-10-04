@@ -27,3 +27,4 @@ SNOWFLAKES = 50
 # Menu constants
 BORDER_PADDING = 40
 HUD_BACKGROUND = "#282828"
+CantidadAnimaciones = 7
