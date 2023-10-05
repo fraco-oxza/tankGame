@@ -309,7 +309,7 @@ class Speedometer:
         self.inc = 10
         self.start_angle = math.radians(200)
         self.end_angle = math.radians(-20)
-        self.font = pygame.font.Font("./resources/fonts/Roboto.ttf", 30)
+        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font.set_bold(True)
         self.size = size
 
