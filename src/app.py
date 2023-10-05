@@ -417,6 +417,7 @@ class Cannonball(Drawable):
         self.max_distance = sys.maxsize
         self.is_alive = True
         self.trajectory = []
+        self.radius_damage = CannonballType
 
     def tick(self, dt: float):
         """
@@ -1778,29 +1779,30 @@ class TankGame:
         # self.terrain_destruction()
 
     def terrain_destruction(self):
-        if self.last_state.impact_type == ImpactType.BORDER:
+
+        if self.last_state is not None and self.last_state.impact_type == ImpactType.BORDER:
             # Aqui detengo porque este caso no me sirve
             return
-
-        radius = self.cannonball.radius_damage
-        for i in range(
-            int(self.last_state.position.x) - radius,
-            int(self.last_state.position.x) + radius,
-        ):
-            leftover_damage = math.sqrt(
-                max(0, radius**2 - (self.last_state.position.x - i) ** 2)
-            )
-            if i < len(self.terrain.new_ground_lines):
-                j = len(self.terrain.new_ground_lines[i]) - 1
-                while leftover_damage != 0 and j >= 0:
-                    initial_height = self.terrain.new_ground_lines[i][j]
-                    if initial_height >= leftover_damage:
-                        self.terrain.new_ground_lines[i][j] -= leftover_damage
-                        leftover_damage = 0
-                    else:
-                        leftover_damage -= initial_height
-                        self.terrain.new_ground_lines[i][j] = 0
-                    j -= 1
+        if self.cannonball is not None and self.last_state is not None:
+            radius = self.cannonball.radius_damage
+            for i in range(
+                    int(self.last_state.position.x) - radius,
+                    int(self.last_state.position.x) + radius,
+            ):
+                leftover_damage = math.sqrt(
+                    max(0, radius ** 2 - (self.last_state.position.x - i) ** 2)
+                )
+                if i < len(self.terrain.new_ground_lines):
+                    j = len(self.terrain.new_ground_lines[i]) - 1
+                    while leftover_damage != 0 and j >= 0:
+                        initial_height = self.terrain.new_ground_lines[i][j]
+                        if initial_height >= leftover_damage:
+                            self.terrain.new_ground_lines[i][j] -= leftover_damage
+                            leftover_damage = 0
+                        else:
+                            leftover_damage -= initial_height
+                            self.terrain.new_ground_lines[i][j] = 0
+                        j -= 1
 
     def start_menu(self):
         soundtrack = pygame.mixer.Sound((resource_path("sounds/inicio.mp3")))
