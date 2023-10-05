@@ -1790,16 +1790,17 @@ class TankGame:
             leftover_damage = math.sqrt(
                 max(0, radius**2 - (self.last_state.position.x - i) ** 2)
             )
-            j = len(self.terrain.new_ground_lines[i]) - 1
-            while leftover_damage != 0 and j >= 0:
-                initial_height = self.terrain.new_ground_lines[i][j]
-                if initial_height >= leftover_damage:
-                    self.terrain.new_ground_lines[i][j] -= leftover_damage
-                    leftover_damage = 0
-                else:
-                    leftover_damage -= initial_height
-                    self.terrain.new_ground_lines[i][j] = 0
-                j -= 1
+            if i < len(self.terrain.new_ground_lines):
+                j = len(self.terrain.new_ground_lines[i]) - 1
+                while leftover_damage != 0 and j >= 0:
+                    initial_height = self.terrain.new_ground_lines[i][j]
+                    if initial_height >= leftover_damage:
+                        self.terrain.new_ground_lines[i][j] -= leftover_damage
+                        leftover_damage = 0
+                    else:
+                        leftover_damage -= initial_height
+                        self.terrain.new_ground_lines[i][j] = 0
+                    j -= 1
 
     def start_menu(self):
         soundtrack = pygame.mixer.Sound((resource_path("sounds/inicio.mp3")))
@@ -1875,7 +1876,7 @@ class TankGame:
                 explotion.play()
                 break
 
-            if self.last_state.impact_type != ImpactType.BORDER:  # por qué .impact_type???
+            if self.last_state is not None and self.last_state.impact_type != ImpactType.BORDER:  # por qué .impact_type???
                 shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
                 shoot.play()
                 if self.last_state.impact_type == ImpactType.TANK:
