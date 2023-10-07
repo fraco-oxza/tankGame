@@ -1847,7 +1847,9 @@ class TankGame:
 
         self.hud.show_instructions(self.screen)
         pygame.display.flip()
-
+        in_game = pygame.mixer.Sound((resource_path("sounds/inGame.mp3")))
+        in_game.play()
+        in_game.set_volume(0.2)
         while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
@@ -1867,25 +1869,32 @@ class TankGame:
                 self.check_running()
                 self.process_input()
                 self.render()
+            throw = pygame.mixer.Sound((resource_path("sounds/throw.mp3")))
+            throw.play()
+            fall = pygame.mixer.Sound((resource_path("sounds/fall.mp3")))
+            fall.set_volume(0.3)
+            fall.play()
 
             self.cannonball_travel()
-
+            fall.stop()
             if (
                 self.last_state is not None
                 and self.last_state.impact_type == ImpactType.SUICIDIO
             ):
-                explotion = pygame.mixer.Sound((resource_path("sounds/explotion.mp3")))
+                explotion = pygame.mixer.Sound((resource_path("sounds/explotionTank.mp3")))
                 explotion.play()
                 break
 
             if self.last_state is not None and self.last_state.impact_type != ImpactType.BORDER:  # por qué .impact_type???
-                shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
-                shoot.play()
                 if self.last_state.impact_type == ImpactType.TANK:
+                    tank_explotion = pygame.mixer.Sound((resource_path("sounds/bomb.mp3")))
+                    tank_explotion.play()
                     self.animacion = Explosion(
                         self.cannonball.position, self.cargar_animacion()
                     )
                 elif self.last_state.impact_type == ImpactType.TERRAIN:
+                    shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
+                    shoot.play()
                     self.animacion = Explosion(
                         self.cannonball.position, self.cargar_animacionTerrain()
                     )
