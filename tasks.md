@@ -23,3 +23,4 @@
 - [ ] Añadir al hud un indicador de viento. 16-10-2023. Francisco
 - [ ] Arreglar la destrucción terreno. 18-10-2023. Benjamín
 - [ ] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
+- [ ] Mejorar el readme.md. 20-10-2023. Benjamín.
