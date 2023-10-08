@@ -1782,13 +1782,14 @@ class TankGame:
                     self.last_state, self.tanks[other_player].position
                 )
             elif self.last_state.impact_type == ImpactType.SUICIDIO:
+                other_player = (self.actual_player + 1) % 2
                 self.life_tank(
                     self.last_state.position,
                     self.tanks[self.actual_player],
                     self.tanks[self.actual_player].actual,
                 )
 
-                self.tanks[self.actual_player].player.score(
+                self.tanks[other_player].player.score(
                     self.last_state, self.tanks[self.actual_player].position
                 )
             elif self.last_state.impact_type == ImpactType.TERRAIN:
