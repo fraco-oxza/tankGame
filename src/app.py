@@ -396,6 +396,7 @@ class Speedometer:
 
         return pygame.transform.scale(surface, (self.size, self.size))
 
+
 class Cannonball(Drawable):
     """
     Esta clase representa una bala de cañón en movimiento, proporciona
@@ -1079,9 +1080,17 @@ class HUD(Drawable):
         ):
             self.self_impact_windows.draw(screen)
 
-        self.speedometer.actual = self.tank_game.tanks[self.tank_game.actual_player].shoot_velocity
+        self.speedometer.actual = self.tank_game.tanks[
+            self.tank_game.actual_player
+        ].shoot_velocity
         draw = self.speedometer.get_draw()
-        screen.blit(draw, (constants.WINDOWS_SIZE[0] // 2 - draw.get_size()[0]//2,constants.WINDOWS_SIZE[1] - draw.get_size()[1]) )
+        screen.blit(
+            draw,
+            (
+                constants.WINDOWS_SIZE[0] // 2 - draw.get_size()[0] // 2,
+                constants.WINDOWS_SIZE[1] - draw.get_size()[1],
+            ),
+        )
 
         if constants.DEVELOPMENT_MODE:
             screen.blit(
@@ -1511,8 +1520,7 @@ class TankGame:
 
         if self.cannonball is not None:
             self.cannonball.draw(game_rect)
-        if self.winner is not None:
-            self.winner_msj.draw(game_rect)
+
 
         self.screen.fill(constants.HUD_BACKGROUND)
         if self.last_state is not None and self.cannonball is not None:
@@ -1528,6 +1536,9 @@ class TankGame:
         self.snow_storm.tick(1.0 / (self.fps + 0.1))
         if self.show_screen:
             self.select_Cannonball.draw(self.screen)
+
+        if self.winner is not None:
+            self.winner_msj.draw(self.screen)
 
         pygame.display.flip()
         self.clock.tick(constants.FPS)
@@ -1747,11 +1758,14 @@ class TankGame:
         imagenesSnow = []
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimacionesSnow):
-            imagenesSnow.append(pygame.image.load(resource_path(f"images/{i} snow.png")))
+            imagenesSnow.append(
+                pygame.image.load(resource_path(f"images/{i} snow.png"))
+            )
 
         for i in range(imagenesSnow.__len__()):
             imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
         return imagenesSnow
+
     def check_last_state(self) -> None:
         """
         This function is responsible for checking what happened in the last shot
