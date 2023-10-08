@@ -7,7 +7,7 @@
 - [ ] Hacer el botón de volver a jugar y salir de la partida. 9-10-2023. Francisco
 - [ ] Implementar la rotación en las balas. 11-10-2023. Sofia
 - [ ] Actualizar la pantalla de instrucciones. 16-10-2023. Francisco
-- [ ] Arreglar lo que sucede cuando un tanque se auto-impacta. 11-10-2023. Sofia y Maca
+- [x] Arreglar lo que sucede cuando un tanque se auto-impacta. 11-10-2023. Sofia y Maca
 - [ ] Arreglar donde se colocan los tanques. 9-10-2023. Francisco
 
 ## Requisitos propios
