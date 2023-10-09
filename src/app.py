@@ -917,10 +917,6 @@ class HUD(Drawable):
     """
 
     tanks: list[Tank]
-    left = 100
-    top = constants.WINDOWS_SIZE[1] - int((3 / 5) * constants.HUD_HEIGHT)
-    width = 160
-    height = 50
 
     def __init__(self, tanks: list[Tank], tank_game: TankGame):
         self.tank_game = tank_game
@@ -964,6 +960,10 @@ class HUD(Drawable):
             )
             screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
 
+    def get_cannonball_indicators(self) -> pygame.Surface:
+        sf = pygame.Surface((400,constants.HUD_HEIGHT))
+        return sf
+
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
         Esta función  permite mostrar en pantalla todo lo relacionado a la
@@ -973,20 +973,24 @@ class HUD(Drawable):
         desarrollador está activado muestra los FPS.
         """
 
-        if self.tank_game.last_state is not None:
-            pass
-
-        self.speedometer.actual = self.tank_game.tanks[
-            self.tank_game.actual_player
-        ].shoot_velocity
-        draw = self.speedometer.get_draw()
-        screen.blit(
-            draw,
-            (
-                constants.WINDOWS_SIZE[0] // 2 - draw.get_size()[0] // 2,
-                constants.WINDOWS_SIZE[1] - draw.get_size()[1],
+        pygame.draw.rect(
+            screen,
+            "#232323",
+            pygame.Rect(
+                constants.BORDER_PADDING,
+                constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT - constants.BORDER_PADDING/2,
+                100,
+                constants.HUD_HEIGHT,
+            
             ),
+            0,10
         )
+
+
+
+
+        if self.tank_game.last_state is not None:
+            self.draw_shoot_info(screen)
 
         if constants.DEVELOPMENT_MODE:
             screen.blit(
