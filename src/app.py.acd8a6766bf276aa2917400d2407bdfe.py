@@ -1611,10 +1611,15 @@ class TankGame:
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
 
-
-                if actual_radius_position is not None and actual_radius_position > constants.TANK_RADIO:
+                if (
+                    actual_radius_position is not None
+                    and actual_radius_position > constants.TANK_RADIO
+                ):
                     other_radius_position = self.calculate_distance(other_player)
-                    if other_radius_position is not None and other_radius_position < constants.TANK_RADIO:
+                    if (
+                        other_radius_position is not None
+                        and other_radius_position < constants.TANK_RADIO
+                    ):
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
