@@ -987,7 +987,7 @@ class HUD(Drawable):
         self.color = self.tanks[self.tank_game.actual_player].available
         ancho = 50
         for i in range(3):
-            if (self.color[i] > 0):
+            if self.color[i] > 0:
                 pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
             else:
                 pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
