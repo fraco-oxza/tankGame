@@ -1335,7 +1335,7 @@ class Menu(Drawable, Collidable):
 
 
 class Explosion(Drawable):
-    t_animacion: int
+    t_animacion: float
     position: pygame.Vector2
     image: list[pygame.surface.Surface]
 
@@ -1379,7 +1379,7 @@ class TankGame:
     winner: Optional[int]
     winner_msj: WinnerScreen
     last_state: Optional[Impact]
-    select_Cannonball: Optional[SelectCannonball]
+    select_Cannonball: SelectCannonball
     show_screen: bool
 
     def __init__(self) -> None:
@@ -1417,10 +1417,17 @@ class TankGame:
         self.animacion = None
         quart_of_windows = int(self.map_size[0] / 4)
 
-        mid_point = randint(int(quart_of_windows), int(3 * quart_of_windows))
+        tank_pos_border_margin = int(quart_of_windows / 4)
 
-        tank1_x = randint(0, mid_point - quart_of_windows)
-        tank2_x = randint(mid_point + quart_of_windows, self.map_size[0])
+        mid_point = randint(
+            int(quart_of_windows + tank_pos_border_margin),
+            int(3 * quart_of_windows - tank_pos_border_margin),
+        )
+
+        tank1_x = randint(tank_pos_border_margin, mid_point - quart_of_windows)
+        tank2_x = randint(
+            mid_point + quart_of_windows, self.map_size[0] - tank_pos_border_margin
+        )
 
         player1 = Player("1", 0)
         player2 = Player("2", 0)
@@ -1603,9 +1610,16 @@ class TankGame:
                 self.cannonball.position, self.tanks[self.actual_player].actual
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
-                if actual_radius_position > constants.TANK_RADIO:
+
+                if (
+                    actual_radius_position is not None
+                    and actual_radius_position > constants.TANK_RADIO
+                ):
                     other_radius_position = self.calculate_distance(other_player)
-                    if other_radius_position < constants.TANK_RADIO:
+                    if (
+                        other_radius_position is not None
+                        and other_radius_position < constants.TANK_RADIO
+                    ):
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
                     return Impact(self.cannonball.position, ImpactType.SUICIDIO)
@@ -1613,6 +1627,9 @@ class TankGame:
         return None
 
     def calculate_distance(self, player: int):
+        if self.cannonball is None:
+            return
+
         actual_radius = math.sqrt(
             ((self.tanks[player].position.x - self.cannonball.position.x) ** 2)
             + ((self.tanks[player].position.y - self.cannonball.position.y) ** 2)
@@ -1889,7 +1906,7 @@ class TankGame:
                 self.last_state is not None
                 and self.last_state.impact_type != ImpactType.BORDER
             ):
-                if (
+                if self.cannonball is not None and (
                     self.last_state.impact_type == ImpactType.TANK
                     or self.last_state.impact_type == ImpactType.SUICIDIO
                 ):
@@ -1900,7 +1917,10 @@ class TankGame:
                     self.animacion = Explosion(
                         self.cannonball.position, self.cargar_animacion()
                     )
-                elif self.last_state.impact_type == ImpactType.TERRAIN:
+                elif (
+                    self.cannonball is not None
+                    and self.last_state.impact_type == ImpactType.TERRAIN
+                ):
                     shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
                     shoot.play()
                     self.animacion = Explosion(
