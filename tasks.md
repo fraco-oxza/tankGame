@@ -8,7 +8,7 @@
 - [ ] Implementar la rotación en las balas. 11-10-2023. Sofia
 - [ ] Actualizar la pantalla de instrucciones. 16-10-2023. Francisco
 - [x] Arreglar lo que sucede cuando un tanque se auto-impacta. 11-10-2023. Sofia y Maca
-- [ ] Arreglar donde se colocan los tanques. 9-10-2023. Francisco
+- [x] Arreglar donde se colocan los tanques. 9-10-2023. Francisco
 
 ## Requisitos propios
 
