@@ -922,7 +922,7 @@ class HUD(Drawable):
     top = constants.WINDOWS_SIZE[1] - int((3 / 5) * constants.HUD_HEIGHT)
     width = 160
     height = 50
-
+    color: list[int]
     def __init__(self, tanks: list[Tank], tank_game: TankGame):
         self.tank_game = tank_game
         self.tanks = tanks
@@ -937,6 +937,7 @@ class HUD(Drawable):
         self.text_velocity1 = None
         self.text_velocity2 = None
         self.text_cannonball_info = None
+        self.color = tanks[self.tank_game.actual_player].available
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         transparency = 128
@@ -965,8 +966,45 @@ class HUD(Drawable):
             )
             screen.blit(self.text_cannonball_info, pygame.Vector2(990, 460))
 
+    def get_select_cannonball(self):
+        width = 350
+        height = constants.HUD_HEIGHT
+        sf = pygame.Surface((width, height))
+        sf.fill("#232323")
+        alto = height // 2
+        text = self.font30.render("Selección de bala", True, "white")
+        sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
+        mm60 = self.font16.render("60MM", True, "white")
+        sf.blit(mm60, (width / 3 - mm60.get_size()[0] / 0.5, 50))
+        mm80 = self.font16.render("80MM", True, "white")
+        sf.blit(mm80, (width / 2 - mm80.get_size()[0] / 1.5, 50))
+        mm105 = self.font16.render("105MM", True, "white")
+        sf.blit(mm105, (width / 1.2 - mm105.get_size()[0] / 2, 50))
+        ancho = 50
+        for i in range(3):
+            pygame.draw.circle(sf, "#45484A", (ancho, alto), 30)
+            ancho += 120
+        self.color = self.tanks[self.tank_game.actual_player].available
+        ancho = 50
+        for i in range(3):
+            if (self.color[i] > 0):
+                pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
+            else:
+                pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
+            ancho += 120
+        ancho = 50
+        for i in range(3):
+            pygame.draw.circle(sf, "#45484A", (ancho, alto), 20)
+            cantidad = self.font.render(f"{self.tanks[self.tank_game.actual_player].available[i]}", True, "white")
+            if self.tanks[self.tank_game.actual_player].available[i] > 9:
+                sf.blit(cantidad, (ancho - 15, alto - 15))
+            else:
+                sf.blit(cantidad, (ancho - 8, alto - 15))
+            ancho += 120
+        return sf
+
     def get_cannonball_indicators(self) -> pygame.Surface:
-        width = 300
+        width = 350
         height = constants.HUD_HEIGHT
 
         sf = pygame.Surface((width, height))
@@ -1029,12 +1067,18 @@ class HUD(Drawable):
         screen.blit(
             self.get_cannonball_indicators(),
             (
-                constants.BORDER_PADDING + 120,
+                constants.BORDER_PADDING + 50,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
             ),
         )
+        screen.blit(self.get_select_cannonball(), (
+            constants.BORDER_PADDING + 450,
+            constants.WINDOWS_SIZE[1]
+            - constants.HUD_HEIGHT
+            - constants.BORDER_PADDING / 2,
+        ), )
 
         if self.tank_game.last_state is not None:
             self.draw_shoot_info(screen)
