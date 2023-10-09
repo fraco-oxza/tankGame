@@ -16,7 +16,7 @@ X_SPEED = 4.0
 TANK_RADIO = 18
 DarkGreen = "#1C542D"
 White = "#FFFFFF"
-HUD_HEIGHT = 200
+HUD_HEIGHT = max(200, min(400, int(WINDOWS_SIZE[1] / 4)))
 H_MAX = (0, 650)
 H_WINNER = (210, 100)
 TANK_WINNER = (650, 500)
@@ -25,7 +25,7 @@ MAP_SEED = -1
 SNOWFLAKES = 50
 
 # Menu constants
-BORDER_PADDING = 50
+BORDER_PADDING = 20
 HUD_BACKGROUND = "#282828"
 CantidadAnimaciones = 7
 CantidadAnimacionesSnow = 10
