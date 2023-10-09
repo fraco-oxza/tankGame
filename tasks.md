@@ -13,7 +13,7 @@
 ## Requisitos propios
 
 - [ ] Implementar el mensaje de advertencia en la interfaz. 13-10-2023. Maca
-- [ ] Terminar el speedometer. 9-10-2023. Francisco
+- [x] Terminar el speedometer. 9-10-2023. Francisco
 - [ ] Hacer el nuevo selector de bala, que es mover el antiguo y adaptar las interacciones. 13-10-2023. Maca
 - [ ] Hacer el mostrador de vida, con unas barritas. 15-10-2023. Sofia.
 - [ ] Hacer un indicador para que se muestre quien esta jugando. 9-10-2023. Francisco.
