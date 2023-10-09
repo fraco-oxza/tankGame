@@ -965,7 +965,6 @@ class HUD(Drawable):
                 "white",
             )
             screen.blit(self.text_cannonball_info, pygame.Vector2(990, 460))
-
     def get_select_cannonball(self):
         width = 350
         height = constants.HUD_HEIGHT
