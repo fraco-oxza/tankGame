@@ -1010,7 +1010,7 @@ class HUD(Drawable):
         )
         self.font16.set_bold(False)
 
-        sf.blit(self.speedometer.get_draw(), (20, (1 / 3) * height -10 ))
+        sf.blit(self.speedometer.get_draw(), (20, (1 / 3) * height - 10))
 
         return sf
 
