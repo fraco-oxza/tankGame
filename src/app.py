@@ -315,7 +315,8 @@ class Speedometer:
         self.size = size
 
     def get_draw(self) -> pygame.Surface:
-        surface = pygame.Surface((500, 500))
+        surface = pygame.Surface((500, 500), pygame.SRCALPHA, 32)
+        surface = surface.convert_alpha()
 
         pygame.draw.circle(surface, "#464646", (250, 250), 250, 40)
         pygame.draw.circle(surface, "#232323", (250, 250), 210)
@@ -922,10 +923,11 @@ class HUD(Drawable):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = pygame.image.load(resource_path("images/Angle.png"))
-        self.speedometer = Speedometer(200)
+        self.speedometer = Speedometer(int((2 / 3) * constants.HUD_HEIGHT))
         self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
         self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
         self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
+        self.font12 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 12)
         self.self_impact_windows = SelfImpactWindows(self.tank_game)
         self.text_angle1 = None
         self.text_angle2 = None
@@ -961,7 +963,36 @@ class HUD(Drawable):
             screen.blit(self.text_cannonball_info, pygame.Vector2(1020, 675))
 
     def get_cannonball_indicators(self) -> pygame.Surface:
-        sf = pygame.Surface((400,constants.HUD_HEIGHT))
+        width = 400
+        height = constants.HUD_HEIGHT
+
+        sf = pygame.Surface((width, height))
+        sf.fill("#232323")
+
+        text = self.font30.render("Ajustes de bala", True, "white")
+        velocity_label = self.font16.render("Velocidad", True, "white")
+        angle_label = self.font16.render("Angulo", True, "white")
+
+        self.speedometer.actual = self.tank_game.tanks[
+            self.tank_game.actual_player
+        ].shoot_velocity
+        self.font16.set_bold(True)
+        velocity = self.font16.render(f"{self.speedometer.actual:.2f}", True, "white")
+        self.font16.set_bold(False)
+        sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
+        cds = pygame.rect.Rect((2 / 3) * width -10, (4 / 8) * height - 15, 70, 30)
+        pygame.draw.rect(sf, "#141414",cds)
+        sf.blit(velocity, ((2 / 3) * width, (4 / 8) * height - velocity.get_size()[1]/2))
+        sf.blit(velocity_label, ( (2 / 3) * width -10 , (4 / 8) * height - 15 -velocity_label.get_size()[1]))
+
+        angle = self.font16.render(f"{math.degrees( self.tank_game.tanks[self.tank_game.actual_player].shoot_angle):.2f}", True, "white")
+        cds = pygame.rect.Rect((2 / 3) * width -10, (6/8) * height - 15, 70, 30)
+        pygame.draw.rect(sf, "#141414",cds)
+        sf.blit(angle, ((2 / 3) * width, (6/8) * height - angle.get_size()[1]/2))
+        sf.blit(angle_label, ( (2 / 3) * width -10 , (6 / 8) * height - 15 -velocity_label.get_size()[1]))
+
+        sf.blit(self.speedometer.get_draw(), (20, (1 / 3) * height - 20))
+
         return sf
 
     def draw(self, screen: pygame.surface.Surface) -> None:
@@ -973,21 +1004,15 @@ class HUD(Drawable):
         desarrollador está activado muestra los FPS.
         """
 
-        pygame.draw.rect(
-            screen,
-            "#232323",
-            pygame.Rect(
-                constants.BORDER_PADDING,
-                constants.WINDOWS_SIZE[1] - constants.HUD_HEIGHT - constants.BORDER_PADDING/2,
-                100,
-                constants.HUD_HEIGHT,
-            
+        screen.blit(
+            self.get_cannonball_indicators(),
+            (
+                constants.BORDER_PADDING + 120,
+                constants.WINDOWS_SIZE[1]
+                - constants.HUD_HEIGHT
+                - constants.BORDER_PADDING / 2,
             ),
-            0,10
         )
-
-
-
 
         if self.tank_game.last_state is not None:
             self.draw_shoot_info(screen)
