@@ -11,6 +11,8 @@ from typing import Optional
 import pygame
 from pygame.font import Font
 
+from caches import image_cache
+from caches import font_cache
 import constants
 
 
