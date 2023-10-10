@@ -161,7 +161,7 @@ class Background(Drawable):
             (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
         )
         self.sky_image = pygame.transform.scale(
-            pygame.image.load(resource_path("images/sky.jpg")), image_size
+            image_cache["images/sky.jpg"], image_size
         )
         self.sky_rect = self.sky_image.get_rect()
 
@@ -336,7 +336,7 @@ class Speedometer:
         self.inc = 10
         self.start_angle = math.radians(200)
         self.end_angle = math.radians(-20)
-        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
+        self.font = font_cache["Roboto.ttf", 30]
         self.font.set_bold(True)
         self.size = size
 
@@ -835,12 +835,12 @@ class HUD(Drawable):
     def __init__(self, tanks: list[Tank], tank_game: TankGame):
         self.tank_game = tank_game
         self.tanks = tanks
-        self.hud_image = pygame.image.load(resource_path("images/Angle.png"))
+        self.hud_image = image_cache["images/Angle.png"]
         self.speedometer = Speedometer(int((2 / 3) * constants.HUD_HEIGHT))
-        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 24)
-        self.font30 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 30)
-        self.font16 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 16)
-        self.font12 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 12)
+        self.font = font_cache["Roboto.ttf", 24]
+        self.font30 = font_cache["Roboto.ttf", 30]
+        self.font16 = font_cache["Roboto.ttf", 16]
+        self.font12 = font_cache["Roboto.ttf", 12]
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
@@ -1081,7 +1081,7 @@ class HUD(Drawable):
         """
         screen.fill("#151f28")
 
-        instructions = pygame.image.load(resource_path("images/instructions.png"))
+        instructions = image_cache["images/instructions.png"]
         rect = instructions.get_rect()
         size = rect.size
 
@@ -1116,14 +1116,14 @@ class WinnerScreen(Drawable):
         Constructor que inicializa todas los elementos necesarios para monstrar
         el mensaje de victoria.
         """
-        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
+        self.font = font_cache["Roboto.ttf", 20]
         self.tank_game = tank_game
         self.text_winner_info = None
         self.text_winner_life = None
         self.text_winner_score = None
         self.text_life1 = None
         self.text_life2 = None
-        self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 150)
+        self.font100 = font_cache["Roboto.ttf", 150]
         self.font100.set_bold(True)
         self.font100.set_italic(True)
         self.vx = random.uniform(-1, 1)
@@ -1276,11 +1276,11 @@ class WarnningWindows(Drawable):
         self.tank_game = tank_game
         self.quantity = None
         self.num_seleccionado = None
-        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 20)
-        self.font2 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 12)
-        self.font100 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 60)
+        self.font = font_cache["Roboto.ttf", 20]
+        self.font2 = font_cache["Roboto.ttf", 12]
+        self.font100 = font_cache["Roboto.ttf", 60]
         self.font.set_bold(True)
-        self.font50 = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 15)
+        self.font50 = font_cache["Roboto.ttf", 15]
 
     def backround(self, screen: pygame.surface.Surface):
         transparency = 240
@@ -1289,7 +1289,7 @@ class WarnningWindows(Drawable):
         screen.blit(rect_surface, constants.DESTWARINING)
         image_size = (50, 50)
         image = pygame.transform.scale(
-            pygame.image.load(resource_path("images/warning.png")), image_size
+            image_cache["images/warning.png"], image_size
         )
         screen.blit(image, constants.POSITION_WARNIN_IMAGE)
 
@@ -1372,7 +1372,7 @@ class Menu(Drawable, Collidable):
     is_hover: bool
 
     def __init__(self):
-        self.fontTitle = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 43)
+        self.fontTitle = font_cache["Roboto.ttf", 43]
         self.storm = SnowStorm()
         self.box_pos = None
         self.botton_color = "#2E3440"
@@ -1477,7 +1477,7 @@ class TankGame:
         pygame.init()
 
         pygame.display.set_caption("TankGame!")
-        icon = pygame.image.load(resource_path("images/tankIcon.png"))
+        icon = image_cache["images/tankIcon.png"]
         pygame.display.set_icon(icon)
 
         self.map_size = (
@@ -1797,7 +1797,7 @@ class TankGame:
         imagenes = []
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimaciones):
-            imagenes.append(pygame.image.load(resource_path(f"images/{i}.png")))
+            imagenes.append(image_cache[f"images/{i}.png"])
 
         for i in range(imagenes.__len__()):
             imagenes[i] = pygame.transform.scale(imagenes[i], scale)
@@ -1809,7 +1809,7 @@ class TankGame:
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimacionesSnow):
             imagenesSnow.append(
-                pygame.image.load(resource_path(f"images/{i} snow.png"))
+                image_cache[f"images/{i} snow.png"]
             )
 
         for i in range(imagenesSnow.__len__()):
