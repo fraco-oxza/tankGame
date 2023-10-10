@@ -482,123 +482,6 @@ class Cannonball(Drawable):
         ) ** (1 / 2)
 
 
-class SelectCannonball(Drawable):
-    cannonball60: Cannonball60mm
-    cannonball80: Cannonball80mm
-    cannonball105: Cannonball105mm
-    tank_game: TankGame
-    available: list[int]
-
-    def __init__(self, tank_game: TankGame):
-        self.font = pygame.font.Font(resource_path("fonts/Roboto.ttf"), 14)
-        self.text_cannonball60_info = None
-        self.text_cannonball80_info = None
-        self.text_cannonball105_info = None
-        self.tank_game = tank_game
-
-    @staticmethod
-    def selection_screen(screen: pygame.surface):
-        transparency = 140
-        rect_surface = pygame.Surface((700, 300))
-        rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = (300, 250)
-        screen.blit(rect_surface, (rect_x1, rect_y1))
-
-    def draw_cannonball_105_mm(self, screen: pygame.surface):
-        position = pygame.Vector2(870, 420)
-        pygame.draw.line(
-            screen, "gray", position, (position.x + 70, position.y - 70), 20
-        )
-        pygame.draw.circle(screen, "black", position, 50)
-
-        pygame.draw.line(
-            screen,
-            "yellow",
-            (position.x + 70, position.y - 70),
-            (position.x + 80, position.y - 80),
-            20,
-        )
-
-    def draw_cannonball_80_mm(self, screen: pygame.surface):
-        position = pygame.Vector2(630, 380)
-        triangle = [
-            (position.x, position.y),
-            (position.x + 25, position.y - 50),
-            (position.x + 50, position.y),
-        ]
-
-        pygame.draw.rect(
-            screen, constants.DarkGreen, pygame.Rect(position.x, position.y, 50, 75)
-        )
-        pygame.draw.line(
-            screen,
-            "yellow",
-            (position.x, position.y + 37.5),
-            (position.x + 50, position.y + 37.5),
-            25,
-        )
-        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
-
-        pygame.draw.line(
-            screen,
-            "orange",
-            (position.x + 25, position.y + 75),
-            (position.x + 25, position.y + 100),
-            20,
-        )
-
-    def draw_cannonball_60_mm(self, screen: pygame.surface):
-        position = pygame.Vector2(420, 370)
-        pygame.draw.line(
-            screen,
-            "#4b5320",
-            (position.x, position.y),
-            (position.x, position.y + 80),
-            40,
-        )
-        pygame.draw.line(
-            screen,
-            "#fbb741",
-            (position.x, position.y + 60),
-            (position.x, position.y + 80),
-            40,
-        )
-
-    def cannonball_105_mm(self, screen: pygame.surface):
-        self.text_cannonball105_info = self.font.render(
-            f"Unidades Diponibles: {self.available[2]}",
-            True,
-            "white",
-        )
-        screen.blit(self.text_cannonball105_info, pygame.Vector2(790, 520))
-
-    def cannonball_80_mm(self, screen: pygame.surface):
-        self.text_cannonball80_info = self.font.render(
-            f"Unidades Diponibles: {self.available[1]}",
-            True,
-            "white",
-        )
-        screen.blit(self.text_cannonball80_info, pygame.Vector2(570, 520))
-
-    def cannonball_60_mm(self, screen: pygame.surface):
-        self.text_cannonball60_info = self.font.render(
-            f"Unidades Diponibles: {self.available[0]}",
-            True,
-            "white",
-        )
-        screen.blit(self.text_cannonball60_info, pygame.Vector2(350, 520))
-
-    def draw(self, screen: pygame.surface.Surface) -> None:
-        self.available = self.tank_game.tanks[self.tank_game.actual_player].available
-        self.selection_screen(screen)
-        self.cannonball_60_mm(screen)
-        self.cannonball_80_mm(screen)
-        self.cannonball_105_mm(screen)
-        self.draw_cannonball_105_mm(screen)
-        self.draw_cannonball_80_mm(screen)
-        self.draw_cannonball_60_mm(screen)
-
-
 class Cannonball105mm(Cannonball):
     damage: int
     radius_damage: int
@@ -776,7 +659,6 @@ class Tank(Drawable, Collidable):
     shoot_angle: float  # rad //
     actual: int  # bala seleccionada
     available: list[int]
-    select: SelectCannonball
     life: int
 
     def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
@@ -967,6 +849,66 @@ class HUD(Drawable):
             )
             screen.blit(self.text_cannonball_info, pygame.Vector2(990, 460))
 
+    def draw_cannonball_105_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(290, 170)
+        pygame.draw.line(
+            screen, "gray", position, (position.x + 35, position.y - 35), 10
+        )
+        pygame.draw.circle(screen, "black", position, 25)
+
+        pygame.draw.line(
+            screen,
+            "yellow",
+            (position.x + 35, position.y - 35),
+            (position.x + 40, position.y - 40),
+            10,
+        )
+
+    def draw_cannonball_80_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(160, 150)
+        triangle = [
+            (position.x, position.y),
+            (position.x + 12.5, position.y - 18),
+            (position.x + 25, position.y),
+        ]
+
+        pygame.draw.rect(
+            screen, constants.DarkGreen, pygame.Rect(position.x, position.y, 25, 37.5)
+        )
+        pygame.draw.line(
+            screen,
+            "yellow",
+            (position.x, position.y + 18.75),
+            (position.x + 25, position.y + 18.75),
+            13,
+        )
+        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
+
+        pygame.draw.line(
+            screen,
+            "orange",
+            (position.x + 12.5, position.y + 37.5),
+            (position.x + 12.5, position.y + 50),
+            10,
+        )
+
+    def draw_cannonball_60_mm(self, screen: pygame.surface):
+        position = pygame.Vector2(50, 140)
+        pygame.draw.line(
+            screen,
+            "#4b5320",
+            (position.x, position.y),
+            (position.x, position.y + 50),
+            25,
+        )
+        pygame.draw.line(
+            screen,
+            "#fbb741",
+            (position.x, position.y + 37.5),
+            (position.x, position.y + 50),
+            25,
+        )
+
     def get_select_cannonball(self):
         width = 350
         height = constants.HUD_HEIGHT
@@ -990,6 +932,8 @@ class HUD(Drawable):
         for i in range(3):
             if self.color[i] > 0:
                 pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
+                if self.tank_game.tanks[self.tank_game.actual_player].actual == i:
+                    pygame.draw.circle(sf, "#1A54D4", (ancho, alto), 25)
             else:
                 pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
             ancho += 120
@@ -1006,6 +950,9 @@ class HUD(Drawable):
             else:
                 sf.blit(cantidad, (ancho - 8, alto - 15))
             ancho += 120
+        self.draw_cannonball_60_mm(sf)
+        self.draw_cannonball_80_mm(sf)
+        self.draw_cannonball_105_mm(sf)
         return sf
 
     def get_cannonball_indicators(self) -> pygame.Surface:
@@ -1494,8 +1441,6 @@ class TankGame:
     winner: Optional[int]
     winner_msj: WinnerScreen
     last_state: Optional[Impact]
-    select_Cannonball: SelectCannonball
-    show_screen: bool
     warning = Optional[WarnningWindows]
 
     def __init__(self) -> None:
@@ -1525,7 +1470,6 @@ class TankGame:
         self.screen = pygame.display.set_mode(constants.WINDOWS_SIZE)
         self.clock = pygame.time.Clock()
         self.last_state = None
-        self.show_screen = False
         self.cannonball = None
         self.menu = Menu()
         self.tanks = []
@@ -1579,7 +1523,6 @@ class TankGame:
         )
 
         self.hud = HUD(self.tanks, self)
-        self.select_Cannonball = SelectCannonball(self)
         self.warning = WarnningWindows(self)
 
     def render(self) -> None:
@@ -1612,8 +1555,6 @@ class TankGame:
         self.hud.draw(self.screen)
 
         self.snow_storm.tick(1.0 / (self.fps + 0.1))
-        if self.show_screen:
-            self.select_Cannonball.draw(self.screen)
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.screen)
 
@@ -1678,28 +1619,16 @@ class TankGame:
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
 
-        if keys_pressed[pygame.K_SPACE] and not self.show_screen:
+        if keys_pressed[pygame.K_SPACE]:
             self.cannonball = playing_tank.shoot()
 
-        if (
-            keys_pressed[pygame.K_TAB]
-            and not self.show_screen
-            and self.show_screen == 0
-        ):
-            self.show_screen = True
-
-        if (
-            keys_pressed[pygame.K_1]
-            or keys_pressed[pygame.K_2]
-            or keys_pressed[pygame.K_3]
-        ) and self.show_screen:
+        if keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[pygame.K_3]:
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
                 self.tanks[self.actual_player].actual = CannonballType.MM80
             elif keys_pressed[pygame.K_3]:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
-            self.show_screen = False
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
