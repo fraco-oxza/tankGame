@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import math
-import os
 import random
 import sys
 from abc import abstractmethod
@@ -11,27 +10,10 @@ from typing import Optional
 import pygame
 from pygame.font import Font
 
-from caches import image_cache
-from caches import font_cache
-from caches import audio_cache
 import constants
-
-
-# variable global, para mostrar pantalla de seleccion de bala
-
-
-def resource_path(relative_path: str):
-    """
-    This function is responsible for loading the resources from the resources
-    folder. It is conditional, since when the program is packaged in an
-    executable, the folder directory changes and other directories must be
-    used. When the _MEIPASS environment variable is set, it means it is
-    packaged.
-    """
-    path = getattr(
-        sys, "_MEIPASS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "../")
-    )
-    return os.path.join(path, "resources", relative_path)
+from caches import audio_cache
+from caches import font_cache
+from caches import image_cache
 
 
 class Collidable:
