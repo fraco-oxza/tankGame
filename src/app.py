@@ -1904,6 +1904,7 @@ class TankGame:
                     while leftover_damage != 0 and j >= 0:
                         initial_height = self.terrain.new_ground_lines[i][j]
                         if initial_height >= leftover_damage:
+                            self.terrain.ground_lines[i] -= leftover_damage
                             self.terrain.new_ground_lines[i][j] -= leftover_damage
                             leftover_damage = 0
                         else:
