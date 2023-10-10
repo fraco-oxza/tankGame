@@ -13,6 +13,7 @@ from pygame.font import Font
 
 from caches import image_cache
 from caches import font_cache
+from caches import audio_cache
 import constants
 
 
@@ -1590,7 +1591,7 @@ class TankGame:
                 or self.warning.quantity_mm_105() == False
                 or self.warning.quantity_mm_80() == False
             ):
-                error = pygame.mixer.Sound((resource_path("sounds/error.mp3")))
+                error = audio_cache["sounds/error.mp3"]
                 error.play()
 
         if self.winner is not None:
@@ -1662,7 +1663,7 @@ class TankGame:
             or keys_pressed[pygame.K_2]
             or keys_pressed[pygame.K_3]
         ):
-            change = pygame.mixer.Sound((resource_path("sounds/click_cannonball.mp3")))
+            change = audio_cache["sounds/click_cannonball.mp3"]
             change.play()
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
@@ -1919,7 +1920,7 @@ class TankGame:
                         j -= 1
 
     def start_menu(self):
-        soundtrack = pygame.mixer.Sound((resource_path("sounds/inicio.mp3")))
+        soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
         while self.running:
             self.check_running()
@@ -1932,7 +1933,7 @@ class TankGame:
 
             if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
                 soundtrack.stop()
-                click = pygame.mixer.Sound((resource_path("sounds/click.mp3")))
+                click = audio_cache["sounds/click.mp3"]
 
                 click.play()
                 break
@@ -1961,14 +1962,14 @@ class TankGame:
 
         self.hud.show_instructions(self.screen)
         pygame.display.flip()
-        in_game = pygame.mixer.Sound((resource_path("sounds/inGame.mp3")))
+        in_game = audio_cache["sounds/inGame.mp3"]
         in_game.play()
         in_game.set_volume(0.2)
         while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
-                click = pygame.mixer.Sound((resource_path("sounds/click.mp3")))
+                click = audio_cache["sounds/click.mp3"]
                 click.play()
                 break
             self.clock.tick(constants.FPS)
@@ -1983,9 +1984,9 @@ class TankGame:
                 self.check_running()
                 self.process_input()
                 self.render()
-            throw = pygame.mixer.Sound((resource_path("sounds/throw.mp3")))
+            throw = audio_cache["sounds/throw.mp3"]
             throw.play()
-            fall = pygame.mixer.Sound((resource_path("sounds/fall.mp3")))
+            fall = audio_cache["sounds/fall.mp3"]
             fall.set_volume(0.3)
             fall.play()
 
@@ -2000,9 +2001,7 @@ class TankGame:
                     self.last_state.impact_type == ImpactType.TANK
                     or self.last_state.impact_type == ImpactType.SUICIDIO
                 ):
-                    tank_explotion = pygame.mixer.Sound(
-                        (resource_path("sounds/bomb.mp3"))
-                    )
+                    tank_explotion = audio_cache["sounds/bomb.mp3"]
                     tank_explotion.play()
                     self.animacion = Explosion(
                         self.cannonball.position, self.cargar_animacion()
@@ -2011,7 +2010,7 @@ class TankGame:
                     self.cannonball is not None
                     and self.last_state.impact_type == ImpactType.TERRAIN
                 ):
-                    shoot = pygame.mixer.Sound((resource_path("sounds/shoot.mp3")))
+                    shoot = audio_cache["sounds/shoot.mp3"]
                     shoot.play()
                     self.animacion = Explosion(
                         self.cannonball.position, self.cargar_animacionTerrain()
