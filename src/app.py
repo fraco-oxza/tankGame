@@ -1622,7 +1622,11 @@ class TankGame:
         if keys_pressed[pygame.K_SPACE]:
             self.cannonball = playing_tank.shoot()
 
-        if keys_pressed[pygame.K_1] or keys_pressed[pygame.K_2] or keys_pressed[pygame.K_3]:
+        if (
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
+        ):
             if keys_pressed[pygame.K_1]:
                 self.tanks[self.actual_player].actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
