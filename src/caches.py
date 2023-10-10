@@ -66,7 +66,7 @@ class FontCache(FileCache):
 
         """
         font_name, font_size = font_params
-        
+
         if font_params not in self.__fonts:
             self.__fonts[font_params] = pygame.font.Font(resource_path(os.path.join("fonts", font_name)), font_size)
 
