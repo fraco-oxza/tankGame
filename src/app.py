@@ -1291,9 +1291,7 @@ class WarnningWindows(Drawable):
         rect_surface.set_alpha(transparency)
         screen.blit(rect_surface, constants.DESTWARINING)
         image_size = (50, 50)
-        image = pygame.transform.scale(
-            image_cache["images/warning.png"], image_size
-        )
+        image = pygame.transform.scale(image_cache["images/warning.png"], image_size)
         screen.blit(image, constants.POSITION_WARNIN_IMAGE)
 
     def quantity_mm_60(self):
@@ -1811,9 +1809,7 @@ class TankGame:
         imagenesSnow = []
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimacionesSnow):
-            imagenesSnow.append(
-                image_cache[f"images/{i} snow.png"]
-            )
+            imagenesSnow.append(image_cache[f"images/{i} snow.png"])
 
         for i in range(imagenesSnow.__len__()):
             imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
