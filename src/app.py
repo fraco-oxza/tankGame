@@ -521,7 +521,7 @@ class Cannonball105mm(Cannonball):
             screen,
             "yellow",
             (tail_x - 5, self.position.y - 30 * angle_y),
-            (tail_x - 10, self.position.y - 30 * angle_y),
+            (tail_x - 8, self.position.y - 30 * angle_y),
             4,
         )
         pygame.draw.circle(
