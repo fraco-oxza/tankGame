@@ -508,20 +508,22 @@ class Cannonball105mm(Cannonball):
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
-        tail_x = self.position.x + 10 * angle_x
-        tail_y = self.position.y * angle_y
+        tail_x = self.position.x + 20 * angle_x
+        tail_y = self.position.y - 20 * angle_y
+        middle_x = tail_x + 5 * angle_x
+        middle_y = tail_y - 5 * angle_y
         pygame.draw.line(
             screen,
             "gray",
             (self.position.x, self.position.y),
-            (tail_x - 10, self.position.y - 30 * angle_y),
+            (tail_x, tail_y),
             4,
         )
         pygame.draw.line(
             screen,
             "yellow",
-            (tail_x - 5, self.position.y - 30 * angle_y),
-            (tail_x - 8, self.position.y - 30 * angle_y),
+            (tail_x, tail_y),
+            (middle_x, middle_y),
             4,
         )
         pygame.draw.circle(
@@ -1305,7 +1307,7 @@ class WarnningWindows(Drawable):
         transparency = 240
         rect_surface = pygame.Surface((400, 100))
         rect_surface.set_alpha(transparency)
-        screen.blit(rect_surface, constants.DESTWARINING)
+        screen.blit(rect_surface, constants.DESTWARNING)
         image_size = (50, 50)
         image = pygame.transform.scale(
             image_cache["images/warning.png"], image_size
