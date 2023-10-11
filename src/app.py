@@ -920,6 +920,32 @@ class HUD(Drawable):
             25,
         )
 
+    def health_bars(self) -> pygame.Surface:
+        other_player = (self.tank_game.actual_player + 1) % 2
+        width = 350
+        height = constants.HUD_HEIGHT
+        alto1 = height // 3
+        ancho1 = width / 6
+        alto2 = height // 1.5
+        ancho2 = width / 6
+        sf = pygame.Surface((width, constants.HUD_HEIGHT))
+        sf.fill("#232323")
+        text = self.font30.render("Salud de tanques", True, "white")
+        sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
+        bar_length = width // 1.5
+        bar_height = 30
+        fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
+        pygame.draw.rect(sf, "#248934", (ancho1, alto1, bar_length, bar_height))
+        pygame.draw.rect(sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1, bar_height))
+        fill2 = (self.tanks[other_player].life / 100) * bar_length
+        pygame.draw.rect(sf, "#AD2301", (ancho2, alto2, bar_length, bar_height))
+        pygame.draw.rect(sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2, bar_height))
+        jugador = self.font16.render("Jugador", True, "white")
+        sf.blit(jugador, (ancho1 + ancho1 // 9, alto1 + alto1 // 9))
+        oponente = self.font16.render("Oponente", True, "white")
+        sf.blit(oponente, (ancho2 + ancho2 // 9, alto2 + alto2 // 18))
+        return sf
+
     def get_select_cannonball(self):
         width = 350
         height = constants.HUD_HEIGHT
@@ -1040,6 +1066,15 @@ class HUD(Drawable):
             self.get_select_cannonball(),
             (
                 constants.BORDER_PADDING + 450,
+                constants.WINDOWS_SIZE[1]
+                - constants.HUD_HEIGHT
+                - constants.BORDER_PADDING / 2,
+            ),
+        )
+        screen.blit(
+            self.health_bars(),
+            (
+                constants.BORDER_PADDING + 850,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
