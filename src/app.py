@@ -581,35 +581,37 @@ class Cannonball80mm(Cannonball):
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
-        tail_x = self.position.x - 10 * angle_x
-        tail_y = self.position.y - 10 * angle_y
-        triangle = [
-            (tail_x, tail_y),
-            (tail_x + 5, tail_y - 10),
-            (tail_x + 10, tail_y),
-        ]
 
-        pygame.draw.rect(
-            screen,
-            constants.DarkGreen,
-            pygame.Rect(tail_x, tail_y, 10, 15),
-        )
+        tail_x = self.position.x - 25 * angle_x
+        tail_y = self.position.y - 25 * angle_y
+
         pygame.draw.line(
             screen,
-            "yellow",
-            (tail_x, tail_y + 7.5),
-            (tail_x + 10, tail_y + 7.5),
-            5,
+            "#4b5320",
+            (self.position.x, self.position.y),
+            (tail_x, tail_y),
+            10,
         )
-        pygame.draw.polygon(screen, constants.DarkGreen, triangle)
-        if self.is_alive:
-            pygame.draw.line(
-                screen,
-                "orange",
-                (tail_x + 5, tail_y + 15),
-                (tail_x + 5, tail_y + 20),
-                4,
-            )
+
+        sep_start = (self.position.x - 10 * angle_x, self.position.y - 10 * angle_y)
+        sep_end = (self.position.x - 15 * angle_x, self.position.y - 15 * angle_y)
+
+        pygame.draw.line(screen, "yellow", sep_start, sep_end, 10)
+
+        cola = (tail_x - 10 * angle_x, tail_y - 10 * angle_y)
+
+        pygame.draw.line(screen, "orange", (tail_x, tail_y), cola, 4)
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Player:
@@ -922,6 +924,7 @@ class HUD(Drawable):
         )
 
     def health_bars(self) -> pygame.Surface:
+
         other_player = (self.tank_game.actual_player + 1) % 2
         width = 350
         height = constants.HUD_HEIGHT
@@ -929,6 +932,7 @@ class HUD(Drawable):
         ancho1 = width / 6
         alto2 = height // 1.5
         ancho2 = width / 6
+
         sf = pygame.Surface((width, constants.HUD_HEIGHT))
         sf.fill("#232323")
         text = self.font30.render("Salud de tanques", True, "white")
@@ -937,10 +941,10 @@ class HUD(Drawable):
         bar_height = 30
         fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#248934", (ancho1, alto1, bar_length, bar_height))
-        pygame.draw.rect(sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1, bar_height))
+        pygame.draw.rect(sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1 + 1, bar_height))
         fill2 = (self.tanks[other_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#AD2301", (ancho2, alto2, bar_length, bar_height))
-        pygame.draw.rect(sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2, bar_height))
+        pygame.draw.rect(sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2 + 1, bar_height))
         jugador = self.font16.render("Jugador", True, "white")
         sf.blit(jugador, (ancho1 + ancho1 // 9, alto1 + alto1 // 9))
         oponente = self.font16.render("Oponente", True, "white")
@@ -1252,9 +1256,6 @@ class WinnerScreen(Drawable):
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)
 
-
-class Proyectil150(Cannonball):
-    pass
 
 
 class ImpactType:
