@@ -603,17 +603,6 @@ class Cannonball80mm(Cannonball):
         pygame.draw.line(screen, "orange", (tail_x, tail_y), cola, 4)
 
 
-
-
-
-
-
-
-
-
-
-
-
 class Player:
     """
     Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
@@ -924,7 +913,6 @@ class HUD(Drawable):
         )
 
     def health_bars(self) -> pygame.Surface:
-
         other_player = (self.tank_game.actual_player + 1) % 2
         width = 350
         height = constants.HUD_HEIGHT
@@ -941,10 +929,14 @@ class HUD(Drawable):
         bar_height = 30
         fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#248934", (ancho1, alto1, bar_length, bar_height))
-        pygame.draw.rect(sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1 + 1, bar_height))
+        pygame.draw.rect(
+            sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1 + 1, bar_height)
+        )
         fill2 = (self.tanks[other_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#AD2301", (ancho2, alto2, bar_length, bar_height))
-        pygame.draw.rect(sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2 + 1, bar_height))
+        pygame.draw.rect(
+            sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2 + 1, bar_height)
+        )
         jugador = self.font16.render("Jugador", True, "white")
         sf.blit(jugador, (ancho1 + ancho1 // 9, alto1 + alto1 // 9))
         oponente = self.font16.render("Oponente", True, "white")
@@ -1257,7 +1249,6 @@ class WinnerScreen(Drawable):
             self.winner_mensaje(screen)
 
 
-
 class ImpactType:
     """
     Clase encargada de definir el tipo de ambiente con lo que impactó la bala,
@@ -1310,9 +1301,7 @@ class WarnningWindows(Drawable):
         rect_surface.set_alpha(transparency)
         screen.blit(rect_surface, constants.DESTWARNING)
         image_size = (50, 50)
-        image = pygame.transform.scale(
-            image_cache["images/warning.png"], image_size
-        )
+        image = pygame.transform.scale(image_cache["images/warning.png"], image_size)
         screen.blit(image, constants.POSITION_WARNIN_IMAGE)
 
     def quantity_mm_60(self):
@@ -1830,9 +1819,7 @@ class TankGame:
         imagenesSnow = []
         scale = (300, 200)
         for i in range(1, constants.CantidadAnimacionesSnow):
-            imagenesSnow.append(
-                image_cache[f"images/{i} snow.png"]
-            )
+            imagenesSnow.append(image_cache[f"images/{i} snow.png"])
 
         for i in range(imagenesSnow.__len__()):
             imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
