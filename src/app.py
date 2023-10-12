@@ -1049,6 +1049,15 @@ class HUD(Drawable):
         se suicidó para llamar a la función correspondiente. Además, si el modo
         desarrollador está activado muestra los FPS.
         """
+        restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
+        radius = 16
+        pygame.draw.circle(screen, "yellow", restart_pos, radius)
+
+        ms = pygame.mouse.get_pos()
+        if (
+            (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
+        ) < radius**2 and pygame.mouse.get_pressed()[0]:
+            self.tank_game.restart()
 
         screen.blit(
             self.get_cannonball_indicators(),
@@ -1480,16 +1489,11 @@ class TankGame:
     last_state: Optional[Impact]
     warning = Optional[WarnningWindows]
 
-    def __init__(self) -> None:
+    def __init__(self, screen: pygame.surface.Surface) -> None:
         """
         constructor that initializes each element within the game, in
         addition to starting the window itself of the game.
         """
-        pygame.init()
-
-        pygame.display.set_caption("TankGame!")
-        icon = image_cache["images/tankIcon.png"]
-        pygame.display.set_icon(icon)
 
         self.map_size = (
             constants.WINDOWS_SIZE[0] - 2 * constants.BORDER_PADDING,
@@ -1504,7 +1508,7 @@ class TankGame:
         self.winner_msj = WinnerScreen(self)
         self.winner = None
         self.running = True
-        self.screen = pygame.display.set_mode(constants.WINDOWS_SIZE)
+        self.screen = screen
         self.clock = pygame.time.Clock()
         self.last_state = None
         self.cannonball = None
@@ -1561,6 +1565,9 @@ class TankGame:
 
         self.hud = HUD(self.tanks, self)
         self.warning = WarnningWindows(self)
+
+    def restart(self):
+        TankGame.__init__(self, self.screen)
 
     def render(self) -> None:
         """
@@ -1628,6 +1635,10 @@ class TankGame:
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
+
+        if keys_pressed[pygame.K_END]:
+            self.restart()
+
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
@@ -2075,7 +2086,13 @@ def main():
     From this function the program is started, creating the only instance of
     TankGame that exists...
     """
-    tank_game = TankGame()
+    pygame.init()
+
+    pygame.display.set_caption("TankGame!")
+    icon = image_cache["images/tankIcon.png"]
+    pygame.display.set_icon(icon)
+
+    tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
 
 
