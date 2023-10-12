@@ -1049,15 +1049,15 @@ class HUD(Drawable):
         se suicidó para llamar a la función correspondiente. Además, si el modo
         desarrollador está activado muestra los FPS.
         """
-        restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30) 
+        restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
         radius = 16
         pygame.draw.circle(screen, "yellow", restart_pos, radius)
 
         ms = pygame.mouse.get_pos()
-        if ((restart_pos[0] - ms[0])**2 + (restart_pos[1] - ms[1])**2) < radius**2 and pygame.mouse.get_pressed()[0]:
+        if (
+            (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
+        ) < radius**2 and pygame.mouse.get_pressed()[0]:
             self.tank_game.restart()
-        
-        
 
         screen.blit(
             self.get_cannonball_indicators(),
@@ -1635,7 +1635,7 @@ class TankGame:
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
-        
+
         if keys_pressed[pygame.K_END]:
             self.restart()
 
@@ -2085,7 +2085,7 @@ def main():
     """
     From this function the program is started, creating the only instance of
     TankGame that exists...
-    """ 
+    """
     pygame.init()
 
     pygame.display.set_caption("TankGame!")
