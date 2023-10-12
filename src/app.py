@@ -2073,7 +2073,8 @@ class TankGame:
             if are_tanks_without_live:
                 break
             self.last_state = None
-        self.running = True
+        if self.winner is not None:
+            self.running = True
         while self.running:
             self.check_running()
             keys_pressed = pygame.key.get_pressed()
