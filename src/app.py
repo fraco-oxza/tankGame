@@ -49,31 +49,6 @@ class Drawable:
         raise NotImplementedError
 
 
-class SoundEfect:
-    def error(self):
-        pass
-
-    def click(self):
-        pass
-
-    def shoot(self):
-        pass
-
-    def explotion(self):
-        pass
-
-    def soundtrack(self):
-        pass
-
-    def throw(self):
-        pass
-
-    def fall(self):
-        pass
-
-    def inGame(self):
-        pass
-
 
 class SnowStorm(Drawable):
     snowflakes: list[pygame.Vector2]
