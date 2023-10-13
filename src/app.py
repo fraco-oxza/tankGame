@@ -49,7 +49,6 @@ class Drawable:
         raise NotImplementedError
 
 
-
 class SnowStorm(Drawable):
     snowflakes: list[pygame.Vector2]
     wind: float
