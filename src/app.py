@@ -585,9 +585,13 @@ class Cannonball80mm(Cannonball):
         tail_x = self.position.x - 25 * angle_x
         tail_y = self.position.y - 25 * angle_y
 
+        vertex1 = (self.position.x, self.position.y)
+        vertex2 = (self.position.x + 10, self.position.y)
+        vertex3 = (self.position.x + 5, self.position.y - 10)
+
         pygame.draw.line(
             screen,
-            "#4b5320",
+            constants.DarkGreen,
             (self.position.x, self.position.y),
             (tail_x, tail_y),
             10,
@@ -601,6 +605,7 @@ class Cannonball80mm(Cannonball):
         cola = (tail_x - 10 * angle_x, tail_y - 10 * angle_y)
 
         pygame.draw.line(screen, "orange", (tail_x, tail_y), cola, 4)
+        pygame.draw.polygon(screen, constants.DarkGreen, [vertex1, vertex2, vertex3])
 
 
 class Player:
