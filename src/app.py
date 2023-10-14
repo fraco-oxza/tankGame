@@ -1302,7 +1302,6 @@ class WarnningWindows(Drawable):
 
         return rect_surface
 
-
     def quantity_mm_60(self):
         if self.quantity[self.num_seleccionado] == 0:
             return False
