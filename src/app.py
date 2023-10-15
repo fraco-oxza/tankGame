@@ -1394,6 +1394,12 @@ class WarnningWindows(Drawable):
             screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
 
 
+class InGameMenuStatus:
+    EXIT = 0
+    CONTINUE = 1
+    RESTART = 2
+
+
 class InGameMenu:
     fontExit: Font
     fontBack: Font
@@ -1687,6 +1693,7 @@ class TankGame:
             )
         )
 
+        self.in_game_menu = InGameMenu(self.screen)
         self.hud = HUD(self.tanks, self)
         self.warning = WarnningWindows(self)
 
