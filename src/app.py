@@ -1271,6 +1271,7 @@ class WarnningWindows(Drawable):
     num_seleccionado: int
     quantity: list[int]
     tank_game: TankGame
+    size = (400, 100)
 
     def __init__(self, tank_game: TankGame):
         self.tank_game = tank_game
@@ -1282,14 +1283,22 @@ class WarnningWindows(Drawable):
         self.font.set_bold(True)
         self.font50 = font_cache["Roboto.ttf", 15]
 
-    def backround(self, screen: pygame.surface.Surface):
-        transparency = 240
-        rect_surface = pygame.Surface((400, 100))
-        rect_surface.set_alpha(transparency)
-        screen.blit(rect_surface, constants.DESTWARNING)
-        image_size = (50, 50)
-        image = pygame.transform.scale(image_cache["images/warning.png"], image_size)
-        screen.blit(image, constants.POSITION_WARNIN_IMAGE)
+    def get_backround(self) -> pygame.Surface:
+        rect_surface = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        rect_surface = rect_surface.convert_alpha()
+
+        pygame.draw.rect(
+            rect_surface,
+            "#232323",
+            pygame.Rect(0, 0, *self.size),
+            0,
+            border_bottom_left_radius=10,
+            border_bottom_right_radius=10,
+        )
+        image = image_cache["images/warning.png"]
+        rect_surface.blit(image, (10, 10))
+
+        return rect_surface
 
     def quantity_mm_60(self):
         if self.quantity[self.num_seleccionado] == 0:
@@ -1307,58 +1316,83 @@ class WarnningWindows(Drawable):
         return True
 
     def draw(self, screen: pygame.surface.Surface):
-        text_position = (1000, 20)
-        text_position2 = (970, 60)
         self.num_seleccionado = self.tank_game.tanks[
             self.tank_game.actual_player
         ].actual
         self.quantity = self.tank_game.tanks[self.tank_game.actual_player].available
-        if self.num_seleccionado == CannonballType.MM60:
-            if self.quantity_mm_60() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 60MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 2 o 3",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
-        if self.num_seleccionado == CannonballType.MM80:
-            if self.quantity_mm_80() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 80MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 1 o 3",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
-        if self.num_seleccionado == CannonballType.MM105:
-            if self.quantity_mm_105() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 105MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 1 o 2",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
+        if self.num_seleccionado == CannonballType.MM60 and not self.quantity_mm_60():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 60MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
 
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 2 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+        if self.num_seleccionado == CannonballType.MM80 and not self.quantity_mm_80():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 80MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
+
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 1 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+
+        if self.num_seleccionado == CannonballType.MM105 and not self.quantity_mm_105():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 105MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
+
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 2 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
 
 class Menu(Drawable, Collidable):
     fontTitle: Font
