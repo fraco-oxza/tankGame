@@ -23,72 +23,60 @@ class FileCache:
     """
     A base class for file catching
     """
+
     @abstractmethod
     def __getitem__(self, filename: str):
         raise NotImplementedError
 
 
 class ImageCache(FileCache):
-    """
+    """ """
 
-    """
     __images: dict[str, pygame.surface.Surface]
 
     def __init__(self):
-        """
-
-        """
+        """ """
         self.__images = {}
 
     def __getitem__(self, filename: str) -> pygame.surface.Surface:
-        """
-
-        """
+        """ """
         if filename not in self.__images:
             self.__images[filename] = pygame.image.load(resource_path(filename))
         return self.__images[filename]
 
 
 class FontCache(FileCache):
-    """
+    """ """
 
-    """
     __fonts: dict[tuple[str, int], pygame.font.Font]
 
     def __init__(self):
-        """
-
-        """
+        """ """
         self.__fonts = {}
 
     def __getitem__(self, font_params: tuple[str, int]) -> pygame.font.Font:
-        """
-
-        """
+        """ """
         font_name, font_size = font_params
 
         if font_params not in self.__fonts:
-            self.__fonts[font_params] = pygame.font.Font(resource_path(os.path.join("fonts", font_name)), font_size)
+            self.__fonts[font_params] = pygame.font.Font(
+                resource_path(os.path.join("fonts", font_name)), font_size
+            )
 
         return self.__fonts[font_params]
 
 
 class AudioCache(FileCache):
-    """
+    """ """
 
-    """
     __audios: dict[str, pygame.mixer.Sound]
 
     def __init__(self):
-        """
-
-        """
+        """ """
         self.__audios = {}
 
     def __getitem__(self, filename: str) -> pygame.mixer.Sound:
-        """
-
-        """
+        """ """
         if filename not in self.__audios:
             self.__audios[filename] = pygame.mixer.Sound(resource_path(filename))
         return self.__audios[filename]
