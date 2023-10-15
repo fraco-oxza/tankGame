@@ -1281,6 +1281,8 @@ class WarnningWindows(Drawable):
         self.font100 = font_cache["Roboto.ttf", 60]
         self.font.set_bold(True)
         self.font50 = font_cache["Roboto.ttf", 15]
+        self.size = (constants.WINDOWS_SIZE[0] / 3.6, constants.WINDOWS_SIZE[1] / 7.2)
+
 
     def get_backround(self) -> pygame.Surface:
         rect_surface = pygame.Surface(self.size, pygame.SRCALPHA, 32)
