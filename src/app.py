@@ -223,7 +223,7 @@ class Terrain(Drawable, Collidable):
     def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
-            self.size[0] // constants.TERRAIN_LINE_WIDTH
+                self.size[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -419,12 +419,12 @@ class Cannonball(Drawable):
         self.velocity[1] += constants.GRAVITY * dt
 
         if (
-            len(self.trajectory) == 0
-            or (
+                len(self.trajectory) == 0
+                or (
                 (self.trajectory[-1].x - self.position.x) ** 2
                 + (self.trajectory[-1].y - self.position.y) ** 2
-            )
-            > 50
+        )
+                > 50
         ):
             self.trajectory.append(pygame.Vector2(self.position.x, self.position.y))
 
@@ -462,8 +462,8 @@ class Cannonball(Drawable):
         el tanque que la lanzó
         """
         return (
-            (self.position.x - tank_position.x) ** 2
-            + (self.position.y - tank_position.y) ** 2
+                (self.position.x - tank_position.x) ** 2
+                + (self.position.y - tank_position.y) ** 2
         ) ** (1 / 2)
 
 
@@ -604,9 +604,9 @@ class Player:
         """
         cannonball_position = impact.position
         distance = (
-            (cannonball_position.x - tank_position.x) ** 2
-            + (cannonball_position.y - tank_position.y) ** 2
-        ) ** (1 / 2)
+                           (cannonball_position.x - tank_position.x) ** 2
+                           + (cannonball_position.y - tank_position.y) ** 2
+                   ) ** (1 / 2)
         if impact.impact_type == ImpactType.TERRAIN:
             if distance <= constants.TANK_RADIO * 2:
                 self.points = self.points + 100
@@ -659,19 +659,19 @@ class Tank(Drawable, Collidable):
         del cañón retornado True o False según corresponda
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= constants.TANK_RADIO:
             return True
         elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 10 and cannon == 0:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 20 and cannon == 1:
             return True
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
+                1 / 2
         ) <= 30 and cannon == 2:
             return True
         return False
@@ -1030,12 +1030,11 @@ class HUD(Drawable):
         """
         restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
         radius = 16
-        pygame.draw.circle(screen, "yellow", restart_pos, radius)
-
+        # pygame.draw.circle(screen, "yellow", restart_pos, radius)
         ms = pygame.mouse.get_pos()
         if (
-            (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
-        ) < radius**2 and pygame.mouse.get_pressed()[0]:
+                (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
+        ) < radius ** 2 and pygame.mouse.get_pressed()[0]:
             self.tank_game.restart()
 
         screen.blit(
@@ -1417,7 +1416,7 @@ class Menu(Drawable, Collidable):
         if self.box_pos == None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+                self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
         )
 
 
@@ -1434,7 +1433,7 @@ class Explosion(Drawable):
         return self.t_mostrado < self.t_animacion
 
     def __init__(
-        self, position: pygame.Vector2, imagenes: list[pygame.surface.Surface]
+            self, position: pygame.Vector2, imagenes: list[pygame.surface.Surface]
     ):
         self.t_mostrado = 0.0
         self.t_animacion = 0.5
@@ -1474,6 +1473,7 @@ class TankGame:
         addition to starting the window itself of the game.
         """
 
+        self.fontReiniciar = font_cache["Roboto.ttf", 25]
         self.map_size = (
             constants.WINDOWS_SIZE[0] - 2 * constants.BORDER_PADDING,
             constants.WINDOWS_SIZE[1]
@@ -1520,7 +1520,7 @@ class TankGame:
                     self.map_size[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
                 player1,
@@ -1535,7 +1535,7 @@ class TankGame:
                     self.map_size[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
-                    ]
+                        ]
                     - 15,
                 ),
                 player2,
@@ -1545,9 +1545,104 @@ class TankGame:
         self.hud = HUD(self.tanks, self)
         self.warning = WarnningWindows(self)
 
-    def restart(self):
+    def restart(self, point: pygame.Vector2):
         TankGame.__init__(self, self.screen)
+        sf = pygame.Surface((200, 100))
+        box_size = (200, 100)
+        end = self.fontReiniciar.render("Reiniciar Partida", True, "#B48EAD")
+        size = self.screen.get_size()
 
+        box_pos = ((size[0] - box_size[0]) / 3, size[1] / 2.5)
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(
+            *box_pos, box_size[0], box_size[1]
+        )
+        pygame.draw.rect(
+            sf,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        sf.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return sf
+
+    def exit(self, point: pygame.Vector2):
+        TankGame.__init__(self, self.screen)
+        end = self.fontReiniciar.render("Salir", True, "#B48EAD")
+        size = self.screen.get_size()
+        box_size = (200, 100)
+        box_pos = ((size[0] - box_size[0]) / 1.5, size[1] / 2.5)
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(
+            *box_pos, box_size[0], box_size[1]
+        )
+        pygame.draw.rect(
+            self.screen,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        self.screen.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return (box_pos[0] <= point.x <= box_pos[0] + box_size[0]) and (
+                    box_pos[1] <= point.y <= box_pos[1] + box_size[1]
+            )
+
+    def back_to_game(self, point: pygame.Vector2):
+        TankGame.__init__(self, self.screen)
+        end = self.fontReiniciar.render("Volver", True, "#B48EAD")
+        size = self.screen.get_size()
+        box_size = (200, 100)
+        box_pos = ((size[0] - box_size[0]), size[1])
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(
+            *box_pos, box_size[0], box_size[1]
+        )
+        pygame.draw.rect(
+            self.screen,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        self.screen.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return (box_pos[0] <= point.x <= box_pos[0] + box_size[0]) and (
+                    box_pos[1] <= point.y <= box_pos[1] + box_size[1]
+            )
     def render(self) -> None:
         """
         This method is responsible for drawing each element of the window, it
@@ -1581,9 +1676,9 @@ class TankGame:
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.screen)
             if (
-                self.warning.quantity_mm_60() == False
-                or self.warning.quantity_mm_105() == False
-                or self.warning.quantity_mm_80() == False
+                    self.warning.quantity_mm_60() == False
+                    or self.warning.quantity_mm_105() == False
+                    or self.warning.quantity_mm_80() == False
             ):
                 error = audio_cache["sounds/error.mp3"]
                 error.play()
@@ -1614,16 +1709,12 @@ class TankGame:
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
-
-        if keys_pressed[pygame.K_END]:
-            self.restart()
-
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                    constants.FPS / self.fps
+                        constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
@@ -1631,7 +1722,7 @@ class TankGame:
                 playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                    constants.FPS / self.fps
+                        constants.FPS / self.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -1657,9 +1748,9 @@ class TankGame:
             self.cannonball = playing_tank.shoot()
 
         if (
-            keys_pressed[pygame.K_1]
-            or keys_pressed[pygame.K_2]
-            or keys_pressed[pygame.K_3]
+                keys_pressed[pygame.K_1]
+                or keys_pressed[pygame.K_2]
+                or keys_pressed[pygame.K_3]
         ):
             change = audio_cache["sounds/click_cannonball.mp3"]
             change.play()
@@ -1669,6 +1760,11 @@ class TankGame:
                 self.tanks[self.actual_player].actual = CannonballType.MM80
             elif keys_pressed[pygame.K_3]:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
+        if keys_pressed[pygame.K_ESCAPE]:
+            self.screen.fill("#434C5E")
+            reiniciar = self.restart_game()
+            finalizar = self.end_game()
+
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
@@ -1682,8 +1778,8 @@ class TankGame:
         self.cannonball.tick((1.0 / self.fps) * constants.X_SPEED)
 
         if (
-            self.cannonball.position.x < 0
-            or self.cannonball.position.x > self.map_size[0]
+                self.cannonball.position.x < 0
+                or self.cannonball.position.x > self.map_size[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
@@ -1695,18 +1791,18 @@ class TankGame:
                 return
             other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
-                self.cannonball.position, self.tanks[self.actual_player].actual
+                    self.cannonball.position, self.tanks[self.actual_player].actual
             ):
                 actual_radius_position = self.calculate_distance(self.actual_player)
 
                 if (
-                    actual_radius_position is not None
-                    and actual_radius_position > constants.TANK_RADIO
+                        actual_radius_position is not None
+                        and actual_radius_position > constants.TANK_RADIO
                 ):
                     other_radius_position = self.calculate_distance(other_player)
                     if (
-                        other_radius_position is not None
-                        and other_radius_position < constants.TANK_RADIO
+                            other_radius_position is not None
+                            and other_radius_position < constants.TANK_RADIO
                     ):
                         return Impact(self.cannonball.position, ImpactType.TANK)
                 else:
@@ -1751,10 +1847,10 @@ class TankGame:
         """
         if cannonball_type == 0:
             if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 10
+                    math.sqrt(
+                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                    )
+                    <= constants.TANK_RADIO + 10
             ):
                 tank.life = tank.life - 30
                 if tank.life < 0:
@@ -1762,20 +1858,20 @@ class TankGame:
 
         elif cannonball_type == 1:
             if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 20
+                    math.sqrt(
+                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                    )
+                    <= constants.TANK_RADIO + 20
             ):
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
         elif cannonball_type == 2:
             if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 30
+                    math.sqrt(
+                        (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
+                    )
+                    <= constants.TANK_RADIO + 30
             ):
                 tank.life = tank.life - 50
                 if tank.life < 0:
@@ -1846,14 +1942,14 @@ class TankGame:
             elif self.last_state.impact_type == ImpactType.TERRAIN:
                 other_player = (self.actual_player + 1) % 2
                 actual_radius_position = (
-                    self.calculate_distance(self.actual_player)
-                    - self.cannonball.radius_damage
+                        self.calculate_distance(self.actual_player)
+                        - self.cannonball.radius_damage
                 )
                 print(actual_radius_position)
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = (
-                        self.calculate_distance(other_player)
-                        - self.cannonball.radius_damage
+                            self.calculate_distance(other_player)
+                            - self.cannonball.radius_damage
                     )
                     if other_radius_position < constants.TANK_RADIO:
                         self.life_tank(
@@ -1878,8 +1974,8 @@ class TankGame:
                     )
 
         if (
-            self.last_state is not None
-            and self.last_state.impact_type != ImpactType.BORDER
+                self.last_state is not None
+                and self.last_state.impact_type != ImpactType.BORDER
         ) and self.cannonball is not None:
             self.cannonball.kill()
 
@@ -1888,19 +1984,19 @@ class TankGame:
 
     def terrain_destruction(self):
         if (
-            self.last_state is not None
-            and self.last_state.impact_type == ImpactType.BORDER
+                self.last_state is not None
+                and self.last_state.impact_type == ImpactType.BORDER
         ):
             # Aqui detengo porque este caso no me sirve
             return
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
             for i in range(
-                int(self.last_state.position.x) - radius,
-                int(self.last_state.position.x) + radius,
+                    int(self.last_state.position.x) - radius,
+                    int(self.last_state.position.x) + radius,
             ):
                 leftover_damage = math.sqrt(
-                    max(0, radius**2 - (self.last_state.position.x - i) ** 2)
+                    max(0, radius ** 2 - (self.last_state.position.x - i) ** 2)
                 )
                 if i < len(self.terrain.new_ground_lines):
                     j = len(self.terrain.new_ground_lines[i]) - 1
@@ -1914,6 +2010,54 @@ class TankGame:
                             leftover_damage -= initial_height
                             self.terrain.new_ground_lines[i][j] = 0
                         j -= 1
+
+    def restart_game(self) -> bool:
+        reiniciar = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+
+            self.screen.blit(self.restart(pygame.Vector2(*ms)), (80, 80))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                reiniciar = True
+                return reiniciar
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
+    def back(self) -> bool:
+        volver = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+
+            self.back_to_game(pygame.Vector2(*ms))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                volver = True
+                return volver
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
+    def end_game(self) -> bool:
+        salir = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+            self.exit(pygame.Vector2(*ms))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                salir = True
+                return salir
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
 
     def start_menu(self):
         soundtrack = audio_cache["sounds/inicio.mp3"]
@@ -1990,12 +2134,12 @@ class TankGame:
             fall.stop()
 
             if (
-                self.last_state is not None
-                and self.last_state.impact_type != ImpactType.BORDER
+                    self.last_state is not None
+                    and self.last_state.impact_type != ImpactType.BORDER
             ):
                 if self.cannonball is not None and (
-                    self.last_state.impact_type == ImpactType.TANK
-                    or self.last_state.impact_type == ImpactType.SUICIDIO
+                        self.last_state.impact_type == ImpactType.TANK
+                        or self.last_state.impact_type == ImpactType.SUICIDIO
                 ):
                     tank_explotion = audio_cache["sounds/bomb.mp3"]
                     tank_explotion.play()
@@ -2003,8 +2147,8 @@ class TankGame:
                         self.cannonball.position, self.cargar_animacion()
                     )
                 elif (
-                    self.cannonball is not None
-                    and self.last_state.impact_type == ImpactType.TERRAIN
+                        self.cannonball is not None
+                        and self.last_state.impact_type == ImpactType.TERRAIN
                 ):
                     shoot = audio_cache["sounds/shoot.mp3"]
                     shoot.play()
@@ -2032,15 +2176,15 @@ class TankGame:
             for tank in self.tanks:
                 if self.last_state is not None:
                     if tank.life == 0 and (
-                        self.last_state.impact_type == ImpactType.TANK
+                            self.last_state.impact_type == ImpactType.TANK
                     ):
                         self.winner = (self.actual_player + 1) % 2
                         self.running = False
                         are_tanks_without_live = True
                         break
                     elif (
-                        tank.life == 0
-                        and self.last_state.impact_type == ImpactType.SUICIDIO
+                            tank.life == 0
+                            and self.last_state.impact_type == ImpactType.SUICIDIO
                     ):
                         self.winner = self.actual_player
                         self.running = False
