@@ -1,6 +1,6 @@
+from abc import abstractmethod
 import os
 import sys
-from abc import abstractmethod
 
 import pygame
 
