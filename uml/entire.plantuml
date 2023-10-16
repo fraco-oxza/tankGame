@@ -35,12 +35,12 @@ class TankGame {
 }
 
 class Cannonball extends Drawable {
-    - position: Point
-    - velocity: Velocity
-    - trajectory: list[pygame.Vector2]
-    - max_height: int
-    - max_distance: int
-    - is_alive: bool
+    + position: Point
+    + velocity: Velocity
+    + trajectory: list[pygame.Vector2]
+    + max_height: int
+    + max_distance: int
+    + is_alive: bool
 
     +Cannonball(Position, Velocity):
     +tick(dt: float):
@@ -52,24 +52,24 @@ class Cannonball extends Drawable {
 }
 class Cannonball105mm extends Cannonball{
     +Cannonball105mm(Position, Velocity):
-    -damage: int
-    - radius_damage: int
-    - units_available: int
-    +__init__(position, velocity)
+    + damage: int
+    + radius_damage: int
+    + units_available: int
+    +Cannonball105mm(position, velocity)
     +draw(Surface)
 }
 class Cannonball60mm extends Cannonball{
     +Cannonball60mm((Position, Velocity):
-    - damage: int
-    - radius_damage: int
-    - units_available: int
+    + damage: int
+    + radius_damage: int
+    + units_available: int
     +draw(Surface)
 }
  class Cannonball80mm extends Cannonball{
     +Cannonball80mm((Position, Velocity):
-    - damage: int
-    - radius_damage: int
-    - units_available: int
+    + damage: int
+    + radius_damage: int
+    + units_available: int
     +draw(Surface)
 }
 interface Drawable {
@@ -81,27 +81,45 @@ class HUD extends Drawable{
     + top: int
     + width: int
     + height: int
- + HUD(TankGame)
+    + color: list[int]
+ +HUD(tank,TankGame)
+ +draw_shoot_into(screen: pygame.surface.Surface)
+ + draw_cannonball_105_mm(self, screen: pygame.surface)
+ + draw_cannonball_80_mm(self, screen: pygame.surface)
+ + draw_cannonball_60_mm(self, screen: pygame.surface)
+ +health_bars()
+ +get_select_cannonball()
+ +get_cannonball_indicators()
  +draw(screen: pygame.surface.Surface)
  +show_instructions(screen: pygame.surface.Surface)
 
  }
 class WinnerScreen extends Drawable{
-    + WinnerScreen():
+    +WinnerScreen():
     +winner_mensaje(Surface)
-    +fuegos_artificiales(Surface)
     +draw(Surface): None
 }
 
-class Terrain extends Drawable {
-    +gruond_lines: List<Int>
+class Terrain extends Drawable,Collidable {
+    +size: tuple[int, int]
+    +ground_lines: list[int]
+    +new_ground_lines: list[list[float]]
+
 
     +Terrain(int, int)
-    + generate_terrain(mountains: int, valleys: int)
+    +generate_terrain(mountains: int, valleys: int)
     +mountain(i: int, j: int, height: int):
     +valley( inicio: int, fin: int, profundidad: int)
     +draw( screen: pygame.surface.Surface)
     +collidesWith( point: pygame.Vector2): bool
+}
+class Speedometer{
+    +size: int
+    +min: int
+    +max: int
+    +actual: float
+    +Speedometer()
+    +get_draw()
 }
 class Collidable {
  +collides_with(Point)) : Boolean
@@ -114,10 +132,7 @@ class Background extends Drawable{
     +wind_target: float
 
     + Background()
-    + add_random_snowflake()
-    + draw_snowflakes(Surface)
     + draw(Surface):None
-    +tick(dt: float): None
 
 }
 class Tank extends Collidable  {
@@ -132,15 +147,15 @@ class Tank extends Collidable  {
     +life: int
 
 
-    +Tank(Position)
+    +Tank(position,color,player)
     +draw(Surface) : None
-    +collides_with(Point)) : Boolean
+    +collides_with(Point,cannon) : Boolean
     +shoot(): Cannonball:
 }
 
 class Player {
     +name: str
-    + points: double
+    +points: int
     +Player(str, int)
     +score(impact: Impact, tank_position: pygame.Vector2)
 
@@ -200,24 +215,15 @@ class SelfImpactWindows extends Drawable {
     + SelfImpactWindows(TankGame):
     + draw(screen: pygame.surface.Surface):
 }
-class SelectCannonball extends Drawable {
-    +cannonball60: Cannonball60mm
-    +cannonball80: Cannonball80mm
-    +cannonball105: Cannonball105mm
-    +tank_game TankGame
-    available: list[int]
-
-    + SelectCannonball(TankGame)
-    + selection_screen(pygame.surface)
-    +draw_cannonball_105_mm(pygame.surface)
-    +draw_cannonball_80_mm(pygame.surface)
-    +draw_cannonball_60_mm(pygame.surface)
-    +cannonball_105_mm(pygame.surface)
-    +cannonball_80_mm(pygame.surface)
-    +cannonball_60_mm(pygame.surface)
-    +draw(pygame.surface)
-    +tick(dt: float):
-    +
+class SnowStorm extends Drawable{
+    +snowflakes: list[pygame.Vector2]
+    +wind: float
+    +wind_target: float
+    +SnowStorm()
+    +add_random_snowflake()
+    +tick():None
+    +draw_snowflakes()
+    +draw():None
 }
 
 class Menu extends Drawable, Collidable{
