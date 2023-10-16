@@ -1441,7 +1441,6 @@ class InGameMenu:
                     self.rennuning = False
 
             self.screen.fill("#434C5E")
-
             size = self.screen.get_size()
             self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
             mouse = pygame.Vector2(pygame.mouse.get_pos())
