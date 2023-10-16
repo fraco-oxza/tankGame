@@ -303,7 +303,9 @@ TankGame *--> Terrain
 TankGame o--> Background
 TankGame o--> Impact
 Tank *--> Player
+Tank o--> CannonballType
 HUD *--> Tank
+HUD o--> Speedometer
 HUD *--> SelfImpactWindows
 Impact *--> ImpactType
 TankGame *--> Impact
