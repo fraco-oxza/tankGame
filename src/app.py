@@ -2147,6 +2147,12 @@ class TankGame:
             return
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
+            if self.tanks[0].position.x in range(
+                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                self.tanks[0].position.y += radius
+            if self.tanks[1].position.x in range(
+                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                self.tanks[1].position.y += radius
             for i in range(
                 int(self.last_state.position.x) - radius,
                 int(self.last_state.position.x) + radius,

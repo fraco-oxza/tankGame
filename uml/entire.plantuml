@@ -104,6 +104,26 @@ class InGameMenuStatus{
     + CONTINUE
     + RESTART
 }
+class InGameMenu{
+    +fontExit: Font
+    +fontBack: Font
+    +fontRestart: Font
+    +storm: SnowStorm
+    +box_size = pygame.Vector2
+    +box_pos: Optional[tuple[float, float]]
+    +botton_color1: str
+    +botton_color2: str
+    +botton_color3: str
+    +hover_botton_color: str
+    +button_reset_position = pygame.Vector2
+    +sobre: Optional[int]
+    + InGameMenu()
+    +tick()
+    +render()
+    +handleInput(mouse: pygame.Vector2)
+    +start_menu()
+    +restart(Mensaje: str)
+}
 
 class Terrain extends Drawable,Collidable {
     +size: tuple[int, int]
