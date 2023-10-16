@@ -2372,6 +2372,5 @@ def main():
 
     tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
-    # hola
 if __name__ == "__main__":
     main()
