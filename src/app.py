@@ -1438,7 +1438,7 @@ class InGameMenu:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.rennuning = False
+                    return InGameMenuStatus.EXIT
 
             self.screen.fill("#434C5E")
             size = self.screen.get_size()
