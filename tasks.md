@@ -3,7 +3,7 @@
 ## Requisitos indispensables
 
 - [x] Implementar completamente la destrucción del terreno con el nuevo mapa. 11-10-2023. Benjamin y Francisco
-- [ ] Hacer que los tanques caigan cuando se destruye el terreno. 15-10-2023. Benjamín
+- [x] Hacer que los tanques caigan cuando se destruye el terreno. 15-10-2023. Benjamín
 - [x] Hacer el botón de volver a jugar y salir de la partida. 9-10-2023. Francisco
 - [X] Implementar la rotación en las balas. 11-10-2023. Sofia
 - [x] Actualizar la pantalla de instrucciones. 16-10-2023. Francisco
