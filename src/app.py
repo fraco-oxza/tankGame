@@ -223,7 +223,7 @@ class Terrain(Drawable, Collidable):
     def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
-                self.size[0] // constants.TERRAIN_LINE_WIDTH
+            self.size[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -1887,10 +1887,14 @@ class TankGame:
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
             if self.tanks[0].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                int(self.cannonball.position.x - radius),
+                int(self.cannonball.position.x + radius),
+            ):
                 self.tanks[0].position.y += radius
             if self.tanks[1].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                int(self.cannonball.position.x - radius),
+                int(self.cannonball.position.x + radius),
+            ):
                 self.tanks[1].position.y += radius
             for i in range(
                 int(self.last_state.position.x) - radius,
@@ -2071,6 +2075,7 @@ def main():
     tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
     # hola
+
 
 if __name__ == "__main__":
     main()
