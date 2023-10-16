@@ -1030,8 +1030,7 @@ class HUD(Drawable):
         """
         restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
         radius = 16
-        pygame.draw.circle(screen, "yellow", restart_pos, radius)
-
+        # pygame.draw.circle(screen, "yellow", restart_pos, radius)
         ms = pygame.mouse.get_pos()
         if (
             (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
@@ -1282,15 +1281,25 @@ class WarnningWindows(Drawable):
         self.font100 = font_cache["Roboto.ttf", 60]
         self.font.set_bold(True)
         self.font50 = font_cache["Roboto.ttf", 15]
+        self.size = (constants.WINDOWS_SIZE[0] / 3.6, constants.WINDOWS_SIZE[1] / 7.2)
 
-    def backround(self, screen: pygame.surface.Surface):
-        transparency = 240
-        rect_surface = pygame.Surface((400, 100))
-        rect_surface.set_alpha(transparency)
-        screen.blit(rect_surface, constants.DESTWARNING)
-        image_size = (50, 50)
-        image = pygame.transform.scale(image_cache["images/warning.png"], image_size)
-        screen.blit(image, constants.POSITION_WARNIN_IMAGE)
+
+    def get_backround(self) -> pygame.Surface:
+        rect_surface = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        rect_surface = rect_surface.convert_alpha()
+
+        pygame.draw.rect(
+            rect_surface,
+            "#232323",
+            pygame.Rect(0, 0, *self.size),
+            0,
+            border_bottom_left_radius=10,
+            border_bottom_right_radius=10,
+        )
+        image = image_cache["images/warning.png"]
+        rect_surface.blit(image, (10, 10))
+
+        return rect_surface
 
     def quantity_mm_60(self):
         if self.quantity[self.num_seleccionado] == 0:
@@ -1308,58 +1317,201 @@ class WarnningWindows(Drawable):
         return True
 
     def draw(self, screen: pygame.surface.Surface):
-        text_position = (1000, 20)
-        text_position2 = (970, 60)
         self.num_seleccionado = self.tank_game.tanks[
             self.tank_game.actual_player
         ].actual
         self.quantity = self.tank_game.tanks[self.tank_game.actual_player].available
-        if self.num_seleccionado == CannonballType.MM60:
-            if self.quantity_mm_60() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 60MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 2 o 3",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
-        if self.num_seleccionado == CannonballType.MM80:
-            if self.quantity_mm_80() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 80MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 1 o 3",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
-        if self.num_seleccionado == CannonballType.MM105:
-            if self.quantity_mm_105() == False:
-                self.backround(screen)
-                self.font100 = self.font.render(
-                    f"No quedan balas de 105MM",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font100, text_position)
-                self.font50 = self.font2.render(
-                    f"Seleccione alguna bala diferente con los números 1 o 2",
-                    True,
-                    "white",
-                )
-                screen.blit(self.font50, text_position2)
+        if self.num_seleccionado == CannonballType.MM60 and not self.quantity_mm_60():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 60MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
 
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 2 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+        if self.num_seleccionado == CannonballType.MM80 and not self.quantity_mm_80():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 80MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
+
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 1 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+
+        if self.num_seleccionado == CannonballType.MM105 and not self.quantity_mm_105():
+            sf = self.get_backround()
+            self.font100 = self.font.render(
+                f"No quedan balas de 105MM",
+                True,
+                "white",
+            )
+            sf.blit(self.font100, (100, 20))
+            self.font50 = self.font2.render(
+                f"Seleccione alguna bala diferente",
+                True,
+                "white",
+            )
+
+            sf.blit(self.font50, (100, 50))
+
+            self.font50 = self.font2.render(
+                f"con los números 2 o 3",
+                True,
+                "white",
+            )
+            sf.blit(self.font50, (100, 65))
+
+            screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+
+
+class InGameMenuStatus:
+    EXIT = 0
+    CONTINUE = 1
+    RESTART = 2
+
+
+class InGameMenu:
+    fontExit: Font
+    fontBack: Font
+    fontRestart: Font
+    storm: SnowStorm
+    box_size = pygame.Vector2
+    box_pos: Optional[tuple[float, float]]
+    botton_color1: str
+    botton_color2: str
+    botton_color3: str
+    hover_botton_color: str
+    button_reset_position = pygame.Vector2
+    sobre: Optional[int]
+
+    def __init__(self, screen: pygame.Surface):
+        self.button_reset_position = pygame.Vector2(200, 100)
+        self.fontExit = font_cache["Roboto.ttf", 25]
+        self.fontRestart = font_cache["Roboto.ttf", 25]
+        self.fontBack = font_cache["Roboto.ttf", 25]
+        self.storm = SnowStorm()
+        self.botton_color1 = "#2E3440"
+        self.botton_color2 = "#2E3440"
+        self.botton_color3 = "#2E3440"
+        self.hover_botton_color = "#3b4252"
+        self.screen = screen
+        self.sobre = None
+        self.clock = pygame.time.Clock()
+        self.box_size = (200, 100)
+
+    def tick(self, dt: float):
+        self.storm.tick(dt)
+
+    def render(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pass
+
+            self.screen.fill("#434C5E")
+
+            size = self.screen.get_size()
+            self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
+            mouse = pygame.Vector2(pygame.mouse.get_pos())
+            self.handleInput(mouse)
+            if (pygame.mouse.get_pressed()[0]):
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                if self.sobre == 1:
+                    return InGameMenuStatus.RESTART
+                elif self.sobre == 2:
+                    return InGameMenuStatus.EXIT
+                elif self.sobre == 3:
+                    return InGameMenuStatus.CONTINUE
+            self.storm.draw(self.screen)
+            self.screen.blit(self.restart("Reiniciar Partida"),
+                             (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2.5))
+            self.screen.blit(self.restart("Salir"), (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2.5))
+            self.screen.blit(self.restart("Volver"),
+                             (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2.5))
+
+            self.storm.tick(1.0 / constants.FPS)
+            self.clock.tick(constants.FPS)
+            pygame.display.flip()
+
+    def handleInput(self, mouse: pygame.Vector2):
+        restart_pos = (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2)
+        if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[1] < mouse.y < (restart_pos[1] + 100):
+            self.botton_color1 = self.hover_botton_color
+            self.sobre = 1
+        else:
+            self.botton_color1 = "#2E3440"
+        exit_pos = (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2)
+        if exit_pos[0] < mouse.x < (exit_pos[0] + 200) and exit_pos[1] < mouse.y < (exit_pos[1] + 100):
+            self.botton_color2 = self.hover_botton_color
+            self.sobre = 2
+        else:
+            self.botton_color2 = "#2E3440"
+        back_pos = (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2)
+        if back_pos[0] < mouse.x < (back_pos[0] + 200) and back_pos[1] < mouse.y < (back_pos[1] + 100):
+            self.botton_color3 = self.hover_botton_color
+            self.sobre = 3
+        else:
+            self.botton_color3 = "#2E3440"
+
+    def start_menu(self) -> int:
+        return self.render()
+
+    def restart(self, Mensaje: str):
+        rect_x, rect_y = 100, 100
+        rect_width, rect_height = 200, 150
+        border_radius = 20
+        sf = pygame.Surface(self.button_reset_position)
+        box_size = sf.get_size()
+        end = self.fontRestart.render(Mensaje, True, "#B48EAD")
+        box_pos = ((box_size[0] - box_size[0]) / 3, box_size[1] / 2.5)
+        if Mensaje == "Reiniciar Partida":
+            sf.fill(self.botton_color1)
+        elif Mensaje == "Salir":
+            sf.fill(self.botton_color2)
+        elif Mensaje == "Volver":
+            sf.fill(self.botton_color3)
+
+        sf.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] / 1.2,
+            ),
+        )
+        return sf
 
 class Menu(Drawable, Collidable):
     fontTitle: Font
@@ -1474,6 +1626,7 @@ class TankGame:
         addition to starting the window itself of the game.
         """
 
+        self.fontReiniciar = font_cache["Roboto.ttf", 25]
         self.map_size = (
             constants.WINDOWS_SIZE[0] - 2 * constants.BORDER_PADDING,
             constants.WINDOWS_SIZE[1]
@@ -1542,11 +1695,102 @@ class TankGame:
             )
         )
 
+        self.in_game_menu = InGameMenu(self.screen)
         self.hud = HUD(self.tanks, self)
         self.warning = WarnningWindows(self)
 
-    def restart(self):
+    def restart(self, point: pygame.Vector2):
         TankGame.__init__(self, self.screen)
+        sf = pygame.Surface((200, 100))
+        box_size = (200, 100)
+        end = self.fontReiniciar.render("Reiniciar Partida", True, "#B48EAD")
+        size = self.screen.get_size()
+
+        box_pos = ((size[0] - box_size[0]) / 3, size[1] / 2.5)
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(*box_pos, box_size[0], box_size[1])
+        pygame.draw.rect(
+            sf,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        sf.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return sf
+
+    def exit(self, point: pygame.Vector2):
+        TankGame.__init__(self, self.screen)
+        end = self.fontReiniciar.render("Salir", True, "#B48EAD")
+        size = self.screen.get_size()
+        box_size = (200, 100)
+        box_pos = ((size[0] - box_size[0]) / 1.5, size[1] / 2.5)
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(*box_pos, box_size[0], box_size[1])
+        pygame.draw.rect(
+            self.screen,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        self.screen.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return (box_pos[0] <= point.x <= box_pos[0] + box_size[0]) and (
+                box_pos[1] <= point.y <= box_pos[1] + box_size[1]
+            )
+
+    def back_to_game(self, point: pygame.Vector2):
+        TankGame.__init__(self, self.screen)
+        end = self.fontReiniciar.render("Volver", True, "#B48EAD")
+        size = self.screen.get_size()
+        box_size = (200, 100)
+        box_pos = ((size[0] - box_size[0]), size[1])
+        botton_color = "#2E3440"
+        hover_botton_color = "#3b4252"
+        is_hover = False
+        options_box = pygame.rect.Rect(*box_pos, box_size[0], box_size[1])
+        pygame.draw.rect(
+            self.screen,
+            botton_color if not is_hover else hover_botton_color,
+            options_box,
+            0,
+            10,
+        )
+        self.screen.blit(
+            end,
+            (
+                box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
+                box_pos[1] + box_size[1] / 2 - end.get_size()[1] / 2,
+            ),
+        )
+        if box_pos == None:
+            return False
+        else:
+            return (box_pos[0] <= point.x <= box_pos[0] + box_size[0]) and (
+                box_pos[1] <= point.y <= box_pos[1] + box_size[1]
+            )
 
     def render(self) -> None:
         """
@@ -1603,7 +1847,7 @@ class TankGame:
         """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running = False
+                pass
 
     def process_input(self) -> None:
         """
@@ -1614,10 +1858,6 @@ class TankGame:
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
-
-        if keys_pressed[pygame.K_END]:
-            self.restart()
-
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
@@ -1669,6 +1909,18 @@ class TankGame:
                 self.tanks[self.actual_player].actual = CannonballType.MM80
             elif keys_pressed[pygame.K_3]:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
+        if keys_pressed[pygame.K_ESCAPE]:
+            self.process_in_game_menu()
+
+    def process_in_game_menu(self):
+        menu_state = self.in_game_menu.start_menu()
+
+        if menu_state is InGameMenuStatus.EXIT:
+            self.running = False
+        elif menu_state is InGameMenuStatus.RESTART:
+            TankGame.__init__(self, self.screen)
+        elif menu_state is InGameMenuStatus.CONTINUE:
+            pass
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
@@ -1895,12 +2147,6 @@ class TankGame:
             return
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
-            if self.tanks[0].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
-                self.tanks[0].position.y += radius
-            if self.tanks[1].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
-                self.tanks[1].position.y += radius
             for i in range(
                 int(self.last_state.position.x) - radius,
                 int(self.last_state.position.x) + radius,
@@ -1920,6 +2166,53 @@ class TankGame:
                             leftover_damage -= initial_height
                             self.terrain.new_ground_lines[i][j] = 0
                         j -= 1
+
+    def restart_game(self) -> bool:
+        reiniciar = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+
+            self.screen.blit(self.restart(pygame.Vector2(*ms)), (80, 80))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                reiniciar = True
+                return reiniciar
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
+    def back(self) -> bool:
+        volver = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+
+            self.back_to_game(pygame.Vector2(*ms))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                volver = True
+                return volver
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
+
+    def end_game(self) -> bool:
+        salir = False
+        while self.running:
+            self.check_running()
+            ms = pygame.mouse.get_pos()
+            self.exit(pygame.Vector2(*ms))
+            if pygame.mouse.get_pressed()[0]:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                salir = True
+                return salir
+            pygame.display.flip()
+            self.clock.tick(constants.FPS)
+            self.fps = self.clock.get_fps()
 
     def start_menu(self):
         soundtrack = audio_cache["sounds/inicio.mp3"]
