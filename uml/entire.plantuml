@@ -295,6 +295,8 @@ class Menu extends Drawable, Collidable{
 TankGame -- Constants
 
 WinnerScreen *--> TankGame
+InGameMenu o--> TankGame
+InGameMenu *--> InGameMenuStatus
 TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain

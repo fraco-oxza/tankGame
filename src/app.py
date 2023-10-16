@@ -2193,13 +2193,11 @@ class TankGame:
         while self.running:
             self.check_running()
             ms = pygame.mouse.get_pos()
-
             self.back_to_game(pygame.Vector2(*ms))
-            if pygame.mouse.get_pressed()[0]:
-                click = audio_cache["sounds/click.mp3"]
-                click.play()
-                volver = True
-                return volver
+            click = audio_cache["sounds/click.mp3"]
+            click.play()
+            volver = True
+            return volver
             pygame.display.flip()
             self.clock.tick(constants.FPS)
             self.fps = self.clock.get_fps()
