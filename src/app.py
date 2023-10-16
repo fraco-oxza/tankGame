@@ -1467,20 +1467,22 @@ class InGameMenu:
 
     def handleInput(self, mouse: pygame.Vector2):
         restart_pos = (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2)
-        if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[1] < mouse.y < (restart_pos[1] + 100):
+        if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[1] - self.button_reset_position[
+            1] < mouse.y < (restart_pos[1] + self.button_reset_position[1]):
             self.botton_color1 = self.hover_botton_color
             self.sobre = 1
         else:
             self.botton_color1 = "#2E3440"
         exit_pos = (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2)
-        if exit_pos[0] < mouse.x < (exit_pos[0] + 200) and exit_pos[1] < mouse.y < (exit_pos[1] + 100):
+        if exit_pos[0] < mouse.x < (exit_pos[0] + 200) and exit_pos[1] - self.button_reset_position[1] < mouse.y < (
+                exit_pos[1] + self.button_reset_position[1]):
             self.botton_color2 = self.hover_botton_color
             self.sobre = 2
         else:
             self.botton_color2 = "#2E3440"
         back_pos = (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2)
         if back_pos[0] < mouse.x < (back_pos[0] + 200) and back_pos[1] - self.button_reset_position[1] < mouse.y < (
-                back_pos[1] + self.button_reset_position[1] // 2):
+                back_pos[1] + +self.button_reset_position[1]):
             self.botton_color3 = self.hover_botton_color
             self.sobre = 3
         else:
