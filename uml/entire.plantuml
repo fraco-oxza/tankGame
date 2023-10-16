@@ -99,6 +99,11 @@ class WinnerScreen extends Drawable{
     +winner_mensaje(Surface)
     +draw(Surface): None
 }
+class InGameMenuStatus{
+    + EXIT
+    + CONTINUE
+    + RESTART
+}
 
 class Terrain extends Drawable,Collidable {
     +size: tuple[int, int]
