@@ -1438,7 +1438,7 @@ class InGameMenu:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pass
+                    self.rennuning = False
 
             self.screen.fill("#434C5E")
 
@@ -1847,7 +1847,7 @@ class TankGame:
         """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pass
+                self.running = False
 
     def process_input(self) -> None:
         """
