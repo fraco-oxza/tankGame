@@ -2071,12 +2071,5 @@ def main():
     tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
 
-<< << << < HEAD
-== == == =
-
->> >> >> > parent
-of
-c11bb35(Actualizado)
-
 if __name__ == "__main__":
     main()
