@@ -223,7 +223,7 @@ class Terrain(Drawable, Collidable):
     def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
-                self.size[0] // constants.TERRAIN_LINE_WIDTH
+            self.size[0] // constants.TERRAIN_LINE_WIDTH
         )
 
         if constants.MAP_SEED != -1:
@@ -1283,7 +1283,6 @@ class WarnningWindows(Drawable):
         self.font50 = font_cache["Roboto.ttf", 15]
         self.size = (constants.WINDOWS_SIZE[0] / 3.6, constants.WINDOWS_SIZE[1] / 7.2)
 
-
     def get_backround(self) -> pygame.Surface:
         rect_surface = pygame.Surface(self.size, pygame.SRCALPHA, 32)
         rect_surface = rect_surface.convert_alpha()
@@ -1446,7 +1445,7 @@ class InGameMenu:
             self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handleInput(mouse)
-            if (pygame.mouse.get_pressed()[0]):
+            if pygame.mouse.get_pressed()[0]:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
                 if self.sobre == 1:
@@ -1456,11 +1455,18 @@ class InGameMenu:
                 elif self.sobre == 3:
                     return InGameMenuStatus.CONTINUE
             self.storm.draw(self.screen)
-            self.screen.blit(self.restart("Reiniciar Partida"),
-                             (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2.5))
-            self.screen.blit(self.restart("Salir"), (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2.5))
-            self.screen.blit(self.restart("Volver"),
-                             (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2.5))
+            self.screen.blit(
+                self.restart("Reiniciar Partida"),
+                (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2.5),
+            )
+            self.screen.blit(
+                self.restart("Salir"),
+                (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2.5),
+            )
+            self.screen.blit(
+                self.restart("Volver"),
+                (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2.5),
+            )
 
             self.storm.tick(1.0 / constants.FPS)
             self.clock.tick(constants.FPS)
@@ -1468,19 +1474,25 @@ class InGameMenu:
 
     def handleInput(self, mouse: pygame.Vector2):
         restart_pos = (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2)
-        if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[1] < mouse.y < (restart_pos[1] + 100):
+        if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[
+            1
+        ] < mouse.y < (restart_pos[1] + 100):
             self.botton_color1 = self.hover_botton_color
             self.sobre = 1
         else:
             self.botton_color1 = "#2E3440"
         exit_pos = (constants.WINDOWS_SIZE[0] // 2.3, constants.WINDOWS_SIZE[1] / 2)
-        if exit_pos[0] < mouse.x < (exit_pos[0] + 200) and exit_pos[1] < mouse.y < (exit_pos[1] + 100):
+        if exit_pos[0] < mouse.x < (exit_pos[0] + 200) and exit_pos[1] < mouse.y < (
+            exit_pos[1] + 100
+        ):
             self.botton_color2 = self.hover_botton_color
             self.sobre = 2
         else:
             self.botton_color2 = "#2E3440"
         back_pos = (constants.WINDOWS_SIZE[0] // 1.6, constants.WINDOWS_SIZE[1] / 2)
-        if back_pos[0] < mouse.x < (back_pos[0] + 200) and back_pos[1] < mouse.y < (back_pos[1] + 100):
+        if back_pos[0] < mouse.x < (back_pos[0] + 200) and back_pos[1] < mouse.y < (
+            back_pos[1] + 100
+        ):
             self.botton_color3 = self.hover_botton_color
             self.sobre = 3
         else:
@@ -1512,6 +1524,7 @@ class InGameMenu:
             ),
         )
         return sf
+
 
 class Menu(Drawable, Collidable):
     fontTitle: Font
@@ -2148,10 +2161,14 @@ class TankGame:
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
             if self.tanks[0].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                int(self.cannonball.position.x - radius),
+                int(self.cannonball.position.x + radius),
+            ):
                 self.tanks[0].position.y += radius
             if self.tanks[1].position.x in range(
-                    int(self.cannonball.position.x - radius), int(self.cannonball.position.x + radius)):
+                int(self.cannonball.position.x - radius),
+                int(self.cannonball.position.x + radius),
+            ):
                 self.tanks[1].position.y += radius
             for i in range(
                 int(self.last_state.position.x) - radius,
@@ -2378,5 +2395,7 @@ def main():
 
     tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
+
+
 if __name__ == "__main__":
     main()
