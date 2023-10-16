@@ -209,6 +209,19 @@ class ImpactType{
     +SUICIDIO int
 }
 
+class Explosion extends Drawable{
+    +t_animacion :float
+    +position :pygame.Vector2
+    +image: list[pygame.surface.Surface]
+
+    +tick(dt: float)
+    +has_next()
+    +Explosion(TankGame)
+    +draw(screen: pygame.surface.Surface)
+}
+
+
+
 class CannonballType{
     +MM60 = int
     +MM80 = int
@@ -219,6 +232,22 @@ class CannonballType{
 class SelfImpactWindows extends Drawable {
     + SelfImpactWindows(TankGame):
     + draw(screen: pygame.surface.Surface):
+}
+
+class WarnningWindows extends Drawable {
+    +num_seleccionado: int
+    +quantity: list[int]
+    +tank_game: TankGame
+    +WarnningWindows(TankGame)
+    +backround(screen: pygame.surface.Surface)
+    +quantity_mm_60()
+    +quantity_mm_80()
+    +quantity_mm_105()
+    +draw(screen: pygame.surface.Surface):
+
+
+
+
 }
 class SnowStorm extends Drawable{
     +snowflakes: list[pygame.Vector2]
