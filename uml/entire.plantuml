@@ -295,13 +295,17 @@ class Menu extends Drawable, Collidable{
 TankGame -- Constants
 
 WinnerScreen *--> TankGame
+InGameMenu o--> TankGame
+InGameMenu *--> InGameMenuStatus
 TankGame *--> Tank
 TankGame o--> Cannonball
 TankGame *--> Terrain
 TankGame o--> Background
 TankGame o--> Impact
 Tank *--> Player
+Tank o--> CannonballType
 HUD *--> Tank
+HUD o--> Speedometer
 HUD *--> SelfImpactWindows
 Impact *--> ImpactType
 TankGame *--> Impact
