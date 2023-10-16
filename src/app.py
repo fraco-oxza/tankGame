@@ -1028,15 +1028,6 @@ class HUD(Drawable):
         se suicidó para llamar a la función correspondiente. Además, si el modo
         desarrollador está activado muestra los FPS.
         """
-        restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
-        radius = 16
-        pygame.draw.circle(screen, "yellow", restart_pos, radius)
-
-        ms = pygame.mouse.get_pos()
-        if (
-            (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
-        ) < radius**2 and pygame.mouse.get_pressed()[0]:
-            self.tank_game.restart()
 
         screen.blit(
             self.get_cannonball_indicators(),
