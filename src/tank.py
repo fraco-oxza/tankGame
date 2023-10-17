@@ -2,6 +2,7 @@ import math
 
 import pygame
 
+import constants
 from cannonballs import (
     Cannonball,
     Cannonball105mm,
@@ -10,7 +11,6 @@ from cannonballs import (
     CannonballType,
 )
 from collidable import Collidable
-import constants
 from draw import Drawable
 from player import Player
 
@@ -43,9 +43,11 @@ class Tank(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
-        Esta función se encarga de revisar si el tanque fue golpeado por la bala
-        del cañón retornado True o False según corresponda
+        Esta función se encarga de revisar si el tanque fue golpeado por la bala del cañón retornado True o False
+        según corresponda
         """
+        # FIXME: Esta function esta bien, el problema es que el parameter cannon no esta en la clase padre
+
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
         ) <= constants.TANK_RADIO:
@@ -67,7 +69,7 @@ class Tank(Drawable, Collidable):
     def shoot(self) -> Cannonball:
         """
         Esta función calcula las direcciones para disparar el proyectil,
-        y calcula la  posición del proyectil después del disparo.
+        y calcula la posición del proyectil después del disparo.
         También crea y retorna el objeto Cannonball con estos atributos.
         """
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)

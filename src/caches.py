@@ -27,6 +27,37 @@ class FileCache:
         raise NotImplementedError
 
 
+class AnimationCache(FileCache):
+    __animations: dict[str, list[pygame.surface.Surface]]
+
+    def __init__(self):
+        self.__animations = {}
+
+    def __getitem__(self, animation_name: str) -> list[pygame.surface.Surface]:
+        if animation_name in self.__animations:
+            return self.__animations[animation_name]
+
+        scale = (300, 200)  # TODO: Find the correct place for this scale
+
+        animations_path = resource_path(os.path.join("animations", animation_name))
+        animation = []
+
+        # find all images from the animation
+        frames_quantity = len(os.listdir(animations_path))
+
+        for frame_number in range(1, frames_quantity + 1):
+            frame_path = resource_path(
+                os.path.join(animations_path, f"{frame_number}.png")
+            )
+            animation.append(
+                pygame.transform.scale(pygame.image.load(frame_path), scale)
+            )
+
+        self.__animations[animation_name] = animation
+
+        return self.__animations[animation_name]
+
+
 class ImageCache(FileCache):
     """ """
 
@@ -83,3 +114,4 @@ class AudioCache(FileCache):
 image_cache = ImageCache()
 font_cache = FontCache()
 audio_cache = AudioCache()
+animation_cache = AnimationCache()

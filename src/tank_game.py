@@ -6,7 +6,7 @@ import pygame
 
 import constants
 from background import Background
-from caches import audio_cache, font_cache, image_cache
+from caches import audio_cache, font_cache, animation_cache
 from cannonballs import Cannonball
 from cannonballs import CannonballType
 from explotion import Explosion
@@ -19,7 +19,7 @@ from player import Player
 from snow_storm import SnowStorm
 from tank import Tank
 from terrain import Terrain
-from warning_windows import WarnningWindows
+from warning_windows import WarningWindows
 from winner_screen import WinnerScreen
 
 
@@ -40,7 +40,7 @@ class TankGame:
     winner: Optional[int]
     winner_msj: WinnerScreen
     last_state: Optional[Impact]
-    warning = Optional[WarnningWindows]
+    warning = Optional[WarningWindows]
 
     def __init__(self, screen: pygame.surface.Surface) -> None:
         """
@@ -119,7 +119,7 @@ class TankGame:
 
         self.in_game_menu = InGameMenu(self.screen)
         self.hud = HUD(self.tanks, self)
-        self.warning = WarnningWindows(self)
+        self.warning = WarningWindows(self)
 
     def render(self) -> None:
         """
@@ -326,9 +326,10 @@ class TankGame:
             self.last_state = self.process_cannonball_trajectory()
             self.render()
 
-    def life_tank(self, point: pygame.Vector2, tank: Tank, cannonball_type: int):
+    @staticmethod
+    def life_tank(point: pygame.Vector2, tank: Tank, cannonball_type: int):
         """Esta función se encarga de quitar vida al tanque según la bala que impactó"""
-        if cannonball_type == 0:
+        if cannonball_type == CannonballType.MM60:
             if (
                 math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
@@ -339,7 +340,7 @@ class TankGame:
                 if tank.life < 0:
                     tank.life = 0
 
-        elif cannonball_type == 1:
+        elif cannonball_type == CannonballType.MM80:
             if (
                 math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
@@ -349,7 +350,7 @@ class TankGame:
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
-        elif cannonball_type == 2:
+        elif cannonball_type == CannonballType.MM105:
             if (
                 math.sqrt(
                     (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
@@ -372,27 +373,6 @@ class TankGame:
             if keys_pressed[pygame.K_SPACE]:
                 break
             self.render()
-
-    def cargar_animacion(self):
-        imagenes = []
-        scale = (300, 200)
-        for i in range(1, constants.CantidadAnimaciones):
-            imagenes.append(image_cache[f"images/{i}.png"])
-
-        for i in range(imagenes.__len__()):
-            imagenes[i] = pygame.transform.scale(imagenes[i], scale)
-
-        return imagenes
-
-    def cargar_animacionTerrain(self):
-        imagenesSnow = []
-        scale = (300, 200)
-        for i in range(1, constants.CantidadAnimacionesSnow):
-            imagenesSnow.append(image_cache[f"images/{i} snow.png"])
-
-        for i in range(imagenesSnow.__len__()):
-            imagenesSnow[i] = pygame.transform.scale(imagenesSnow[i], scale)
-        return imagenesSnow
 
     def check_last_state(self) -> None:
         """
@@ -462,15 +442,12 @@ class TankGame:
         ) and self.cannonball is not None:
             self.cannonball.kill()
 
-        # if self.last_state is not None: # Lo movi, que piensan
-        # self.terrain_destruction()
-
     def terrain_destruction(self):
         if (
             self.last_state is not None
             and self.last_state.impact_type == ImpactType.BORDER
         ):
-            # Aqui detengo porque este caso no me sirve
+            # Aquí detengo porque este caso no me sirve
             return
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
@@ -538,7 +515,7 @@ class TankGame:
     def start(self) -> None:
         """
         Esta función muestra las instrucciones básicas para después dar paso al
-        juego como tal. Se encarga de gestionar la situación actual, como cual
+        juego como tal. Se encarga de gestionar la situación actual, como cuál
         jugador es el turno, el ángulo del cañon o si se ha decidido disparar,
         donde en cuyo caso se comprobará si la bala sigue avanzando o si ha
         impactado con algo.
@@ -589,7 +566,7 @@ class TankGame:
                     tank_explotion = audio_cache["sounds/bomb.mp3"]
                     tank_explotion.play()
                     self.animacion = Explosion(
-                        self.cannonball.position, self.cargar_animacion()
+                        self.cannonball.position, animation_cache["tank_explosion"]
                     )
                 elif (
                     self.cannonball is not None
@@ -598,7 +575,7 @@ class TankGame:
                     shoot = audio_cache["sounds/shoot.mp3"]
                     shoot.play()
                     self.animacion = Explosion(
-                        self.cannonball.position, self.cargar_animacionTerrain()
+                        self.cannonball.position, animation_cache["snow_explosion"]
                     )
                 # Display explotion
                 self.display_explotion()

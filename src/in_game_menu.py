@@ -56,7 +56,7 @@ class InGameMenu:
             size = self.screen.get_size()
             self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
             mouse = pygame.Vector2(pygame.mouse.get_pos())
-            self.handleInput(mouse)
+            self.handle_input(mouse)
             if pygame.mouse.get_pressed()[0]:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
@@ -84,7 +84,7 @@ class InGameMenu:
             self.clock.tick(constants.FPS)
             pygame.display.flip()
 
-    def handleInput(self, mouse: pygame.Vector2):
+    def handle_input(self, mouse: pygame.Vector2):
         restart_pos = (constants.WINDOWS_SIZE[0] // 4, constants.WINDOWS_SIZE[1] / 2)
         if restart_pos[0] < mouse.x < (restart_pos[0] + 200) and restart_pos[
             1
@@ -119,16 +119,16 @@ class InGameMenu:
     def start_menu(self) -> int:
         return self.render()
 
-    def restart(self, Mensaje: str):
+    def restart(self, mensaje: str):
         sf = pygame.Surface(self.button_reset_position)
         box_size = sf.get_size()
-        end = self.fontRestart.render(Mensaje, True, "#B48EAD")
+        end = self.fontRestart.render(mensaje, True, "#B48EAD")
         box_pos = ((box_size[0] - box_size[0]) / 3, box_size[1] / 2.5)
-        if Mensaje == "Reiniciar Partida":
+        if mensaje == "Reiniciar Partida":
             sf.fill(self.botton_color1)
-        elif Mensaje == "Salir":
+        elif mensaje == "Salir":
             sf.fill(self.botton_color2)
-        elif Mensaje == "Volver":
+        elif mensaje == "Volver":
             sf.fill(self.botton_color3)
 
         sf.blit(

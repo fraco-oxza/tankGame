@@ -2,8 +2,8 @@ import math
 
 import pygame
 
-from caches import font_cache, image_cache
 import constants
+from caches import font_cache, image_cache
 from draw import Drawable
 from speedometer import Speedometer
 from tank import Tank
@@ -12,7 +12,7 @@ from tank import Tank
 class HUD(Drawable):
     """
     Esta clase es responsable de mostrar elementos relacionados con la
-    información en pantalla que no es parte del terreno o del juego en sí  :)
+    información en pantalla que no es parte del terreno o del juego en sí :)
     """
 
     tanks: list[Tank]
@@ -65,7 +65,8 @@ class HUD(Drawable):
             )
             screen.blit(self.text_cannonball_info, pygame.Vector2(990, 460))
 
-    def draw_cannonball_105_mm(self, screen: pygame.surface):
+    @staticmethod
+    def draw_cannonball_105_mm(screen: pygame.surface):
         position = pygame.Vector2(290, 170)
         pygame.draw.line(
             screen, "gray", position, (position.x + 35, position.y - 35), 10
@@ -80,7 +81,8 @@ class HUD(Drawable):
             10,
         )
 
-    def draw_cannonball_80_mm(self, screen: pygame.surface):
+    @staticmethod
+    def draw_cannonball_80_mm(screen: pygame.surface):
         position = pygame.Vector2(160, 150)
         triangle = [
             (position.x, position.y),
@@ -108,7 +110,8 @@ class HUD(Drawable):
             10,
         )
 
-    def draw_cannonball_60_mm(self, screen: pygame.surface):
+    @staticmethod
+    def draw_cannonball_60_mm(screen: pygame.surface):
         position = pygame.Vector2(50, 140)
         pygame.draw.line(
             screen,

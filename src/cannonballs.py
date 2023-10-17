@@ -1,6 +1,6 @@
-from abc import abstractmethod
 import math
 import sys
+from abc import abstractmethod
 
 import pygame
 
@@ -64,7 +64,7 @@ class Cannonball(Drawable):
     def draw_trajectory(self, screen: pygame.surface.Surface):
         """
         Esta función dibuja la trayectoria de la bala, por cada punto en la
-        lista trajectory dibuja un circulo.
+        lista trajectory dibuja un círculo.
         """
         for point in self.trajectory:
             pygame.draw.circle(screen, "#000000", (point.x, point.y), 1)
@@ -75,14 +75,14 @@ class Cannonball(Drawable):
 
     def get_max_height(self) -> int:
         """
-        esta función se encarga de retornar la altura máxima del lanzamiento de
+        Esta función se encarga de retornar la altura máxima del lanzamiento de
         la bala
         """
         return constants.WINDOWS_SIZE[1] - self.max_height
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
-        esta función se encarga de retornar la distancia máxima entre la bala y
+        Esta función se encarga de retornar la distancia máxima entre la bala y
         el tanque que la lanzó
         """
         return (
