@@ -50,7 +50,7 @@ class Tank(Drawable, Collidable):
             1 / 2
         ) <= constants.TANK_RADIO:
             return True
-        elif ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
+        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
         ) <= 10 and cannon == 0:
             return True

@@ -62,9 +62,9 @@ class InGameMenu:
                 click.play()
                 if self.sobre == 1:
                     return InGameMenuStatus.RESTART
-                elif self.sobre == 2:
+                if self.sobre == 2:
                     return InGameMenuStatus.EXIT
-                elif self.sobre == 3:
+                if self.sobre == 3:
                     return InGameMenuStatus.CONTINUE
             self.storm.draw(self.screen)
             self.screen.blit(
