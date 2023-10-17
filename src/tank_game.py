@@ -629,7 +629,7 @@ class TankGame:
                         self.running = False
                         are_tanks_without_live = True
                         break
-                    elif (
+                    if (
                         tank.life == 0
                         and self.last_state.impact_type == ImpactType.SUICIDIO
                     ):
