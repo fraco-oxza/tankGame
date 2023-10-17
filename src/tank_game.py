@@ -154,9 +154,9 @@ class TankGame:
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.screen)
             if (
-                self.warning.quantity_mm_60() == False
-                or self.warning.quantity_mm_105() == False
-                or self.warning.quantity_mm_80() == False
+                self.warning.quantity_mm_60() is False
+                or self.warning.quantity_mm_105() is False
+                or self.warning.quantity_mm_80() is False
             ):
                 error = audio_cache["sounds/error.mp3"]
                 error.play()
