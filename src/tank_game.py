@@ -584,7 +584,10 @@ class TankGame:
                 self.last_state is not None
                 and self.last_state.impact_type != ImpactType.BORDER
             ):
-                if self.cannonball is not None and self.last_state.impact_type in (ImpactType.TANK, ImpactType.SUICIDIO):
+                if self.cannonball is not None and self.last_state.impact_type in (
+                    ImpactType.TANK,
+                    ImpactType.SUICIDIO,
+                ):
                     tank_explotion = audio_cache["sounds/bomb.mp3"]
                     tank_explotion.play()
                     self.animacion = Explosion(
