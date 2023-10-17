@@ -66,13 +66,13 @@ class WarnningWindows(Drawable):
         if self.num_seleccionado == CannonballType.MM60 and not self.quantity_mm_60():
             sf = self.get_backround()
             self.font100 = self.font.render(
-                f"No quedan balas de 60MM",
+                "No quedan balas de 60MM",
                 True,
                 "white",
             )
             sf.blit(self.font100, (100, 20))
             self.font50 = self.font2.render(
-                f"Seleccione alguna bala diferente",
+                "Seleccione alguna bala diferente",
                 True,
                 "white",
             )
@@ -80,7 +80,7 @@ class WarnningWindows(Drawable):
             sf.blit(self.font50, (100, 50))
 
             self.font50 = self.font2.render(
-                f"con los números 2 o 3",
+                "con los números 2 o 3",
                 True,
                 "white",
             )
@@ -90,13 +90,13 @@ class WarnningWindows(Drawable):
         if self.num_seleccionado == CannonballType.MM80 and not self.quantity_mm_80():
             sf = self.get_backround()
             self.font100 = self.font.render(
-                f"No quedan balas de 80MM",
+                "No quedan balas de 80MM",
                 True,
                 "white",
             )
             sf.blit(self.font100, (100, 20))
             self.font50 = self.font2.render(
-                f"Seleccione alguna bala diferente",
+                "Seleccione alguna bala diferente",
                 True,
                 "white",
             )
@@ -104,7 +104,7 @@ class WarnningWindows(Drawable):
             sf.blit(self.font50, (100, 50))
 
             self.font50 = self.font2.render(
-                f"con los números 1 o 3",
+                "con los números 1 o 3",
                 True,
                 "white",
             )
@@ -115,13 +115,13 @@ class WarnningWindows(Drawable):
         if self.num_seleccionado == CannonballType.MM105 and not self.quantity_mm_105():
             sf = self.get_backround()
             self.font100 = self.font.render(
-                f"No quedan balas de 105MM",
+                "No quedan balas de 105MM",
                 True,
                 "white",
             )
             sf.blit(self.font100, (100, 20))
             self.font50 = self.font2.render(
-                f"Seleccione alguna bala diferente",
+                "Seleccione alguna bala diferente",
                 True,
                 "white",
             )
@@ -129,7 +129,7 @@ class WarnningWindows(Drawable):
             sf.blit(self.font50, (100, 50))
 
             self.font50 = self.font2.render(
-                f"con los números 2 o 3",
+                "con los números 2 o 3",
                 True,
                 "white",
             )
