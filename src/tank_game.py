@@ -4,14 +4,16 @@ from typing import Optional
 
 import pygame
 
+import constants
 from background import Background
 from caches import audio_cache, font_cache, image_cache
 from cannonballs import Cannonball
-import constants
+from cannonballs import CannonballType
 from explotion import Explosion
 from hud import HUD
 from impact import Impact, ImpactType
 from in_game_menu import InGameMenu
+from in_game_menu import InGameMenuStatus
 from menu import Menu
 from player import Player
 from snow_storm import SnowStorm
