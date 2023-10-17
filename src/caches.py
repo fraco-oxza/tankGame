@@ -20,9 +20,7 @@ def resource_path(relative_path: str):
 
 
 class FileCache:
-    """
-    A base class for file catching
-    """
+    """A base class for file catching"""
 
     @abstractmethod
     def __getitem__(self, filename: str):

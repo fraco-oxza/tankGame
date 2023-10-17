@@ -327,9 +327,7 @@ class TankGame:
             self.render()
 
     def life_tank(self, point: pygame.Vector2, tank: Tank, cannonball_type: int):
-        """
-        Esta función se encarga de quitar vida al tanque según la bala que impactó
-        """
+        """Esta función se encarga de quitar vida al tanque según la bala que impactó"""
         if cannonball_type == 0:
             if (
                 math.sqrt(

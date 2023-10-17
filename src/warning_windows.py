@@ -8,9 +8,7 @@ from draw import Drawable
 
 
 class WarnningWindows(Drawable):
-    """
-    This class represents a warning
-    """
+    """This class represents a warning"""
 
     num_seleccionado: int
     quantity: list[int]
