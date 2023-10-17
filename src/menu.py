@@ -62,7 +62,7 @@ class Menu(Drawable, Collidable):
         self.storm.tick(dt)
 
     def collides_with(self, point: pygame.Vector2) -> bool:
-        if self.box_pos == None:
+        if self.box_pos is None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
             self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
