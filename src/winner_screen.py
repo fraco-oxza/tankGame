@@ -31,7 +31,6 @@ class WinnerScreen(Drawable):
         self.font100.set_italic(True)
         self.vx = random.uniform(-1, 1)
         self.vy = random.uniform(-5, -1)
-        random.normalvariate()
         self.radio = 2
 
     def winner_mensaje(self, screen: pygame.surface.Surface):
