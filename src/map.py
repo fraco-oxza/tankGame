@@ -27,7 +27,7 @@ class Map:
         return self.terrain_colors
 
     def define_background_image(self):
-        # aqui exploto el codigo
+        # aqui ya no exploto el codigo
         if self.chosen_biome == 0:
             self.background_image = "images/sky.jpg"
 
