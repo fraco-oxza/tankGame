@@ -13,12 +13,13 @@ class SnowStorm(Drawable):
     wind: float
     wind_target: float
 
-    def __init__(self):
+    def __init__(self, storm_color: str):
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
         self.wind = 0
         self.wind_target = 0
+        self.storm_color = storm_color
 
     def add_random_snowflake(self):
         """Add a snowflake at a random valid position within the map."""
@@ -58,7 +59,7 @@ class SnowStorm(Drawable):
     def draw_snowflakes(self, screen: pygame.surface.Surface):
         """This function draws each snowflake present in the list of snowflakes."""
         for snowflake in self.snowflakes:
-            pygame.draw.circle(screen, "#ffffff", snowflake, 1)
+            pygame.draw.circle(screen, self.storm_color, snowflake, 1)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         self.draw_snowflakes(screen)

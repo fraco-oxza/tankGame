@@ -14,6 +14,7 @@ from hud import HUD
 from impact import Impact, ImpactType
 from in_game_menu import InGameMenu
 from in_game_menu import InGameMenuStatus
+from map import Map
 from menu import Menu
 from player import Player
 from snow_storm import SnowStorm
@@ -55,9 +56,10 @@ class TankGame:
             - constants.HUD_HEIGHT
             - 2 * constants.BORDER_PADDING,
         )
-        self.background = Background()
-        self.snow_storm = SnowStorm()
-        self.terrain = Terrain(self.map_size, constants.MOUNTAINS, constants.VALLEYS)
+        self.map = Map()
+        self.background = Background(self.map.define_background_image())
+        self.snow_storm = SnowStorm(self.map.define_storm_color())
+        self.terrain = Terrain(self.map_size, constants.MOUNTAINS, constants.VALLEYS, self.map.define_terrain_colors())
         self.fps = float(constants.FPS)
         self.winner_msj = WinnerScreen(self)
         self.winner = None
@@ -66,7 +68,7 @@ class TankGame:
         self.clock = pygame.time.Clock()
         self.last_state = None
         self.cannonball = None
-        self.menu = Menu()
+        self.menu = Menu(self.snow_storm)
         self.tanks = []
         self.actual_player = randint(0, 1)
         self.animacion = None
@@ -117,7 +119,7 @@ class TankGame:
             )
         )
 
-        self.in_game_menu = InGameMenu(self.screen)
+        self.in_game_menu = InGameMenu(self.screen, self.snow_storm)
         self.hud = HUD(self.tanks, self)
         self.warning = WarningWindows(self)
 

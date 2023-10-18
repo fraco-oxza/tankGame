@@ -3,8 +3,8 @@ from typing import Optional
 import pygame
 from pygame.font import Font
 
-from caches import font_cache, audio_cache
 import constants
+from caches import font_cache, audio_cache
 from snow_storm import SnowStorm
 
 
@@ -28,12 +28,12 @@ class InGameMenu:
     button_reset_position = pygame.Vector2
     sobre: Optional[int]
 
-    def __init__(self, screen: pygame.Surface):
+    def __init__(self, screen: pygame.Surface, storm: SnowStorm):
         self.button_reset_position = pygame.Vector2(200, 100)
         self.fontExit = font_cache["Roboto.ttf", 25]
         self.fontRestart = font_cache["Roboto.ttf", 25]
         self.fontBack = font_cache["Roboto.ttf", 25]
-        self.storm = SnowStorm()
+        self.storm = storm
         self.botton_color1 = "#2E3440"
         self.botton_color2 = "#2E3440"
         self.botton_color3 = "#2E3440"

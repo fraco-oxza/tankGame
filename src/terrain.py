@@ -3,8 +3,8 @@ from random import randint
 
 import pygame
 
-from collidable import Collidable
 import constants
+from collidable import Collidable
 from draw import Drawable
 
 
@@ -112,13 +112,8 @@ class Terrain(Drawable, Collidable):
         origin_color = 255
         dest_color = 30
 
-        self.terrain_layer_colors = []
-        self.layers_num = 4
-
-        for i in range(self.layers_num):
-            self.terrain_layer_colors.append(
-                dest_color + i * ((origin_color - dest_color) / (self.layers_num - 1))
-            )
+        self.terrain_layer_colors = colors
+        self.layers_num = len(colors)
 
         self.new_ground_lines = []
         # Transformar a nuevo modelo
@@ -138,7 +133,7 @@ class Terrain(Drawable, Collidable):
                 if layer != 0:
                     pygame.draw.rect(
                         screen,
-                        (color, color, color),
+                        color,
                         pygame.Rect(
                             i * constants.TERRAIN_LINE_WIDTH,
                             self.size[1] - latest_height - layer - 3,

@@ -1,7 +1,7 @@
 import pygame
 
-from caches import image_cache
 import constants
+from caches import image_cache
 from draw import Drawable
 
 
@@ -13,14 +13,15 @@ class Background(Drawable):
 
     sky_image: pygame.Surface
 
-    def __init__(self):
+    def __init__(self, image: str):
         """Initialize the class by loading the images and creating the snowflakes."""
+        self.image = image
         image_size = pygame.Vector2(
             constants.WINDOWS_SIZE[0],
             (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
         )
         self.sky_image = pygame.transform.scale(
-            image_cache["images/sky.jpg"], image_size
+            image_cache[self.image], image_size
         )
         self.sky_rect = self.sky_image.get_rect()
 

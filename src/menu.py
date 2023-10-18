@@ -18,9 +18,9 @@ class Menu(Drawable, Collidable):
     hover_botton_color: str
     is_hover: bool
 
-    def __init__(self):
+    def __init__(self, storm: SnowStorm):
         self.fontTitle = font_cache["Roboto.ttf", 43]
-        self.storm = SnowStorm()
+        self.storm = storm
         self.box_pos = None
         self.botton_color = "#2E3440"
         self.hover_botton_color = "#3b4252"
