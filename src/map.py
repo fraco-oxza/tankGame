@@ -19,7 +19,7 @@ class Map:
             self.terrain_colors = ["#3C474F", "#586874", "#99B4C9", "#B8D9F2"]
 
         elif self.chosen_biome == 1:
-            self.terrain_colors = ["#92CF59", "#71A145", "#587D36", "#3B5424"]
+            self.terrain_colors = ["#3B5424", "#587D36", "#71A145", "#92CF59"]
 
         else:
             self.terrain_colors = ["#693C27", "#915336", "#BA6A45", "#DE7F53"]
