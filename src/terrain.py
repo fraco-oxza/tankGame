@@ -96,7 +96,7 @@ class Terrain(Drawable, Collidable):
                 ((j - fin) ** 2) * multiplier
             )
 
-    def __init__(self, size: tuple[int, int], mountains: int, valleys: int):
+    def __init__(self, size: tuple[int, int], mountains: int, valleys: int, colors: list[str]):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
             self.size[0] // constants.TERRAIN_LINE_WIDTH
@@ -108,9 +108,6 @@ class Terrain(Drawable, Collidable):
         # Se genero el terreno
         self.generate_terrain(mountains, valleys)
         random.seed()
-
-        origin_color = 255
-        dest_color = 30
 
         self.terrain_layer_colors = colors
         self.layers_num = len(colors)
