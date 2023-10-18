@@ -21,6 +21,6 @@
 - [ ] Nubes moviéndose. 18-10-2023. Maca.
 - [ ] Hacer que la bala sienta viento, desactibable. 16-10-2023. Francisco.
 - [ ] Añadir al hud un indicador de viento. 16-10-2023. Francisco
-- [ ] Arreglar la destrucción terreno. 18-10-2023. Benjamín
-- [ ] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
+- [x] Arreglar la destrucción terreno. 18-10-2023. Benjamín
+- [x] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
 - [ ] Mejorar el readme.md. 20-10-2023. Benjamín.
