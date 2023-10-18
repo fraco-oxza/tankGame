@@ -7,7 +7,9 @@ class Map:
     storm_color: str
     chosen_biome: int
 
-    def __init__(self, ):
+    def __init__(
+        self,
+    ):
         self.terrain_colors = []
         self.background_image = ""
         self.storm_color = ""

@@ -96,7 +96,9 @@ class Terrain(Drawable, Collidable):
                 ((j - fin) ** 2) * multiplier
             )
 
-    def __init__(self, size: tuple[int, int], mountains: int, valleys: int, colors: list[str]):
+    def __init__(
+        self, size: tuple[int, int], mountains: int, valleys: int, colors: list[str]
+    ):
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
             self.size[0] // constants.TERRAIN_LINE_WIDTH
