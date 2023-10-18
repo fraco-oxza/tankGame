@@ -17,10 +17,10 @@
 - [x] Hacer el nuevo selector de bala, que es mover el antiguo y adaptar las interacciones. 13-10-2023. Maca
 - [x] Hacer el mostrador de vida, con unas barritas. 15-10-2023. Sofia.
 - [ ] Hacer un indicador para que se muestre quien está jugando. 9-10-2023. Francisco.
-- [ ] Distintos biomas (unos 3). 18-10-2023. Sofia y Benja.
+- [x] Distintos biomas (unos 3). 18-10-2023. Sofia y Benja.
 - [ ] Nubes moviéndose. 18-10-2023. Maca.
 - [ ] Hacer que la bala sienta viento, desactibable. 16-10-2023. Francisco.
 - [ ] Añadir al hud un indicador de viento. 16-10-2023. Francisco
-- [ ] Arreglar la destrucción terreno. 18-10-2023. Benjamín
-- [ ] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
+- [x] Arreglar la destrucción terreno. 18-10-2023. Benjamín
+- [x] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
 - [ ] Mejorar el readme.md. 20-10-2023. Benjamín.
