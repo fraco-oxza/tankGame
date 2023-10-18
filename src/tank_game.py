@@ -59,7 +59,12 @@ class TankGame:
         self.map = Map()
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color())
-        self.terrain = Terrain(self.map_size, constants.MOUNTAINS, constants.VALLEYS, self.map.define_terrain_colors())
+        self.terrain = Terrain(
+            self.map_size,
+            constants.MOUNTAINS,
+            constants.VALLEYS,
+            self.map.define_terrain_colors(),
+        )
         self.fps = float(constants.FPS)
         self.winner_msj = WinnerScreen(self)
         self.winner = None

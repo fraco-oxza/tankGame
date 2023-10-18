@@ -20,9 +20,7 @@ class Background(Drawable):
             constants.WINDOWS_SIZE[0],
             (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
         )
-        self.sky_image = pygame.transform.scale(
-            image_cache[self.image], image_size
-        )
+        self.sky_image = pygame.transform.scale(image_cache[self.image], image_size)
         self.sky_rect = self.sky_image.get_rect()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
