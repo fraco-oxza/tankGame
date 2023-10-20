@@ -4,9 +4,11 @@ import pygame
 from pygame.font import Font
 
 from caches import font_cache
+from caches import image_cache
 from collidable import Collidable
 from draw import Drawable
 from snow_storm import SnowStorm
+from src import constants
 
 
 class Menu(Drawable, Collidable):
@@ -20,21 +22,30 @@ class Menu(Drawable, Collidable):
 
     def __init__(self, storm: SnowStorm):
         self.fontTitle = font_cache["Roboto.ttf", 43]
+        image_size = pygame.Vector2(constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+        self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.storm = storm
         self.box_pos = None
         self.botton_color = "#2E3440"
         self.hover_botton_color = "#3b4252"
         self.is_hover = False
+        self.sky_rect = self.image.get_rect()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        screen.fill("#434C5E")
+        screen.blit(self.image, self.sky_rect.topleft)
+        transparency = 150
+        rect_surface = pygame.Surface((constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]))
+        rect_surface.fill("#000000")
+        rect_surface.set_alpha(transparency)
+        rect_x1, rect_y1 = (0, 0)
+        screen.blit(rect_surface, (rect_x1, rect_y1))
         self.storm.draw(screen)
 
         size = screen.get_size()
         self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
 
         self.fontTitle.set_bold(True)
-        title = self.fontTitle.render("Tank Game", True, "#B48EAD")
+        title = self.fontTitle.render("Tank Game", True, "#ffffff")
         self.fontTitle.set_bold(False)
         screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
 
@@ -49,7 +60,7 @@ class Menu(Drawable, Collidable):
             10,
         )
 
-        play = self.fontTitle.render("Jugar", True, "#B48EAD")
+        play = self.fontTitle.render("Jugar", True, "#FFFFFF")
         screen.blit(
             play,
             (
