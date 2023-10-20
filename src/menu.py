@@ -22,7 +22,9 @@ class Menu(Drawable, Collidable):
 
     def __init__(self, storm: SnowStorm):
         self.fontTitle = font_cache["Roboto.ttf", 43]
-        image_size = pygame.Vector2(constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+        image_size = pygame.Vector2(
+            constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]
+        )
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.storm = storm
         self.box_pos = None
@@ -34,7 +36,9 @@ class Menu(Drawable, Collidable):
     def draw(self, screen: pygame.surface.Surface) -> None:
         screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
-        rect_surface = pygame.Surface((constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]))
+        rect_surface = pygame.Surface(
+            (constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+        )
         rect_surface.fill("#000000")
         rect_surface.set_alpha(transparency)
         rect_x1, rect_y1 = (0, 0)

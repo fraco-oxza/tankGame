@@ -41,8 +41,12 @@ class InGameMenu:
         self.screen = screen
         self.sobre = None
         self.clock = pygame.time.Clock()
-        image_size = pygame.Vector2(constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
-        self.image = pygame.transform.scale(image_cache["images/Control.png"], image_size)
+        image_size = pygame.Vector2(
+            constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]
+        )
+        self.image = pygame.transform.scale(
+            image_cache["images/Control.png"], image_size
+        )
         self.sky_rect = self.image.get_rect()
 
     def tick(self, dt: float):
@@ -56,7 +60,9 @@ class InGameMenu:
 
             self.screen.blit(self.image, self.sky_rect.topleft)
             transparency = 150
-            rect_surface = pygame.Surface((constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]))
+            rect_surface = pygame.Surface(
+                (constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+            )
             rect_surface.fill("#000000")
             rect_surface.set_alpha(transparency)
             rect_x1, rect_y1 = (0, 0)
@@ -91,10 +97,13 @@ class InGameMenu:
             pygame.display.flip()
 
     def handle_input(self, mouse: pygame.Vector2):
-        restart_pos = (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2.37)
-        if restart_pos[0] < mouse.x < (restart_pos[0] + self.button_reset_position[0]) and restart_pos[
-            1
-        ] < mouse.y < (
+        restart_pos = (
+            constants.WINDOWS_SIZE[0] // 2.6,
+            constants.WINDOWS_SIZE[1] / 2.37,
+        )
+        if restart_pos[0] < mouse.x < (
+            restart_pos[0] + self.button_reset_position[0]
+        ) and restart_pos[1] < mouse.y < (
             restart_pos[1] + self.button_reset_position[1]
         ):
             self.botton_color1 = self.hover_botton_color
@@ -102,21 +111,17 @@ class InGameMenu:
         else:
             self.botton_color1 = "#73726E"
         exit_pos = (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2)
-        if exit_pos[0] < mouse.x < (exit_pos[0] + self.button_reset_position[0]) and exit_pos[
-            1
-        ] < mouse.y < (
-            exit_pos[1] + self.button_reset_position[1]
-        ):
+        if exit_pos[0] < mouse.x < (
+            exit_pos[0] + self.button_reset_position[0]
+        ) and exit_pos[1] < mouse.y < (exit_pos[1] + self.button_reset_position[1]):
             self.botton_color2 = self.hover_botton_color
             self.sobre = 2
         else:
             self.botton_color2 = "#73726E"
         back_pos = (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2.9)
-        if back_pos[0] < mouse.x < (back_pos[0] + self.button_reset_position[0]) and back_pos[
-            1
-        ] < mouse.y < (
-                back_pos[1] + self.button_reset_position[1]
-        ):
+        if back_pos[0] < mouse.x < (
+            back_pos[0] + self.button_reset_position[0]
+        ) and back_pos[1] < mouse.y < (back_pos[1] + self.button_reset_position[1]):
             self.botton_color3 = self.hover_botton_color
             self.sobre = 3
         else:
