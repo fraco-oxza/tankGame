@@ -16,7 +16,7 @@
 - [x] Terminar el speedometer. 9-10-2023. Francisco
 - [x] Hacer el nuevo selector de bala, que es mover el antiguo y adaptar las interacciones. 13-10-2023. Maca
 - [x] Hacer el mostrador de vida, con unas barritas. 15-10-2023. Sofia.
-- [ ] Hacer un indicador para que se muestre quien está jugando. 9-10-2023. Francisco.
+- [x] Hacer un indicador para que se muestre quien está jugando. 9-10-2023. Francisco.
 - [x] Distintos biomas (unos 3). 18-10-2023. Sofia y Benja.
 - [ ] Nubes moviéndose. 18-10-2023. Maca.
 - [ ] Hacer que la bala sienta viento, desactibable. 16-10-2023. Francisco.
