@@ -16,7 +16,6 @@ class Map:
         # 0 : snowy , 1 : forest, 2: desert, 3: city, 4:island, 5: moon, 6: fantastic, 7: ocean , 8: hell
         self.chosen_biome = random.randint(0, 8)
 
-
     def define_terrain_colors(self):
         if self.chosen_biome == 0:
             self.terrain_colors = ["#3C474F", "#586874", "#99B4C9", "#B8D9F2"]
