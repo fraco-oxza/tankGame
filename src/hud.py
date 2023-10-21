@@ -171,9 +171,7 @@ class HUD(Drawable):
         pygame.draw.rect(
             sf,
             self.tank_game.tanks[self.tank_game.actual_player].color,
-            pygame.Rect(
-                width / 3 + 18, height / 1.5 - 15, 25, 17.5
-            ),
+            pygame.Rect(width / 3 + 18, height / 1.5 - 15, 25, 17.5),
         )
         pygame.draw.rect(
             sf,
@@ -330,9 +328,15 @@ class HUD(Drawable):
             (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
         ) < radius**2 and pygame.mouse.get_pressed()[0]:
             self.tank_game.restart()
-        screen.blit(self.get_actual_player(), (constants.BORDER_PADDING - 10, constants.WINDOWS_SIZE[1]
-                                               - constants.HUD_HEIGHT
-                                               - constants.BORDER_PADDING / 2,))
+        screen.blit(
+            self.get_actual_player(),
+            (
+                constants.BORDER_PADDING - 10,
+                constants.WINDOWS_SIZE[1]
+                - constants.HUD_HEIGHT
+                - constants.BORDER_PADDING / 2,
+            ),
+        )
         screen.blit(
             self.get_cannonball_indicators(),
             (
