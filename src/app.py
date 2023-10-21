@@ -15,7 +15,6 @@ def main():
     pygame.display.set_caption("TankGame!")
     icon = image_cache["images/tankIcon.png"]
     pygame.display.set_icon(icon)
-
     tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
     tank_game.start()
 
