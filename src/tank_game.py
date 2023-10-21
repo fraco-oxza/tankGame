@@ -415,7 +415,6 @@ class TankGame:
                     self.calculate_distance(self.actual_player)
                     - self.cannonball.radius_damage
                 )
-                print(actual_radius_position)
                 if actual_radius_position > constants.TANK_RADIO:
                     other_radius_position = (
                         self.calculate_distance(other_player)
