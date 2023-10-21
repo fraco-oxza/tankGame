@@ -13,8 +13,8 @@ class Map:
         self.terrain_colors = []
         self.background_image = ""
         self.storm_color = ""
-        # 0 : snowy , 1 : forest, 2: desert
-        self.chosen_biome = random.randint(0, 2)
+        # 0 : snowy , 1 : forest, 2: desert, 3: city, 4:island
+        self.chosen_biome = random.randint(0, 4)
 
     def define_terrain_colors(self):
         if self.chosen_biome == 0:
@@ -23,8 +23,14 @@ class Map:
         elif self.chosen_biome == 1:
             self.terrain_colors = ["#3B5424", "#587D36", "#71A145", "#92CF59"]
 
-        else:
+        elif self.chosen_biome == 2:
             self.terrain_colors = ["#693C27", "#915336", "#BA6A45", "#DE7F53"]
+
+        elif self.chosen_biome == 3:
+            self.terrain_colors = ["#231F20", "#322E2D", "#40413C", "#635852"]
+
+        else:
+            self.terrain_colors = ["#563F49", "#856860", "#D6B393", "#F8DAB6"]
 
         return self.terrain_colors
 
@@ -36,8 +42,14 @@ class Map:
         elif self.chosen_biome == 1:
             self.background_image = "images/forest.jpg"
 
-        else:
+        elif self.chosen_biome == 2:
             self.background_image = "images/desert.jpg"
+
+        elif self.chosen_biome == 3:
+            self.background_image = "images/city.jpg"
+
+        else:
+            self.background_image = "images/island.jpg"
 
         return self.background_image
 
@@ -48,7 +60,12 @@ class Map:
         elif self.chosen_biome == 1:
             self.storm_color = "#84D9F2"
 
-        else:
+        elif self.chosen_biome == 2:
             self.storm_color = "#AB7961"
 
+        elif self.chosen_biome == 3:
+            self.storm_color = "#231F20"
+
+        else:
+            self.storm_color = "#AB7961"
         return self.storm_color
