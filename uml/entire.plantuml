@@ -138,6 +138,35 @@ class Terrain extends Drawable,Collidable {
     +draw( screen: pygame.surface.Surface)
     +collidesWith( point: pygame.Vector2): bool
 }
+
+class FileCache{
+    +__getitem__(filename: str)
+}
+
+class AnimationCache extends FileCache{
+    +__animations: dict[str, list[pygame.surface.Surface]
+    +__init__()
+    +__getitem__(filename: str)
+}
+
+class ImageCache extends FileCache{
+    +__images: dict[str, pygame.surface.Surface]
+    +__init__()
+    +__getitem__(filename: str)
+}
+
+class FontCache extends FileCache{
+    +__fonts: dict[tuple[str, int], pygame.font.Font]
+    +__init__()
+    +__getitem__(filename: str)
+}
+
+class AudioCache extends FileCache{
+    +__audios: dict[str, pygame.mixer.Sound]
+    +__init__()
+    +__getitem__(filename: str)
+}
+
 class Speedometer{
     +size: int
     +min: int
@@ -265,10 +294,17 @@ class WarnningWindows extends Drawable {
     +quantity_mm_105()
     +draw(screen: pygame.surface.Surface):
 
-
-
-
 }
+
+class Map{
+    +terrain_colors: list[str]
+    +background_colors: str
+    +chosen_biome: int
+    +define_terrain_colors()
+    +define_background_image()
+    +define_storm_color()
+}
+
 class SnowStorm extends Drawable{
     +snowflakes: list[pygame.Vector2]
     +wind: float
@@ -302,6 +338,19 @@ TankGame o--> Cannonball
 TankGame *--> Terrain
 TankGame o--> Background
 TankGame o--> Impact
+TankGame *--> Map
+TankGame *--> AudioCache
+TankGame *--> FontCache
+TankGame *--> AnimationCache
+Background *--> ImageCache
+Terrain *--> ImageCache
+Menu *--> ImageCache
+Menu *--> FontCache
+HUD *--> FontCache
+HUD *--> ImageCache
+InGameMenu *--> ImageCache
+InGameMenu *--> AudioCache
+InGameMenu *--> FontCache
 Tank *--> Player
 Tank o--> CannonballType
 HUD *--> Tank
