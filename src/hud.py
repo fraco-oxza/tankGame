@@ -159,6 +159,64 @@ class HUD(Drawable):
         sf.blit(oponente, (ancho2 + ancho2 // 9, alto2 + alto2 // 18))
         return sf
 
+    def get_actual_player(self):
+        width = 165
+        height = constants.HUD_HEIGHT
+        sf = pygame.Surface((width, height))
+        sf.fill("#232323")
+        actual_player1 = self.font30.render("Jugador", True, "#FFFFFF")
+        actual_player = self.font30.render("actual", True, "#FFFFFF")
+        sf.blit(actual_player1, (width / 6, 10))
+        sf.blit(actual_player, (width / 5, 40))
+        pygame.draw.rect(
+            sf,
+            self.tank_game.tanks[self.tank_game.actual_player].color,
+            pygame.Rect(
+                width / 3 + 18, height / 1.5 - 15, 25, 17.5
+            ),
+        )
+        pygame.draw.rect(
+            sf,
+            self.tank_game.tanks[self.tank_game.actual_player].color,
+            pygame.Rect(
+                width / 3,
+                height / 1.5,
+                62.5,
+                25,
+            ),
+        )
+        pygame.draw.rect(
+            sf,
+            constants.GRAY,
+            pygame.Rect(
+                width / 3,
+                height / 1.5 + 25,
+                62.5,
+                10,
+            ),
+        )
+
+        for i in range(6):
+            pygame.draw.circle(
+                sf,
+                constants.BLACK,
+                (
+                    width / 3 + 12.5 * i,
+                    height / 1.5 + 35,
+                ),
+                7.5,
+            )
+
+        pygame.draw.line(
+            sf,
+            self.tank_game.tanks[self.tank_game.actual_player].color,
+            ((width / 3 + 29), height / 1.5 - 13),
+            ((width / 3 - 10), height / 1.5 - 35),
+            8,
+        )
+
+        return sf
+
     def get_select_cannonball(self):
         width = 350
         height = constants.HUD_HEIGHT
@@ -272,11 +330,13 @@ class HUD(Drawable):
             (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
         ) < radius**2 and pygame.mouse.get_pressed()[0]:
             self.tank_game.restart()
-
+        screen.blit(self.get_actual_player(), (constants.BORDER_PADDING - 10, constants.WINDOWS_SIZE[1]
+                                               - constants.HUD_HEIGHT
+                                               - constants.BORDER_PADDING / 2,))
         screen.blit(
             self.get_cannonball_indicators(),
             (
-                constants.BORDER_PADDING + 50,
+                constants.BORDER_PADDING + 170,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
@@ -285,7 +345,7 @@ class HUD(Drawable):
         screen.blit(
             self.get_select_cannonball(),
             (
-                constants.BORDER_PADDING + 450,
+                constants.BORDER_PADDING + 535,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
@@ -294,7 +354,7 @@ class HUD(Drawable):
         screen.blit(
             self.health_bars(),
             (
-                constants.BORDER_PADDING + 850,
+                constants.BORDER_PADDING + 900,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
