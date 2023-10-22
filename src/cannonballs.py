@@ -78,7 +78,7 @@ class Cannonball(Drawable):
         Esta función se encarga de retornar la altura máxima del lanzamiento de
         la bala
         """
-        return constants.WINDOWS_SIZE[1] - self.max_height
+        return constants.MAP_SIZE[1] - self.max_height
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """

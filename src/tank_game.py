@@ -50,17 +50,11 @@ class TankGame:
         """
 
         self.fontReiniciar = font_cache["Roboto.ttf", 25]
-        self.map_size = (
-            constants.WINDOWS_SIZE[0] - 2 * constants.BORDER_PADDING,
-            constants.WINDOWS_SIZE[1]
-            - constants.HUD_HEIGHT
-            - 2 * constants.BORDER_PADDING,
-        )
         self.map = Map()
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color())
         self.terrain = Terrain(
-            self.map_size,
+            constants.MAP_SIZE,
             constants.MOUNTAINS,
             constants.VALLEYS,
             self.map.define_terrain_colors(),
@@ -77,7 +71,7 @@ class TankGame:
         self.tanks = []
         self.actual_player = randint(0, 1)
         self.animacion = None
-        quart_of_windows = int(self.map_size[0] / 4)
+        quart_of_windows = int(constants.MAP_SIZE[0] / 4)
 
         tank_pos_border_margin = int(quart_of_windows / 4)
 
@@ -88,7 +82,7 @@ class TankGame:
 
         tank1_x = randint(tank_pos_border_margin, mid_point - quart_of_windows)
         tank2_x = randint(
-            mid_point + quart_of_windows, self.map_size[0] - tank_pos_border_margin
+            mid_point + quart_of_windows, constants.MAP_SIZE[0] - tank_pos_border_margin
         )
 
         player1 = Player("1", 0)
@@ -99,7 +93,7 @@ class TankGame:
                 pygame.Color(60, 100, 120),
                 pygame.Vector2(
                     tank1_x,
-                    self.map_size[1]
+                    constants.MAP_SIZE[1]
                     - self.terrain.ground_lines[
                         tank1_x // constants.TERRAIN_LINE_WIDTH - 1
                     ]
@@ -114,7 +108,7 @@ class TankGame:
                 pygame.Color(220, 10, 50),
                 pygame.Vector2(
                     tank2_x,
-                    self.map_size[1]
+                    constants.MAP_SIZE[1]
                     - self.terrain.ground_lines[
                         tank2_x // constants.TERRAIN_LINE_WIDTH - 1
                     ]
@@ -144,7 +138,7 @@ class TankGame:
                     (self.cannonball.position.x + 10, top_padding + 10),
                 ],
             )
-            height = self.terrain.size[1] - self.cannonball.position.y
+            height = constants.MAP_SIZE[1] - self.cannonball.position.y
             height_text = font_cache["Roboto.ttf", 16].render(
                 f" {height:.2f}[m] ", True, "#ffffff", "#ff0000"
             )
@@ -163,7 +157,7 @@ class TankGame:
         also puts the execution to sleep for a while to make the game run at the
         fps, specified in the FPS constant
         """
-        game_rect = pygame.surface.Surface(self.map_size)
+        game_rect = pygame.surface.Surface(constants.MAP_SIZE)
 
         self.background.draw(game_rect)
         self.snow_storm.draw(game_rect)
@@ -301,7 +295,7 @@ class TankGame:
 
         if (
             self.cannonball.position.x < 0
-            or self.cannonball.position.x > self.map_size[0]
+            or self.cannonball.position.x > constants.MAP_SIZE[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
