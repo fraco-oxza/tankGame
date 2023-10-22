@@ -492,11 +492,13 @@ class TankGame:
                 int(self.cannonball.position.x + radius),
             ):
                 self.tanks[0].position.y += radius
+                self.tanks[0].life -= 10
             if self.tanks[1].position.x in range(
                 int(self.cannonball.position.x - radius),
                 int(self.cannonball.position.x + radius),
             ):
                 self.tanks[1].position.y += radius
+                self.tanks[1].life -= 10
             for i in range(
                 int(self.last_state.position.x) - radius,
                 int(self.last_state.position.x) + radius,
