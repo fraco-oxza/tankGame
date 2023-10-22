@@ -46,7 +46,7 @@ class Menu(Drawable, Collidable):
         self.storm.draw(screen)
 
         size = screen.get_size()
-        self.box_pos = ((size[0] - self.box_size[0]) / 2, size[1] / 2)
+        self.box_pos = ((size[0] - self.box_size[0]) / 2, (3 / 4) * size[1])
 
         self.fontTitle.set_bold(True)
         title = self.fontTitle.render("Tank Game", True, "#ffffff")

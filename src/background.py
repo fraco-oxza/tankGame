@@ -28,4 +28,5 @@ class Background(Drawable):
         This function is responsible for drawing the background and the
         snowflakes.
         """
-        screen.blit(self.sky_image, self.sky_rect.topleft)
+        size = screen.get_size()
+        screen.blit(self.sky_image, (0, (size[1] - self.sky_image.get_size()[1])))

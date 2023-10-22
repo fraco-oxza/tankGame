@@ -96,7 +96,7 @@ class TankGame:
 
         self.tanks.append(
             Tank(
-                pygame.Color(50, 50, 0),
+                pygame.Color(60, 100, 120),
                 pygame.Vector2(
                     tank1_x,
                     self.map_size[1]
@@ -111,7 +111,7 @@ class TankGame:
 
         self.tanks.append(
             Tank(
-                pygame.Color(80, 50, 50),
+                pygame.Color(220, 10, 50),
                 pygame.Vector2(
                     tank2_x,
                     self.map_size[1]
@@ -128,6 +128,35 @@ class TankGame:
         self.hud = HUD(self.tanks, self)
         self.warning = WarningWindows(self)
 
+    def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
+        if self.cannonball is None:
+            return
+
+        if self.cannonball.position.y < 0:
+            top_padding = 10
+
+            pygame.draw.polygon(
+                sf,
+                "red",
+                [
+                    (self.cannonball.position.x, top_padding),
+                    (self.cannonball.position.x - 10, top_padding + 10),
+                    (self.cannonball.position.x + 10, top_padding + 10),
+                ],
+            )
+            height = self.terrain.size[1] - self.cannonball.position.y
+            height_text = font_cache["Roboto.ttf", 16].render(
+                f" {height:.2f}[m] ", True, "#ffffff", "#ff0000"
+            )
+
+            sf.blit(
+                height_text,
+                (
+                    self.cannonball.position.x - height_text.get_size()[0] // 2,
+                    (top_padding + 10),
+                ),
+            )
+
     def render(self) -> None:
         """
         This method is responsible for drawing each element of the window, it
@@ -139,6 +168,7 @@ class TankGame:
         self.background.draw(game_rect)
         self.snow_storm.draw(game_rect)
         self.terrain.draw(game_rect)
+        self.draw_cannonball_indicator(game_rect)
 
         for tank in self.tanks:
             tank.draw(game_rect)

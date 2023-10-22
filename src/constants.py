@@ -1,5 +1,3 @@
-import random
-
 GRAVITY = 9.8  # m/s^2
 DEVELOPMENT_MODE = False
 WINDOWS_SIZE = (1280, 720)
@@ -8,8 +6,8 @@ SHOOT_MAX_SPEED = 400
 TERRAIN_LINE_WIDTH = 1  # px
 SEA_LEVEL = 200  # px
 FPS = 60
-MOUNTAINS = random.randint(3, 5)
-VALLEYS = random.randint(2, 4)
+MOUNTAINS = 3
+VALLEYS = 2
 SKY_COLOR = "#5086C1"
 TERRAIN_COLOR = "#fffafa"
 BLACK = (0, 0, 0)
