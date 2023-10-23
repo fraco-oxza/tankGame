@@ -21,7 +21,6 @@ class Map:
         self.chosen_biome = random.randint(0, 8)
 
     def define_terrain_colors(self):
-
         """
         function that is responsible for delivering colors to the soil substrate according to the chosen biome
         """
@@ -56,7 +55,6 @@ class Map:
         return self.terrain_colors
 
     def define_background_image(self):
-
         """
         function that is responsible for delivering the background image according to the chosen biome
         """
@@ -91,7 +89,6 @@ class Map:
         return self.background_image
 
     def define_storm_color(self):
-
         """
         function that is responsible for delivering the colors to the particles according to the chosen biome
         """
