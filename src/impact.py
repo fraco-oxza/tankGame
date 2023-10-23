@@ -1,5 +1,6 @@
 import pygame
 
+
 class ImpactType:
     """
     Class in charge of defining the type of environment with which the bullet impacted,

@@ -12,6 +12,7 @@ class SnowStorm(Drawable):
     """
     This class is responsible for adding small particles to the map, changing depending on the biome.
     """
+
     snowflakes: list[pygame.Vector2]
     wind: float
     wind_target: float

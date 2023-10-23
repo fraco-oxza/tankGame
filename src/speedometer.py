@@ -10,6 +10,7 @@ class Speedometer:
     This class represents a speedometer. This speedometer has the ability to display the speed for a bullet on the HUD,
     in real time as it is changed
     """
+
     size: int
     min: int
     max: int
