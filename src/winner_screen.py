@@ -1,23 +1,21 @@
 import random
-
 import pygame
 
 from caches import font_cache
 import constants
+
 from draw import Drawable
-
-
 class WinnerScreen(Drawable):
     """
-    Esta clase se encarga de dibujar en pantalla un mensaje anunciando el
-    ganador, mostrando su puntaje y el correspondiente tanque para una mejor
-    distinción.
+    This class is responsible for drawing a message on the screen announcing the
+    winner, showing his score and the corresponding tank for better
+    distinction.
     """
 
     def __init__(self, tank_game):
         """
-        Constructor que inicializa todas los elementos necesarios para monstrar
-        el mensaje de victoria.
+        Constructor that initializes all the elements needed to demonstrate
+        the message of victory.
         """
         self.font = font_cache["Roboto.ttf", 20]
         self.tank_game = tank_game
@@ -35,11 +33,11 @@ class WinnerScreen(Drawable):
 
     def winner_mensaje(self, screen: pygame.surface.Surface):
         """
-        Esta función crea el mensaje de ganador, haciendo una ventana que
-        muestre toda la información que el ganador sacó de la partida,
-        incluyendo su puntaje, y como adicional se dibuja el tanque del color
-        ganador
-        """
+        This function creates the winner message, making a window that
+        show all the information that the winner got from the game,
+        including your score, and as an additional color tank is drawn
+        winner
+                """
         if self.tank_game.winner is None:
             # Si no hay ganador, no se ejecuta
             return
@@ -127,9 +125,9 @@ class WinnerScreen(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Función que en el caso de que haya un ganador y aún no se muestre en
-        pantalla, redigirá hacia otra función donde el mensaje se creará y será
-        presentado al usuario por medio de la interfaz.
+        Function that in the event that there is a winner and it is not yet shown in
+        screen, it will redirect to another function where the message will be created and
+        presented to the user through the interface.
         """
         if self.tank_game.winner is not None:
             self.winner_mensaje(screen)

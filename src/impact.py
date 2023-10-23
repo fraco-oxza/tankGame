@@ -1,10 +1,9 @@
 import pygame
 
-
 class ImpactType:
     """
-    Clase encargada de definir el tipo de ambiente con lo que impactó la bala,
-    a cada tipo se le asigna un número
+    Class in charge of defining the type of environment with which the bullet impacted,
+    each type is assigned a number
     """
 
     TERRAIN = 0
@@ -15,9 +14,9 @@ class ImpactType:
 
 class Impact:
     """
-    Clase encargada de encontrar la posición en la que la bala impacta y
-    determinar mediante el atributo impact_type con qué impacta terreno, borde,
-    tanque o si es un suicidio
+    Class in charge of finding the position in which the bullet hits and
+    determine through the impact_type attribute what terrain, edge,
+    tank or if it is a suicide
     """
 
     position: pygame.Vector2
