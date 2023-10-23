@@ -71,7 +71,7 @@ class Cannonball(Drawable):
 
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        raise NotImplementedError
 
     def get_max_height(self) -> int:
         """
@@ -95,6 +95,7 @@ class CannonballType:
     """
     function that identifies what type of cannonball the user chose
     """
+
     MM60 = 0
     MM80 = 1
     MM105 = 2
@@ -104,6 +105,7 @@ class Cannonball105mm(Cannonball):
     """
     This class represents the 105mm cannonball, with its available quantity and damage attributes
     """
+
     damage: int
     radius_damage: int
     units_available: int
@@ -151,6 +153,7 @@ class Cannonball60mm(Cannonball):
     """
     This class represents the 60mm cannonball, with its available quantity and damage attributes
     """
+
     damage: int
     radius_damage: int
     units_available: int
@@ -189,6 +192,7 @@ class Cannonball80mm(Cannonball):
     """
     This class represents the 80mm cannonball, with its available quantity and damage attributes
     """
+
     damage: int
     radius_damage: int
     units_available: int
