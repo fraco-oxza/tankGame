@@ -123,6 +123,9 @@ class TankGame:
         self.warning = WarningWindows(self)
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
+        """
+        This method allows you to track the bullet when it is not on the screen.
+        """
         if self.cannonball is None:
             return
 
@@ -275,6 +278,9 @@ class TankGame:
             self.process_in_game_menu()
 
     def process_in_game_menu(self):
+        """
+        This method allows you to check if the pause menu is active or not.
+        """
         menu_state = self.in_game_menu.start_menu()
 
         if menu_state is InGameMenuStatus.EXIT:
@@ -475,6 +481,9 @@ class TankGame:
             self.cannonball.kill()
 
     def terrain_destruction(self):
+        """
+        This method takes care of the destruction of terrain, the fall of tanks and the damage related to this.
+        """
         if (
             self.last_state is not None
             and self.last_state.impact_type == ImpactType.BORDER
@@ -516,6 +525,9 @@ class TankGame:
                         j -= 1
 
     def start_menu(self):
+        """
+        This method takes care of the menu music and the start button click.
+        """
         soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
         while self.running:
@@ -539,6 +551,9 @@ class TankGame:
             self.fps = self.clock.get_fps()
 
     def display_explotion(self):
+        """
+        This method is responsible for the animation of the explosion.
+        """
         if self.animacion is None:
             return
 
@@ -548,11 +563,11 @@ class TankGame:
 
     def start(self) -> None:
         """
-        Esta función muestra las instrucciones básicas para después dar paso al
-        juego como tal. Se encarga de gestionar la situación actual, como cuál
-        jugador es el turno, el ángulo del cañon o si se ha decidido disparar,
-        donde en cuyo caso se comprobará si la bala sigue avanzando o si ha
-        impactado con algo.
+        This method shows the basic instructions and then gives way to the
+        game as such. It is responsible for managing the current situation, such as which
+        player's turn, the angle of the cannon or if it has been decided to shoot,
+        where in which case it will be checked if the bullet continues to advance or if it has
+        shocked with something.
         """
         self.start_menu()
 

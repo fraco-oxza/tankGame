@@ -5,15 +5,15 @@ from pygame import Vector2
 
 class Collidable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a
-    otras clases, donde se espera haya colisiones.
+    Class containing an abstract method that is passed via Override to
+    other classes, where collisions are expected.
     """
 
     @abstractmethod
     def collides_with(self, point: Vector2) -> bool:
         """
-        Esta funcion es la encargada de decir si self, es decir la instancia
-        colisionable ya colisionó con un punto. Debe retornar True en caso de
-        que colisione y False en otro caso.
+        This method is responsible for saying if self, that is, the instance
+        collidable has already collided with a point. Should return True in case of
+        that collides and False otherwise.
         """
         raise NotImplementedError

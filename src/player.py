@@ -6,9 +6,9 @@ from impact import Impact, ImpactType
 
 class Player:
     """
-    Esta clase se encarga de asignar el puntaje obtenido por tiro a cada jugador,
-    a través del cálculo de la distancia con la bala lanzada y el tanque en
-    objetivo
+    This class is responsible for assigning the score obtained per shot to each player,
+    through the calculation of the distance with the bullet launched and the tank in
+    aim
     """
 
     name: str
@@ -20,9 +20,9 @@ class Player:
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
         """
-        Función que se encarga de asignar el puntaje mediante el cálculo de la
-        distancia cuando la bala cae con el tanque objetivo, mientras la bala
-        caiga más cerca se le asigna más puntaje al jugador
+        Method that is responsible for assigning the score by calculating the
+        distance when the bullet falls with the target tank, while the bullet
+        The closer it lands, the more points are assigned to the player.
         """
         cannonball_position = impact.position
         distance = (

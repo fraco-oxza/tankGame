@@ -11,8 +11,8 @@ from tank import Tank
 
 class HUD(Drawable):
     """
-    Esta clase es responsable de mostrar elementos relacionados con la
-    información en pantalla que no es parte del terreno o del juego en sí :)
+    This class is responsible for displaying elements related to the
+    information on screen that is not part of the terrain or the game itself.
     """
 
     tanks: list[Tank]
@@ -39,6 +39,10 @@ class HUD(Drawable):
         self.color = tanks[self.tank_game.actual_player].available
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
+        """
+        This method is responsible for drawing on the HUD all the information about
+        the bullet such as the maximum distance traveled or the maximum height reached.
+        """
         transparency = 128
         rect_surface = pygame.Surface((300, 50))
         rect_surface.set_alpha(transparency)
@@ -67,6 +71,9 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_105_mm(screen: pygame.surface):
+        """
+        This method allows you to draw the 105mm cannonball icon.
+        """
         position = pygame.Vector2(290, 170)
         pygame.draw.line(
             screen, "gray", position, (position.x + 35, position.y - 35), 10
@@ -83,6 +90,9 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_80_mm(screen: pygame.surface):
+        """
+        This method allows you to draw the 80mm cannonball icon.
+        """
         position = pygame.Vector2(160, 150)
         triangle = [
             (position.x, position.y),
@@ -112,6 +122,9 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_60_mm(screen: pygame.surface):
+        """
+        This method allows you to draw the 60mm cannonball icon.
+        """
         position = pygame.Vector2(50, 140)
         pygame.draw.line(
             screen,
@@ -129,6 +142,9 @@ class HUD(Drawable):
         )
 
     def health_bars(self) -> pygame.Surface:
+        """
+        This method allows you to draw the life bar of both the player and the rival.
+        """
         other_player = (self.tank_game.actual_player + 1) % 2
         width = 350
         height = constants.HUD_HEIGHT
@@ -160,6 +176,10 @@ class HUD(Drawable):
         return sf
 
     def get_actual_player(self):
+        """
+        This method allows you to draw the current player's tank on the
+        HUD to indicate who is currently playing.
+        """
         width = 165
         height = constants.HUD_HEIGHT
         sf = pygame.Surface((width, height))
@@ -216,6 +236,9 @@ class HUD(Drawable):
         return sf
 
     def get_select_cannonball(self):
+        """
+        This method allows you to draw on the HUD the number of bullets that the current player has.
+        """
         width = 350
         height = constants.HUD_HEIGHT
         sf = pygame.Surface((width, height))
@@ -262,6 +285,9 @@ class HUD(Drawable):
         return sf
 
     def get_cannonball_indicators(self) -> pygame.Surface:
+        """
+        This method allows you to draw on the HUD both the angle and the speed at which you want to shoot.
+        """
         width = 350
         height = constants.HUD_HEIGHT
 
@@ -315,11 +341,11 @@ class HUD(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función  permite mostrar en pantalla todo lo relacionado a la
-        información de cada tanque tales como angulo y velocidad de disparo,
-        puntaje, máxima altura, máxima distancia, también verifica si el tanque
-        se suicidó para llamar a la función correspondiente. Además, si el modo
-        desarrollador está activado muestra los FPS.
+        This function allows you to display on the screen everything related to the
+        information about each tank such as angle and rate of fire,
+        score, maximum height, maximum distance, also check if the tank
+        killed itself to call the corresponding function. Furthermore, if the mode
+        developer is activated shows the FPS
         """
         restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
         radius = 16
@@ -380,8 +406,8 @@ class HUD(Drawable):
 
     def show_instructions(self, screen: pygame.surface.Surface):
         """
-        Esta función permite mostrar al inicio del juego una imagen con las
-        instrucciones necesarias para el/los jugadores
+        This function allows you to display an image at the start of the game with the
+        necessary instructions for the players
         """
         screen.fill("#3C0384")
 

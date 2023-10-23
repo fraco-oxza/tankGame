@@ -17,9 +17,9 @@ from player import Player
 
 class Tank(Drawable, Collidable):
     """
-    Esta clase representa un tanque en el juego,
-    cuenta con funcionalidades para dibujarlo, detectar colisiones y disparar
-    una bala de cañón en una dirección y velocidad específica
+    This class represents a tank in the game,
+    It has functionalities to draw it, detect collisions and shoot
+    a cannonball in a specific direction and speed
     """
 
     player: Player
@@ -43,8 +43,8 @@ class Tank(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
-        Esta función se encarga de revisar si el tanque fue golpeado por la bala del cañón retornado True o False
-        según corresponda
+        This function is responsible for checking if the tank was hit by the cannon ball returned True or False
+        as appropriate
         """
         # FIXME: Esta function esta bien, el problema es que el parameter cannon no esta en la clase padre
 
@@ -68,9 +68,9 @@ class Tank(Drawable, Collidable):
 
     def shoot(self) -> Cannonball:
         """
-        Esta función calcula las direcciones para disparar el proyectil,
-        y calcula la posición del proyectil después del disparo.
-        También crea y retorna el objeto Cannonball con estos atributos.
+        This function calculates the directions to fire the projectile,
+        and calculates the position of the projectile after firing.
+        It also creates and returns the Cannonball object with these attributes.
         """
         v_x = self.shoot_velocity * math.cos(self.shoot_angle)
         # the -1 is since in this system the vertical coordinates are inverted
@@ -97,9 +97,9 @@ class Tank(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función se encarga de dibujar el tanque y actualiza la posición del
-        cañón del tanque según su ángulo. Además, si está activado el modo
-        desarrollador dibuja la hitbox
+        This function is responsible for drawing the tank and updates the position of the
+        tank gun according to its angle. Additionally, if mode is activated
+        developer draws the hitbox
         """
         if constants.DEVELOPMENT_MODE:
             pygame.draw.circle(
