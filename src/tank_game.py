@@ -266,6 +266,8 @@ class TankGame:
             elif keys_pressed[pygame.K_3]:
                 self.tanks[self.actual_player].actual = CannonballType.MM105
         if keys_pressed[pygame.K_ESCAPE]:
+            click = audio_cache["sounds/click.mp3"]
+            click.play()
             self.process_in_game_menu()
 
     def process_in_game_menu(self):

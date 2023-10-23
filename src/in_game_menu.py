@@ -9,12 +9,19 @@ from snow_storm import SnowStorm
 
 
 class InGameMenuStatus:
+    """
+    This class is responsible, through numbers, for identifying what type of option the user chooses.
+    """
     EXIT = 0
     CONTINUE = 1
     RESTART = 2
 
 
 class InGameMenu:
+    """
+    This class is responsible for loading the background image and drawing all the buttons that are in the
+    menu (return, restart game and return) when the user presses the esc option on the keyboard.
+    """
     fontExit: Font
     fontBack: Font
     fontRestart: Font
@@ -50,9 +57,17 @@ class InGameMenu:
         self.sky_rect = self.image.get_rect()
 
     def tick(self, dt: float):
+        """
+        Function that is responsible for drawing the snow
+        """
         self.storm.tick(dt)
 
     def render(self):
+        """
+        Function responsible for loading the image and the transparency over it while any of the button options
+        are not pressed. It is also responsible for calling the function that draws the buttons on the screen
+        and loading the snow that is drawn on the screen
+        """
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -97,6 +112,11 @@ class InGameMenu:
             pygame.display.flip()
 
     def handle_input(self, mouse: pygame.Vector2):
+        """
+        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
+        It is also responsible for changing the color of the button when the mouse passes over a button,
+        otherwise it remains in its original color
+        """
         restart_pos = (
             constants.WINDOWS_SIZE[0] // 2.6,
             constants.WINDOWS_SIZE[1] / 2.37,
@@ -128,9 +148,17 @@ class InGameMenu:
             self.botton_color3 = "#73726E"
 
     def start_menu(self) -> int:
+        """
+        function responsible for calling the render function that is responsible
+        for displaying the entire menu screen
+        """
         return self.render()
 
     def restart(self, mensaje: str):
+        """
+        Function responsible for creating the surface that represents the button,
+        in addition to writing the message of each button in the center of each surface
+        """
         sf = pygame.Surface(self.button_reset_position)
         box_size = sf.get_size()
         end = self.fontRestart.render(mensaje, True, "#ffffff")
