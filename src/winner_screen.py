@@ -5,6 +5,8 @@ from caches import font_cache
 import constants
 
 from draw import Drawable
+
+
 class WinnerScreen(Drawable):
     """
     This class is responsible for drawing a message on the screen announcing the
@@ -37,7 +39,7 @@ class WinnerScreen(Drawable):
         show all the information that the winner got from the game,
         including your score, and as an additional color tank is drawn
         winner
-                """
+        """
         if self.tank_game.winner is None:
             # Si no hay ganador, no se ejecuta
             return
