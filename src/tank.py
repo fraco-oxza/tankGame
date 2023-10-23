@@ -18,8 +18,8 @@ from player import Player
 class Tank(Drawable, Collidable):
     """
     This class represents a tank in the game,
-    It has functionalities to draw it, detect collisions and shoot
-    a cannonball in a specific direction and speed
+    It has functionalities to draw it,
+    detect collisions and shoot a cannonball in a specific direction and speed
     """
 
     player: Player
