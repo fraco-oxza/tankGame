@@ -41,7 +41,7 @@ class TankGame:
     winner: Optional[int]
     winner_msj: WinnerScreen
     last_state: Optional[Impact]
-    warning = Optional[WarningWindows]
+    warning: WarningWindows
 
     def __init__(self, screen: pygame.surface.Surface) -> None:
         """
@@ -184,11 +184,7 @@ class TankGame:
         self.snow_storm.tick(1.0 / (self.fps + 0.1))
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.screen)
-            if (
-                self.warning.quantity_mm_60() is False
-                or self.warning.quantity_mm_105() is False
-                or self.warning.quantity_mm_80() is False
-            ):
+            if not self.warning.is_current_cannonball_available():
                 error = audio_cache["sounds/error.mp3"]
                 error.play()
 
@@ -201,9 +197,9 @@ class TankGame:
 
     def check_running(self):
         """
-        This method checks if the player has sent the signal to close the window and
-        stops the execution if this is the case, it is also responsible for cleaning
-        any position that has been left unused.
+        This method checks if the player has sent the signal to close the
+        window and stops the execution if this is the case, it is also
+        responsible for cleaning any position that has been left unused.
         """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

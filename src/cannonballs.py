@@ -71,7 +71,7 @@ class Cannonball(Drawable):
 
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
-        pass
+        raise NotImplementedError
 
     def get_max_height(self) -> int:
         """

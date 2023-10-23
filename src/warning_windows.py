@@ -8,12 +8,21 @@ from draw import Drawable
 
 
 class WarningWindows(Drawable):
-    """This class represents a warning"""
+    """
+    This class represents a warning when the current cannonball does not have
+    ammunition. It disappears when another cannonball is selected.
+    """
 
     num_seleccionado: int
     quantity: list[int]
 
     def __init__(self, tank_game):
+        """
+        This constructor loads the fonts that will be used and It sets the size
+        of the warning box based on the screen size. It saves the tank_game
+        instance inside of the object to know the quantity of ammunition
+        available and the current cannonball.
+        """
         self.tank_game = tank_game
         self.quantity = []
         self.num_seleccionado = 0
@@ -25,6 +34,10 @@ class WarningWindows(Drawable):
         self.size = (constants.WINDOWS_SIZE[0] / 3.6, constants.WINDOWS_SIZE[1] / 7.2)
 
     def get_background(self) -> pygame.Surface:
+        """
+        This method creates the warning surface. Then It draws the
+        background and return the surface.
+        """
         rect_surface = pygame.Surface(self.size, pygame.SRCALPHA, 32)
         rect_surface = rect_surface.convert_alpha()
 
@@ -41,42 +54,37 @@ class WarningWindows(Drawable):
 
         return rect_surface
 
-    def quantity_mm_60(self):
-        if self.quantity[self.num_seleccionado] == 0:
-            return False
-        return True
-
-    def quantity_mm_80(self):
-        if self.quantity[self.num_seleccionado] == 0:
-            return False
-        return True
-
-    def quantity_mm_105(self):
-        if self.quantity[self.num_seleccionado] == 0:
-            return False
-        return True
+    def is_current_cannonball_available(self):
+        """This method asks if the current cannonball has ammunition available"""
+        return self.quantity[self.num_seleccionado] > 0
 
     def draw(self, screen: pygame.surface.Surface):
+        """
+        This method creates a different screen with the warning. Then It puts
+        this new screen onto the center of the main screen.
+        """
         self.num_seleccionado = self.tank_game.tanks[
             self.tank_game.actual_player
         ].actual
         self.quantity = self.tank_game.tanks[self.tank_game.actual_player].available
 
+        if self.is_current_cannonball_available():
+            # In this case there are cannonballs available, so is not necessary
+            # to display the warning.
+            return
+
         missing_caliber = None
         alternatives = None
-        if self.num_seleccionado == CannonballType.MM60 and not self.quantity_mm_60():
+
+        if self.num_seleccionado == CannonballType.MM60:
             missing_caliber = "60MM"
             alternatives = "2 o 3"
-        if self.num_seleccionado == CannonballType.MM80 and not self.quantity_mm_80():
+        if self.num_seleccionado == CannonballType.MM80:
             missing_caliber = "80MM"
             alternatives = "1 o 3"
-        if self.num_seleccionado == CannonballType.MM105 and not self.quantity_mm_105():
+        if self.num_seleccionado == CannonballType.MM105:
             missing_caliber = "105MM"
-            alternatives = "2 o 3"
-
-        if missing_caliber is None:
-            # En este caso no faltan balas, por lo tanto no se muestra la advertencia
-            return
+            alternatives = "1 o 2"
 
         sf = self.get_background()
         self.font100 = self.font.render(
