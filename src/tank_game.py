@@ -90,7 +90,7 @@ class TankGame:
 
         self.tanks.append(
             Tank(
-                pygame.Color(60, 100, 120),
+                "#1976d2",
                 pygame.Vector2(
                     tank1_x,
                     constants.MAP_SIZE[1]
@@ -105,7 +105,7 @@ class TankGame:
 
         self.tanks.append(
             Tank(
-                pygame.Color(220, 10, 50),
+                "#FF5722",
                 pygame.Vector2(
                     tank2_x,
                     constants.MAP_SIZE[1]
@@ -134,7 +134,7 @@ class TankGame:
 
             pygame.draw.polygon(
                 sf,
-                "red",
+                "#2196F3",
                 [
                     (self.cannonball.position.x, top_padding),
                     (self.cannonball.position.x - 10, top_padding + 10),
@@ -142,14 +142,20 @@ class TankGame:
                 ],
             )
             height = constants.MAP_SIZE[1] - self.cannonball.position.y
-            height_text = font_cache["Roboto.ttf", 16].render(
-                f" {height:.2f}[m] ", True, "#ffffff", "#ff0000"
+            height_text = font_cache["Roboto.ttf", 18].render(
+                f" {height:.2f}[m] ", True, "#ffffff", "#2196F3"
             )
 
             sf.blit(
                 height_text,
                 (
-                    self.cannonball.position.x - height_text.get_size()[0] // 2,
+                    max(
+                        0,
+                        min(
+                            self.cannonball.position.x - height_text.get_size()[0] // 2,
+                            constants.MAP_SIZE[0] - height_text.get_size()[0],
+                        ),
+                    ),
                     (top_padding + 10),
                 ),
             )

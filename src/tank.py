@@ -38,7 +38,7 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
-        self.available = [1, 10, 3]
+        self.available = [3, 10, 3]
         self.life = 100
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:

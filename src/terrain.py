@@ -10,8 +10,8 @@ from draw import Drawable
 
 class Terrain(Drawable, Collidable):
     """
-    Esta clase representa al terreno, permite generar y dibujarlo aleatoriamente
-    por cada partida, además comprueba colisiones con este
+    This class represents the terrain, allowing it to be generated and drawn randomly
+    for each game session. It also checks collisions with the terrain.
     """
 
     size: tuple[int, int]
@@ -20,11 +20,10 @@ class Terrain(Drawable, Collidable):
 
     def generate_terrain(self, mountains: int, valley: int):
         """
-        Esta función genera el terreno aleatorio,  dividiendolo en segmentos,
-        donde se agregan deformaciones  (usando las funciones montañas y
-        valles).
-        Las montañas y valles se generan dentro de segmentos específicos y se
-        determinan aleatoriamente.
+        This function generates random terrain by dividing it into segments,
+        where deformations (using the mountain and valley functions) are added.
+        Mountains and valleys are generated within specific segments and are
+        determined randomly.
         """
         deformations = mountains + valley
         segment_size = self.size[0] // deformations
@@ -54,11 +53,10 @@ class Terrain(Drawable, Collidable):
 
     def mountain(self, i: int, j: int, height: int):
         """
-        Esta función montañas va desde un punto de inicio, hasta un punto
-        final, incluyendo su punto medio para que sean simétricas. El primer
-        for incluye en la lista ground_lines los valores que van creciendo
-        hasta el punto medio, mientras que el segundo for los valores que van
-        decreciendo desde el punto medio hasta el punto final
+        This function creates mountains from a start point to an end point,
+        including their midpoint to make them symmetrical. The first for loop adds
+        values to the ground_lines list that increase up to the midpoint, while
+        the second for loop adds values that decrease from the midpoint to the end point.
         """
         m = (i + j) // 2
         original_max = (m - i - 1) ** 2
@@ -74,31 +72,34 @@ class Terrain(Drawable, Collidable):
                 ((j - k) ** 2) * multiplier
             )
 
-    def valley(self, inicio: int, fin: int, profundidad: int):
+    def valley(self, start: int, end: int, depth: int):
         """
-        Esta función valles desde un punto de inicio, hasta un punto final,
-        incluyendo su punto medio para que sean simétricos. El primer for
-        incluye en la lista ground_lines los valores que van decreciendo hasta
-        el punto medio, mientras que el segundo for los valores que van
-        creciendo desde el punto medio hasta el final
+        This function creates valleys from a start point to an end point, including
+        their midpoint to make them symmetrical. The first for loop adds values to
+        the ground_lines list that decrease up to the midpoint, while the second
+        for loop adds values that increase from the midpoint to the end point.
         """
-        m = (inicio + fin) // 2
-        original_max = (m - inicio - 1) ** 2
-        multiplier = (profundidad / original_max) / constants.TERRAIN_LINE_WIDTH
+        m = (start + end) // 2
+        original_max = (m - start - 1) ** 2
+        multiplier = (depth / original_max) / constants.TERRAIN_LINE_WIDTH
 
-        for i in range(inicio, m):
+        for i in range(start, m):
             self.ground_lines[i // constants.TERRAIN_LINE_WIDTH] -= int(
-                ((i - inicio) ** 2) * multiplier
+                ((i - start) ** 2) * multiplier
             )
 
-        for j in range(m, fin):
+        for j in range(m, end):
             self.ground_lines[j // constants.TERRAIN_LINE_WIDTH] -= int(
-                ((j - fin) ** 2) * multiplier
+                ((j - end) ** 2) * multiplier
             )
 
     def __init__(
         self, size: tuple[int, int], mountains: int, valleys: int, colors: list[str]
     ):
+        """
+        Initializes the Terrain object with the specified size, number of mountains
+        and valleys, and color layers for rendering.
+        """
         self.size = size
         self.ground_lines = [constants.SEA_LEVEL] * (
             self.size[0] // constants.TERRAIN_LINE_WIDTH
@@ -107,7 +108,7 @@ class Terrain(Drawable, Collidable):
         if constants.MAP_SEED != -1:
             random.seed(constants.MAP_SEED)
 
-        # Se genero el terreno
+        # Generate the terrain
         self.generate_terrain(mountains, valleys)
         random.seed()
 
@@ -115,7 +116,7 @@ class Terrain(Drawable, Collidable):
         self.layers_num = len(colors)
 
         self.new_ground_lines = []
-        # Transformar a nuevo modelo
+        # Transform to a new model
         for height in self.ground_lines:
             self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
 
@@ -123,8 +124,8 @@ class Terrain(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta función dibuja diferentes capas del terreno utilizando diferentes
-        colores y alturas, esto permite simular el sustrato del suelo
+        Draws different layers of the terrain using different colors and heights,
+        simulating the substrate of the ground.
         """
         for i, layers in enumerate(self.new_ground_lines):
             latest_height = -5
@@ -144,9 +145,9 @@ class Terrain(Drawable, Collidable):
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
-        Esta función se encarga de verificar si la posición de la bala colisionó
-        o no con el terreno, esto lo hace comparando la altura del terreno en la
-        línea correspondiente al punto con la coordenada del cañón
+        Checks if the position of the projectile collides with the terrain,
+        comparing the terrain height at the corresponding line with the cannon's
+        coordinate.
         """
         line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
 
