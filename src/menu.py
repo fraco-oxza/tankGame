@@ -16,6 +16,7 @@ class Menu(Drawable, Collidable):
     This class is in charge of displaying everything related to the main menu on the screen
     when you enter the game.
     """
+
     fontTitle: Font
     storm: SnowStorm
     box_size = (200, 100)

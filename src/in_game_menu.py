@@ -12,6 +12,7 @@ class InGameMenuStatus:
     """
     This class is responsible, through numbers, for identifying what type of option the user chooses.
     """
+
     EXIT = 0
     CONTINUE = 1
     RESTART = 2
@@ -22,6 +23,7 @@ class InGameMenu:
     This class is responsible for loading the background image and drawing all the buttons that are in the
     menu (return, restart game and return) when the user presses the esc option on the keyboard.
     """
+
     fontExit: Font
     fontBack: Font
     fontRestart: Font
