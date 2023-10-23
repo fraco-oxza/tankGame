@@ -12,6 +12,10 @@ import constants
 
 
 class Menu(Drawable, Collidable):
+    """
+    This class is in charge of displaying everything related to the main menu on the screen
+    when you enter the game.
+    """
     fontTitle: Font
     storm: SnowStorm
     box_size = (200, 100)
@@ -34,6 +38,10 @@ class Menu(Drawable, Collidable):
         self.sky_rect = self.image.get_rect()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        Function responsible for creating and displaying the new surface on the screen,
+        which is responsible for loading the background image and drawing the start button
+        """
         screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
         rect_surface = pygame.Surface(
@@ -74,9 +82,17 @@ class Menu(Drawable, Collidable):
         )
 
     def tick(self, dt: float):
+        """
+        Function that is responsible for drawing the snow
+        """
         self.storm.tick(dt)
 
     def collides_with(self, point: pygame.Vector2) -> bool:
+        """
+        The "point" parameter is the position that the mouse has on the user, this function is responsible
+        for returning true or false depending on the case. If the mouse position is over the start button
+        and it is clicked, it returns true, otherwise false
+        """
         if self.box_pos is None:
             return False
         return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (

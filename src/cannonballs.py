@@ -92,12 +92,18 @@ class Cannonball(Drawable):
 
 
 class CannonballType:
+    """
+    function that identifies what type of cannonball the user chose
+    """
     MM60 = 0
     MM80 = 1
     MM105 = 2
 
 
 class Cannonball105mm(Cannonball):
+    """
+    This class represents the 105mm cannonball, with its available quantity and damage attributes
+    """
     damage: int
     radius_damage: int
     units_available: int
@@ -109,6 +115,9 @@ class Cannonball105mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -139,6 +148,9 @@ class Cannonball105mm(Cannonball):
 
 
 class Cannonball60mm(Cannonball):
+    """
+    This class represents the 60mm cannonball, with its available quantity and damage attributes
+    """
     damage: int
     radius_damage: int
     units_available: int
@@ -150,6 +162,9 @@ class Cannonball60mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -171,6 +186,9 @@ class Cannonball60mm(Cannonball):
 
 
 class Cannonball80mm(Cannonball):
+    """
+    This class represents the 80mm cannonball, with its available quantity and damage attributes
+    """
     damage: int
     radius_damage: int
     units_available: int
@@ -182,6 +200,9 @@ class Cannonball80mm(Cannonball):
         self.units_available = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
