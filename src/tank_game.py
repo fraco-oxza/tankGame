@@ -123,9 +123,7 @@ class TankGame:
         self.warning = WarningWindows(self)
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
-        """
-        This method allows you to track the bullet when it is not on the screen.
-        """
+        """This method allows you to track the bullet when it is not on the screen."""
         if self.cannonball is None:
             return
 
@@ -280,9 +278,7 @@ class TankGame:
             self.process_in_game_menu()
 
     def process_in_game_menu(self):
-        """
-        This method allows you to check if the pause menu is active or not.
-        """
+        """This method allows you to check if the pause menu is active or not."""
         menu_state = self.in_game_menu.start_menu()
 
         if menu_state is InGameMenuStatus.EXIT:
@@ -527,9 +523,7 @@ class TankGame:
                         j -= 1
 
     def start_menu(self):
-        """
-        This method takes care of the menu music and the start button click.
-        """
+        """This method takes care of the menu music and the start button click."""
         soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
         while self.running:
@@ -553,9 +547,7 @@ class TankGame:
             self.fps = self.clock.get_fps()
 
     def display_explotion(self):
-        """
-        This method is responsible for the animation of the explosion.
-        """
+        """This method is responsible for the animation of the explosion."""
         if self.animacion is None:
             return
 

@@ -83,9 +83,7 @@ class Menu(Drawable, Collidable):
         )
 
     def tick(self, dt: float):
-        """
-        Function that is responsible for drawing the snow
-        """
+        """Function that is responsible for drawing the snow"""
         self.storm.tick(dt)
 
     def collides_with(self, point: pygame.Vector2) -> bool:
