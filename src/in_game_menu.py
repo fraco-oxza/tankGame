@@ -59,9 +59,7 @@ class InGameMenu:
         self.sky_rect = self.image.get_rect()
 
     def tick(self, dt: float):
-        """
-        Function that is responsible for drawing the snow
-        """
+        """Function that is responsible for drawing the snow"""
         self.storm.tick(dt)
 
     def render(self):

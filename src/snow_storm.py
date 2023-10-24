@@ -26,9 +26,7 @@ class SnowStorm(Drawable):
         self.storm_color = storm_color
 
     def add_random_snowflake(self):
-        """
-        Add a snowflake at a random valid position within the map
-        """
+        """Add a snowflake at a random valid position within the map"""
         self.snowflakes.append(
             pygame.Vector2(
                 randint(0, constants.WINDOWS_SIZE[0]),
@@ -68,7 +66,5 @@ class SnowStorm(Drawable):
             pygame.draw.circle(screen, self.storm_color, snowflake, 1)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        This function only draws the particles on the screen
-        """
+        """This function only draws the particles on the screen"""
         self.draw_snowflakes(screen)

@@ -92,9 +92,7 @@ class Cannonball(Drawable):
 
 
 class CannonballType:
-    """
-    function that identifies what type of cannonball the user chose
-    """
+    """function that identifies what type of cannonball the user chose"""
 
     MM60 = 0
     MM80 = 1
@@ -117,9 +115,7 @@ class Cannonball105mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        This function is responsible for drawing the bullet chosen by the user
-        """
+        """This function is responsible for drawing the bullet chosen by the user"""
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -165,9 +161,7 @@ class Cannonball60mm(Cannonball):
         self.units_available = 3
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        This function is responsible for drawing the bullet chosen by the user
-        """
+        """This function is responsible for drawing the bullet chosen by the user"""
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -204,9 +198,7 @@ class Cannonball80mm(Cannonball):
         self.units_available = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        This function is responsible for drawing the bullet chosen by the user
-        """
+        """This function is responsible for drawing the bullet chosen by the user"""
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)

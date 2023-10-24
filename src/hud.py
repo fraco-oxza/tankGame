@@ -71,9 +71,7 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_105_mm(screen: pygame.surface):
-        """
-        This method allows you to draw the 105mm cannonball icon.
-        """
+        """This method allows you to draw the 105mm cannonball icon."""
         position = pygame.Vector2(290, 170)
         pygame.draw.line(
             screen, "gray", position, (position.x + 35, position.y - 35), 10
@@ -90,9 +88,7 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_80_mm(screen: pygame.surface):
-        """
-        This method allows you to draw the 80mm cannonball icon.
-        """
+        """This method allows you to draw the 80mm cannonball icon."""
         position = pygame.Vector2(160, 150)
         triangle = [
             (position.x, position.y),
@@ -122,9 +118,7 @@ class HUD(Drawable):
 
     @staticmethod
     def draw_cannonball_60_mm(screen: pygame.surface):
-        """
-        This method allows you to draw the 60mm cannonball icon.
-        """
+        """This method allows you to draw the 60mm cannonball icon."""
         position = pygame.Vector2(50, 140)
         pygame.draw.line(
             screen,

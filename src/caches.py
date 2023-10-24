@@ -19,22 +19,16 @@ def resource_path(relative_path: str):
 
 
 class FileCache:
-    """
-    A base class for file caching.
-    """
+    """A base class for file caching."""
 
     @abstractmethod
     def __getitem__(self, filename: str):
-        """
-        Abstract method to get items from the cache.
-        """
+        """Abstract method to get items from the cache."""
         raise NotImplementedError
 
 
 class AnimationCache(FileCache):
-    """
-    A cache class for animations.
-    """
+    """A cache class for animations."""
 
     __animations: dict[str, list[pygame.surface.Surface]]
 
@@ -42,9 +36,7 @@ class AnimationCache(FileCache):
         self.__animations = {}
 
     def __getitem__(self, animation_name: str) -> list[pygame.surface.Surface]:
-        """
-        Get the animation frames from the cache.
-        """
+        """Get the animation frames from the cache."""
         if animation_name in self.__animations:
             return self.__animations[animation_name]
 
@@ -70,9 +62,7 @@ class AnimationCache(FileCache):
 
 
 class ImageCache(FileCache):
-    """
-    A cache class for images.
-    """
+    """A cache class for images."""
 
     __images: dict[str, pygame.surface.Surface]
 
@@ -80,18 +70,14 @@ class ImageCache(FileCache):
         self.__images = {}
 
     def __getitem__(self, filename: str) -> pygame.surface.Surface:
-        """
-        Get images from the cache.
-        """
+        """Get images from the cache."""
         if filename not in self.__images:
             self.__images[filename] = pygame.image.load(resource_path(filename))
         return self.__images[filename]
 
 
 class FontCache(FileCache):
-    """
-    A cache class for fonts.
-    """
+    """A cache class for fonts."""
 
     __fonts: dict[tuple[str, int], pygame.font.Font]
 
@@ -99,9 +85,7 @@ class FontCache(FileCache):
         self.__fonts = {}
 
     def __getitem__(self, font_params: tuple[str, int]) -> pygame.font.Font:
-        """
-        Get fonts from the cache.
-        """
+        """Get fonts from the cache."""
         font_name, font_size = font_params
 
         if font_params not in self.__fonts:
@@ -113,9 +97,7 @@ class FontCache(FileCache):
 
 
 class AudioCache(FileCache):
-    """
-    A cache class for audio files.
-    """
+    """A cache class for audio files."""
 
     __audios: dict[str, pygame.mixer.Sound]
 
@@ -123,9 +105,7 @@ class AudioCache(FileCache):
         self.__audios = {}
 
     def __getitem__(self, filename: str) -> pygame.mixer.Sound:
-        """
-        Get audio files from the cache.
-        """
+        """Get audio files from the cache."""
         if filename not in self.__audios:
             self.__audios[filename] = pygame.mixer.Sound(resource_path(filename))
         return self.__audios[filename]
