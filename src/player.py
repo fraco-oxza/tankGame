@@ -2,6 +2,7 @@ import pygame
 
 import constants
 from impact import Impact, ImpactType
+from cannonballs import Cannonball105mm, Cannonball60mm, Cannonball80mm, CannonballType
 
 
 class Player:
@@ -13,10 +14,20 @@ class Player:
 
     name: str
     points: int
+    money: int
+    ammunition: dict[int, int]
+    color: str | pygame.Color
 
-    def __init__(self, name: str, points: int):
+    def __init__(self, name: str, color: str | pygame.Color):
         self.name = name
-        self.points = points
+        self.points = 0
+        self.money = 0
+        self.color = color
+        self.ammunition = {
+            CannonballType.MM60: 3,
+            CannonballType.MM80: 10,
+            CannonballType.MM105: 3,
+        }
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
         """

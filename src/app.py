@@ -2,6 +2,7 @@ import pygame
 
 from caches import image_cache
 import constants
+import context
 from tank_game import TankGame
 
 
@@ -15,7 +16,8 @@ def main():
     pygame.display.set_caption("TankGame!")
     icon = image_cache["images/tankIcon.png"]
     pygame.display.set_icon(icon)
-    tank_game = TankGame(pygame.display.set_mode(constants.WINDOWS_SIZE))
+
+    tank_game = TankGame(context.instance)
     tank_game.start()
 
 

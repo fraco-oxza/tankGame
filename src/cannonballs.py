@@ -5,6 +5,7 @@ from abc import abstractmethod
 import pygame
 
 import constants
+import context
 from draw import Drawable
 
 
@@ -18,7 +19,7 @@ class Cannonball(Drawable):
     position: pygame.Vector2
     velocity: pygame.Vector2
     trajectory: list[pygame.Vector2]
-    max_height: int
+    max_height: float
     max_distance: int
     is_alive: bool
 
@@ -37,10 +38,11 @@ class Cannonball(Drawable):
         de tiempo, su propósito es simular el movimiento y comportamiento de la
         parábola que dibuja la bala del cañón
         """
-        if self.position.y < self.max_height:
-            self.max_height = int(self.position.y)
         self.position += self.velocity * dt
         self.velocity[1] += constants.GRAVITY * dt
+
+        if self.position.y < self.max_height:
+            self.max_height = self.position.y
 
         if (
             len(self.trajectory) == 0
@@ -78,7 +80,7 @@ class Cannonball(Drawable):
         Esta función se encarga de retornar la altura máxima del lanzamiento de
         la bala
         """
-        return constants.MAP_SIZE[1] - self.max_height
+        return int(context.instance.map_size[1] - self.max_height)
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """

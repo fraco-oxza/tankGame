@@ -1,4 +1,5 @@
 import math
+from typing import _ProtocolMeta, Optional
 
 import pygame
 
@@ -23,22 +24,24 @@ class Tank(Drawable, Collidable):
     """
 
     player: Player
-    color: pygame.Color
+    color: pygame.Color | str
     position: pygame.Vector2
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
     actual: int  # bala seleccionada
-    available: list[int]
+    available: dict[int, int]
     life: int
 
-    def __init__(self, color: pygame.Color, position: pygame.Vector2, player: Player):
+    def __init__(
+        self, color: pygame.Color | str, position: pygame.Vector2, player: Player
+    ):
         self.player = player
         self.color = color
         self.position = position
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
-        self.available = [3, 10, 3]
+        self.available = player.ammunition
         self.life = 100
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
@@ -66,7 +69,7 @@ class Tank(Drawable, Collidable):
             return True
         return False
 
-    def shoot(self) -> Cannonball:
+    def shoot(self) -> Optional[Cannonball]:
         """
         This function calculates the directions to fire the projectile,
         and calculates the position of the projectile after firing.

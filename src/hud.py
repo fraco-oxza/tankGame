@@ -87,7 +87,7 @@ class HUD(Drawable):
         )
 
     @staticmethod
-    def draw_cannonball_80_mm(screen: pygame.surface):
+    def draw_cannonball_80_mm(screen: pygame.surface.Surface):
         """This method allows you to draw the 80mm cannonball icon."""
         position = pygame.Vector2(160, 150)
         triangle = [
@@ -117,7 +117,7 @@ class HUD(Drawable):
         )
 
     @staticmethod
-    def draw_cannonball_60_mm(screen: pygame.surface):
+    def draw_cannonball_60_mm(screen: pygame.surface.Surface):
         """This method allows you to draw the 60mm cannonball icon."""
         position = pygame.Vector2(50, 140)
         pygame.draw.line(
@@ -253,12 +253,12 @@ class HUD(Drawable):
         self.color = self.tanks[self.tank_game.actual_player].available
         ancho = 50
         for i in range(3):
-            if self.color[i] > 0:
-                pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
-                if self.tank_game.tanks[self.tank_game.actual_player].actual == i:
-                    pygame.draw.circle(sf, "#1A54D4", (ancho, alto), 25)
-            else:
-                pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
+            pygame.draw.circle(sf, "#232323", (ancho, alto), 25)
+            if self.tank_game.tanks[self.tank_game.actual_player].actual == i:
+                if self.color[i] > 0:
+                    pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
+                else:
+                    pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
             ancho += 120
         ancho = 50
         for i in range(3):
