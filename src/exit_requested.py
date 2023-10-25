@@ -1,0 +1,2 @@
+class ExitRequested(Exception):
+    pass
