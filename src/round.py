@@ -620,7 +620,7 @@ class Round:
             self.wait_release_space()
             if len(self.turns_queue) == 0:
                 self.create_turns()
-            self.actual_player = self.turns_queue[-1] # Swap actual player
+            self.actual_player = self.turns_queue[-1]  # Swap actual player
             self.turns_queue.pop()
             self.render()
 
