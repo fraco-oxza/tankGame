@@ -16,6 +16,7 @@ class Cannonball(Drawable):
     obtener información.
     """
 
+    damage: int
     position: pygame.Vector2
     velocity: pygame.Vector2
     trajectory: list[pygame.Vector2]
@@ -106,7 +107,6 @@ class Cannonball105mm(Cannonball):
     This class represents the 105mm cannonball, with its available quantity and damage attributes
     """
 
-    damage: int
     radius_damage: int
     units_available: int
 
@@ -152,7 +152,6 @@ class Cannonball60mm(Cannonball):
     This class represents the 60mm cannonball, with its available quantity and damage attributes
     """
 
-    damage: int
     radius_damage: int
     units_available: int
 
@@ -189,7 +188,6 @@ class Cannonball80mm(Cannonball):
     This class represents the 80mm cannonball, with its available quantity and damage attributes
     """
 
-    damage: int
     radius_damage: int
     units_available: int
 

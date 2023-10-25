@@ -1,22 +1,22 @@
-from enum import Enum
 import math
 import random
 from typing import Optional
 
 import pygame
 
-from background import Background
-from caches import animation_cache, audio_cache, font_cache
-from cannonballs import CannonballType
 import constants
 import context
+from background import Background
+from caches import animation_cache, audio_cache, font_cache
+from cannonballs import CannonballType, Cannonball
 from context import Context
+from exit_requested import ExitRequested
 from explotion import Explosion
 from hud import HUD
 from impact import Impact, ImpactType
-from winner_screen import WinnerScreen
 from in_game_menu import InGameMenu
 from in_game_menu import InGameMenuStatus
+from inputs import check_running, run_until_exit
 from map import Map
 from menu import Menu
 from player import Player
@@ -24,11 +24,7 @@ from snow_storm import SnowStorm
 from tank import Tank
 from terrain import Terrain
 from warning_windows import WarningWindows
-
-
-class ResultType(Enum):
-    Normal = 0
-    ExitRequested = 1
+from winner_screen import WinnerScreen
 
 
 class Round:
@@ -37,6 +33,7 @@ class Round:
     players: list[Player]
     turns_queue: list[int]
     actual_player: int
+    cannonball: Optional[Cannonball]
 
     def __init__(self, players: list[Player]):
         self.context = context.instance
@@ -59,6 +56,7 @@ class Round:
 
         self.last_state = None
         self.cannonball = None
+        self.fps = constants.FPS
         self.menu = Menu(self.snow_storm)
         self.create_tanks()
         self.create_turns()
@@ -90,8 +88,10 @@ class Round:
 
         points = []
         for zone in range(to_generate):
-            center = ((zone * segments_size) + ((zone + 1) + segments_size)) / 2
-            x = int(center + random.normalvariate(0, segments_size / 2))
+            center = ((zone * segments_size) + ((zone + 1) * segments_size)) / 2
+            x = center + random.normalvariate(0, segments_size / 4)
+            x = min(max(zone * segments_size, x), (zone + 1) * segments_size)
+            x = int(x)
             y = (
                 self.context.map_size[1]
                 - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
@@ -181,16 +181,6 @@ class Round:
         self.context.clock.tick(constants.FPS)
         self.fps = self.context.clock.get_fps()
 
-    def check_running(self):
-        """
-        This method checks if the player has sent the signal to close the
-        window and stops the execution if this is the case, it is also
-        responsible for cleaning any position that has been left unused.
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-
     def process_input(self) -> None:
         """
         This method is responsible for reading from the keyboard what the user wants
@@ -261,7 +251,7 @@ class Round:
         menu_state = self.in_game_menu.start_menu()
 
         if menu_state is InGameMenuStatus.EXIT:
-            self.running = False
+            raise ExitRequested
         elif menu_state is InGameMenuStatus.RESTART:
             # TODO: Ver que hacer con esto en base al nuevo modelo
             # TankGame.__init__(self, self.context)
@@ -290,37 +280,25 @@ class Round:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
-            if self.cannonball is None:
-                return
-            other_player = (self.actual_player + 1) % 2
             if tank.collides_with(
-                self.cannonball.position, self.tanks[self.actual_player].actual
+                self.cannonball.position, self.get_current_tank().actual
             ):
-                actual_radius_position = self.calculate_distance(self.actual_player)
-
-                if (
-                    actual_radius_position is not None
-                    and actual_radius_position > constants.TANK_RADIO
-                ):
-                    other_radius_position = self.calculate_distance(other_player)
-                    if (
-                        other_radius_position is not None
-                        and other_radius_position < constants.TANK_RADIO
-                    ):
-                        return Impact(self.cannonball.position, ImpactType.TANK)
-                else:
-                    return Impact(self.cannonball.position, ImpactType.SUICIDIO)
+                return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
         return None
 
-    def calculate_distance(self, player: int):
+    def get_current_tank(self):
+        return self.tanks[self.actual_player]
+
+    def calculate_distance(self, tank: Tank):
         if self.cannonball is None:
             return
 
         actual_radius = math.sqrt(
-            ((self.tanks[player].position.x - self.cannonball.position.x) ** 2)
-            + ((self.tanks[player].position.y - self.cannonball.position.y) ** 2)
+            ((tank.position.x - self.cannonball.position.x) ** 2)
+            + ((tank.position.y - self.cannonball.position.y) ** 2)
         )
+
         return actual_radius
 
     def wait_release_space(self) -> None:
@@ -331,7 +309,7 @@ class Round:
         :return: None
         """
         while pygame.key.get_pressed()[pygame.K_SPACE]:
-            self.check_running()
+            check_running()
             self.render()
 
     def cannonball_travel(self) -> None:
@@ -340,7 +318,7 @@ class Round:
         making it advance, and then drawing it.
         """
         while self.running and self.last_state is None:
-            self.check_running()
+            check_running()
             self.last_state = self.process_cannonball_trajectory()
             self.render()
 
@@ -368,6 +346,7 @@ class Round:
                 tank.life = tank.life - 40
                 if tank.life < 0:
                     tank.life = 0
+
         elif cannonball_type == CannonballType.MM105:
             if (
                 math.sqrt(
@@ -386,7 +365,7 @@ class Round:
         be displayed, but the game won't progress to menus or actions.
         """
         while self.running:
-            self.check_running()
+            check_running()
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
                 break
@@ -397,67 +376,28 @@ class Round:
         This function is responsible for checking what happened in the last shot
         and modifying the class fields to adapt to the outcome.
         """
-        if self.last_state is not None:
-            if self.last_state.impact_type == ImpactType.TANK:
-                other_player = (self.actual_player + 1) % 2
-                self.life_tank(
-                    self.last_state.position,
-                    self.tanks[other_player],
-                    self.tanks[self.actual_player].actual,
-                )
+        if self.last_state is None:
+            return
 
-                self.tanks[self.actual_player].player.score(
-                    self.last_state, self.tanks[other_player].position
-                )
-            elif self.last_state.impact_type == ImpactType.SUICIDIO:
-                other_player = (self.actual_player + 1) % 2
-                self.life_tank(
-                    self.last_state.position,
-                    self.tanks[self.actual_player],
-                    self.tanks[self.actual_player].actual,
-                )
-
-                self.tanks[other_player].player.score(
-                    self.last_state, self.tanks[self.actual_player].position
-                )
-            elif self.last_state.impact_type == ImpactType.TERRAIN:
-                other_player = (self.actual_player + 1) % 2
-                actual_radius_position = (
-                    self.calculate_distance(self.actual_player)
-                    - self.cannonball.radius_damage
-                )
-                if actual_radius_position > constants.TANK_RADIO:
-                    other_radius_position = (
-                        self.calculate_distance(other_player)
-                        - self.cannonball.radius_damage
+        if self.last_state.impact_type != ImpactType.BORDER:
+            for tank in self.tanks:
+                if (
+                    self.last_state.impact_type == ImpactType.TANK
+                    and tank is self.last_state.impacted_tank
+                ):
+                    # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
+                    continue
+                tank.life -= int(
+                    (
+                        self.cannonball.damage
+                        / ((1 - self.calculate_distance(tank)) ** 2)
                     )
-                    if other_radius_position < constants.TANK_RADIO:
-                        self.life_tank(
-                            self.last_state.position,
-                            self.tanks[other_player],
-                            self.tanks[self.actual_player].actual,
-                        )
-                        self.tanks[self.actual_player].player.score(
-                            self.last_state, self.tanks[other_player].position
-                        )
-                        self.last_state.impact_type = ImpactType.TANK
+                    * 200
+                )
 
-                else:
-                    self.last_state.impact_type = ImpactType.SUICIDIO
-                    self.life_tank(
-                        self.last_state.position,
-                        self.tanks[self.actual_player],
-                        self.tanks[self.actual_player].actual,
-                    )
-                    self.tanks[other_player].player.score(
-                        self.last_state, self.tanks[self.actual_player].position
-                    )
-
-        if (
-            self.last_state is not None
-            and self.last_state.impact_type != ImpactType.BORDER
-        ) and self.cannonball is not None:
-            self.cannonball.kill()
+        if self.last_state.impact_type == ImpactType.TANK:
+            if self.last_state.impacted_tank is not None:
+                self.last_state.impacted_tank.life -= self.cannonball.damage
 
     def terrain_destruction(self):
         """
@@ -510,7 +450,7 @@ class Round:
         soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
         while self.running:
-            self.check_running()
+            check_running()
             self.menu.draw(self.context.screen)
             self.menu.tick((1.0 / (self.fps + 0.1)))
 
@@ -538,6 +478,7 @@ class Round:
             self.animacion.tick(1.0 / (self.fps + 0.001))
             self.render()
 
+    @run_until_exit
     def start(self) -> None:
         """
         This method shows the basic instructions and then gives way to the
@@ -553,8 +494,9 @@ class Round:
         in_game = audio_cache["sounds/inGame.mp3"]
         in_game.play()
         in_game.set_volume(0.2)
+
         while self.running:
-            self.check_running()
+            check_running()
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
                 click = audio_cache["sounds/click.mp3"]
@@ -565,11 +507,14 @@ class Round:
         self.wait_release_space()
 
         while self.running:
-            self.check_running()
+            check_running()
+
+            for tank in self.tanks:
+                print(f"{tank.color} vida: {tank.life}")
 
             # Select the angle
             while self.running and self.cannonball is None:
-                self.check_running()
+                check_running()
                 self.process_input()
                 self.render()
 
@@ -649,7 +594,7 @@ class Round:
         if self.winner is not None:
             self.running = True
         while self.running:
-            self.check_running()
+            check_running()
             keys_pressed = pygame.key.get_pressed()
             if keys_pressed[pygame.K_SPACE]:
                 break

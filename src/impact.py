@@ -23,6 +23,9 @@ class Impact:
     position: pygame.Vector2
     impact_type: int
 
-    def __init__(self, position: pygame.Vector2, impact_type: int) -> None:
+    def __init__(
+        self, position: pygame.Vector2, impact_type: int, impacted_tank=None
+    ) -> None:
         self.position = position
         self.impact_type = impact_type
+        self.impacted_tank = impacted_tank

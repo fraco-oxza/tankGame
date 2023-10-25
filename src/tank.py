@@ -1,5 +1,5 @@
 import math
-from typing import _ProtocolMeta, Optional
+from typing import Optional
 
 import pygame
 
@@ -79,23 +79,44 @@ class Tank(Drawable, Collidable):
         # the -1 is since in this system the vertical coordinates are inverted
         v_y = -1 * self.shoot_velocity * math.sin(self.shoot_angle)
 
-        new_x = self.position.x + 20 * math.cos(self.shoot_angle)
-        new_y = self.position.y - 20 * math.sin(self.shoot_angle)
-
-        start_point = pygame.Vector2(new_x, new_y)
         start_velocity = pygame.Vector2(v_x, v_y)
 
         if self.actual == CannonballType.MM60:
             if self.available[0] > 0:
                 self.available[0] = self.available[0] - 1
+                new_x = self.position.x + (10 + constants.TANK_RADIO) * math.cos(
+                    self.shoot_angle
+                )
+                new_y = self.position.y - (10 + constants.TANK_RADIO) * math.sin(
+                    self.shoot_angle
+                )
+
+                start_point = pygame.Vector2(new_x, new_y)
+
                 return Cannonball60mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM80:
             if self.available[1] > 0:
                 self.available[1] = self.available[1] - 1
+                new_x = self.position.x + (20 + constants.TANK_RADIO) * math.cos(
+                    self.shoot_angle
+                )
+                new_y = self.position.y - (20 + constants.TANK_RADIO) * math.sin(
+                    self.shoot_angle
+                )
+
+                start_point = pygame.Vector2(new_x, new_y)
                 return Cannonball80mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM105:
             if self.available[2] > 0:
                 self.available[2] = self.available[2] - 1
+                new_x = self.position.x + (30 + constants.TANK_RADIO) * math.cos(
+                    self.shoot_angle
+                )
+                new_y = self.position.y - (30 + constants.TANK_RADIO) * math.sin(
+                    self.shoot_angle
+                )
+
+                start_point = pygame.Vector2(new_x, new_y)
                 return Cannonball105mm(start_point, start_velocity)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
