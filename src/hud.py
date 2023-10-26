@@ -135,38 +135,56 @@ class HUD(Drawable):
             25,
         )
 
-    def health_bars(self) -> pygame.Surface:
+    def tank_info(self) -> pygame.Surface:
         """
-        This method allows you to draw the life bar of both the player and the rival.
+        This method is responsible for displaying all the tank and player information in a section of the HUD
         """
-        other_player = (self.tank_game.actual_player + 1) % 2
         width = 350
         height = constants.HUD_HEIGHT
-        alto1 = height // 3
-        ancho1 = width / 6
-        alto2 = height // 1.5
-        ancho2 = width / 6
-
         sf = pygame.Surface((width, constants.HUD_HEIGHT))
         sf.fill("#232323")
-        text = self.font30.render("Salud de tanques", True, "white")
+        # this is for health
+        heart_icon = image_cache["images/heart.png"]
+        heart_icon = pygame.transform.scale(heart_icon, (25, 25))
+        sf.blit(heart_icon, (width / 7.5, height / 3.5))
+        width_bar = height // 2.7
+        height_bar = width / 6
+        text = self.font30.render("Información", True, "white")
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
         bar_length = width // 1.5
         bar_height = 30
         fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
-        pygame.draw.rect(sf, "#248934", (ancho1, alto1, bar_length, bar_height))
+        pygame.draw.rect(sf, "#248934", (width_bar, height_bar, bar_length, bar_height))
         pygame.draw.rect(
-            sf, "#131313", (ancho1 + fill1, alto1, bar_length - fill1 + 1, bar_height)
+            sf, "#131313", (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height)
         )
-        fill2 = (self.tanks[other_player].life / 100) * bar_length
-        pygame.draw.rect(sf, "#AD2301", (ancho2, alto2, bar_length, bar_height))
-        pygame.draw.rect(
-            sf, "#131313", (ancho2 + fill2, alto2, bar_length - fill2 + 1, bar_height)
-        )
-        jugador = self.font16.render("Jugador", True, "white")
-        sf.blit(jugador, (ancho1 + ancho1 // 9, alto1 + alto1 // 9))
-        oponente = self.font16.render("Oponente", True, "white")
-        sf.blit(oponente, (ancho2 + ancho2 // 9, alto2 + alto2 // 18))
+        player = self.font16.render("Salud", True, "white")
+        sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
+
+        # this is for money
+        money_icon = image_cache["images/money.png"]
+        money_icon = pygame.transform.scale(money_icon, (30, 30))
+        sf.blit(money_icon, (width / 7.5, height / 2.2))
+        actual_money = self.font16.render(
+            "Dinero disponible: $" + str(self.tanks[self.tank_game.actual_player].player.money), True, "#FFFFFF")
+        sf.blit(actual_money, (width / 4, height / 2))
+
+        # this is por murders
+        murders_icon = image_cache["images/murders.png"]
+        murders_icon = pygame.transform.scale(murders_icon, (25, 25))
+        sf.blit(murders_icon, (width / 7.5, height / 1.55))
+        actual_murders = self.font16.render(
+            "Asesinatos cometidos: " + str(self.tanks[self.tank_game.actual_player].player.murders), True, "#FFFFFF")
+        sf.blit(actual_murders, (width / 4, height / 1.5))
+
+        # this is por deads
+        deads_icon = image_cache["images/deads.png"]
+        deads_icon = pygame.transform.scale(deads_icon, (25, 25))
+        sf.blit(deads_icon, (width / 7.5, height / 1.25))
+        actual_deads = self.font16.render(
+            "Veces que ha muerto: " + str(self.tanks[self.tank_game.actual_player].player.deads), True, "#FFFFFF")
+        sf.blit(actual_deads, (width / 4, height / 1.2))
+
         return sf
 
     def get_actual_player(self):
@@ -376,7 +394,7 @@ class HUD(Drawable):
             ),
         )
         screen.blit(
-            self.health_bars(),
+            self.tank_info(),
             (
                 constants.BORDER_PADDING + 900,
                 constants.WINDOWS_SIZE[1]

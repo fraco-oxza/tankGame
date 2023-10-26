@@ -17,9 +17,16 @@ class Player:
     money: int
     ammunition: dict[int, int]
     color: str | pygame.Color
+    money: int
+    murders: int
+    deads: int
 
     def __init__(self, name: str, color: str | pygame.Color):
         self.name = name
+        self.points = points
+        self.money = 10000
+        self.murders = 0
+        self.deads = 0
         self.points = 0
         self.money = 0
         self.color = color
