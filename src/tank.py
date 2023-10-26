@@ -31,6 +31,7 @@ class Tank(Drawable, Collidable):
     actual: int  # bala seleccionada
     available: dict[int, int]
     life: int
+    is_alive: bool
 
     def __init__(
         self, color: pygame.Color | str, position: pygame.Vector2, player: Player
@@ -42,6 +43,7 @@ class Tank(Drawable, Collidable):
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
         self.available = player.ammunition
+        self.is_alive = True
         self.life = 100
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
@@ -125,6 +127,9 @@ class Tank(Drawable, Collidable):
         tank gun according to its angle. Additionally, if mode is activated
         developer draws the hitbox
         """
+        if not self.is_alive:
+            self.color = "#232323"
+
         if constants.DEVELOPMENT_MODE:
             pygame.draw.circle(
                 screen,

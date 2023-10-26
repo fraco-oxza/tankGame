@@ -12,6 +12,7 @@ class Context:
     rounds: int
     screen: pygame.surface.Surface
     number_of_players: int
+    number_of_rounds: int
     __windows_size: tuple[int, int]
     map_size: tuple[int, int]
     fps: float
@@ -23,6 +24,7 @@ class Context:
         self.windows_size = constants.WINDOWS_SIZE
         self.screen = pygame.display.set_mode(self.__windows_size)
         self.number_of_players = constants.DEFAULT_NUMBER_OF_PLAYERS
+        self.number_of_rounds = constants.DEFAULT_ROUNDS
         self.fps = float(constants.FPS)
         self.clock = Clock()
 

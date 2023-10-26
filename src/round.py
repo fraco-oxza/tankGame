@@ -34,6 +34,7 @@ class Round:
     turns_queue: list[int]
     actual_player: int
     cannonball: Optional[Cannonball]
+    tanks_alive: int
 
     def __init__(self, players: list[Player]):
         self.context = context.instance
@@ -47,6 +48,7 @@ class Round:
             self.map.define_terrain_colors(),
         )
         # TODO: Add the winner screen
+        self.tanks_alive = len(players)
         self.winner_msj = WinnerScreen(self)
         self.players = players
         self.winner = None
@@ -290,9 +292,9 @@ class Round:
     def get_current_tank(self):
         return self.tanks[self.actual_player]
 
-    def calculate_distance(self, tank: Tank):
+    def calculate_distance(self, tank: Tank) -> float:
         if self.cannonball is None:
-            return
+            return math.inf
 
         actual_radius = math.sqrt(
             ((tank.position.x - self.cannonball.position.x) ** 2)
@@ -322,42 +324,6 @@ class Round:
             self.last_state = self.process_cannonball_trajectory()
             self.render()
 
-    @staticmethod
-    def life_tank(point: pygame.Vector2, tank: Tank, cannonball_type: int):
-        """Esta función se encarga de quitar vida al tanque según la bala que impactó"""
-        if cannonball_type == CannonballType.MM60:
-            if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 10
-            ):
-                tank.life = tank.life - 30
-                if tank.life < 0:
-                    tank.life = 0
-
-        elif cannonball_type == CannonballType.MM80:
-            if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 20
-            ):
-                tank.life = tank.life - 40
-                if tank.life < 0:
-                    tank.life = 0
-
-        elif cannonball_type == CannonballType.MM105:
-            if (
-                math.sqrt(
-                    (point.x - tank.position.x) ** 2 + (point.y - tank.position.y) ** 2
-                )
-                <= constants.TANK_RADIO + 30
-            ):
-                tank.life = tank.life - 50
-                if tank.life < 0:
-                    tank.life = 0
-
     def wait_on_space(self) -> None:
         """
         This function will pause most of the game logic but won't completely
@@ -376,7 +342,7 @@ class Round:
         This function is responsible for checking what happened in the last shot
         and modifying the class fields to adapt to the outcome.
         """
-        if self.last_state is None:
+        if self.last_state is None or self.cannonball is None:
             return
 
         if self.last_state.impact_type != ImpactType.BORDER:
@@ -390,7 +356,7 @@ class Round:
                 tank.life -= int(
                     (
                         self.cannonball.damage
-                        / ((1 - self.calculate_distance(tank)) ** 2)
+                        / ((1.0 - self.calculate_distance(tank)) ** 2)
                     )
                     * 200
                 )
@@ -398,6 +364,17 @@ class Round:
         if self.last_state.impact_type == ImpactType.TANK:
             if self.last_state.impacted_tank is not None:
                 self.last_state.impacted_tank.life -= self.cannonball.damage
+
+        for tank in self.tanks:
+            if tank.is_alive and tank.life <= 0:
+                tank.is_alive = False
+                tank.life = 0
+                self.get_current_tank().player.money += 1000
+                self.tanks_alive -= 1
+
+        
+
+        
 
     def terrain_destruction(self):
         """
@@ -478,6 +455,13 @@ class Round:
             self.animacion.tick(1.0 / (self.fps + 0.001))
             self.render()
 
+    def next_turn(self): 
+        if len(self.turns_queue) == 0:
+            self.create_turns()
+
+        self.actual_player = self.turns_queue[-1]  # Swap actual player
+        self.turns_queue.pop()
+
     @run_until_exit
     def start(self) -> None:
         """
@@ -509,8 +493,10 @@ class Round:
         while self.running:
             check_running()
 
-            for tank in self.tanks:
-                print(f"{tank.color} vida: {tank.life}")
+            self.next_turn()
+
+            while not self.get_current_tank().is_alive:
+                self.next_turn()
 
             # Select the angle
             while self.running and self.cannonball is None:
@@ -563,34 +549,23 @@ class Round:
             self.cannonball = None
 
             self.wait_release_space()
-            if len(self.turns_queue) == 0:
-                self.create_turns()
-            self.actual_player = self.turns_queue[-1]  # Swap actual player
-            self.turns_queue.pop()
+
+
+
             self.render()
 
-            are_tanks_without_live = False
-            for tank in self.tanks:
-                if self.last_state is not None:
-                    if tank.life == 0 and (
-                        self.last_state.impact_type == ImpactType.TANK
-                    ):
-                        self.winner = (self.actual_player + 1) % 2
-                        self.running = False
-                        are_tanks_without_live = True
-                        break
-                    if (
-                        tank.life == 0
-                        and self.last_state.impact_type == ImpactType.SUICIDIO
-                    ):
-                        self.winner = self.actual_player
-                        self.running = False
-                        are_tanks_without_live = True
-                        break
+            if self.tanks_alive == 1:
+                for i,tank in enumerate(self.tanks):
+                    if tank.is_alive:
+                        self.winner = i
 
-            if are_tanks_without_live:
+            if self.winner is not None:
                 break
+
+
+
             self.last_state = None
+
         if self.winner is not None:
             self.running = True
         while self.running:
