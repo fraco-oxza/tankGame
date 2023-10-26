@@ -65,16 +65,7 @@ class WinnerScreen(Drawable):
             True,
             "white",
         )
-        self.font.set_bold(False)
-        position_winner_life = pygame.Vector2(instance.windows_size[0] / 2.32, instance.windows_size[1] / 6)
-        screen.blit(self.text_winner_life, position_winner_life)
-        points = self.tank_game.tanks[self.tank_game.winner].player.points
-        self.font.set_bold(True)
-        self.text_winner_life = self.font.render(
-            f"Puntaje: {points} puntos ",
-            True,
-            "white",
-        )
+
         self.font.set_bold(False)
         position_winner_score = pygame.Vector2(instance.windows_size[0] / 2.28, instance.windows_size[1] / 2.66)
         screen.blit(self.text_winner_life, position_winner_score)
