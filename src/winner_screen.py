@@ -5,7 +5,7 @@ from caches import font_cache
 import constants
 
 from draw import Drawable
-
+from context import instance
 
 class WinnerScreen(Drawable):
     """
@@ -19,14 +19,14 @@ class WinnerScreen(Drawable):
         Constructor that initializes all the elements needed to demonstrate
         the message of victory.
         """
-        self.font = font_cache["Roboto.ttf", 20]
+        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 64)]
         self.tank_game = tank_game
         self.text_winner_info = None
         self.text_winner_life = None
         self.text_winner_score = None
         self.text_life1 = None
         self.text_life2 = None
-        self.font100 = font_cache["Roboto.ttf", 150]
+        self.font100 = font_cache["Roboto.ttf", int(instance.windows_size[0] // 8.53)]
         self.font100.set_bold(True)
         self.font100.set_italic(True)
         self.vx = random.uniform(-1, 1)
@@ -44,12 +44,12 @@ class WinnerScreen(Drawable):
             # Si no hay ganador, no se ejecuta
             return
 
-        center = (360, 120)
+        center = (instance.windows_size[0] / 3.55, instance.windows_size[1] / 6)
         transparency = 220
-        rect_surface = pygame.Surface((900, 400))
+        rect_surface = pygame.Surface((instance.windows_size[0] / 1.22, instance.windows_size[1] / 1.8))
         rect_surface.fill("#64BA1E")
         rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = constants.H_WINNER
+        rect_x1, rect_y1 = (instance.windows_size[0] / 10.66, instance.windows_size[1] / 12)
         screen.blit(rect_surface, (rect_x1, rect_y1))
         self.text_winner_info = self.font100.render(
             "WINNER",
@@ -66,7 +66,7 @@ class WinnerScreen(Drawable):
             "white",
         )
         self.font.set_bold(False)
-        position_winner_life = pygame.Vector2(550, 120)
+        position_winner_life = pygame.Vector2(instance.windows_size[0] / 2.32, instance.windows_size[1] / 6)
         screen.blit(self.text_winner_life, position_winner_life)
         points = self.tank_game.tanks[self.tank_game.winner].player.points
         self.font.set_bold(True)
@@ -76,33 +76,35 @@ class WinnerScreen(Drawable):
             "white",
         )
         self.font.set_bold(False)
-        position_winner_score = pygame.Vector2(560, 270)
+        position_winner_score = pygame.Vector2(instance.windows_size[0] / 2.28, instance.windows_size[1] / 2.66)
         screen.blit(self.text_winner_life, position_winner_score)
         pygame.draw.rect(
             screen,
             self.tank_game.tanks[self.tank_game.winner].color,
             pygame.Rect(
-                constants.TANK_WINNER[0] - 25, constants.TANK_WINNER[1] - 10, 50, 35
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 51.2,
+                instance.windows_size[1] / 2.05 - instance.windows_size[1] / 72, instance.windows_size[0] / 25.6,
+                instance.windows_size[1] / 20.57
             ),
         )
         pygame.draw.rect(
             screen,
             self.tank_game.tanks[self.tank_game.winner].color,
             pygame.Rect(
-                constants.TANK_WINNER[0] - 62.5,
-                constants.TANK_WINNER[1] + 25,
-                125,
-                50,
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+                instance.windows_size[1] / 2.05 + instance.windows_size[1] / 28.8,
+                instance.windows_size[0] / 10.24,
+                instance.windows_size[1] / 14.4,
             ),
         )
         pygame.draw.rect(
             screen,
             constants.GRAY,
             pygame.Rect(
-                constants.TANK_WINNER[0] - 62.5,
-                constants.TANK_WINNER[1] + 75,
-                125,
-                20,
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+                instance.windows_size[1] / 2.05 + instance.windows_size[1] / 9.6,
+                instance.windows_size[0] / 10.24,
+                instance.windows_size[0] / 64,
             ),
         )
 
@@ -111,18 +113,19 @@ class WinnerScreen(Drawable):
                 screen,
                 constants.BLACK,
                 (
-                    constants.TANK_WINNER[0] - 60 + 25 * i,
-                    constants.TANK_WINNER[1] + 90,
+                    instance.windows_size[0] / 1.96 - instance.windows_size[0] / 21.33 + instance.windows_size[
+                        0] / 51.2 * i,
+                    instance.windows_size[1] / 2.05 + instance.windows_size[1] / 8,
                 ),
-                15,
+                instance.windows_size[0] / 85.33,
             )
 
         pygame.draw.line(
             screen,
             self.tank_game.tanks[self.tank_game.winner].color,
-            constants.TANK_WINNER,
-            (550, 300),
-            15,
+            (instance.windows_size[0] / 1.96, instance.windows_size[1] / 2.05),
+            (instance.windows_size[0] / 2.32, instance.windows_size[1] / 2.4),
+            int(instance.windows_size[0] / 51.2),
         )
 
     def draw(self, screen: pygame.surface.Surface) -> None:

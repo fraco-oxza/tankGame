@@ -5,7 +5,7 @@ from caches import font_cache
 from caches import image_cache
 from cannonballs import CannonballType
 from draw import Drawable
-
+from context import instance
 
 class WarningWindows(Drawable):
     """
@@ -26,12 +26,12 @@ class WarningWindows(Drawable):
         self.tank_game = tank_game
         self.quantity = []
         self.num_seleccionado = 0
-        self.font = font_cache["Roboto.ttf", 20]
-        self.font2 = font_cache["Roboto.ttf", 12]
-        self.font100 = font_cache["Roboto.ttf", 60]
+        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 64)]
+        self.font2 = font_cache["Roboto.ttf", int(instance.windows_size[0] / 106.66)]
+        self.font100 = font_cache["Roboto.ttf", int(instance.windows_size[0] / 21.33)]
         self.font.set_bold(True)
-        self.font50 = font_cache["Roboto.ttf", 15]
-        self.size = (constants.WINDOWS_SIZE[0] / 3.6, constants.WINDOWS_SIZE[1] / 7.2)
+        self.font50 = font_cache["Roboto.ttf", int(instance.windows_size[0] / 85.33)]
+        self.size = (instance.windows_size[0] / 3.6, instance.windows_size[1] / 7.2)
 
     def get_background(self) -> pygame.Surface:
         """
@@ -50,7 +50,7 @@ class WarningWindows(Drawable):
             border_bottom_right_radius=10,
         )
         image = image_cache["images/warning.png"]
-        rect_surface.blit(image, (10, 10))
+        rect_surface.blit(image, (instance.windows_size[0] / 128, instance.windows_size[1] / 72))
 
         return rect_surface
 
@@ -92,20 +92,24 @@ class WarningWindows(Drawable):
             True,
             "white",
         )
-        sf.blit(self.font100, (100, 20))
+        sf.blit(self.font100, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 36))
         self.font50 = self.font2.render(
             "Seleccione alguna bala diferente",
             True,
             "white",
         )
-
-        sf.blit(self.font50, (100, 50))
-
+        if instance.windows_size[0] > 1000:
+            sf.blit(self.font50, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 14.4))
+        else:
+            sf.blit(self.font50, (instance.windows_size[0] / 9, instance.windows_size[1] / 14.4))
         self.font50 = self.font2.render(
             f"con los números {alternatives}",
             True,
             "white",
         )
-        sf.blit(self.font50, (100, 65))
+        if instance.windows_size[0] > 1000:
+            sf.blit(self.font50, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 11.07))
+        else:
+            sf.blit(self.font50, (instance.windows_size[0] / 8, instance.windows_size[1] / 11.07))
 
-        screen.blit(sf, (constants.WINDOWS_SIZE[0] / 2 - sf.get_size()[0] / 2, 0))
+        screen.blit(sf, (instance.windows_size[0] / 2 - sf.get_size()[0] / 2, 0))

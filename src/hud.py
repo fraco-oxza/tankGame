@@ -7,7 +7,7 @@ from caches import font_cache, image_cache
 from draw import Drawable
 from speedometer import Speedometer
 from tank import Tank
-
+from context import instance
 
 class HUD(Drawable):
     """
@@ -17,7 +17,7 @@ class HUD(Drawable):
 
     tanks: list[Tank]
     left = 100
-    top = constants.WINDOWS_SIZE[1] - int((3 / 5) * constants.HUD_HEIGHT)
+    top = instance.windows_size[1] - int((3 / 5) * instance.windows_size[1] / 3.6)
     width = 160
     height = 50
     color: list[int]
@@ -26,17 +26,18 @@ class HUD(Drawable):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = image_cache["images/Angle.png"]
-        self.speedometer = Speedometer(int((2 / 3) * constants.HUD_HEIGHT))
-        self.font = font_cache["Roboto.ttf", 24]
-        self.font30 = font_cache["Roboto.ttf", 30]
-        self.font16 = font_cache["Roboto.ttf", 16]
-        self.font12 = font_cache["Roboto.ttf", 12]
+        self.speedometer = Speedometer(
+            int(((2.7 / 5) if instance.windows_size[1] < 1000 else (3 / 5)) * instance.windows_size[1] / 3.6))
+        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] // 53.33)]
+        self.font30 = font_cache["Roboto.ttf", int(instance.windows_size[0] // 42.6)]
+        self.font16 = font_cache["Roboto.ttf", int(instance.windows_size[0] // 80)]
+        self.font12 = font_cache["Roboto.ttf", int(instance.windows_size[0] // 106.6)]
         self.text_angle1 = None
         self.text_angle2 = None
         self.text_velocity1 = None
         self.text_velocity2 = None
         self.text_cannonball_info = None
-        self.color = tanks[self.tank_game.actual_player].available
+        self.color = tanks[self.tank_game.actual_player].color
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         """
@@ -44,10 +45,14 @@ class HUD(Drawable):
         the bullet such as the maximum distance traveled or the maximum height reached.
         """
         transparency = 128
-        rect_surface = pygame.Surface((300, 50))
+        rect_surface = pygame.Surface((instance.windows_size[0] / 4.26, instance.windows_size[1] / 14.4))
         rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = constants.H_MAX
-        rect_x2, rect_y2 = constants.DISTANCE_MAX
+        if instance.windows_size[0] != instance.windows_size[1]:
+            rect_x1, rect_y1 = (instance.windows_size[0] / 64, instance.windows_size[1] / 1.6)
+            rect_x2, rect_y2 = (instance.windows_size[0] // 1.33, instance.windows_size[1] // 1.6)
+        else:
+            rect_x1, rect_y1 = (instance.windows_size[0] / 40, instance.windows_size[1] / 1.6)
+            rect_x2, rect_y2 = (instance.windows_size[0] / 1.349, instance.windows_size[1] // 1.6)
         screen.blit(rect_surface, (rect_x1, rect_y1))
         screen.blit(rect_surface, (rect_x2, rect_y2))
 
@@ -57,7 +62,8 @@ class HUD(Drawable):
                 True,
                 "white",
             )
-            screen.blit(self.text_cannonball_info, pygame.Vector2(40, 460))
+            screen.blit(self.text_cannonball_info,
+                        pygame.Vector2(instance.windows_size[0] / 32, instance.windows_size[1] / 1.56))
 
             distance = self.tank_game.cannonball.calculate_distance_to(
                 self.tanks[self.tank_game.actual_player].position
@@ -67,43 +73,47 @@ class HUD(Drawable):
                 True,
                 "white",
             )
-            screen.blit(self.text_cannonball_info, pygame.Vector2(990, 460))
+            screen.blit(self.text_cannonball_info,
+                        pygame.Vector2(instance.windows_size[0] / 1.29, instance.windows_size[1] / 1.56))
 
     @staticmethod
     def draw_cannonball_105_mm(screen: pygame.surface):
         """This method allows you to draw the 105mm cannonball icon."""
-        position = pygame.Vector2(290, 170)
+        position = pygame.Vector2(instance.windows_size[0] / 4.41, instance.windows_size[1] / 4.23)
         pygame.draw.line(
-            screen, "gray", position, (position.x + 35, position.y - 35), 10
+            screen, "gray", position,
+            (position.x + instance.windows_size[0] / 36.57, position.y - instance.windows_size[1] / 20.57),
+            instance.windows_size[0] // 128
         )
-        pygame.draw.circle(screen, "black", position, 25)
+        pygame.draw.circle(screen, "black", position, instance.windows_size[0] / 51.2)
 
         pygame.draw.line(
             screen,
             "yellow",
-            (position.x + 35, position.y - 35),
-            (position.x + 40, position.y - 40),
-            10,
+            (position.x + instance.windows_size[0] / 36.57, position.y - instance.windows_size[1] / 20.57),
+            (position.x + instance.windows_size[0] / 32, position.y - instance.windows_size[1] / 18),
+            instance.windows_size[0] // 128,
         )
 
     @staticmethod
     def draw_cannonball_80_mm(screen: pygame.surface.Surface):
         """This method allows you to draw the 80mm cannonball icon."""
-        position = pygame.Vector2(160, 150)
+        position = pygame.Vector2(instance.windows_size[0] / 8, instance.windows_size[1] / 4.8)
         triangle = [
             (position.x, position.y),
-            (position.x + 12.5, position.y - 18),
-            (position.x + 25, position.y),
+            (position.x + instance.windows_size[0] / 102.4, position.y - instance.windows_size[1] / 40),
+            (position.x + instance.windows_size[0] / 51.2, position.y),
         ]
 
         pygame.draw.rect(
-            screen, constants.DarkGreen, pygame.Rect(position.x, position.y, 25, 37.5)
+            screen, constants.DarkGreen,
+            pygame.Rect(position.x, position.y, instance.windows_size[0] / 51.2, instance.windows_size[1] / 19.2)
         )
         pygame.draw.line(
             screen,
             "yellow",
-            (position.x, position.y + 18.75),
-            (position.x + 25, position.y + 18.75),
+            (position.x, position.y + instance.windows_size[1] / 38.46),
+            (position.x + instance.windows_size[0] / 51.2, position.y + instance.windows_size[1] / 38.46),
             13,
         )
         pygame.draw.polygon(screen, constants.DarkGreen, triangle)
@@ -111,21 +121,21 @@ class HUD(Drawable):
         pygame.draw.line(
             screen,
             "orange",
-            (position.x + 12.5, position.y + 37.5),
-            (position.x + 12.5, position.y + 50),
+            (position.x + instance.windows_size[0] / 102.4, position.y + instance.windows_size[1] / 19.2),
+            (position.x + instance.windows_size[0] / 102.4, position.y + instance.windows_size[1] / 14.4),
             10,
         )
 
     @staticmethod
     def draw_cannonball_60_mm(screen: pygame.surface.Surface):
         """This method allows you to draw the 60mm cannonball icon."""
-        position = pygame.Vector2(50, 140)
+        position = pygame.Vector2(instance.windows_size[0] / 25.6, instance.windows_size[1] / 5.14)
         pygame.draw.line(
             screen,
             "#4b5320",
             (position.x, position.y),
-            (position.x, position.y + 50),
-            25,
+            (position.x, position.y + instance.windows_size[1] / 14.4),
+            int(instance.windows_size[0] // 51.2),
         )
         pygame.draw.line(
             screen,
@@ -139,20 +149,20 @@ class HUD(Drawable):
         """
         This method is responsible for displaying all the tank and player information in a section of the HUD
         """
-        width = 350
-        height = constants.HUD_HEIGHT
-        sf = pygame.Surface((width, constants.HUD_HEIGHT))
+        width = instance.windows_size[0] / 3.65
+        height = instance.windows_size[1] / 3.6
+        sf = pygame.Surface((width, height))
         sf.fill("#232323")
         # this is for health
         heart_icon = image_cache["images/heart.png"]
-        heart_icon = pygame.transform.scale(heart_icon, (25, 25))
+        heart_icon = pygame.transform.scale(heart_icon, (width / 14, height / 8))
         sf.blit(heart_icon, (width / 7.5, height / 3.5))
-        width_bar = height // 2.7
-        height_bar = width / 6
+        width_bar = width / 7.5 + width / 10
+        height_bar = height / 3.7
         text = self.font30.render("Información", True, "white")
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
         bar_length = width // 1.5
-        bar_height = 30
+        bar_height = height / 6.66
         fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#248934", (width_bar, height_bar, bar_length, bar_height))
         pygame.draw.rect(
@@ -163,7 +173,7 @@ class HUD(Drawable):
 
         # this is for money
         money_icon = image_cache["images/money.png"]
-        money_icon = pygame.transform.scale(money_icon, (30, 30))
+        money_icon = pygame.transform.scale(money_icon, (width / 11.66, height / 6.66))
         sf.blit(money_icon, (width / 7.5, height / 2.2))
         actual_money = self.font16.render(
             "Dinero disponible: $" + str(self.tanks[self.tank_game.actual_player].player.money), True, "#FFFFFF")
@@ -171,7 +181,7 @@ class HUD(Drawable):
 
         # this is por murders
         murders_icon = image_cache["images/murders.png"]
-        murders_icon = pygame.transform.scale(murders_icon, (25, 25))
+        murders_icon = pygame.transform.scale(murders_icon, (width / 14, height / 8))
         sf.blit(murders_icon, (width / 7.5, height / 1.55))
         actual_murders = self.font16.render(
             "Asesinatos cometidos: " + str(self.tanks[self.tank_game.actual_player].player.murders), True, "#FFFFFF")
@@ -179,7 +189,7 @@ class HUD(Drawable):
 
         # this is por deads
         deads_icon = image_cache["images/deads.png"]
-        deads_icon = pygame.transform.scale(deads_icon, (25, 25))
+        deads_icon = pygame.transform.scale(deads_icon, (width / 14, height / 8))
         sf.blit(deads_icon, (width / 7.5, height / 1.25))
         actual_deads = self.font16.render(
             "Veces que ha muerto: " + str(self.tanks[self.tank_game.actual_player].player.deads), True, "#FFFFFF")
@@ -192,18 +202,18 @@ class HUD(Drawable):
         This method allows you to draw the current player's tank on the
         HUD to indicate who is currently playing.
         """
-        width = 165
-        height = constants.HUD_HEIGHT
+        width = instance.windows_size[0] / 7.75
+        height = instance.windows_size[1] / 3.6
         sf = pygame.Surface((width, height))
         sf.fill("#232323")
         actual_player1 = self.font30.render("Jugador", True, "#FFFFFF")
         actual_player = self.font30.render("actual", True, "#FFFFFF")
-        sf.blit(actual_player1, (width / 6, 10))
-        sf.blit(actual_player, (width / 5, 40))
+        sf.blit(actual_player1, (width / 6, height / 72))
+        sf.blit(actual_player, (width / 4, height / 7))
         pygame.draw.rect(
             sf,
             self.tank_game.tanks[self.tank_game.actual_player].color,
-            pygame.Rect(width / 3 + 18, height / 1.5 - 15, 25, 17.5),
+            pygame.Rect(width / 3 + width / 9.16, height / 1.5 - height / 13.33, width / 6.6, height / 11.42),
         )
         pygame.draw.rect(
             sf,
@@ -211,8 +221,8 @@ class HUD(Drawable):
             pygame.Rect(
                 width / 3,
                 height / 1.5,
-                62.5,
-                25,
+                width / 2.64,
+                height / 8,
             ),
         )
         pygame.draw.rect(
@@ -220,9 +230,9 @@ class HUD(Drawable):
             constants.GRAY,
             pygame.Rect(
                 width / 3,
-                height / 1.5 + 25,
-                62.5,
-                10,
+                height / 1.5 + height / 8,
+                width / 2.64,
+                height / 20,
             ),
         )
 
@@ -231,18 +241,18 @@ class HUD(Drawable):
                 sf,
                 constants.BLACK,
                 (
-                    width / 3 + 12.5 * i,
-                    height / 1.5 + 35,
+                    width / 3 + width / 13.2 * i,
+                    height / 1.5 + height / 5.71,
                 ),
-                7.5,
+                width / 26.66,
             )
 
         pygame.draw.line(
             sf,
             self.tank_game.tanks[self.tank_game.actual_player].color,
-            ((width / 3 + 29), height / 1.5 - 13),
-            ((width / 3 - 10), height / 1.5 - 35),
-            8,
+            ((width / 3 + width / 5.68), height / 1.5 - height / 15.38),
+            ((width / 3 - width / 16.5), height / 1.5 - height / 5.71),
+            int(width / 20.625),
         )
 
         return sf
@@ -251,46 +261,60 @@ class HUD(Drawable):
         """
         This method allows you to draw on the HUD the number of bullets that the current player has.
         """
-        width = 350
-        height = constants.HUD_HEIGHT
+        width = instance.windows_size[0] / 3.65
+        height = instance.windows_size[1] / 3.6
         sf = pygame.Surface((width, height))
         sf.fill("#232323")
         alto = height // 2
         text = self.font30.render("Selección de bala", True, "white")
-        sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
+        sf.blit(text, (width / 2 - text.get_size()[0] / 2, width / 40))
         mm60 = self.font16.render("60MM", True, "white")
-        sf.blit(mm60, (width / 3 - mm60.get_size()[0] / 0.5, 50))
+        sf.blit(mm60, (width / 3 - mm60.get_size()[0] / 0.5, width / 7))
         mm80 = self.font16.render("80MM", True, "white")
-        sf.blit(mm80, (width / 2 - mm80.get_size()[0] / 1.5, 50))
+        sf.blit(mm80, (width / 2 - mm80.get_size()[0] / 1.5, width / 7))
         mm105 = self.font16.render("105MM", True, "white")
-        sf.blit(mm105, (width / 1.2 - mm105.get_size()[0] / 2, 50))
-        ancho = 50
+        sf.blit(mm105, (width / 1.2 - mm105.get_size()[0] / 2, width / 7))
+        ancho = width / 7
         for i in range(3):
-            pygame.draw.circle(sf, "#45484A", (ancho, alto), 30)
-            ancho += 120
+            pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 11.66)
+            ancho += width / 2.91
         self.color = self.tanks[self.tank_game.actual_player].available
-        ancho = 50
+        ancho = width / 7
         for i in range(3):
-            pygame.draw.circle(sf, "#232323", (ancho, alto), 25)
+            pygame.draw.circle(sf, "#232323", (ancho, alto), width / 14)
             if self.tank_game.tanks[self.tank_game.actual_player].actual == i:
                 if self.color[i] > 0:
-                    pygame.draw.circle(sf, "#A7D131", (ancho, alto), 25)
+                    pygame.draw.circle(sf, "#A7D131", (ancho, alto), width / 14)
                 else:
-                    pygame.draw.circle(sf, "#F80000", (ancho, alto), 25)
-            ancho += 120
-        ancho = 50
-        for i in range(3):
-            pygame.draw.circle(sf, "#45484A", (ancho, alto), 20)
-            cantidad = self.font.render(
-                f"{self.tanks[self.tank_game.actual_player].available[i]}",
-                True,
-                "white",
-            )
-            if self.tanks[self.tank_game.actual_player].available[i] > 9:
-                sf.blit(cantidad, (ancho - 15, alto - 15))
-            else:
-                sf.blit(cantidad, (ancho - 8, alto - 15))
-            ancho += 120
+                    pygame.draw.circle(sf, "#F80000", (ancho, alto), width / 14)
+            ancho += width / 2.91
+        ancho = width / 7
+        if instance.windows_size[0] != instance.windows_size[1]:
+            for i in range(3):
+                pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 17.5)
+                cantidad = self.font.render(
+                    f"{self.tanks[self.tank_game.actual_player].available[i]}",
+                    True,
+                    "white",
+                )
+                if self.tanks[self.tank_game.actual_player].available[i] > 9:
+                    sf.blit(cantidad, (ancho - width / 23.33, alto - height / 13.33))
+                else:
+                    sf.blit(cantidad, (ancho - width / 43.75, alto - height / 13.33))
+                ancho += width / 2.91
+        else:
+            for i in range(3):
+                pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 17.5)
+                cantidad = self.font.render(
+                    f"{self.tanks[self.tank_game.actual_player].available[i]}",
+                    True,
+                    "white",
+                )
+                if self.tanks[self.tank_game.actual_player].available[i] > 9:
+                    sf.blit(cantidad, (ancho - width / 23.33, alto - height / 27.33))
+                else:
+                    sf.blit(cantidad, (ancho - width / 43.75, alto - height / 27.33))
+                ancho += width / 2.91
         self.draw_cannonball_60_mm(sf)
         self.draw_cannonball_80_mm(sf)
         self.draw_cannonball_105_mm(sf)
@@ -300,8 +324,8 @@ class HUD(Drawable):
         """
         This method allows you to draw on the HUD both the angle and the speed at which you want to shoot.
         """
-        width = 350
-        height = constants.HUD_HEIGHT
+        width = instance.windows_size[0] / 3.65
+        height = instance.windows_size[1] / 3.6
 
         sf = pygame.Surface((width, height))
         sf.fill("#232323")
@@ -316,8 +340,9 @@ class HUD(Drawable):
         self.font16.set_bold(True)
         velocity = self.font16.render(f"{self.speedometer.actual:.2f}", True, "white")
 
-        sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
-        cds = pygame.rect.Rect((2 / 3) * width - 10, (4 / 8) * height - 15, 70, 30)
+        sf.blit(text, (width / 2 - text.get_size()[0] / 2, width / 70))
+        cds = pygame.rect.Rect((2 / 3) * width - width / 35, (4 / 8) * height - height / 13.33, width / 5,
+                               height / 6.66)
         pygame.draw.rect(sf, "#141414", cds)
         sf.blit(
             velocity, ((2 / 3) * width, (4 / 8) * height - velocity.get_size()[1] / 2)
@@ -325,8 +350,8 @@ class HUD(Drawable):
         sf.blit(
             velocity_label,
             (
-                (2 / 3) * width - 10,
-                (4 / 8) * height - 15 - velocity_label.get_size()[1],
+                (2 / 3) * width - width / 35,
+                (4 / 8) * height - height / 13.33 - velocity_label.get_size()[1],
             ),
         )
 
@@ -335,19 +360,20 @@ class HUD(Drawable):
             True,
             "white",
         )
-        cds = pygame.rect.Rect((2 / 3) * width - 10, (6 / 8) * height - 15, 70, 30)
+        cds = pygame.rect.Rect((2 / 3) * width - width / 35, (6 / 8) * height - height / 13.33, width / 5,
+                               height / 6.66)
         pygame.draw.rect(sf, "#141414", cds)
         sf.blit(angle, ((2 / 3) * width, (6 / 8) * height - angle.get_size()[1] / 2))
         sf.blit(
             angle_label,
             (
-                (2 / 3) * width - 10,
-                (6 / 8) * height - 15 - velocity_label.get_size()[1],
+                (2 / 3) * width - width / 35,
+                (6 / 8) * height - height / 23.33 - velocity_label.get_size()[1],
             ),
         )
         self.font16.set_bold(False)
 
-        sf.blit(self.speedometer.get_draw(), (20, (1 / 3) * height - 10))
+        sf.blit(self.speedometer.get_draw(), (width / 15, (1 / 3) * height - height / 20))
 
         return sf
 
@@ -359,8 +385,9 @@ class HUD(Drawable):
         killed itself to call the corresponding function. Furthermore, if the mode
         developer is activated shows the FPS
         """
-        restart_pos = (constants.BORDER_PADDING + 10, constants.WINDOWS_SIZE[1] - 30)
-        radius = 16
+        restart_pos = (constants.BORDER_PADDING + instance.windows_size[0] / 128,
+                       instance.windows_size[1] - instance.windows_size[1] / 24)
+        radius = instance.windows_size[0] / 80
         ms = pygame.mouse.get_pos()
         if (
             (restart_pos[0] - ms[0]) ** 2 + (restart_pos[1] - ms[1]) ** 2
@@ -369,25 +396,25 @@ class HUD(Drawable):
         screen.blit(
             self.get_actual_player(),
             (
-                constants.BORDER_PADDING - 10,
+                constants.BORDER_PADDING - instance.windows_size[0] / 128,
                 constants.WINDOWS_SIZE[1]
-                - constants.HUD_HEIGHT
+                - instance.windows_size[1] / 3.6
                 - constants.BORDER_PADDING / 2,
             ),
         )
         screen.blit(
             self.get_cannonball_indicators(),
             (
-                constants.BORDER_PADDING + 170,
-                constants.WINDOWS_SIZE[1]
-                - constants.HUD_HEIGHT
+                constants.BORDER_PADDING + instance.windows_size[0] / 7.5,
+                instance.windows_size[1]
+                - instance.windows_size[1] / 3.6
                 - constants.BORDER_PADDING / 2,
             ),
         )
         screen.blit(
             self.get_select_cannonball(),
             (
-                constants.BORDER_PADDING + 535,
+                constants.BORDER_PADDING + instance.windows_size[0] / 2.39,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
@@ -396,7 +423,7 @@ class HUD(Drawable):
         screen.blit(
             self.tank_info(),
             (
-                constants.BORDER_PADDING + 900,
+                constants.BORDER_PADDING + instance.windows_size[0] / 1.42,
                 constants.WINDOWS_SIZE[1]
                 - constants.HUD_HEIGHT
                 - constants.BORDER_PADDING / 2,
@@ -424,6 +451,7 @@ class HUD(Drawable):
         screen.fill("#3C0384")
 
         instructions = image_cache["images/instructions.png"]
+        instructions = pygame.transform.scale(instructions, instance.windows_size)
         rect = instructions.get_rect()
         size = rect.size
 

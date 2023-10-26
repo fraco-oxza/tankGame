@@ -6,7 +6,7 @@ from pygame.font import Font
 import constants
 from caches import font_cache, audio_cache, image_cache
 from snow_storm import SnowStorm
-
+from context import instance
 
 class InGameMenuStatus:
     """
@@ -38,10 +38,10 @@ class InGameMenu:
     sobre: Optional[int]
 
     def __init__(self, screen: pygame.Surface, storm: SnowStorm):
-        self.button_reset_position = pygame.Vector2(300, 48)
-        self.fontExit = font_cache["Roboto.ttf", 25]
-        self.fontRestart = font_cache["Roboto.ttf", 25]
-        self.fontBack = font_cache["Roboto.ttf", 25]
+        self.button_reset_position = pygame.Vector2(instance.windows_size[0] / 4.26, instance.windows_size[1] / 15)
+        self.fontExit = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
+        self.fontRestart = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
+        self.fontBack = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
         self.storm = storm
         self.botton_color1 = "#73726E"
         self.botton_color2 = "#73726E"
@@ -51,7 +51,7 @@ class InGameMenu:
         self.sobre = None
         self.clock = pygame.time.Clock()
         image_size = pygame.Vector2(
-            constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]
+            instance.windows_size[0], instance.windows_size[1]
         )
         self.image = pygame.transform.scale(
             image_cache["images/Control.png"], image_size
@@ -76,7 +76,7 @@ class InGameMenu:
             self.screen.blit(self.image, self.sky_rect.topleft)
             transparency = 150
             rect_surface = pygame.Surface(
-                (constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+                (instance.windows_size[0], instance.windows_size[1])
             )
             rect_surface.fill("#000000")
             rect_surface.set_alpha(transparency)
@@ -96,15 +96,15 @@ class InGameMenu:
             self.storm.draw(self.screen)
             self.screen.blit(
                 self.restart("Reiniciar Partida"),
-                (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2.37),
+                (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2.37),
             )
             self.screen.blit(
                 self.restart("Salir"),
-                (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2),
+                (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2),
             )
             self.screen.blit(
                 self.restart("Volver"),
-                (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2.9),
+                (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2.9),
             )
 
             self.storm.tick(1.0 / constants.FPS)
@@ -118,8 +118,8 @@ class InGameMenu:
         otherwise it remains in its original color
         """
         restart_pos = (
-            constants.WINDOWS_SIZE[0] // 2.6,
-            constants.WINDOWS_SIZE[1] / 2.37,
+            instance.windows_size[0] // 2.6,
+            instance.windows_size[1] / 2.37,
         )
         if restart_pos[0] < mouse.x < (
             restart_pos[0] + self.button_reset_position[0]
@@ -130,7 +130,7 @@ class InGameMenu:
             self.sobre = 1
         else:
             self.botton_color1 = "#73726E"
-        exit_pos = (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2)
+        exit_pos = (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2)
         if exit_pos[0] < mouse.x < (
             exit_pos[0] + self.button_reset_position[0]
         ) and exit_pos[1] < mouse.y < (exit_pos[1] + self.button_reset_position[1]):
@@ -138,7 +138,7 @@ class InGameMenu:
             self.sobre = 2
         else:
             self.botton_color2 = "#73726E"
-        back_pos = (constants.WINDOWS_SIZE[0] // 2.6, constants.WINDOWS_SIZE[1] / 2.9)
+        back_pos = (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2.9)
         if back_pos[0] < mouse.x < (
             back_pos[0] + self.button_reset_position[0]
         ) and back_pos[1] < mouse.y < (back_pos[1] + self.button_reset_position[1]):

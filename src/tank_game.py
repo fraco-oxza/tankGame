@@ -38,6 +38,7 @@ class TankGame:
     def start(self) -> None:
         while True:
             try:
+                print("hhhh", self.context.map_size)
                 self.main_menu()
 
                 for _ in range(self.context.number_of_players):

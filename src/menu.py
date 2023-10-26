@@ -9,6 +9,7 @@ from collidable import Collidable
 from draw import Drawable
 from snow_storm import SnowStorm
 import constants
+from context import instance
 
 
 class Menu(Drawable, Collidable):
@@ -19,16 +20,16 @@ class Menu(Drawable, Collidable):
 
     fontTitle: Font
     storm: SnowStorm
-    box_size = (200, 100)
+    box_size = (instance.windows_size[0] / 6.4, instance.windows_size[1] / 7.2)
     box_pos: Optional[tuple[float, float]]
     botton_color: str
     hover_botton_color: str
     is_hover: bool
 
     def __init__(self, storm: SnowStorm):
-        self.fontTitle = font_cache["Roboto.ttf", 43]
+        self.fontTitle = font_cache["Roboto.ttf", int(instance.windows_size[0] / 29.76)]
         image_size = pygame.Vector2(
-            constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1]
+            instance.windows_size[0], instance.windows_size[1]
         )
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.storm = storm
@@ -46,7 +47,7 @@ class Menu(Drawable, Collidable):
         screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
         rect_surface = pygame.Surface(
-            (constants.WINDOWS_SIZE[0], constants.WINDOWS_SIZE[1])
+            (instance.windows_size[0], instance.windows_size[1])
         )
         rect_surface.fill("#000000")
         rect_surface.set_alpha(transparency)

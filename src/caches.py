@@ -3,7 +3,7 @@ import os
 import sys
 
 import pygame
-
+from context import instance
 
 def resource_path(relative_path: str):
     """
@@ -40,7 +40,9 @@ class AnimationCache(FileCache):
         if animation_name in self.__animations:
             return self.__animations[animation_name]
 
-        scale = (300, 200)  # TODO: Find the correct place for this scale
+        scale = (
+            instance.windows_size[0] / 4.26,
+            instance.windows_size[1] / 3.6)  # TODO: Find the correct place for this scale
 
         animations_path = resource_path(os.path.join("animations", animation_name))
         animation = []
