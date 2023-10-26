@@ -369,12 +369,10 @@ class Round:
             if tank.is_alive and tank.life <= 0:
                 tank.is_alive = False
                 tank.life = 0
+                tank.player.deads += 1
                 self.get_current_tank().player.money += 1000
+                self.get_current_tank().player.murders += 1
                 self.tanks_alive -= 1
-
-        
-
-        
 
     def terrain_destruction(self):
         """
@@ -455,7 +453,7 @@ class Round:
             self.animacion.tick(1.0 / (self.fps + 0.001))
             self.render()
 
-    def next_turn(self): 
+    def next_turn(self):
         if len(self.turns_queue) == 0:
             self.create_turns()
 
@@ -550,19 +548,15 @@ class Round:
 
             self.wait_release_space()
 
-
-
             self.render()
 
             if self.tanks_alive == 1:
-                for i,tank in enumerate(self.tanks):
+                for i, tank in enumerate(self.tanks):
                     if tank.is_alive:
                         self.winner = i
 
             if self.winner is not None:
                 break
-
-
 
             self.last_state = None
 

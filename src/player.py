@@ -1,8 +1,8 @@
 import pygame
 
 import constants
+from cannonballs import CannonballType
 from impact import Impact, ImpactType
-from cannonballs import Cannonball105mm, Cannonball60mm, Cannonball80mm, CannonballType
 
 
 class Player:
@@ -23,12 +23,11 @@ class Player:
 
     def __init__(self, name: str, color: str | pygame.Color):
         self.name = name
-        self.points = points
+        self.points = 0
         self.money = 10000
         self.murders = 0
         self.deads = 0
         self.points = 0
-        self.money = 0
         self.color = color
         self.ammunition = {
             CannonballType.MM60: 3,
