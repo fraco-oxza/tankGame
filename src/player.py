@@ -13,10 +13,16 @@ class Player:
 
     name: str
     points: int
+    money: int
+    murders: int
+    deads: int
 
     def __init__(self, name: str, points: int):
         self.name = name
         self.points = points
+        self.money = 10000
+        self.murders = 0
+        self.deads = 0
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
         """
