@@ -137,7 +137,7 @@ class HUD(Drawable):
 
     def tank_info(self) -> pygame.Surface:
         """
-        This method allows you to draw the life bar of both the player
+        This method is responsible for displaying all the tank and player information in a section of the HUD
         """
         width = 350
         height = constants.HUD_HEIGHT
