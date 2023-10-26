@@ -149,7 +149,7 @@ class HUD(Drawable):
         sf.blit(heart_icon, (width / 7.5, height / 3.5))
         width_bar = height // 2.7
         height_bar = width / 6
-        text = self.font30.render("Información", True, "white")
+        text = self.font30.render("Información ", True, "white")
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
         bar_length = width // 1.5
         bar_height = 30
