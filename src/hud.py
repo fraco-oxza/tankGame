@@ -139,13 +139,16 @@ class HUD(Drawable):
         """
         This method allows you to draw the life bar of both the player
         """
-        # this is for health
         width = 350
         height = constants.HUD_HEIGHT
-        width_bar = height // 3
-        height_bar = width / 6
         sf = pygame.Surface((width, constants.HUD_HEIGHT))
         sf.fill("#232323")
+        # this is for health
+        heart_icon = image_cache["images/heart.png"]
+        heart_icon = pygame.transform.scale(heart_icon, (25, 25))
+        sf.blit(heart_icon, (width / 7.5, height / 3.5))
+        width_bar = height // 2.7
+        height_bar = width / 6
         text = self.font30.render("Información de tanque", True, "white")
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
         bar_length = width // 1.5
@@ -159,16 +162,25 @@ class HUD(Drawable):
         sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
 
         # this is for money
+        money_icon = image_cache["images/money.png"]
+        money_icon = pygame.transform.scale(money_icon, (30, 30))
+        sf.blit(money_icon, (width / 7.5, height / 2.2))
         actual_money = self.font16.render(
             "Dinero disponible: $" + str(self.tanks[self.tank_game.actual_player].player.money), True, "#FFFFFF")
         sf.blit(actual_money, (width / 4, height / 2))
 
         # this is por murders
+        murders_icon = image_cache["images/murders.png"]
+        murders_icon = pygame.transform.scale(murders_icon, (25, 25))
+        sf.blit(murders_icon, (width / 7.5, height / 1.55))
         actual_murders = self.font16.render(
             "Asesinatos cometidos: " + str(self.tanks[self.tank_game.actual_player].player.murders), True, "#FFFFFF")
         sf.blit(actual_murders, (width / 4, height / 1.5))
 
         # this is por deads
+        deads_icon = image_cache["images/deads.png"]
+        deads_icon = pygame.transform.scale(deads_icon, (25, 25))
+        sf.blit(deads_icon, (width / 7.5, height / 1.25))
         actual_deads = self.font16.render(
             "Veces que ha muerto: " + str(self.tanks[self.tank_game.actual_player].player.deads), True, "#FFFFFF")
         sf.blit(actual_deads, (width / 4, height / 1.2))
