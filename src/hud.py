@@ -153,24 +153,38 @@ class HUD(Drawable):
         fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
         pygame.draw.rect(sf, "#248934", (width_bar, height_bar, bar_length, bar_height))
         pygame.draw.rect(
-            sf, "#131313", (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height)
+            sf,
+            "#131313",
+            (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
         )
         player = self.font16.render("Salud", True, "white")
         sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
 
         # this is for money
         actual_money = self.font16.render(
-            "Dinero disponible: $" + str(self.tanks[self.tank_game.actual_player].player.money), True, "#FFFFFF")
+            "Dinero disponible: $"
+            + str(self.tanks[self.tank_game.actual_player].player.money),
+            True,
+            "#FFFFFF",
+        )
         sf.blit(actual_money, (width / 4, height / 2))
 
         # this is por murders
         actual_murders = self.font16.render(
-            "Asesinatos cometidos: " + str(self.tanks[self.tank_game.actual_player].player.murders), True, "#FFFFFF")
+            "Asesinatos cometidos: "
+            + str(self.tanks[self.tank_game.actual_player].player.murders),
+            True,
+            "#FFFFFF",
+        )
         sf.blit(actual_murders, (width / 4, height / 1.5))
 
         # this is por deads
         actual_deads = self.font16.render(
-            "Veces que ha muerto: " + str(self.tanks[self.tank_game.actual_player].player.deads), True, "#FFFFFF")
+            "Veces que ha muerto: "
+            + str(self.tanks[self.tank_game.actual_player].player.deads),
+            True,
+            "#FFFFFF",
+        )
         sf.blit(actual_deads, (width / 4, height / 1.2))
 
         return sf
