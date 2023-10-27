@@ -7,6 +7,7 @@ import constants
 from draw import Drawable
 from context import instance
 
+
 class WinnerScreen(Drawable):
     """
     This class is responsible for drawing a message on the screen announcing the
@@ -46,10 +47,15 @@ class WinnerScreen(Drawable):
 
         center = (instance.windows_size[0] / 3.55, instance.windows_size[1] / 6)
         transparency = 220
-        rect_surface = pygame.Surface((instance.windows_size[0] / 1.22, instance.windows_size[1] / 1.8))
+        rect_surface = pygame.Surface(
+            (instance.windows_size[0] / 1.22, instance.windows_size[1] / 1.8)
+        )
         rect_surface.fill("#64BA1E")
         rect_surface.set_alpha(transparency)
-        rect_x1, rect_y1 = (instance.windows_size[0] / 10.66, instance.windows_size[1] / 12)
+        rect_x1, rect_y1 = (
+            instance.windows_size[0] / 10.66,
+            instance.windows_size[1] / 12,
+        )
         screen.blit(rect_surface, (rect_x1, rect_y1))
         self.text_winner_info = self.font100.render(
             "WINNER",
@@ -66,15 +72,18 @@ class WinnerScreen(Drawable):
             "white",
         )
         self.font.set_bold(False)
-        position_winner_life = pygame.Vector2(instance.windows_size[0] / 2.32, instance.windows_size[1] / 6)
+        position_winner_life = pygame.Vector2(
+            instance.windows_size[0] / 2.32, instance.windows_size[1] / 6
+        )
         screen.blit(self.text_winner_life, position_winner_life)
         pygame.draw.rect(
             screen,
             self.tank_game.tanks[self.tank_game.winner].color,
             pygame.Rect(
                 instance.windows_size[0] / 1.96 - instance.windows_size[0] / 51.2,
-                instance.windows_size[1] / 2.05 - instance.windows_size[1] / 72, instance.windows_size[0] / 25.6,
-                instance.windows_size[1] / 20.57
+                instance.windows_size[1] / 2.05 - instance.windows_size[1] / 72,
+                instance.windows_size[0] / 25.6,
+                instance.windows_size[1] / 20.57,
             ),
         )
         pygame.draw.rect(
@@ -103,8 +112,9 @@ class WinnerScreen(Drawable):
                 screen,
                 constants.BLACK,
                 (
-                    instance.windows_size[0] / 1.96 - instance.windows_size[0] / 21.33 + instance.windows_size[
-                        0] / 51.2 * i,
+                    instance.windows_size[0] / 1.96
+                    - instance.windows_size[0] / 21.33
+                    + instance.windows_size[0] / 51.2 * i,
                     instance.windows_size[1] / 2.05 + instance.windows_size[1] / 8,
                 ),
                 instance.windows_size[0] / 85.33,

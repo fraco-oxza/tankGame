@@ -8,6 +8,7 @@ from caches import font_cache, audio_cache, image_cache
 from snow_storm import SnowStorm
 from context import instance
 
+
 class InGameMenuStatus:
     """
     This class is responsible, through numbers, for identifying what type of option the user chooses.
@@ -38,9 +39,13 @@ class InGameMenu:
     sobre: Optional[int]
 
     def __init__(self, screen: pygame.Surface, storm: SnowStorm):
-        self.button_reset_position = pygame.Vector2(instance.windows_size[0] / 4.26, instance.windows_size[1] / 15)
+        self.button_reset_position = pygame.Vector2(
+            instance.windows_size[0] / 4.26, instance.windows_size[1] / 15
+        )
         self.fontExit = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
-        self.fontRestart = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
+        self.fontRestart = font_cache[
+            "Roboto.ttf", int(instance.windows_size[0] / 51.2)
+        ]
         self.fontBack = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
         self.storm = storm
         self.botton_color1 = "#73726E"
@@ -50,9 +55,7 @@ class InGameMenu:
         self.screen = screen
         self.sobre = None
         self.clock = pygame.time.Clock()
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(
             image_cache["images/Control.png"], image_size
         )

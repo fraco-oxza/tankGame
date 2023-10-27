@@ -28,9 +28,7 @@ class Menu(Drawable, Collidable):
 
     def __init__(self, storm: SnowStorm):
         self.fontTitle = font_cache["Roboto.ttf", int(instance.windows_size[0] / 29.76)]
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.storm = storm
         self.box_pos = None

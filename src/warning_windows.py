@@ -7,6 +7,7 @@ from cannonballs import CannonballType
 from draw import Drawable
 from context import instance
 
+
 class WarningWindows(Drawable):
     """
     This class represents a warning when the current cannonball does not have
@@ -50,7 +51,9 @@ class WarningWindows(Drawable):
             border_bottom_right_radius=10,
         )
         image = image_cache["images/warning.png"]
-        rect_surface.blit(image, (instance.windows_size[0] / 128, instance.windows_size[1] / 72))
+        rect_surface.blit(
+            image, (instance.windows_size[0] / 128, instance.windows_size[1] / 72)
+        )
 
         return rect_surface
 
@@ -92,24 +95,39 @@ class WarningWindows(Drawable):
             True,
             "white",
         )
-        sf.blit(self.font100, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 36))
+        sf.blit(
+            self.font100,
+            (instance.windows_size[0] / 12.8, instance.windows_size[1] / 36),
+        )
         self.font50 = self.font2.render(
             "Seleccione alguna bala diferente",
             True,
             "white",
         )
         if instance.windows_size[0] > 1000:
-            sf.blit(self.font50, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 14.4))
+            sf.blit(
+                self.font50,
+                (instance.windows_size[0] / 12.8, instance.windows_size[1] / 14.4),
+            )
         else:
-            sf.blit(self.font50, (instance.windows_size[0] / 9, instance.windows_size[1] / 14.4))
+            sf.blit(
+                self.font50,
+                (instance.windows_size[0] / 9, instance.windows_size[1] / 14.4),
+            )
         self.font50 = self.font2.render(
             f"con los números {alternatives}",
             True,
             "white",
         )
         if instance.windows_size[0] > 1000:
-            sf.blit(self.font50, (instance.windows_size[0] / 12.8, instance.windows_size[1] / 11.07))
+            sf.blit(
+                self.font50,
+                (instance.windows_size[0] / 12.8, instance.windows_size[1] / 11.07),
+            )
         else:
-            sf.blit(self.font50, (instance.windows_size[0] / 8, instance.windows_size[1] / 11.07))
+            sf.blit(
+                self.font50,
+                (instance.windows_size[0] / 8, instance.windows_size[1] / 11.07),
+            )
 
         screen.blit(sf, (instance.windows_size[0] / 2 - sf.get_size()[0] / 2, 0))
