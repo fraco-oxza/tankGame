@@ -2,11 +2,15 @@ import random
 from random import randint
 
 import pygame
-
+from caches import audio_cache
 from context import Context
 from exit_requested import ExitRequested, RestartRequested
 from player import Player
 from round import Round
+from menu import Menu
+import constants
+from menu import MenuStatus
+from option_menu import OptionMenu
 
 
 class TankGame:
@@ -19,9 +23,8 @@ class TankGame:
         """
         self.context = context
         self.players = []
-
-    def main_menu(self):
-        pass
+        self.menu = Menu(self.context.screen)
+        self.menu2 = OptionMenu(self.context.screen)
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
@@ -35,12 +38,29 @@ class TankGame:
     def game_brief(self):
         pass
 
+    def start_menu(self):
+        """This method takes care of the menu music and the start button click."""
+        soundtrack = audio_cache["sounds/inicio.mp3"]
+        soundtrack.play()
+        while True:
+            if self.menu.show_menu() == MenuStatus.start:
+                soundtrack.stop()
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                break
+            if self.menu.show_menu() == MenuStatus.options:
+                self.menu2.render()
+            pygame.display.flip()
+            self.context.clock.tick(constants.FPS)
+            self.context.fps = self.context.clock.get_fps()
+
     def start(self) -> None:
+        soundtrack = audio_cache["sounds/inGame.mp3"]
         while True:
             try:
+                self.start_menu()
+                soundtrack.play()
                 print("empezo partida", self.context.map_size)
-                self.main_menu()
-
                 for _ in range(self.context.number_of_players):
                     self.create_player()
 
@@ -58,3 +78,4 @@ class TankGame:
                 pass
 
             self.players = []
+            soundtrack.stop()

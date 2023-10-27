@@ -5,14 +5,19 @@ from pygame.font import Font
 
 from caches import font_cache
 from caches import image_cache
-from collidable import Collidable
-from draw import Drawable
+from caches import audio_cache
 from snow_storm import SnowStorm
-import constants
 from context import instance
+from inputs import check_running
 
 
-class Menu(Drawable, Collidable):
+class MenuStatus:
+    nothing = 0
+    start = 1
+    options = 2
+
+
+class Menu:
     """
     This class is in charge of displaying everything related to the main menu on the screen
     when you enter the game.
@@ -26,25 +31,28 @@ class Menu(Drawable, Collidable):
     hover_botton_color: str
     is_hover: bool
 
-    def __init__(self, storm: SnowStorm):
+    def __init__(self, screen: pygame.surface.Surface):
         self.fontTitle = font_cache["Roboto.ttf", int(instance.windows_size[0] / 29.76)]
         image_size = pygame.Vector2(
             instance.windows_size[0], instance.windows_size[1]
         )
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
-        self.storm = storm
         self.box_pos = None
-        self.botton_color = "#2E3440"
+        self.box_pos_options = None
+        self.button_color1 = "#2E3440"
+        self.button_color2 = "#2E3440"
         self.hover_botton_color = "#3b4252"
         self.is_hover = False
         self.sky_rect = self.image.get_rect()
+        self.upon = None
+        self.screen = screen
 
-    def draw(self, screen: pygame.surface.Surface) -> None:
+    def render(self) -> int:
         """
         Function responsible for creating and displaying the new surface on the screen,
         which is responsible for loading the background image and drawing the start button
         """
-        screen.blit(self.image, self.sky_rect.topleft)
+        self.screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
         rect_surface = pygame.Surface(
             (instance.windows_size[0], instance.windows_size[1])
@@ -52,49 +60,83 @@ class Menu(Drawable, Collidable):
         rect_surface.fill("#000000")
         rect_surface.set_alpha(transparency)
         rect_x1, rect_y1 = (0, 0)
-        screen.blit(rect_surface, (rect_x1, rect_y1))
-        self.storm.draw(screen)
+        self.screen.blit(rect_surface, (rect_x1, rect_y1))
 
-        size = screen.get_size()
-        self.box_pos = ((size[0] - self.box_size[0]) / 2, (3 / 4) * size[1])
-
+        size = self.screen.get_size()
+        self.box_pos = ((size[0] - self.box_size[0]) / 2, (5 / 8) * size[1])
+        self.box_pos_options = ((size[0] - self.box_size[0]) / 2, (6.5 / 8) * size[1])
         self.fontTitle.set_bold(True)
         title = self.fontTitle.render("Tank Game", True, "#ffffff")
         self.fontTitle.set_bold(False)
-        screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
+        self.screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
 
-        options_box = pygame.rect.Rect(
+        box = pygame.rect.Rect(
             *self.box_pos, self.box_size[0], self.box_size[1]
         )
+        option_box = pygame.rect.Rect(
+            *self.box_pos_options, self.box_size[0], self.box_size[1])
         pygame.draw.rect(
-            screen,
-            self.botton_color if not self.is_hover else self.hover_botton_color,
-            options_box,
+            self.screen,
+            self.button_color1,
+            box,
             0,
             10,
         )
-
+        pygame.draw.rect(
+            self.screen,
+            self.button_color2,
+            option_box,
+            0,
+            10,
+        )
         play = self.fontTitle.render("Jugar", True, "#FFFFFF")
-        screen.blit(
+        self.screen.blit(
             play,
             (
                 self.box_pos[0] + self.box_size[0] / 2 - play.get_size()[0] / 2,
                 self.box_pos[1] + self.box_size[1] / 2 - play.get_size()[1] / 2,
             ),
         )
-
-    def tick(self, dt: float):
-        """Function that is responsible for drawing the snow"""
-        self.storm.tick(dt)
-
-    def collides_with(self, point: pygame.Vector2) -> bool:
-        """
-        The "point" parameter is the position that the mouse has on the user, this function is responsible
-        for returning true or false depending on the case. If the mouse position is over the start button
-        and it is clicked, it returns true, otherwise false
-        """
-        if self.box_pos is None:
-            return False
-        return (self.box_pos[0] <= point.x <= self.box_pos[0] + self.box_size[0]) and (
-            self.box_pos[1] <= point.y <= self.box_pos[1] + self.box_size[1]
+        options = self.fontTitle.render("Opciones", True, "#FFFFFF")
+        self.screen.blit(
+            options,
+            (
+                self.box_pos_options[0] + self.box_size[0] / 2 - options.get_size()[0] / 2,
+                self.box_pos_options[1] + self.box_size[1] / 2 - options.get_size()[1] / 2,
+            ),
         )
+
+        self.handle_input()
+        if pygame.mouse.get_pressed()[0]:
+            click = audio_cache["sounds/click.mp3"]
+            click.play()
+            if self.upon == 1:
+                return MenuStatus.start
+            if self.upon == 2:
+                return MenuStatus.options
+
+    def show_menu(self):
+        print("hola", self.render())
+        return self.render()
+
+    def handle_input(self):
+        """
+        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
+        It is also responsible for changing the color of the button when the mouse passes over a button,
+        otherwise it remains in its original color
+        """
+        check_running()
+        mouse = pygame.Vector2(pygame.mouse.get_pos())
+        if (self.box_pos[0] <= mouse.x <= self.box_pos[0] + self.box_size[0]) and (
+                self.box_pos[1] <= mouse.y <= self.box_pos[1] + self.box_size[1]):
+            self.button_color1 = self.hover_botton_color
+            self.upon = 1
+            print("chao")
+        else:
+            self.button_color1 = "#2E3440"
+        if (self.box_pos_options[0] <= mouse.x <= self.box_pos_options[0] + self.box_size[0]) and (
+                self.box_pos_options[1] <= mouse.y <= self.box_pos_options[1] + self.box_size[1]):
+            self.button_color2 = self.hover_botton_color
+            self.upon = 2
+        else:
+            self.button_color2 = "#2E3440"

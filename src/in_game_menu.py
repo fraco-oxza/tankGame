@@ -7,7 +7,7 @@ import constants
 from caches import font_cache, audio_cache, image_cache
 from snow_storm import SnowStorm
 from context import instance
-
+from inputs import check_running
 class InGameMenuStatus:
     """
     This class is responsible, through numbers, for identifying what type of option the user chooses.
@@ -69,10 +69,7 @@ class InGameMenu:
         and loading the snow that is drawn on the screen
         """
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return InGameMenuStatus.EXIT
-
+            check_running()
             self.screen.blit(self.image, self.sky_rect.topleft)
             transparency = 150
             rect_surface = pygame.Surface(
