@@ -4,7 +4,7 @@ from random import randint
 import pygame
 
 from context import Context
-from exit_requested import ExitRequested
+from exit_requested import ExitRequested, RestartRequested
 from player import Player
 from round import Round
 
@@ -38,7 +38,7 @@ class TankGame:
     def start(self) -> None:
         while True:
             try:
-                print("hhhh", self.context.map_size)
+                print("empezo partida", self.context.map_size)
                 self.main_menu()
 
                 for _ in range(self.context.number_of_players):
@@ -51,7 +51,10 @@ class TankGame:
 
                 self.game_brief()
 
-                self.players = []
-
+                print("termino")
             except ExitRequested:
                 break
+            except RestartRequested:
+                pass
+
+            self.players = []

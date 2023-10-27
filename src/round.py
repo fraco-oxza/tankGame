@@ -10,7 +10,7 @@ from background import Background
 from caches import animation_cache, audio_cache, font_cache
 from cannonballs import CannonballType, Cannonball
 from context import Context
-from exit_requested import ExitRequested
+from exit_requested import ExitRequested, RestartRequested
 from explotion import Explosion
 from hud import HUD
 from impact import Impact, ImpactType
@@ -58,7 +58,7 @@ class Round:
 
         self.last_state = None
         self.cannonball = None
-        self.fps = constants.FPS
+        self.context.fps = constants.FPS
         self.menu = Menu(self.snow_storm)
         self.create_tanks()
         self.create_turns()
@@ -169,7 +169,7 @@ class Round:
 
         self.hud.draw(self.context.screen)
 
-        self.snow_storm.tick(1.0 / (self.fps + 0.1))
+        self.snow_storm.tick(1.0 / (self.context.fps + 0.1))
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.context.screen)
             if not self.warning.is_current_cannonball_available():
@@ -181,7 +181,7 @@ class Round:
 
         pygame.display.flip()
         self.context.clock.tick(constants.FPS)
-        self.fps = self.context.clock.get_fps()
+        self.context.fps = self.context.clock.get_fps()
 
     def process_input(self) -> None:
         """
@@ -194,25 +194,29 @@ class Round:
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_angle += math.radians(1) * (constants.FPS / self.fps)
+                playing_tank.shoot_angle += math.radians(1) * (
+                    constants.FPS / self.context.fps
+                )
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                    constants.FPS / self.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_angle -= math.radians(1) * (constants.FPS / self.fps)
+                playing_tank.shoot_angle -= math.radians(1) * (
+                    constants.FPS / self.context.fps
+                )
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                    constants.FPS / self.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_velocity += 1 * (constants.FPS / self.fps)
+                playing_tank.shoot_velocity += 1 * (constants.FPS / self.context.fps)
             else:
-                playing_tank.shoot_velocity += 0.1 * (constants.FPS / self.fps)
+                playing_tank.shoot_velocity += 0.1 * (constants.FPS / self.context.fps)
 
             playing_tank.shoot_velocity = min(
                 constants.SHOOT_MAX_SPEED, playing_tank.shoot_velocity
@@ -220,9 +224,9 @@ class Round:
 
         if keys_pressed[pygame.K_LEFT]:
             if keys_pressed[pygame.K_LSHIFT]:
-                playing_tank.shoot_velocity -= 1 * (constants.FPS / self.fps)
+                playing_tank.shoot_velocity -= 1 * (constants.FPS / self.context.fps)
             else:
-                playing_tank.shoot_velocity -= 0.1 * (constants.FPS / self.fps)
+                playing_tank.shoot_velocity -= 0.1 * (constants.FPS / self.context.fps)
 
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
@@ -257,7 +261,7 @@ class Round:
         elif menu_state is InGameMenuStatus.RESTART:
             # TODO: Ver que hacer con esto en base al nuevo modelo
             # TankGame.__init__(self, self.context)
-            pass
+            raise RestartRequested
         elif menu_state is InGameMenuStatus.CONTINUE:
             pass
 
@@ -270,7 +274,7 @@ class Round:
         if self.cannonball is None:
             return None
 
-        self.cannonball.tick((1.0 / self.fps) * constants.X_SPEED)
+        self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
 
         if (
             self.cannonball.position.x < 0
@@ -427,7 +431,7 @@ class Round:
         while self.running:
             check_running()
             self.menu.draw(self.context.screen)
-            self.menu.tick((1.0 / (self.fps + 0.1)))
+            self.menu.tick((1.0 / (self.context.fps + 0.1)))
 
             ms = pygame.mouse.get_pos()
 
@@ -450,7 +454,7 @@ class Round:
             return
 
         while self.animacion.has_next():
-            self.animacion.tick(1.0 / (self.fps + 0.001))
+            self.animacion.tick(1.0 / (self.context.fps + 0.001))
             self.render()
 
     def next_turn(self):
@@ -469,31 +473,18 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        self.start_menu()
-
-        self.hud.show_instructions(self.context.screen)
-        pygame.display.flip()
-        in_game = audio_cache["sounds/inGame.mp3"]
-        in_game.play()
-        in_game.set_volume(0.2)
-
-        while self.running:
-            check_running()
-            keys_pressed = pygame.key.get_pressed()
-            if keys_pressed[pygame.K_SPACE]:
-                click = audio_cache["sounds/click.mp3"]
-                click.play()
-                break
-            self.context.clock.tick(constants.FPS)
-
-        self.wait_release_space()
 
         while self.running:
             check_running()
 
             self.next_turn()
 
-            while not self.get_current_tank().is_alive:
+            # TODO: Añadir muchas verificaciones
+            # -cuando no quedan tankes jugables
+            # -mostrar advertencias
+            while not self.get_current_tank().is_alive or (
+                sum(self.get_current_tank().available.values()) <= 0
+            ):
                 self.next_turn()
 
             # Select the angle
@@ -501,6 +492,11 @@ class Round:
                 check_running()
                 self.process_input()
                 self.render()
+
+            # self.get_current_tank().player is isinstance(Bot):
+            # self.get_current_tank().shoot_velocity = random.randint(1, 300)
+            # self.get_current_tank().shoot_angle = random.randint(1, 300)
+            # self.cannonball = self.get_current_tank().shoot()
 
             throw = audio_cache["sounds/throw.mp3"]
             throw.play()
@@ -539,8 +535,8 @@ class Round:
 
             self.terrain_destruction()
 
-            self.wait_release_space()
-            self.wait_on_space()
+            # self.wait_release_space()
+            # self.wait_on_space()
 
             self.check_last_state()
 
