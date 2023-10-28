@@ -116,7 +116,6 @@ class Menu:
                 return MenuStatus.options
 
     def show_menu(self):
-        print("hola", self.render())
         return self.render()
 
     def handle_input(self):

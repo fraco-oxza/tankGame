@@ -11,7 +11,7 @@ from menu import Menu
 import constants
 from menu import MenuStatus
 from option_menu import OptionMenu
-
+from option_menu import OptionMenuStatus
 
 class TankGame:
     players: list[Player]
@@ -24,7 +24,7 @@ class TankGame:
         self.context = context
         self.players = []
         self.menu = Menu(self.context.screen)
-        self.menu2 = OptionMenu(self.context.screen)
+        self.menu_option = OptionMenu(self.context.screen)
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
@@ -42,6 +42,7 @@ class TankGame:
         """This method takes care of the menu music and the start button click."""
         soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
+        i = 0
         while True:
             if self.menu.show_menu() == MenuStatus.start:
                 soundtrack.stop()
@@ -49,7 +50,13 @@ class TankGame:
                 click.play()
                 break
             if self.menu.show_menu() == MenuStatus.options:
-                self.menu2.render()
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                if self.menu_option.start_option_menu() == OptionMenuStatus.CONTINUE:
+                    click = audio_cache["sounds/click.mp3"]
+                    click.play()
+                    continue
+
             pygame.display.flip()
             self.context.clock.tick(constants.FPS)
             self.context.fps = self.context.clock.get_fps()
