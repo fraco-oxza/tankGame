@@ -25,6 +25,7 @@ class TankGame:
         self.players = []
         self.menu = Menu(self.context.screen)
         self.menu_option = OptionMenu(self.context.screen)
+        self.screen_resolution = [(800, 800), (1366, 768), (1600, 900), (1280, 720), (1920, 1080)]
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
@@ -55,11 +56,20 @@ class TankGame:
                 if self.menu_option.start_option_menu() == OptionMenuStatus.CONTINUE:
                     click = audio_cache["sounds/click.mp3"]
                     click.play()
-                    continue
+                    self.Replace()
 
             pygame.display.flip()
             self.context.clock.tick(constants.FPS)
             self.context.fps = self.context.clock.get_fps()
+
+    def Replace(self):
+        self.context.number_of_players = self.menu_option.quantity_players
+        for j in range(len(self.screen_resolution)):
+            if j == self.menu_option.index_screen_resolution:
+                self.context.windows_size = self.screen_resolution[j]
+        self.context.number_of_bots = self.menu_option.quantity_bots
+        self.context.number_of_round = self.menu_option.quantity_rounds
+        self.context.type_of_effect = self.menu_option.index_environment_effects
 
     def start(self) -> None:
         soundtrack = audio_cache["sounds/inGame.mp3"]

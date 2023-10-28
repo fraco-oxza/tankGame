@@ -25,6 +25,8 @@ class Context:
         self.screen = pygame.display.set_mode(self.__windows_size)
         self.number_of_players = constants.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = constants.DEFAULT_ROUNDS
+        self.number_of_bots = constants.DEFAULT_NUMBER_OF_BOTS
+        self.type_of_effect = constants.DEFAULT_TYPE_EFFECT
         self.__fps = float(constants.FPS)
         self.clock = Clock()
 
