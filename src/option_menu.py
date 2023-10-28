@@ -21,18 +21,18 @@ class OptionMenu:
     def __init__(self, screen: pygame.Surface):
         self.button_reset_position = pygame.Vector2(instance.windows_size[0] / 25, instance.windows_size[1] / 15)
         self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
-        self.button_color1 = "#73726E"
-        self.button_color2 = "#73726E"
-        self.button_color3 = "#73726E"
-        self.button_color4 = "#73726E"
-        self.button_color5 = "#73726E"
-        self.button_color6 = "#73726E"
-        self.button_color7 = "#73726E"
-        self.button_color8 = "#73726E"
-        self.button_color9 = "#73726E"
-        self.button_color10 = "#73726E"
-        self.button_color11 = "#73726E"
-        self.hover_botton_color = constants.DarkGreen
+        self.button_color1 = "#2E3440"
+        self.button_color2 = "#2E3440"
+        self.button_color3 = "#2E3440"
+        self.button_color4 = "#2E3440"
+        self.button_color5 = "#2E3440"
+        self.button_color6 = "#2E3440"
+        self.button_color7 = "#2E3440"
+        self.button_color8 = "#2E3440"
+        self.button_color9 = "#2E3440"
+        self.button_color10 = "#2E3440"
+        self.button_color11 = "#2E3440"
+        self.hover_botton_color = "#3b4252"
         self.screen = screen
         self.sobre = None
         self.clock = pygame.time.Clock()
@@ -44,6 +44,12 @@ class OptionMenu:
         )
         self.sky_rect = self.image.get_rect()
         self.quantity_players = 2
+        self.quantity_bots = 0
+        self.quantity_rounds = 1
+        self.environment_effects = ["Nada", "Gravedad", "Viento", "Gravedad y Viento"]
+        self.index_environment_effects = 0
+        self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
+        self.index_screen_resolution = 0
 
     def render(self):
         while True:
@@ -104,15 +110,55 @@ class OptionMenu:
                              )
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handle_input(mouse)
-            msj = self.font.render(f"{self.quantity_players}", True, "#ffffff")
+            msj = self.font.render(f"{self.quantity_players}", True, "#560083")
             self.screen.blit(msj
                              ,
                              (
                                  620, 245,
                              ),
                              )
+            msj = self.font.render(f"{self.quantity_bots}", True, "#560083")
+            self.screen.blit(msj
+                             ,
+                             (
+                                 620, 335,
+                             ),
+                             )
+            msj = self.font.render(f"{self.quantity_rounds}", True, "#560083")
+            self.screen.blit(msj
+                             ,
+                             (
+                                 620, 425,
+                             ),
+                             )
+            msj = self.font.render(f"{self.environment_effects[self.index_environment_effects]}", True, "#560083")
+            if self.index_environment_effects < len(self.environment_effects) - 1:
+                self.screen.blit(msj
+                                 ,
+                                 (
+                                     580, 515,
+                                 ),
+                                 )
+            else:
+                self.screen.blit(msj
+                                 ,
+                                 (
+                                     540, 515,
+                                 ),
+                                 )
+            msj = self.font.render(f"{self.screen_resolution[self.index_screen_resolution]}", True, "#560083")
+            if self.index_screen_resolution == 0:
+                self.screen.blit(msj
+                                 ,
+                                 (
+                                     590, 150,
+                                 ),
+                                 )
+            else:
+                self.screen.blit(msj, (570, 150))
             if pygame.mouse.get_pressed()[0]:
                 self.selection()
+                print(self.sobre)
             self.clock.tick(constants.FPS)
             pygame.display.flip()
 
@@ -134,7 +180,7 @@ class OptionMenu:
             self.button_color1 = self.hover_botton_color
             self.sobre = 1
         else:
-            self.button_color1 = "#73726E"
+            self.button_color1 = "#2E3440"
         button_left_2 = (370, 225)
         if button_left_2[0] < mouse.x < (
                 button_left_2[0] + self.button_reset_position[0]
@@ -142,7 +188,7 @@ class OptionMenu:
             self.button_color2 = self.hover_botton_color
             self.sobre = 2
         else:
-            self.button_color2 = "#73726E"
+            self.button_color2 = "#2E3440"
         button_left_3 = (370, 315)
         if button_left_3[0] < mouse.x < (
                 button_left_3[0] + self.button_reset_position[0]
@@ -150,7 +196,7 @@ class OptionMenu:
             self.button_color3 = self.hover_botton_color
             self.sobre = 3
         else:
-            self.button_color3 = "#73726E"
+            self.button_color3 = "#2E3440"
         button_left_4 = (370, 405)
         if button_left_4[0] < mouse.x < (
                 button_left_4[0] + self.button_reset_position[0]
@@ -158,7 +204,7 @@ class OptionMenu:
             self.button_color4 = self.hover_botton_color
             self.sobre = 4
         else:
-            self.button_color4 = "#73726E"
+            self.button_color4 = "#2E3440"
         button_left_5 = (370, 495)
         if button_left_5[0] < mouse.x < (
                 button_left_5[0] + self.button_reset_position[0]
@@ -166,7 +212,7 @@ class OptionMenu:
             self.button_color5 = self.hover_botton_color
             self.sobre = 5
         else:
-            self.button_color5 = "#73726E"
+            self.button_color5 = "#2E3440"
         button_left_6 = (840, 130)
         if button_left_6[0] < mouse.x < (
                 button_left_6[0] + self.button_reset_position[0]
@@ -174,7 +220,7 @@ class OptionMenu:
             self.button_color6 = self.hover_botton_color
             self.sobre = 6
         else:
-            self.button_color6 = "#73726E"
+            self.button_color6 = "#2E3440"
         button_left_7 = (840, 225)
         if button_left_7[0] < mouse.x < (
                 button_left_7[0] + self.button_reset_position[0]
@@ -182,7 +228,7 @@ class OptionMenu:
             self.button_color7 = self.hover_botton_color
             self.sobre = 7
         else:
-            self.button_color7 = "#73726E"
+            self.button_color7 = "#2E3440"
         button_left_8 = (840, 315)
         if button_left_8[0] < mouse.x < (
                 button_left_8[0] + self.button_reset_position[0]
@@ -190,7 +236,7 @@ class OptionMenu:
             self.button_color8 = self.hover_botton_color
             self.sobre = 8
         else:
-            self.button_color8 = "#73726E"
+            self.button_color8 = "#2E3440"
         button_left_9 = (840, 405)
         if button_left_9[0] < mouse.x < (
                 button_left_9[0] + self.button_reset_position[0]
@@ -198,7 +244,7 @@ class OptionMenu:
             self.button_color9 = self.hover_botton_color
             self.sobre = 9
         else:
-            self.button_color9 = "#73726E"
+            self.button_color9 = "#2E3440"
         button_left_10 = (840, 495)
         if button_left_10[0] < mouse.x < (
                 button_left_10[0] + self.button_reset_position[0]
@@ -206,15 +252,15 @@ class OptionMenu:
             self.button_color10 = self.hover_botton_color
             self.sobre = 10
         else:
-            self.button_color10 = "#73726E"
-        button_left_11 = (370, 495)
+            self.button_color10 = "#2E3440"
+        button_left_11 = (0, 0)
         if button_left_11[0] < mouse.x < (
                 button_left_11[0] + self.button_reset_position[0]
         ) and button_left_11[1] < mouse.y < (button_left_11[1] + self.button_reset_position[1]):
             self.button_color11 = self.hover_botton_color
             self.sobre = 11
         else:
-            self.button_color11 = "#73726E"
+            self.button_color11 = "#2E3440"
 
     def paint_left(self, index: int):
         """
@@ -259,10 +305,34 @@ class OptionMenu:
         return sf
 
     def selection(self):
+        if self.sobre == 1:
+            if self.index_screen_resolution > 0:
+                self.index_screen_resolution -= 1
+        if self.sobre == 6:
+            if self.index_screen_resolution < len(self.screen_resolution) - 1:
+                self.index_screen_resolution += 1
         if self.sobre == 2:
             if self.quantity_players > 2:
                 self.quantity_players -= 1
         if self.sobre == 7:
-            if self.quantity_players < 20:
+            if self.quantity_players < 6:
                 self.quantity_players += 1
         self.clock.tick(constants.FPS / 15)
+        if self.sobre == 3:
+            if self.quantity_bots > 0:
+                self.quantity_bots -= 1
+        if self.sobre == 8:
+            if self.quantity_bots < self.quantity_players:
+                self.quantity_bots += 1
+        if self.sobre == 4:
+            if self.quantity_rounds > 1:
+                self.quantity_rounds -= 1
+        if self.sobre == 9:
+            if self.quantity_rounds < 20:
+                self.quantity_rounds += 1
+        if self.sobre == 5:
+            if self.index_environment_effects > 0:
+                self.index_environment_effects -= 1
+        if self.sobre == 10:
+            if self.index_environment_effects < len(self.environment_effects) - 1:
+                self.index_environment_effects += 1
