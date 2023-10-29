@@ -328,21 +328,40 @@ class Menu extends Drawable, Collidable{
     +draw(pygame.surface)
     +collidesWith( point: pygame.Vector2): bool
 }
+class OptionMenuStatus{
+    +CONTINUE:int
 
+}
+class OptionMenu{
+    +box_size = pygame.Vector2
+    +box_pos: Optional[tuple[float, float]]
+    +hover_botton_color: str
+    +button_position = pygame.Vector2
+    +sobre: Optional[int]
+    +OptionMenu(Surface)
+    +render()
+    +start_option_menu
+    +handle_input(mouse: pygame.Vector2))
+    +paint_left(index:int)
+    +paint_right(index:int)
+    +principal_button(index:int)
+    +selection()
+
+}
 TankGame -- Constants
 
 WinnerScreen *--> TankGame
 InGameMenu o--> TankGame
 InGameMenu *--> InGameMenuStatus
-TankGame *--> Tank
-TankGame o--> Cannonball
-TankGame *--> Terrain
-TankGame o--> Background
-TankGame o--> Impact
-TankGame *--> Map
-TankGame *--> AudioCache
-TankGame *--> FontCache
-TankGame *--> AnimationCache
+Round *--> Tank
+Round o--> Cannonball
+Round *--> Terrain
+Round o--> Background
+Round o--> Impact
+Round *--> Map
+Round *--> AudioCache
+Round *--> FontCache
+Round *--> AnimationCache
 Background *--> ImageCache
 Terrain *--> ImageCache
 Menu *--> ImageCache
@@ -359,5 +378,6 @@ HUD o--> Speedometer
 HUD *--> SelfImpactWindows
 Impact *--> ImpactType
 TankGame *--> Impact
+OptionMenu *-->OptionMenuStatus
 
 @enduml

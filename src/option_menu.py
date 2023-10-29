@@ -10,15 +10,11 @@ from inputs import check_running
 
 class OptionMenuStatus:
     CONTINUE = 1
-    AGAIN = -1
 
 
 class OptionMenu:
     box_size = pygame.Vector2
     box_pos: Optional[tuple[float, float]]
-    button_color1: str
-    button_color2: str
-    button_color3: str
     hover_botton_color: str
     button_position = pygame.Vector2
     sobre: Optional[int]
