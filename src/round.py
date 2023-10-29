@@ -451,6 +451,7 @@ class Round:
         """
 
         while self.running:
+            self.wait_release_space()
             check_running()
 
             self.next_turn()

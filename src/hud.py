@@ -537,32 +537,3 @@ class HUD(Drawable):
                 (0, 0),
             )
 
-    def show_instructions(self, screen: pygame.surface.Surface):
-        """
-        This function allows you to display an image at the start of the game with the
-        necessary instructions for the players
-        """
-        screen.fill("#3C0384")
-
-        instructions = image_cache["images/instructions.png"]
-        instructions = pygame.transform.scale(instructions, instance.windows_size)
-        rect = instructions.get_rect()
-        size = rect.size
-
-        screen.blit(
-            instructions,
-            (
-                instance.windows_size[0] / 2 - size[0] / 2,
-                instance.windows_size[1] / 2 - size[1] / 2,
-            ),
-        )
-        out_text = self.font.render(
-            "Presione espacio para continuar",
-            True,
-            "white",
-        )
-        size = out_text.get_rect().size
-        screen.blit(
-            out_text,
-            (instance.windows_size[0] - size[0], instance.windows_size[1] - size[1]),
-        )
