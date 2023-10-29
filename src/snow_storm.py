@@ -6,6 +6,7 @@ import pygame
 
 import constants
 from draw import Drawable
+from context import instance
 
 
 class SnowStorm(Drawable):
@@ -29,8 +30,8 @@ class SnowStorm(Drawable):
         """Add a snowflake at a random valid position within the map"""
         self.snowflakes.append(
             pygame.Vector2(
-                randint(0, constants.WINDOWS_SIZE[0]),
-                randint(0, constants.WINDOWS_SIZE[1]),
+                randint(0, instance.windows_size[0]),
+                randint(0, instance.windows_size[1]),
             )
         )
 
@@ -43,14 +44,14 @@ class SnowStorm(Drawable):
             snowflake.y += constants.GRAVITY / 10.0  # gravity
 
             # Corner case down
-            if snowflake.y > (constants.WINDOWS_SIZE[1]):
-                snowflake.y -= constants.WINDOWS_SIZE[1]
+            if snowflake.y > (instance.windows_size[1]):
+                snowflake.y -= instance.windows_size[1]
 
             # Corner case sides
-            if snowflake.x > constants.WINDOWS_SIZE[0]:
-                snowflake.x -= constants.WINDOWS_SIZE[0]
+            if snowflake.x > instance.windows_size[0]:
+                snowflake.x -= instance.windows_size[0]
             elif snowflake.x < 0:
-                snowflake.x += constants.WINDOWS_SIZE[0]
+                snowflake.x += instance.windows_size[0]
 
             if abs(self.wind - self.wind_target) < 1e-9:
                 self.wind_target = (random.random() - 0.5) * 10.0

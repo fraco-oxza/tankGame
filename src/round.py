@@ -59,7 +59,7 @@ class Round:
         self.last_state = None
         self.cannonball = None
         self.context.fps = constants.FPS
-        self.menu = Menu(self.snow_storm)
+        self.menu = Menu(self.context.screen)
         self.create_tanks()
         self.create_turns()
 
@@ -164,7 +164,7 @@ class Round:
         if self.animacion is not None:
             self.animacion.draw(game_rect)
         self.context.screen.blit(
-            game_rect, (constants.BORDER_PADDING, constants.BORDER_PADDING)
+            game_rect, (self.context.border_padding, self.context.border_padding)
         )
 
         self.hud.draw(self.context.screen)
@@ -424,30 +424,6 @@ class Round:
                             self.terrain.new_ground_lines[i][j] = 0
                         j -= 1
 
-    def start_menu(self):
-        """This method takes care of the menu music and the start button click."""
-        soundtrack = audio_cache["sounds/inicio.mp3"]
-        soundtrack.play()
-        while self.running:
-            check_running()
-            self.menu.draw(self.context.screen)
-            self.menu.tick((1.0 / (self.context.fps + 0.1)))
-
-            ms = pygame.mouse.get_pos()
-
-            self.menu.is_hover = self.menu.collides_with(pygame.Vector2(*ms))
-
-            if pygame.mouse.get_pressed()[0] and self.menu.is_hover:
-                soundtrack.stop()
-                click = audio_cache["sounds/click.mp3"]
-
-                click.play()
-                break
-
-            pygame.display.flip()
-            self.context.clock.tick(constants.FPS)
-            self.context.fps = self.context.clock.get_fps()
-
     def display_explotion(self):
         """This method is responsible for the animation of the explosion."""
         if self.animacion is None:
@@ -535,8 +511,8 @@ class Round:
 
             self.terrain_destruction()
 
-            # self.wait_release_space()
-            # self.wait_on_space()
+            self.wait_release_space()
+            self.wait_on_space()
 
             self.check_last_state()
 
