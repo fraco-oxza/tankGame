@@ -13,6 +13,7 @@ from menu import MenuStatus
 from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 
+
 class TankGame:
     players: list[Player]
 
@@ -25,7 +26,13 @@ class TankGame:
         self.players = []
         self.menu = Menu(self.context.screen)
         self.menu_option = OptionMenu(self.context.screen)
-        self.screen_resolution = [(800, 800), (1366, 768), (1600, 900), (1280, 720), (1920, 1080)]
+        self.screen_resolution = [
+            (800, 800),
+            (1366, 768),
+            (1600, 900),
+            (1280, 720),
+            (1920, 1080),
+        ]
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color

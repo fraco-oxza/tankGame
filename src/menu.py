@@ -47,9 +47,7 @@ class Menu:
         Function responsible for creating and displaying the new surface on the screen,
         which is responsible for loading the background image and drawing the start button
         """
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.sky_rect = self.image.get_rect()
         self.screen.blit(self.image, self.sky_rect.topleft)
@@ -70,11 +68,10 @@ class Menu:
         self.fontTitle.set_bold(False)
         self.screen.blit(title, ((size[0] - title.get_size()[0]) / 2, size[1] / 6))
 
-        box = pygame.rect.Rect(
-            *self.box_pos, self.box_size[0], self.box_size[1]
-        )
+        box = pygame.rect.Rect(*self.box_pos, self.box_size[0], self.box_size[1])
         option_box = pygame.rect.Rect(
-            *self.box_pos_options, self.box_size[0], self.box_size[1])
+            *self.box_pos_options, self.box_size[0], self.box_size[1]
+        )
         pygame.draw.rect(
             self.screen,
             self.button_color1,
@@ -101,8 +98,12 @@ class Menu:
         self.screen.blit(
             options,
             (
-                self.box_pos_options[0] + self.box_size[0] / 2 - options.get_size()[0] / 2,
-                self.box_pos_options[1] + self.box_size[1] / 2 - options.get_size()[1] / 2,
+                self.box_pos_options[0]
+                + self.box_size[0] / 2
+                - options.get_size()[0] / 2,
+                self.box_pos_options[1]
+                + self.box_size[1] / 2
+                - options.get_size()[1] / 2,
             ),
         )
 
@@ -127,14 +128,22 @@ class Menu:
         check_running()
         mouse = pygame.Vector2(pygame.mouse.get_pos())
         if (self.box_pos[0] <= mouse.x <= self.box_pos[0] + self.box_size[0]) and (
-                self.box_pos[1] <= mouse.y <= self.box_pos[1] + self.box_size[1]):
+            self.box_pos[1] <= mouse.y <= self.box_pos[1] + self.box_size[1]
+        ):
             self.button_color1 = self.hover_botton_color
             self.upon = 1
             print("chao")
         else:
             self.button_color1 = "#2E3440"
-        if (self.box_pos_options[0] <= mouse.x <= self.box_pos_options[0] + self.box_size[0]) and (
-                self.box_pos_options[1] <= mouse.y <= self.box_pos_options[1] + self.box_size[1]):
+        if (
+            self.box_pos_options[0]
+            <= mouse.x
+            <= self.box_pos_options[0] + self.box_size[0]
+        ) and (
+            self.box_pos_options[1]
+            <= mouse.y
+            <= self.box_pos_options[1] + self.box_size[1]
+        ):
             self.button_color2 = self.hover_botton_color
             self.upon = 2
         else:

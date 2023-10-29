@@ -424,7 +424,6 @@ class Round:
                             self.terrain.new_ground_lines[i][j] = 0
                         j -= 1
 
-
     def display_explotion(self):
         """This method is responsible for the animation of the explosion."""
         if self.animacion is None:
@@ -441,7 +440,6 @@ class Round:
         self.actual_player = self.turns_queue[-1]  # Swap actual player
         self.turns_queue.pop()
 
-
     @run_until_exit
     def start(self) -> None:
         """
@@ -453,7 +451,6 @@ class Round:
         """
 
         while self.running:
-
             check_running()
 
             self.next_turn()

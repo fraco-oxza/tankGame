@@ -8,6 +8,7 @@ import constants
 from draw import Drawable
 from context import instance
 
+
 class SnowStorm(Drawable):
     """
     This class is responsible for adding small particles to the map, changing depending on the biome.

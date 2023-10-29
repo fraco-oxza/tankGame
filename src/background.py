@@ -5,6 +5,7 @@ from caches import image_cache
 from draw import Drawable
 from context import instance
 
+
 class Background(Drawable):
     """
     This class represents the game background, which loads an image and creates
