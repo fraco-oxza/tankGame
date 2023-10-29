@@ -5,6 +5,7 @@ import sys
 import pygame
 from context import instance
 
+
 def resource_path(relative_path: str):
     """
     This function is responsible for loading resources from the resources folder.
@@ -42,7 +43,8 @@ class AnimationCache(FileCache):
 
         scale = (
             instance.windows_size[0] / 4.26,
-            instance.windows_size[1] / 3.6)  # TODO: Find the correct place for this scale
+            instance.windows_size[1] / 3.6,
+        )  # TODO: Find the correct place for this scale
 
         animations_path = resource_path(os.path.join("animations", animation_name))
         animation = []

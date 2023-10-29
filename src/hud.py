@@ -536,4 +536,3 @@ class HUD(Drawable):
                 ),
                 (0, 0),
             )
-

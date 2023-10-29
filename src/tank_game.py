@@ -74,7 +74,10 @@ class TankGame:
         size = out_text.get_rect().size
         screen.blit(
             out_text,
-            (self.context.windows_size[0] - size[0], self.context.windows_size[1] - size[1]),
+            (
+                self.context.windows_size[0] - size[0],
+                self.context.windows_size[1] - size[1],
+            ),
         )
         pygame.display.flip()
 
