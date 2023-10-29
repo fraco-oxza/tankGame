@@ -35,7 +35,7 @@ class TankGame {
 }
 
 class Cannonballs extends Drawable {
-    +damage:int
+    + damage:int
     + position: Point
     + velocity: Velocity
     + trajectory: list[pygame.Vector2]
