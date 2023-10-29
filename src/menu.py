@@ -132,7 +132,6 @@ class Menu:
         ):
             self.button_color1 = self.hover_botton_color
             self.upon = 1
-            print("chao")
         else:
             self.button_color1 = "#2E3440"
         if (

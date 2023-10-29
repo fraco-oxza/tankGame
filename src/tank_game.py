@@ -77,7 +77,7 @@ class TankGame:
             if j == self.menu_option.index_screen_resolution:
                 self.context.windows_size = self.screen_resolution[j]
         self.context.number_of_bots = self.menu_option.quantity_bots
-        self.context.number_of_round = self.menu_option.quantity_rounds
+        self.context.number_of_rounds = self.menu_option.quantity_rounds
         self.context.type_of_effect = self.menu_option.index_environment_effects
 
     def start(self) -> None:
@@ -89,7 +89,6 @@ class TankGame:
                 print("empezo partida", self.context.map_size)
                 for _ in range(self.context.number_of_players):
                     self.create_player()
-
                 for i in range(self.context.number_of_rounds):
                     print(f"round {i}")
                     current_round = Round(self.players)
