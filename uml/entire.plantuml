@@ -3,6 +3,10 @@
 top to bottom direction
 skinparam linetype ortho
 
+class Main{
+    +main()
+
+}
 class TankGame {
     + terrain: Terrain
     + tanks: list[Tank]
@@ -229,7 +233,10 @@ class Impact
 
     +Impact(Position, ImpactType)
 }
-
+class inputs{
+    +check_running()
+    +run_until_exit(func)
+}
 class Constants {
     + GRAVITY: double
     + TANK_HIT_BOX_SIZE: double
@@ -332,6 +339,13 @@ class OptionMenuStatus{
     +CONTINUE:int
 
 }
+class ExitRequested extends Exception{
+
+}
+class RestartRequested extends Exception{
+
+}
+
 class OptionMenu{
     +box_size = pygame.Vector2
     +box_pos: Optional[tuple[float, float]]
@@ -348,26 +362,70 @@ class OptionMenu{
     +selection()
 
 }
-TankGame -- Constants
+class Round{
+    +tanks: list[Tank]
+    +context: Context
+    +players: list[Player]
+    +turns_queue: list[int]
+    +actual_player: int
+    +cannonball: Optional[Cannonball]
+    +tanks_alive: int
+    +Round(players: list[Player])
+    +create_turns()
+    +create_tanks()
+    +generate_tanks_positions()
+    +draw_cannonball_indicator(sf: pygame.surface.Surface)
+    +render()
+    +process_input()
+    +process_in_game_menu()
+    +process_cannonball_trajectory()
+    +get_current_tank()
+    +calculate_distance(tank: Tank)
+    +wait_release_space()
+    +cannonball_travel()
+    +wait_on_space()
+    +check_last_state()
+    +terrain_destruction()
+    +display_explotion()
+    +next_turn()
+    +start()
+}
 
+
+TankGame -- Constants
+Main *--> TankGame
 WinnerScreen *--> TankGame
 InGameMenu o--> TankGame
 InGameMenu *--> InGameMenuStatus
 Round *--> Tank
+Round *--> Context
 Round o--> Cannonball
+Round o--> CannonballType
+Round *--> ExitRequested
+Round *--> RestartRequested
 Round *--> Terrain
 Round o--> Background
 Round o--> Impact
 Round *--> Map
+Round *--> HUD
+Round *--> ImpactType
+Round *--> InGameMenu
+Round *--> InGameMenuStatus
+Round *--> SnowStorm
 Round *--> AudioCache
 Round *--> FontCache
 Round *--> AnimationCache
+Round o--> WarningWindows
+Round o--> WinnerScreen
+Round -- inputs
+Background *--> Context
 Background *--> ImageCache
 Terrain *--> ImageCache
 Menu *--> ImageCache
 Menu *--> FontCache
 HUD *--> FontCache
 HUD *--> ImageCache
+SnowStorm *--> Context
 InGameMenu *--> ImageCache
 InGameMenu *--> AudioCache
 InGameMenu *--> FontCache
