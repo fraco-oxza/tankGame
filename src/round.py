@@ -20,6 +20,7 @@ from inputs import check_running, run_until_exit
 from map import Map
 from menu import Menu
 from player import Player
+from shop_menu import Shop
 from snow_storm import SnowStorm
 from tank import Tank
 from terrain import Terrain
@@ -39,6 +40,7 @@ class Round:
     def __init__(self, players: list[Player]):
         self.context = context.instance
         self.map = Map()
+        self.shop_menu = Shop(self.context.screen)
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color())
         self.terrain = Terrain(
@@ -168,6 +170,7 @@ class Round:
         )
 
         self.hud.draw(self.context.screen)
+        # self.shop_menu.start_shop()
 
         self.snow_storm.tick(1.0 / (self.context.fps + 0.1))
         if self.cannonball is None and self.last_state is None:
@@ -392,18 +395,14 @@ class Round:
         if self.cannonball is not None and self.last_state is not None:
             radius = self.cannonball.radius_damage
             # FIXME: Esto esta muy mal con el nuevo modelo
-            if self.tanks[0].position.x in range(
-                int(self.cannonball.position.x - radius),
-                int(self.cannonball.position.x + radius),
+            for p in range(0, self.tanks.__len__()):
+                if self.tanks[p].position.x in range(
+                        int(self.cannonball.position.x - radius),
+                        int(self.cannonball.position.x + radius),
             ):
-                self.tanks[0].position.y += radius
-                self.tanks[0].life -= 10
-            if self.tanks[1].position.x in range(
-                int(self.cannonball.position.x - radius),
-                int(self.cannonball.position.x + radius),
-            ):
-                self.tanks[1].position.y += radius
-                self.tanks[1].life -= 10
+                    self.tanks[p].position.y += radius
+                    self.tanks[p].life -= 10
+
             for i in range(
                 int(self.last_state.position.x) - radius,
                 int(self.last_state.position.x) + radius,
