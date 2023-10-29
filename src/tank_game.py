@@ -45,14 +45,16 @@ class TankGame:
         soundtrack.play()
         i = 0
         while True:
-            if self.menu.show_menu() == MenuStatus.start:
+            menu = self.menu.show_menu()
+            if menu == MenuStatus.start:
                 soundtrack.stop()
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
                 break
-            if self.menu.show_menu() == MenuStatus.options:
+            if menu == MenuStatus.options:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
+                self.menu_option = OptionMenu(self.context.screen)
                 if self.menu_option.start_option_menu() == OptionMenuStatus.CONTINUE:
                     click = audio_cache["sounds/click.mp3"]
                     click.play()

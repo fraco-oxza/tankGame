@@ -164,7 +164,7 @@ class Round:
         if self.animacion is not None:
             self.animacion.draw(game_rect)
         self.context.screen.blit(
-            game_rect, (constants.BORDER_PADDING, constants.BORDER_PADDING)
+            game_rect, (self.context.border_padding, self.context.border_padding)
         )
 
         self.hud.draw(self.context.screen)

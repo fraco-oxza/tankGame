@@ -48,13 +48,14 @@ class OptionMenu:
             image_cache["images/options.png"], image_size
         )
         self.sky_rect = self.image.get_rect()
-        self.quantity_players = 2
-        self.quantity_bots = 0
-        self.quantity_rounds = 1
+        self.quantity_players = instance.number_of_players
+        self.quantity_bots = instance.number_of_bots
+        self.quantity_rounds = instance.number_of_rounds
         self.environment_effects = ["Ninguno", "Gravedad", "Viento", "Gravedad y Viento"]
-        self.index_environment_effects = 0
-        self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
-        self.index_screen_resolution = 0
+        self.index_environment_effects = instance.type_of_effect
+        # self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
+        self.screen_resolution = [(800, 800), (1366, 768), (1600, 900), (1280, 720), (1920, 1080)]
+        self.index_screen_resolution = self.screen_resolution.index(instance.windows_size)
 
     def render(self):
         while True:
@@ -108,8 +109,7 @@ class OptionMenu:
                                  instance.windows_size[0] / 2.39, instance.windows_size[1] / 1.48,
                              ),
                              )
-            mouse = pygame.Vector2(pygame.mouse.get_pos())
-            self.handle_input(mouse)
+
             msj = self.font.render(f"{self.quantity_players}", True, "#8ACAC0")
             self.screen.blit(msj
                              ,
@@ -146,7 +146,8 @@ class OptionMenu:
                                      instance.windows_size[0] / 2.37, instance.windows_size[1] / 1.39,
                                  ),
                                  )
-            msj = self.font.render(f"{self.screen_resolution[self.index_screen_resolution]}", True, "#8ACAC0")
+            x, y = self.screen_resolution[self.index_screen_resolution]
+            msj = self.font.render(f"{x} X {y}", True, "#8ACAC0")
             if self.index_screen_resolution == 0:
                 self.screen.blit(msj
                                  ,
@@ -156,6 +157,8 @@ class OptionMenu:
                                  )
             else:
                 self.screen.blit(msj, (instance.windows_size[0] / 2.24, instance.windows_size[1] / 4.8))
+            mouse = pygame.Vector2(pygame.mouse.get_pos())
+            self.handle_input(mouse)
             if pygame.mouse.get_pressed()[0]:
                 self.selection()
                 if self.sobre == 11:

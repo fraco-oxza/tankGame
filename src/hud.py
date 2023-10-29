@@ -37,7 +37,7 @@ class HUD(Drawable):
         self.text_velocity1 = None
         self.text_velocity2 = None
         self.text_cannonball_info = None
-        self.color = tanks[self.tank_game.actual_player].color
+        self.color = tanks[self.tank_game.actual_player].available
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         """
@@ -385,7 +385,7 @@ class HUD(Drawable):
         killed itself to call the corresponding function. Furthermore, if the mode
         developer is activated shows the FPS
         """
-        restart_pos = (constants.BORDER_PADDING + instance.windows_size[0] / 128,
+        restart_pos = (instance.border_padding + instance.windows_size[0] / 128,
                        instance.windows_size[1] - instance.windows_size[1] / 24)
         radius = instance.windows_size[0] / 80
         ms = pygame.mouse.get_pos()
@@ -396,37 +396,37 @@ class HUD(Drawable):
         screen.blit(
             self.get_actual_player(),
             (
-                constants.BORDER_PADDING - instance.windows_size[0] / 128,
-                constants.WINDOWS_SIZE[1]
+                instance.border_padding - instance.windows_size[0] / 128,
+                instance.windows_size[1]
                 - instance.windows_size[1] / 3.6
-                - constants.BORDER_PADDING / 2,
+                - instance.border_padding / 2,
             ),
         )
         screen.blit(
             self.get_cannonball_indicators(),
             (
-                constants.BORDER_PADDING + instance.windows_size[0] / 7.5,
+                instance.border_padding + instance.windows_size[0] / 7.5,
                 instance.windows_size[1]
                 - instance.windows_size[1] / 3.6
-                - constants.BORDER_PADDING / 2,
+                - instance.border_padding / 2,
             ),
         )
         screen.blit(
             self.get_select_cannonball(),
             (
-                constants.BORDER_PADDING + instance.windows_size[0] / 2.39,
-                constants.WINDOWS_SIZE[1]
-                - constants.HUD_HEIGHT
-                - constants.BORDER_PADDING / 2,
+                instance.border_padding + instance.windows_size[0] / 2.39,
+                instance.windows_size[1]
+                - instance.hud_height
+                - instance.border_padding / 2,
             ),
         )
         screen.blit(
             self.tank_info(),
             (
-                constants.BORDER_PADDING + instance.windows_size[0] / 1.42,
-                constants.WINDOWS_SIZE[1]
-                - constants.HUD_HEIGHT
-                - constants.BORDER_PADDING / 2,
+                instance.border_padding + instance.windows_size[0] / 1.42,
+                instance.windows_size[1]
+                - instance.hud_height
+                - instance.border_padding / 2,
             ),
         )
 
@@ -458,8 +458,8 @@ class HUD(Drawable):
         screen.blit(
             instructions,
             (
-                constants.WINDOWS_SIZE[0] / 2 - size[0] / 2,
-                constants.WINDOWS_SIZE[1] / 2 - size[1] / 2,
+                instance.windows_size[0] / 2 - size[0] / 2,
+                instance.windows_size[1] / 2 - size[1] / 2,
             ),
         )
         out_text = self.font.render(
@@ -470,5 +470,5 @@ class HUD(Drawable):
         size = out_text.get_rect().size
         screen.blit(
             out_text,
-            (constants.WINDOWS_SIZE[0] - size[0], constants.WINDOWS_SIZE[1] - size[1]),
+            (instance.windows_size[0] - size[0], instance.windows_size[1] - size[1]),
         )

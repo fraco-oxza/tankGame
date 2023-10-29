@@ -20,8 +20,8 @@ class Context:
 
     def __init__(self) -> None:
         print("se ha creado un contexto")
-        self.rounds = constants.DEFAULT_ROUNDS
-        self.windows_size = constants.WINDOWS_SIZE
+
+        self.windows_size = constants.DEFAULT_WINDOWS_SIZE
         self.screen = pygame.display.set_mode(self.__windows_size)
         self.number_of_players = constants.DEFAULT_NUMBER_OF_PLAYERS
         self.number_of_rounds = constants.DEFAULT_ROUNDS
@@ -45,9 +45,12 @@ class Context:
     @windows_size.setter
     def windows_size(self, new_size: tuple[int, int]) -> None:
         self.__windows_size = new_size
+        self.aspect_ratio = self.windows_size[0] / self.windows_size[1]
+        self.hud_height = self.windows_size[1] / 3.6
+        self.border_padding = self.windows_size[1] // 36
         self.map_size = (
-            new_size[0] - 2 * constants.BORDER_PADDING,
-            new_size[1] - constants.HUD_HEIGHT - 2 * constants.BORDER_PADDING,
+            new_size[0] - 2 * self.border_padding,
+            int(new_size[1] - self.hud_height - 2 * self.border_padding),
         )
         self.screen = pygame.display.set_mode(new_size)
 

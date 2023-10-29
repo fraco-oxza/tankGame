@@ -3,7 +3,7 @@ import pygame
 import constants
 from caches import image_cache
 from draw import Drawable
-
+from context import instance
 
 class Background(Drawable):
     """
@@ -17,8 +17,8 @@ class Background(Drawable):
         """Initialize the class by loading the images and creating the snowflakes."""
         self.image = image
         image_size = pygame.Vector2(
-            constants.WINDOWS_SIZE[0],
-            (1.0 / constants.ASPECT_RATIO) * constants.WINDOWS_SIZE[0],
+            instance.windows_size[0],
+            (1.0 / instance.aspect_ratio) * instance.windows_size[0],
         )
         self.sky_image = pygame.transform.scale(image_cache[self.image], image_size)
         self.sky_rect = self.sky_image.get_rect()

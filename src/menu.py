@@ -33,17 +33,12 @@ class Menu:
 
     def __init__(self, screen: pygame.surface.Surface):
         self.fontTitle = font_cache["Roboto.ttf", int(instance.windows_size[0] / 29.76)]
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
-        self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
         self.box_pos = None
         self.box_pos_options = None
         self.button_color1 = "#2E3440"
         self.button_color2 = "#2E3440"
         self.hover_botton_color = "#3b4252"
         self.is_hover = False
-        self.sky_rect = self.image.get_rect()
         self.upon = None
         self.screen = screen
 
@@ -52,6 +47,11 @@ class Menu:
         Function responsible for creating and displaying the new surface on the screen,
         which is responsible for loading the background image and drawing the start button
         """
+        image_size = pygame.Vector2(
+            instance.windows_size[0], instance.windows_size[1]
+        )
+        self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
+        self.sky_rect = self.image.get_rect()
         self.screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
         rect_surface = pygame.Surface(
