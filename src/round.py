@@ -397,9 +397,9 @@ class Round:
             # FIXME: Esto esta muy mal con el nuevo modelo
             for p in range(0, self.tanks.__len__()):
                 if self.tanks[p].position.x in range(
-                        int(self.cannonball.position.x - radius),
-                        int(self.cannonball.position.x + radius),
-            ):
+                    int(self.cannonball.position.x - radius),
+                    int(self.cannonball.position.x + radius),
+                ):
                     self.tanks[p].position.y += radius
                     self.tanks[p].life -= 10
 

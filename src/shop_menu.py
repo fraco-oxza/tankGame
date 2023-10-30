@@ -28,9 +28,15 @@ class Shop:
     upon: Optional[int]
 
     def __init__(self, screen: pygame.surface):
-        self.button_reset_position = pygame.Vector2(instance.windows_size[0] / 17, instance.windows_size[1] / 15)
-        self.ammo_button_reset_position = pygame.Vector2(instance.windows_size[0] / 7.5, instance.windows_size[1] / 15)
-        self.buy_button_reset_position = pygame.Vector2(instance.windows_size[0] / 10, instance.windows_size[1] / 15)
+        self.button_reset_position = pygame.Vector2(
+            instance.windows_size[0] / 17, instance.windows_size[1] / 15
+        )
+        self.ammo_button_reset_position = pygame.Vector2(
+            instance.windows_size[0] / 7.5, instance.windows_size[1] / 15
+        )
+        self.buy_button_reset_position = pygame.Vector2(
+            instance.windows_size[0] / 10, instance.windows_size[1] / 15
+        )
         self.money_font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
         self.c60_button_color = "#FFFFFF"
         self.c80_button_color = "#FFFFFF"
@@ -40,9 +46,7 @@ class Shop:
         self.hover_button_color = "#000000"
         self.upon = None
         self.screen = screen
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(
             image_cache["images/shopmenu.png"], image_size
         )
