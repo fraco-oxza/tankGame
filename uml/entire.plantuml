@@ -376,6 +376,10 @@ class OptionMenu{
 
 }
 
+class Bot(Tank)
+{
+    +random_shoot(pygame.Vector2)
+}
 class Context {
     +rounds: int
     +screen: pygame.surface.Surface
