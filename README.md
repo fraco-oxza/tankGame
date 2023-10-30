@@ -1,5 +1,6 @@
 # Tank Game ![Game Icon](resources/images/tankIcon.png)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![DeepSource](https://app.deepsource.com/gh/fraco-oxza/tankGame.svg/?label=resolved+issues&show_trend=false&token=5XqbNoQe1vAgVms-sZSpTDMW)](https://app.deepsource.com/gh/fraco-oxza/tankGame/)
 
 Tank game is our programming project for the University of Talca, it is a simple
 2D game that allows you to simulate the trajectory of shots and impacts.
