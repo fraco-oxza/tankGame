@@ -385,8 +385,6 @@ class Round:
                 else:
                     self.get_current_tank().player.money -= 5000
 
-
-
     def terrain_destruction(self):
         """
         This method takes care of the destruction of terrain, the fall of tanks and the damage related to this.
