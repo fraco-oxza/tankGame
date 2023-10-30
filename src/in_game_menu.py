@@ -55,7 +55,7 @@ class InGameMenu:
         self.hover_botton_color = "#736868"
         self.screen = screen
         self.sobre = None
-        self.clock = pygame.time.Clock()
+        self.clock = instance.clock
         image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(
             image_cache["images/Control.png"], image_size

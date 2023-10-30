@@ -12,13 +12,3 @@ def check_running():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             raise ExitRequested
-
-
-def run_until_exit(func):
-    def wrapper(*args, **kargs):
-        try:
-            return func(*args, **kargs)
-        except ExitRequested:
-            raise ExitRequested
-
-    return wrapper

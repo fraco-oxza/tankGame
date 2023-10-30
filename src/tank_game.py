@@ -2,6 +2,7 @@ import random
 from random import randint
 
 import pygame
+from pygame.font import Font
 from caches import audio_cache, image_cache, font_cache
 from context import Context
 from exit_requested import ExitRequested, RestartRequested
@@ -16,6 +17,11 @@ from option_menu import OptionMenuStatus
 
 class TankGame:
     players: list[Player]
+    context: Context
+    menu: Menu
+    menu_option: OptionMenu
+    screen_resolution: list[tuple[int, int]]
+    font: Font
 
     def __init__(self, context: Context) -> None:
         """

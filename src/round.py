@@ -376,10 +376,16 @@ class Round:
             if tank.is_alive and tank.life <= 0:
                 tank.is_alive = False
                 tank.life = 0
-                tank.player.deads += 1
-                self.get_current_tank().player.money += 1000
-                self.get_current_tank().player.murders += 1
                 self.tanks_alive -= 1
+                tank.player.deads += 1
+
+                if self.get_current_tank().player is not tank.player:
+                    self.get_current_tank().player.money += 1000
+                    self.get_current_tank().player.murders += 1
+                else:
+                    self.get_current_tank().player.money -= 5000
+
+
 
     def terrain_destruction(self):
         """
@@ -439,7 +445,6 @@ class Round:
         self.actual_player = self.turns_queue[-1]  # Swap actual player
         self.turns_queue.pop()
 
-    @run_until_exit
     def start(self) -> None:
         """
         This method shows the basic instructions and then gives way to the

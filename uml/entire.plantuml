@@ -5,37 +5,22 @@ skinparam linetype ortho
 
 class Main{
     +main()
-
 }
+
 class TankGame {
-    + terrain: Terrain
-    + tanks: list[Tank]
-    + screen: pygame.Surface
-    + cannonball: Optional[Cannonball]
-    +old_cannonballs : listCannonball]
-    + running: bool
-    + actual_player: int
-    + winner: Optional[int]
-    +winner_msj: Optional[WinnerScreen]
-    +last_state: Optional[Impact]
-    +select_Cannonball : Optional[SelectCannonball]
-    show_screen: bool
+    + players: list[Player]
+    + context: Context
+    + menu: Menu
+    + menu_option: OptionMenu
+    + screen_resolution: list[tuple[int, int]]
 
-    + TankGame():
-    + render(): None
-    + check_running(): bool
-    + process_input(): None
-    + process_cannonball_trajectory(): None
-    +calculate_distance
-    + wait_release_space(): None
-    + cannonball_travel(): None
-    +life_tank
-    + wait_on_space(): None
-    + check_last_state(): None
-    + start_menu(): None
-    +start()
-    +main()
-
+    + TankGame(Context):
+    + create_player():
+    + game_brief():
+    + show_instructions(Surface):
+    + start_menu():
+    + Replace():
+    + start():
 }
 
 class Cannonballs extends Drawable {
@@ -76,9 +61,11 @@ class Cannonball60mm extends Cannonball{
     + units_available: int
     +draw(Surface)
 }
+
 interface Drawable {
     + draw(Surface)
 }
+
 class HUD extends Drawable{
     + tanks: list[Tank]
     + left: int
@@ -97,16 +84,13 @@ class HUD extends Drawable{
  +get_cannonball_indicators()
  +draw(Surface)
  }
+
 class WinnerScreen extends Drawable{
     +WinnerScreen():
     +winner_mensaje(Surface)
     +draw(Surface): None
 }
-class InGameMenuStatus{
-    + EXIT
-    + CONTINUE
-    + RESTART
-}
+
 class InGameMenu{
     +fontExit: Font
     +fontBack: Font
@@ -120,12 +104,20 @@ class InGameMenu{
     +hover_botton_color: str
     +button_reset_position = pygame.Vector2
     +sobre: Optional[int]
-    + InGameMenu()
+    +InGameMenu()
     +tick()
     +render()
     +handleInput(mouse: pygame.Vector2)
     +start_menu()
     +restart(Mensaje: str)
+
+    + InGameMenu(Surface, SnowStorm):
+    + tick(float):
+    + render():
+    + handle_input(Vector2):
+    + start_menu(): int
+    + restart(str):
+
 }
 
 class Terrain extends Drawable,Collidable {
@@ -134,7 +126,7 @@ class Terrain extends Drawable,Collidable {
     +new_ground_lines: list[list[float]]
 
 
-    +Terrain(int, int)
+    +Terrain(tuple[int,int], int, int, list[str])
     +generate_terrain(mountains: int, valleys: int)
     +mountain(i: int, j: int, height: int):
     +valley( inicio: int, fin: int, profundidad: int)
@@ -344,13 +336,11 @@ class Menu{
     +handle_input
 
 }
- class MenuStatus
-    {
-    +nothing = 0
-    +start = 1
-    +options = 2
-
-    }
+enum MenuStatus {
+    nothing
+    start 
+    options
+}
 
 class ExitRequested extends Exception{
 
@@ -428,7 +418,30 @@ class Round{
 }
 
 
+enum InGameMenuStatus {
+    EXIT
+    CONTINUE
+    RESTART
+}
+
+class Inputs {
+    +check_running()
+}
+
+
+Inputs -- TankGame
+Inputs -- Round
 TankGame -- Constants
+TankGame o--> Player
+TankGame o--> Context
+TankGame *--> Menu
+TankGame *--> OptionMenu
+TankGame -- Round
+TankGame -- ExitRequested
+TankGame -- AudioCache
+TankGame -- SoundCache
+TankGame -- FontCache
+
 Main *--> TankGame
 WinnerScreen *--> TankGame
 InGameMenu o--> TankGame
@@ -471,7 +484,6 @@ HUD *--> Tank
 HUD o--> Speedometer
 HUD *--> SelfImpactWindows
 Impact *--> ImpactType
-TankGame *--> Impact
 OptionMenu *-->MenuStatus
 
 @enduml
