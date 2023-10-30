@@ -215,16 +215,21 @@ class Tank extends Collidable,Drawable  {
 class Player {
     +name: str
     +points: int
-    +Player(str, int)
-    +score(impact: Impact, tank_position: pygame.Vector2)
+    +money: int
+    +ammunition: dict[int, int]
+    +color: str | pygame.Color
+    +money: int
+    +murders: int
+    +deads: int
 
-
+    +Player(name: str, color: str | pygame.Color)
+    +score(Impact, pygame.Vector2)
 }
 class WinnerScreen extends Drawable
 {
-    + WinnerScreen()
+    +WinnerScreen(tank_game)
     +winner_mensaje(screen: pygame.surface.Surface)
-    +fuegos_artificiales(screen: pygame.surface.Surface)
+    +draw(screen: pygame.surface.Surface)
 }
 class Impact
 {
@@ -295,19 +300,19 @@ class WarnningWindows extends Drawable {
     +num_seleccionado: int
     +quantity: list[int]
     +tank_game: TankGame
-    +WarnningWindows(TankGame)
-    +backround(screen: pygame.surface.Surface)
-    +quantity_mm_60()
-    +quantity_mm_80()
-    +quantity_mm_105()
-    +draw(screen: pygame.surface.Surface):
 
+    +WarnningWindows(TankGame)
+    +get_background(screen: pygame.surface.Surface)
+    +is_current_cannonball_available()
+    +draw(screen: pygame.surface.Surface):
 }
 
 class Map{
     +terrain_colors: list[str]
-    +background_colors: str
+    +background_image: str
+    +storm_color = str
     +chosen_biome: int
+    +Map()
     +define_terrain_colors()
     +define_background_image()
     +define_storm_color()
@@ -324,21 +329,29 @@ class SnowStorm extends Drawable{
     +draw():None
 }
 
-class Menu extends Drawable, Collidable{
-    storm: SnowStorm
-    box_size = (200, 100)
-    box_pos: Optional[tuple[float, float]]
-    botton_color: str
-    hover_botton_color: str
-    is_hover: bool
-    +Menu()
-    +draw(pygame.surface)
-    +collidesWith( point: pygame.Vector2): bool
-}
-class OptionMenuStatus{
-    +CONTINUE:int
+class Menu{
+   +fontTitle: Font
+   +storm: SnowStorm
+   +box_size = (instance.windows_size[0] / 6.4, instance.windows_size[1] / 7.2)
+   +box_pos: Optional[tuple[float, float]]
+   +botton_color: str
+   +hover_botton_color: str
+   +is_hover: bool
+
+    +Menu(pygame.surface.Surface)
+    +render()
+    +show_menu
+    +handle_input
 
 }
+ class MenuStatus
+    {
+    +nothing = 0
+    +start = 1
+    +options = 2
+
+    }
+
 class ExitRequested extends Exception{
 
 }
@@ -360,6 +373,25 @@ class OptionMenu{
     +paint_right(index:int)
     +principal_button(index:int)
     +selection()
+
+}
+
+class Context {
+    +rounds: int
+    +screen: pygame.surface.Surface
+    +number_of_players: int
+    +number_of_rounds: int
+    +__windows_size: tuple[int, int]
+    +map_size: tuple[int, int]
+    +__fps: float
+    +clock: pygame.time.Clock
+
+    +Context()
+    +fps()
+    +fps(val)
+    +windows_size()
+    +windows_size(new_size: tuple[int, int])
+
 
 }
 class Round{
@@ -436,6 +468,6 @@ HUD o--> Speedometer
 HUD *--> SelfImpactWindows
 Impact *--> ImpactType
 TankGame *--> Impact
-OptionMenu *-->OptionMenuStatus
+OptionMenu *-->MenuStatus
 
 @enduml
