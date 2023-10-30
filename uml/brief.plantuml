@@ -1,0 +1,193 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class Main{}
+
+class TankGame {}
+
+class Cannonballs extends Drawable {}
+
+class Cannonball105mm extends Cannonball{}
+
+class Cannonball60mm extends Cannonball{}
+
+class Cannonball80mm extends Cannonball{}
+
+interface Drawable {}
+
+class HUD extends Drawable{}
+
+class WinnerScreen extends Drawable{}
+
+class InGameMenu{}
+
+class Terrain extends Drawable,Collidable {}
+
+class FileCache{}
+
+class AnimationCache extends FileCache{}
+
+class ImageCache extends FileCache{}
+
+class FontCache extends FileCache{}
+
+class AudioCache extends FileCache{}
+
+class Speedometer{}
+class Collidable {}
+
+class Background extends Drawable{
+
+
+}
+class Tank extends Collidable,Drawable  {
+
+}
+
+class Player {
+
+}
+class WinnerScreen extends Drawable
+{
+
+}
+class Impact
+{
+
+}
+class inputs{
+
+}
+class Constants {
+
+}
+class ImpactType{
+
+}
+
+class Explosion extends Drawable{
+
+}
+
+
+
+class CannonballType{
+
+}
+
+class SelfImpactWindows extends Drawable {
+}
+
+class WarnningWindows extends Drawable {
+
+}
+
+class Map{
+
+}
+
+class SnowStorm extends Drawable{
+
+}
+
+class Menu{
+
+
+}
+enum MenuStatus {
+
+}
+
+class ExitRequested extends Exception{
+
+}
+class RestartRequested extends Exception{
+
+}
+
+class OptionMenu{
+
+
+}
+
+class Bot(Tank)
+{
+
+}
+class Context {
+
+}
+class Round{
+
+}
+
+
+enum InGameMenuStatus {
+
+}
+
+class Inputs {
+
+}
+
+
+Inputs -- TankGame
+Inputs -- Round
+TankGame -- Constants
+TankGame o--> Player
+TankGame o--> Context
+TankGame *--> Menu
+TankGame *--> OptionMenu
+TankGame -- Round
+TankGame -- ExitRequested
+TankGame -- AudioCache
+TankGame -- SoundCache
+TankGame -- FontCache
+
+Main *--> TankGame
+WinnerScreen *--> TankGame
+InGameMenu o--> TankGame
+InGameMenu *--> InGameMenuStatus
+Round *--> Tank
+Round *--> Context
+Round o--> Cannonball
+Round o--> CannonballType
+Round *--> ExitRequested
+Round *--> RestartRequested
+Round *--> Terrain
+Round o--> Background
+Round o--> Impact
+Round *--> Map
+Round *--> HUD
+Round *--> ImpactType
+Round *--> InGameMenu
+Round *--> InGameMenuStatus
+Round *--> SnowStorm
+Round *--> AudioCache
+Round *--> FontCache
+Round *--> AnimationCache
+Round o--> WarningWindows
+Round o--> WinnerScreen
+Round -- inputs
+Background *--> Context
+Background *--> ImageCache
+Terrain *--> ImageCache
+Menu *--> ImageCache
+Menu *--> FontCache
+HUD *--> FontCache
+HUD *--> ImageCache
+SnowStorm *--> Context
+InGameMenu *--> ImageCache
+InGameMenu *--> AudioCache
+InGameMenu *--> FontCache
+Tank *--> Player
+Tank o--> CannonballType
+HUD *--> Tank
+HUD o--> Speedometer
+HUD *--> SelfImpactWindows
+Impact *--> ImpactType
+OptionMenu *-->MenuStatus
+
+@enduml

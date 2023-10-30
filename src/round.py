@@ -16,7 +16,7 @@ from hud import HUD
 from impact import Impact, ImpactType
 from in_game_menu import InGameMenu
 from in_game_menu import InGameMenuStatus
-from inputs import check_running, run_until_exit
+from inputs import check_running
 from map import Map
 from menu import Menu
 from player import Player
