@@ -152,7 +152,7 @@ class TankGame:
                     self.position_table.show_positions()
                     == PositionTableButton.VOLVER_A_JUGAR
                 ):
-                    continue
+                    pass
             except ExitRequested:
                 break
             except RestartRequested:
