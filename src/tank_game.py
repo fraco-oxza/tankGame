@@ -36,9 +36,9 @@ class TankGame:
         self.menu_option = OptionMenu(self.context.screen)
         self.screen_resolution = [
             (800, 800),
+            (1280, 720),
             (1366, 768),
             (1600, 900),
-            (1280, 720),
             (1920, 1080),
         ]
         self.font = font_cache["Roboto.ttf", int(self.context.windows_size[0] // 53.33)]
