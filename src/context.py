@@ -4,6 +4,7 @@ from pygame.time import Clock
 import constants
 import player
 
+
 class Context:
     """
     this class is responsible for save the info about the general game.
@@ -18,6 +19,7 @@ class Context:
     __fps: float
     clock: pygame.time.Clock
     players: list[player.Player]
+
     def __init__(self) -> None:
         print("se ha creado un contexto")
 

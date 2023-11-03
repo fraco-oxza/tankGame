@@ -15,6 +15,8 @@ from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 from positions_table import PositionTable
 from positions_table import PositionTableButton
+
+
 class TankGame:
     players: list[Player]
     context: Context
@@ -41,6 +43,7 @@ class TankGame:
         ]
         self.font = font_cache["Roboto.ttf", int(self.context.windows_size[0] // 53.33)]
         self.position_table = PositionTable(self.context.screen)
+
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
         self.context.players.append(
@@ -145,7 +148,10 @@ class TankGame:
                 self.game_brief()
 
                 print("termino")
-                if self.position_table.show_positions() == PositionTableButton.VOLVER_A_JUGAR:
+                if (
+                    self.position_table.show_positions()
+                    == PositionTableButton.VOLVER_A_JUGAR
+                ):
                     continue
             except ExitRequested:
                 break

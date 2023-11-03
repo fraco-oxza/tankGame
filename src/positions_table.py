@@ -35,8 +35,12 @@ class PositionTable:
     def draw_blocks(self):
         while True:
             check_running()
-            image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
-            self.image = pygame.transform.scale(image_cache["images/Tablero.png"], image_size)
+            image_size = pygame.Vector2(
+                instance.windows_size[0], instance.windows_size[1]
+            )
+            self.image = pygame.transform.scale(
+                image_cache["images/Tablero.png"], image_size
+            )
             self.sky_rect = self.image.get_rect()
             self.screen.blit(self.image, self.sky_rect.topleft)
             transparency = 150
@@ -121,14 +125,10 @@ class PositionTable:
         It is also responsible for changing the color of the button when the mouse passes over a button,
         otherwise it remains in its original color
         """
-        restart_pos = (
-            500, 600
-        )
+        restart_pos = (500, 600)
         if restart_pos[0] < mouse.x < (
-                restart_pos[0] + self.button_position[0]
-        ) and restart_pos[1] < mouse.y < (
-                restart_pos[1] + self.button_position[1]
-        ):
+            restart_pos[0] + self.button_position[0]
+        ) and restart_pos[1] < mouse.y < (restart_pos[1] + self.button_position[1]):
             self.color1 = self.hover_color
             self.sobre = 1
         else:

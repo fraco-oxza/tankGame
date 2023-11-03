@@ -24,7 +24,13 @@ class Explosion(Drawable):
         """Checks if there are more frames in the animation."""
         return self.elapsed_time < self.t_animation or self.loop
 
-    def __init__(self, position: pygame.Vector2, images: list[pygame.surface.Surface], size=None, loop=False):
+    def __init__(
+        self,
+        position: pygame.Vector2,
+        images: list[pygame.surface.Surface],
+        size=None,
+        loop=False,
+    ):
         """
         Initializes the Explosion object with the given position and animation frames.
         """

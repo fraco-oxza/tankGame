@@ -435,6 +435,7 @@ class Round:
         while self.animacion_fuego.has_next():
             self.animacion_fuego.tick(1.0 / (self.context.fps + 0.001))
             self.render()
+
     def display_explotion(self):
         """This method is responsible for the animation of the explosion."""
         if self.animacion is None:

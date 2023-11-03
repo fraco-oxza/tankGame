@@ -19,6 +19,8 @@ from player import Player
 from explotion import Explosion
 from caches import animation_cache
 from context import instance
+
+
 class Tank(Drawable, Collidable):
     """
     This class represents a tank in the game,
@@ -48,7 +50,9 @@ class Tank(Drawable, Collidable):
         self.available = player.ammunition
         self.is_alive = True
         self.life = 100
-        self.animacion_fuego = Explosion(self.position, animation_cache["fire"], (50, 50), loop=True)
+        self.animacion_fuego = Explosion(
+            self.position, animation_cache["fire"], (50, 50), loop=True
+        )
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
