@@ -16,8 +16,9 @@ from cannonballs import (
 from collidable import Collidable
 from draw import Drawable
 from player import Player
-
-
+from explotion import Explosion
+from caches import animation_cache
+from context import instance
 class Tank(Drawable, Collidable):
     """
     This class represents a tank in the game,
@@ -47,6 +48,7 @@ class Tank(Drawable, Collidable):
         self.available = player.ammunition
         self.is_alive = True
         self.life = 100
+        self.animacion_fuego = Explosion(self.position, animation_cache["fire"], (50, 50), loop=True)
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
@@ -131,6 +133,8 @@ class Tank(Drawable, Collidable):
         """
         if not self.is_alive:
             self.color = "#232323"
+            self.animacion_fuego.draw(screen)
+            self.animacion_fuego.tick(1.0 / instance.fps)
 
         if constants.DEVELOPMENT_MODE:
             pygame.draw.circle(

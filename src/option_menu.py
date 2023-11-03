@@ -61,9 +61,9 @@ class OptionMenu:
         # self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
         self.screen_resolution = [
             (800, 800),
+            (1280, 720),
             (1366, 768),
             (1600, 900),
-            (1280, 720),
             (1920, 1080),
         ]
         self.index_screen_resolution = self.screen_resolution.index(
@@ -472,7 +472,7 @@ class OptionMenu:
             if self.quantity_bots > 0:
                 self.quantity_bots -= 1
         if self.sobre == 8:
-            if self.quantity_bots < self.quantity_players - 1:
+            if self.quantity_bots < self.quantity_players:
                 self.quantity_bots += 1
         if self.sobre == 4:
             if self.quantity_rounds > 1:

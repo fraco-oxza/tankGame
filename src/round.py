@@ -37,7 +37,7 @@ class Round:
     cannonball: Optional[Cannonball]
     tanks_alive: int
 
-    def __init__(self, players: list[Player]):
+    def __init__(self):
         self.context = context.instance
         self.map = Map()
         self.shop_menu = Shop(self.context.screen)
@@ -50,14 +50,14 @@ class Round:
             self.map.define_terrain_colors(),
         )
         # TODO: Add the winner screen
-        self.tanks_alive = len(players)
+        self.tanks_alive = len(self.context.players)
         self.winner_msj = WinnerScreen(self)
-        self.players = players
+        self.players = self.context.players
         self.winner = None
         self.running = True
         self.turns_queue = []
         self.animacion = None
-
+        self.animacion_fuego = None
         self.last_state = None
         self.cannonball = None
         self.context.fps = constants.FPS
@@ -427,6 +427,14 @@ class Round:
                             self.terrain.new_ground_lines[i][j] = 0
                         j -= 1
 
+    def display_fire(self):
+        """This method is responsible for the animation of the fire when a tank is not alive."""
+        if self.animacion_fuego is None:
+            return
+
+        while self.animacion_fuego.has_next():
+            self.animacion_fuego.tick(1.0 / (self.context.fps + 0.001))
+            self.render()
     def display_explotion(self):
         """This method is responsible for the animation of the explosion."""
         if self.animacion is None:
@@ -508,6 +516,7 @@ class Round:
                     self.animacion = Explosion(
                         self.cannonball.position, animation_cache["snow_explosion"]
                     )
+
                 # Display explotion
                 self.display_explotion()
                 self.animacion = None

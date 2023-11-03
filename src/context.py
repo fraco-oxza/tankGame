@@ -2,7 +2,7 @@ import pygame
 from pygame.time import Clock
 
 import constants
-
+import player
 
 class Context:
     """
@@ -17,7 +17,7 @@ class Context:
     map_size: tuple[int, int]
     __fps: float
     clock: pygame.time.Clock
-
+    players: list[player.Player]
     def __init__(self) -> None:
         print("se ha creado un contexto")
 
@@ -29,6 +29,7 @@ class Context:
         self.type_of_effect = constants.DEFAULT_TYPE_EFFECT
         self.__fps = float(constants.FPS)
         self.clock = Clock()
+        self.players = []
 
     @property
     def fps(self) -> float:
