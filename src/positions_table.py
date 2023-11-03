@@ -53,11 +53,17 @@ class PositionTable:
             rect_x1, rect_y1 = (0, 0)
             self.screen.blit(rect_surface, (rect_x1, rect_y1))
             msj = self.fontTittle.render("Tabla de posiciones", True, "#ffffff")
-            self.screen.blit(msj, (instance.windows_size[0] / 2.61, instance.windows_size[1] / 36))
+            self.screen.blit(
+                msj, (instance.windows_size[0] / 2.61, instance.windows_size[1] / 36)
+            )
             deads = self.font.render("Jugador", True, "#ffffff")
-            self.screen.blit(deads, (instance.windows_size[0] / 3.2, instance.windows_size[1] / 8))
+            self.screen.blit(
+                deads, (instance.windows_size[0] / 3.2, instance.windows_size[1] / 8)
+            )
             deads = self.font.render("Asesinatos cometidos", True, "#ffffff")
-            self.screen.blit(deads, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8))
+            self.screen.blit(
+                deads, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8)
+            )
             sum = 0
             self.bubble_sort()
             for i in range(len(instance.players)):
@@ -68,7 +74,10 @@ class PositionTable:
                 sf_tank = self.tank(i)
                 self.position_tank(sf_tank, sum)
                 sum += instance.windows_size[1] / 10.28
-            self.screen.blit(self.button(), (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2))
+            self.screen.blit(
+                self.button(),
+                (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2),
+            )
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handle_input(mouse)
             if pygame.mouse.get_pressed()[0]:
@@ -101,13 +110,19 @@ class PositionTable:
         return sf
 
     def position_box(self, sf: pygame.surface.Surface, sum):
-        self.screen.blit(sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + sum))
+        self.screen.blit(
+            sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + sum)
+        )
 
     def position_tank(self, sf: pygame.surface.Surface, sum):
-        self.screen.blit(sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + sum))
+        self.screen.blit(
+            sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + sum)
+        )
 
     def position_number(self, sf: pygame.surface.Surface, sum):
-        self.screen.blit(sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + sum))
+        self.screen.blit(
+            sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + sum)
+        )
 
     def button(self):
         sf = pygame.Surface(self.button_position)
@@ -131,14 +146,10 @@ class PositionTable:
         It is also responsible for changing the color of the button when the mouse passes over a button,
         otherwise it remains in its original color
         """
-        restart_pos = (
-            instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2
-        )
+        restart_pos = (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2)
         if restart_pos[0] < mouse.x < (
-                restart_pos[0] + self.button_position[0]
-        ) and restart_pos[1] < mouse.y < (
-                restart_pos[1] + self.button_position[1]
-        ):
+            restart_pos[0] + self.button_position[0]
+        ) and restart_pos[1] < mouse.y < (restart_pos[1] + self.button_position[1]):
             self.color1 = self.hover_color
             self.sobre = 1
         else:
@@ -215,7 +226,8 @@ class PositionTable:
             (
                 box_pos[0] + box_size[0] / 2 - end.get_size()[0] / 2,
                 box_pos[1] / 1.2,
-            ))
+            ),
+        )
         return sf
 
     def bubble_sort(self):
