@@ -28,6 +28,7 @@ from warning_windows import WarningWindows
 from winner_screen import WinnerScreen
 from bot import Bot
 
+
 class Round:
     tanks: list[Tank]
     context: Context
@@ -88,8 +89,9 @@ class Round:
                 self.tanks.append(Bot(player.color, pygame.Vector2(player_pos), player))
                 contador = contador + 1
             else:
-                self.tanks.append(Tank(player.color, pygame.Vector2(player_pos), player))
-
+                self.tanks.append(
+                    Tank(player.color, pygame.Vector2(player_pos), player)
+                )
 
     def generate_tanks_positions(self) -> list[tuple[int, int]]:
         to_generate = len(self.players)
@@ -491,11 +493,11 @@ class Round:
                 while find:
                     random_tank = random.randint(0, len(self.tanks) - 1)
                     if random_tank != self.actual_player:
-                        self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                        self.get_current_tank().random_shoot(
+                            self.tanks[random_tank].position
+                        )
                         find = False
                 self.get_current_tank().shoot()
-
-
 
             throw = audio_cache["sounds/throw.mp3"]
             throw.play()

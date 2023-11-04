@@ -138,7 +138,9 @@ class TankGame:
                 self.start_menu()
                 soundtrack.play()
                 print("empezo partida", self.context.map_size)
-                for _ in range(self.context.number_of_players + self.context.number_of_bots):
+                for _ in range(
+                    self.context.number_of_players + self.context.number_of_bots
+                ):
                     self.create_player()
                 for i in range(self.context.number_of_rounds):
                     print(f"round {i}")
