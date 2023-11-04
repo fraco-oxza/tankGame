@@ -291,8 +291,7 @@ class Round:
             return None
 
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
-        self.cannonball.position.x += self.wind.velocity * (1.0/self.context.fps)
-
+        self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
             self.cannonball.position.x < 0
@@ -338,7 +337,6 @@ class Round:
             while pygame.key.get_pressed()[pygame.K_SPACE]:
                 check_running()
                 self.render()
-
 
     def cannonball_travel(self) -> None:
         """
