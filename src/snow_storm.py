@@ -7,6 +7,7 @@ import pygame
 import constants
 from draw import Drawable
 from context import instance
+from wind import Wind
 
 
 class SnowStorm(Drawable):
@@ -15,15 +16,13 @@ class SnowStorm(Drawable):
     """
 
     snowflakes: list[pygame.Vector2]
-    wind: float
-    wind_target: float
+    wind: Wind
 
-    def __init__(self, storm_color: str):
+    def __init__(self, storm_color: str, wind: Wind):
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
-        self.wind = 0
-        self.wind_target = 0
+        self.wind = wind
         self.storm_color = storm_color
 
     def add_random_snowflake(self):
@@ -53,13 +52,7 @@ class SnowStorm(Drawable):
             elif snowflake.x < 0:
                 snowflake.x += instance.windows_size[0]
 
-            if abs(self.wind - self.wind_target) < 1e-9:
-                self.wind_target = (random.random() - 0.5) * 10.0
-
-            wind_diff = self.wind_target - self.wind
-            self.wind += math.tanh(wind_diff) * dt * 1e-5
-
-            snowflake.x += self.wind
+            snowflake.x += self.wind.velocity
 
     def draw_snowflakes(self, screen: pygame.surface.Surface):
         """This function draws each snowflake present in the list of snowflakes."""

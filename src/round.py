@@ -25,6 +25,7 @@ from snow_storm import SnowStorm
 from tank import Tank
 from terrain import Terrain
 from warning_windows import WarningWindows
+from wind import Wind
 from winner_screen import WinnerScreen
 from bot import Bot
 
@@ -37,13 +38,15 @@ class Round:
     actual_player: int
     cannonball: Optional[Cannonball]
     tanks_alive: int
+    wind: Optional[Wind]
 
     def __init__(self):
         self.context = context.instance
         self.map = Map()
         self.shop_menu = Shop(self.context.screen)
+        self.wind = Wind()
         self.background = Background(self.map.define_background_image())
-        self.snow_storm = SnowStorm(self.map.define_storm_color())
+        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
         self.terrain = Terrain(
             self.context.map_size,
             constants.MOUNTAINS,
@@ -189,6 +192,9 @@ class Round:
         if self.winner is not None:
             self.winner_msj.draw(self.context.screen)
 
+        if self.wind is not None:
+            self.wind.tick(1.0 / self.context.fps)
+
         pygame.display.flip()
         self.context.clock.tick(constants.FPS)
         self.context.fps = self.context.clock.get_fps()
@@ -285,6 +291,8 @@ class Round:
             return None
 
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
+        self.cannonball.position.x += self.wind.velocity * (1.0/self.context.fps)
+
 
         if (
             self.cannonball.position.x < 0

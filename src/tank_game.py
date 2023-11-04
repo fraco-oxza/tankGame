@@ -18,7 +18,6 @@ from positions_table import PositionTableButton
 
 
 class TankGame:
-    players: list[Player]
     context: Context
     menu: Menu
     menu_option: OptionMenu
@@ -31,7 +30,6 @@ class TankGame:
         addition to starting the window itself of the game.
         """
         self.context = context
-        self.players = []
         self.menu = Menu(self.context.screen)
         self.menu_option = OptionMenu(self.context.screen)
         self.screen_resolution = [
@@ -160,5 +158,5 @@ class TankGame:
             except RestartRequested:
                 pass
 
-            self.players = []
+            self.context.players.clear()
             soundtrack.stop()
