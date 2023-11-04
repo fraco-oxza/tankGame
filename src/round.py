@@ -26,7 +26,7 @@ from tank import Tank
 from terrain import Terrain
 from warning_windows import WarningWindows
 from winner_screen import WinnerScreen
-
+from bot import Bot
 
 class Round:
     tanks: list[Tank]
@@ -81,10 +81,15 @@ class Round:
 
     def create_tanks(self) -> None:
         self.tanks = []
-
         positions = self.generate_tanks_positions()
+        contador = 0
         for player, player_pos in zip(self.players, positions):
-            self.tanks.append(Tank(player.color, pygame.Vector2(player_pos), player))
+            if contador < context.instance.number_of_bots:
+                self.tanks.append(Bot(player.color, pygame.Vector2(player_pos), player))
+                contador = contador + 1
+            else:
+                self.tanks.append(Tank(player.color, pygame.Vector2(player_pos), player))
+
 
     def generate_tanks_positions(self) -> list[tuple[int, int]]:
         to_generate = len(self.players)
@@ -481,10 +486,16 @@ class Round:
                 self.process_input()
                 self.render()
 
-            # self.get_current_tank().player is isinstance(Bot):
-            # self.get_current_tank().shoot_velocity = random.randint(1, 300)
-            # self.get_current_tank().shoot_angle = random.randint(1, 300)
-            # self.cannonball = self.get_current_tank().shoot()
+            if isinstance(self.get_current_tank(), Bot):
+                find = True
+                while find:
+                    random_tank = random.randint(0, len(self.tanks) - 1)
+                    if random_tank != self.actual_player:
+                        self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                        find = False
+                self.get_current_tank().shoot()
+
+
 
             throw = audio_cache["sounds/throw.mp3"]
             throw.play()

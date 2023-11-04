@@ -13,6 +13,7 @@ class Context:
     rounds: int
     screen: pygame.surface.Surface
     number_of_players: int
+    number_of_bots: int
     number_of_rounds: int
     __windows_size: tuple[int, int]
     map_size: tuple[int, int]

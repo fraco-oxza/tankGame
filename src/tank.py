@@ -202,3 +202,6 @@ class Tank(Drawable, Collidable):
         pygame.draw.line(
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
+
+    def random_shoot(self, position):
+        pass
