@@ -210,7 +210,6 @@ class Round:
         to do, modifying the attributes of the tanks or creating the cannonball.
         :return:
         """
-        game_rect = pygame.surface.Surface(self.context.map_size)
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()

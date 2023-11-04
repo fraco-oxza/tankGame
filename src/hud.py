@@ -212,6 +212,7 @@ class HUD(Drawable):
         """
         This method is responsible for displaying all the tank and player information in a section of the HUD
         """
+        actual_tank = self.tanks[self.tank_game.actual_player]
         width = instance.windows_size[0] / 3.65
         height = instance.windows_size[1] / 3.6
         sf = pygame.Surface((width, height))
@@ -226,14 +227,14 @@ class HUD(Drawable):
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, 5))
         bar_length = width // 1.5
         bar_height = height / 6.66
-        fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
+        fill1 = (actual_tank.life / 100) * bar_length
         pygame.draw.rect(sf, "#248934", (width_bar, height_bar, bar_length, bar_height))
         pygame.draw.rect(
             sf,
             "#131313",
             (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
         )
-        player = self.font16.render("Salud", True, "white")
+        player = self.font16.render("Salud " + str(actual_tank.life) + "/ 100", True, "white")
         sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
 
         # this is for money
@@ -242,7 +243,7 @@ class HUD(Drawable):
         sf.blit(money_icon, (width / 7.5, height / 2.2))
         actual_money = self.font16.render(
             "Dinero disponible: $"
-            + str(self.tanks[self.tank_game.actual_player].player.money),
+            + str(actual_tank.player.money),
             True,
             "#FFFFFF",
         )
