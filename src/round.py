@@ -469,7 +469,6 @@ class Round:
         while self.running:
             self.wait_release_space()
             check_running()
-
             self.next_turn()
 
             # TODO: Añadir muchas verificaciones
@@ -480,7 +479,6 @@ class Round:
             ):
                 self.next_turn()
 
-            # Select the angle
             while self.running and self.cannonball is None:
                 check_running()
                 self.process_input()
@@ -494,8 +492,6 @@ class Round:
                         self.get_current_tank().random_shoot(self.tanks[random_tank].position)
                         find = False
                 self.get_current_tank().shoot()
-
-
 
             throw = audio_cache["sounds/throw.mp3"]
             throw.play()
@@ -534,7 +530,6 @@ class Round:
                 self.animacion = None
 
             self.terrain_destruction()
-
             self.wait_release_space()
             self.wait_on_space()
 

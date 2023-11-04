@@ -1,7 +1,6 @@
 import pygame
 
 from caches import image_cache
-import constants
 from exit_requested import ExitRequested
 import context
 from tank_game import TankGame
