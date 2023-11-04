@@ -474,7 +474,7 @@ class OptionMenu:
             if self.quantity_bots > 0:
                 self.quantity_bots -= 1
         if self.sobre == 8:
-            if self.quantity_bots < self.quantity_players:
+            if self.quantity_bots < 6:
                 self.quantity_bots += 1
         if self.sobre == 4:
             if self.quantity_rounds > 1:

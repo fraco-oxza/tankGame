@@ -115,6 +115,13 @@ class Round:
 
         return points
 
+    def draw_tank_health(self, sf: pygame.surface.Surface):
+        for tank in self.tanks:
+            pygame.draw.circle(sf, "yellow", (int(tank.position.x), int(tank.position.y) - 50), 15)
+
+
+
+
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
         if self.cannonball is None:
@@ -152,6 +159,7 @@ class Round:
             )
 
     def render(self) -> None:
+        keys_pressed = pygame.key.get_pressed()
         """
         This method is responsible for drawing each element of the window, it
         also puts the execution to sleep for a while to make the game run at the
@@ -205,9 +213,14 @@ class Round:
         to do, modifying the attributes of the tanks or creating the cannonball.
         :return:
         """
+        game_rect = pygame.surface.Surface(self.context.map_size)
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
+
+        if keys_pressed[pygame.K_v]:
+            self.draw_tank_health(game_rect)
+
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
@@ -267,6 +280,7 @@ class Round:
             click = audio_cache["sounds/click.mp3"]
             click.play()
             self.process_in_game_menu()
+
 
     def process_in_game_menu(self):
         """This method allows you to check if the pause menu is active or not."""

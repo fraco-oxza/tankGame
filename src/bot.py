@@ -1,6 +1,6 @@
 import math
 import pygame
-
+import constants
 from random import randint
 
 from player import Player
@@ -16,23 +16,9 @@ class Bot(Tank):
         super().__init__(color, position, player)
 
     def random_shoot(self, position2: pygame.Vector2):
-        """ "
-        distance = (
-            (position2.x - self.position.x) ** 2 + (position2.y - self.position.y) ** 2
-        ) ** (1 / 2)
-        theta = math.atan2(position2.y - self.position.y, position2.x - self.position.x)
-        angle = math.degrees(theta)
-        velocity = distance / (
-            1
-            / (2 * math.cos(theta))
-            * (position2.y - self.position.y)
-            / (position2.x - self.position.x)
-            * math.sin(theta)
-        )
-        """
         self.selection_cannonball()
-        self.shoot_angle = math.radians(randint(10, 180))
-        self.shoot_velocity = randint(50, 200)
+        self.shoot_angle = 90
+        self.shoot_velocity = 0
 
     def selection_cannonball(self):
         if self.available[0] == 0:
