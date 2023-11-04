@@ -115,10 +115,6 @@ class Round:
 
         return points
 
-
-
-
-
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
         if self.cannonball is None:
@@ -274,7 +270,6 @@ class Round:
             click.play()
             self.process_in_game_menu()
 
-
     def process_in_game_menu(self):
         """This method allows you to check if the pause menu is active or not."""
         menu_state = self.in_game_menu.start_menu()
@@ -298,8 +293,7 @@ class Round:
             return None
 
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
-        self.cannonball.position.x += self.wind.velocity * (1.0/self.context.fps)
-
+        self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
             self.cannonball.position.x < 0
@@ -345,7 +339,6 @@ class Round:
             while pygame.key.get_pressed()[pygame.K_SPACE]:
                 check_running()
                 self.render()
-
 
     def cannonball_travel(self) -> None:
         """

@@ -474,8 +474,14 @@ class HUD(Drawable):
         height = 10
         for tank in self.tank_game.tanks:
             bar_length = (tank.life / 100) * width
-            pygame.draw.rect(sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height))
-            pygame.draw.rect(sf, "red", (tank.position.x + 5, tank.position.y + 50, bar_length, height))
+            pygame.draw.rect(
+                sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height)
+            )
+            pygame.draw.rect(
+                sf,
+                "red",
+                (tank.position.x + 5, tank.position.y + 50, bar_length, height),
+            )
 
             # pygame.draw.circle(sf, "yellow", (int(tank.position.x) + 10, int(tank.position.y) - 20), 15)
 
