@@ -469,6 +469,16 @@ class HUD(Drawable):
 
         return sf
 
+    def draw_tank_health(self, sf: pygame.surface.Surface):
+        width = 30
+        height = 10
+        for tank in self.tank_game.tanks:
+            bar_length = (tank.life / 100) * width
+            pygame.draw.rect(sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height))
+            pygame.draw.rect(sf, "red", (tank.position.x + 5, tank.position.y + 50, bar_length, height))
+
+            # pygame.draw.circle(sf, "yellow", (int(tank.position.x) + 10, int(tank.position.y) - 20), 15)
+
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
         This function allows you to display on the screen everything related to the
@@ -536,20 +546,6 @@ class HUD(Drawable):
                 ),
                 (0, 0),
             )
-
-    def draw_tank_health(self, screen: pygame.surface.Surface, tank: Tank):
-        """
-        width = instance.windows_size[0] / 3.65
-        height = instance.windows_size[1] / 3.6
-        width_bar = width / 7.5 + width / 10
-        height_bar = height / 3.7
-        bar_length = width // 1.5
-        bar_height = height / 6.66
-        fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
-        pygame.draw.rect(screen, "#248934", (width_bar, height_bar, bar_length, bar_height))
-        pygame.draw.rect(
-            screen,
-            "#131313",
-            (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
-        )
-        """
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_v]:
+            self.draw_tank_health(screen)

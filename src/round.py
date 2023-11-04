@@ -115,9 +115,6 @@ class Round:
 
         return points
 
-    def draw_tank_health(self, sf: pygame.surface.Surface):
-        for tank in self.tanks:
-            pygame.draw.circle(sf, "yellow", (int(tank.position.x), int(tank.position.y) - 50), 15)
 
 
 
@@ -217,10 +214,6 @@ class Round:
         playing_tank = self.tanks[self.actual_player]
 
         keys_pressed = pygame.key.get_pressed()
-
-        if keys_pressed[pygame.K_v]:
-            self.draw_tank_health(game_rect)
-
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
