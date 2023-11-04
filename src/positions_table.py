@@ -16,8 +16,6 @@ class PositionTable:
     screen: pygame.Surface
 
     def __init__(self, screen: pygame.Surface):
-        print(instance.windows_size[0])
-        print(instance.windows_size[1])
         self.table = pygame.Vector2(
             instance.windows_size[0] / 1.5, instance.windows_size[1] / 12
         )

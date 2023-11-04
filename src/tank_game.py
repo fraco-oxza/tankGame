@@ -146,8 +146,8 @@ class TankGame:
                     current_round.start()
 
                 self.game_brief()
-
                 print("termino")
+                self.position_table = PositionTable(self.context.screen)
                 if (
                     self.position_table.show_positions()
                     == PositionTableButton.VOLVER_A_JUGAR
