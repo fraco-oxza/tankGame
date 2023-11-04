@@ -470,14 +470,21 @@ class HUD(Drawable):
         return sf
 
     def draw_tank_health(self, sf: pygame.surface.Surface):
+        color_life = ""
         width = 30
         height = 10
         for tank in self.tank_game.tanks:
             bar_length = (tank.life / 100) * width
             pygame.draw.rect(sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height))
-            pygame.draw.rect(sf, "red", (tank.position.x + 5, tank.position.y + 50, bar_length, height))
 
-            # pygame.draw.circle(sf, "yellow", (int(tank.position.x) + 10, int(tank.position.y) - 20), 15)
+            if tank.life <= 100:
+                color_life = "green"
+            if tank.life <= 85:
+                color_life = "yellow"
+            if tank.life < 50:
+                color_life = "red"
+
+            pygame.draw.rect(sf, color_life, (tank.position.x + 5, tank.position.y + 50, bar_length, height))
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
