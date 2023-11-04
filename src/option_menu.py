@@ -234,10 +234,12 @@ class OptionMenu:
 
     def handle_input(self, mouse: pygame.Vector2):
         """
-        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
-        It is also responsible for changing the color of the button when the mouse passes over a button,
-        otherwise it remains in its original color
+        Function responsible for identifying which button the user pressed by
+        clicking on one of the buttons. It is also responsible for changing the
+        color of the button when the mouse passes over a button, otherwise it
+        remains in its original color
         """
+        check_running()
         button_left_1 = (
             instance.windows_size[0] / 3.45,
             instance.windows_size[1] / 5.53,

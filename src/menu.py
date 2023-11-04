@@ -1,11 +1,14 @@
+import random
 from typing import Optional
 
 import pygame
+from pygame.event import Event
 from pygame.font import Font
 
 from caches import font_cache
 from caches import image_cache
 from caches import audio_cache
+from exit_requested import ExitRequested
 from snow_storm import SnowStorm
 from context import instance
 from inputs import check_running
@@ -30,6 +33,7 @@ class Menu:
     botton_color: str
     hover_botton_color: str
     is_hover: bool
+    prev: bool
 
     def __init__(self, screen: pygame.surface.Surface):
         self.fontTitle = font_cache["Roboto.ttf", int(instance.windows_size[0] / 29.76)]
@@ -41,6 +45,7 @@ class Menu:
         self.is_hover = False
         self.upon = None
         self.screen = screen
+        self.prev = False
 
     def render(self) -> int:
         """
@@ -108,13 +113,16 @@ class Menu:
         )
 
         self.handle_input()
-        if pygame.mouse.get_pressed()[0]:
-            click = audio_cache["sounds/click.mp3"]
-            click.play()
-            if self.upon == 1:
-                return MenuStatus.start
-            if self.upon == 2:
-                return MenuStatus.options
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                raise ExitRequested
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click = audio_cache["sounds/click.mp3"]
+                click.play()
+                if self.upon == 1:
+                    return MenuStatus.start
+                if self.upon == 2:
+                    return MenuStatus.options
 
     def show_menu(self):
         return self.render()
@@ -125,7 +133,6 @@ class Menu:
         It is also responsible for changing the color of the button when the mouse passes over a button,
         otherwise it remains in its original color
         """
-        check_running()
         mouse = pygame.Vector2(pygame.mouse.get_pos())
         if (self.box_pos[0] <= mouse.x <= self.box_pos[0] + self.box_size[0]) and (
             self.box_pos[1] <= mouse.y <= self.box_pos[1] + self.box_size[1]
@@ -145,5 +152,6 @@ class Menu:
         ):
             self.button_color2 = self.hover_botton_color
             self.upon = 2
+
         else:
             self.button_color2 = "#2E3440"
