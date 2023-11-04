@@ -234,7 +234,7 @@ class HUD(Drawable):
             "#131313",
             (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
         )
-        player = self.font16.render("Salud " + str(actual_tank.life) + "/ 100", True, "white")
+        player = self.font16.render("Salud " + str(actual_tank.life) + " / 100", True, "white")
         sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
 
         # this is for money
