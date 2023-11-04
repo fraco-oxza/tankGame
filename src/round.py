@@ -332,9 +332,13 @@ class Round:
         trajectory, and they accidentally shoot as the other player.
         :return: None
         """
-        while pygame.key.get_pressed()[pygame.K_SPACE]:
-            check_running()
-            self.render()
+        if isinstance(self.get_current_tank(), Bot):
+            pass
+        else:
+            while pygame.key.get_pressed()[pygame.K_SPACE]:
+                check_running()
+                self.render()
+
 
     def cannonball_travel(self) -> None:
         """
@@ -355,8 +359,11 @@ class Round:
         while self.running:
             check_running()
             keys_pressed = pygame.key.get_pressed()
-            if keys_pressed[pygame.K_SPACE]:
+            if isinstance(self.get_current_tank(), Bot):
                 break
+            else:
+                if keys_pressed[pygame.K_SPACE]:
+                    break
             self.render()
 
     def check_last_state(self) -> None:
@@ -489,11 +496,6 @@ class Round:
             ):
                 self.next_turn()
 
-            while self.running and self.cannonball is None:
-                check_running()
-                self.process_input()
-                self.render()
-
             if isinstance(self.get_current_tank(), Bot):
                 find = True
                 while find:
@@ -503,7 +505,12 @@ class Round:
                             self.tanks[random_tank].position
                         )
                         find = False
-                self.get_current_tank().shoot()
+                self.cannonball = self.get_current_tank().shoot()
+            else:
+                while self.running and self.cannonball is None:
+                    check_running()
+                    self.process_input()
+                    self.render()
 
             throw = audio_cache["sounds/throw.mp3"]
             throw.play()
@@ -542,8 +549,9 @@ class Round:
                 self.animacion = None
 
             self.terrain_destruction()
-            self.wait_release_space()
-            self.wait_on_space()
+            if not isinstance(self.get_current_tank(), Bot):
+                self.wait_release_space()
+                self.wait_on_space()
 
             self.check_last_state()
 

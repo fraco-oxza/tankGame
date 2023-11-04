@@ -536,3 +536,20 @@ class HUD(Drawable):
                 ),
                 (0, 0),
             )
+
+    def draw_tank_health(self, screen: pygame.surface.Surface, tank: Tank):
+        """
+        width = instance.windows_size[0] / 3.65
+        height = instance.windows_size[1] / 3.6
+        width_bar = width / 7.5 + width / 10
+        height_bar = height / 3.7
+        bar_length = width // 1.5
+        bar_height = height / 6.66
+        fill1 = (self.tanks[self.tank_game.actual_player].life / 100) * bar_length
+        pygame.draw.rect(screen, "#248934", (width_bar, height_bar, bar_length, bar_height))
+        pygame.draw.rect(
+            screen,
+            "#131313",
+            (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
+        )
+        """

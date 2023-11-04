@@ -5,7 +5,9 @@ from random import randint
 
 from player import Player
 from tank import Tank
-
+from cannonballs import (
+    CannonballType,
+)
 
 class Bot(Tank):
     def __init__(
@@ -28,5 +30,17 @@ class Bot(Tank):
             * math.sin(theta)
         )
         """
-        self.shoot_angle = randint(10, 180)
+        self.selection_cannonball()
+        self.shoot_angle = math.radians(randint(10, 180))
         self.shoot_velocity = randint(50, 200)
+
+    def selection_cannonball(self):
+        if self.available[0] == 0:
+            self.actual = CannonballType.MM80
+        if self.available[1] == 0:
+            self.actual = CannonballType.MM105
+        if self.available[2] == 0:
+            if self.available[1] != 0:
+                self.actual = CannonballType.MM80
+            if self.available[0] != 0:
+                self.actual = CannonballType.MM60
