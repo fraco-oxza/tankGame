@@ -291,8 +291,7 @@ class Round:
             return None
 
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
-        self.cannonball.position.x += self.wind.velocity * (1.0/self.context.fps)
-
+        self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
             self.cannonball.position.x < 0
