@@ -14,7 +14,7 @@ class Bot(Tank):
         super().__init__(color, position, player)
 
     def random_shoot(self, position2: pygame.Vector2):
-        """"
+        """ "
         distance = (
             (position2.x - self.position.x) ** 2 + (position2.y - self.position.y) ** 2
         ) ** (1 / 2)
