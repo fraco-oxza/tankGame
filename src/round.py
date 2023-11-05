@@ -181,7 +181,6 @@ class Round:
         )
 
         self.hud.draw(self.context.screen)
-        # self.shop_menu.start_shop()
 
         self.snow_storm.tick(1.0 / (self.context.fps + 0.1))
         if self.cannonball is None and self.last_state is None:
