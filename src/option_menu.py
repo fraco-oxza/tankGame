@@ -239,7 +239,6 @@ class OptionMenu:
         color of the button when the mouse passes over a button, otherwise it
         remains in its original color
         """
-        check_running()
         button_left_1 = (
             instance.windows_size[0] / 3.45,
             instance.windows_size[1] / 5.53,
@@ -385,10 +384,6 @@ class OptionMenu:
             self.button_color11 = "#A4715C"
 
     def paint_left(self, index: int):
-        """
-        Function responsible for creating the surface that represents the button,
-        in addition to writing the message of each button in the center of each surface
-        """
         sf = pygame.Surface(self.secondary_buttons)
         if index == 1:
             sf.fill(self.button_color1)
@@ -413,10 +408,6 @@ class OptionMenu:
         return sf
 
     def paint_right(self, index: int):
-        """
-        Function responsible for creating the surface that represents the button,
-        in addition to writing the message of each button in the center of each surface
-        """
         sf = pygame.Surface(self.secondary_buttons)
         if index == 6:
             sf.fill(self.button_color6)
@@ -469,7 +460,6 @@ class OptionMenu:
         if self.sobre == 7:
             if self.quantity_players < 6:
                 self.quantity_players += 1
-        self.clock.tick(constants.FPS / 15)
         if self.sobre == 3:
             if self.quantity_bots > 0:
                 self.quantity_bots -= 1
@@ -488,3 +478,4 @@ class OptionMenu:
         if self.sobre == 10:
             if self.index_environment_effects < len(self.environment_effects) - 1:
                 self.index_environment_effects += 1
+        self.clock.tick(constants.FPS / 15)

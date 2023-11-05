@@ -43,7 +43,7 @@ class Round:
     def __init__(self):
         self.context = context.instance
         self.map = Map()
-        self.shop_menu = Shop(self.context.screen)
+        # self.shop_menu = Shop(self.context.screen)
         self.wind = Wind()
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
