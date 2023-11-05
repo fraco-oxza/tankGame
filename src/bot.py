@@ -15,8 +15,21 @@ class Bot(Tank):
 
     def random_shoot(self, position2: pygame.Vector2):
         self.selection_cannonball()
-        self.shoot_angle = math.radians(random.randint(0, 180))
-        self.shoot_velocity = random.randint(50, 240)
+        delta_x = position2.x - self.position.x
+        delta_y = position2.y - self.position.y
+        d = pygame.math.Vector2(delta_x, delta_y).length()
+        print("d: ", d)
+        angle = abs(pygame.math.Vector2(delta_x, delta_y).angle_to(pygame.math.Vector2(1, 0)))
+        angle = math.radians(angle)
+        print("angle: ", angle)
+        if delta_y != 0:
+            velocity = (d * 9.8) / (2 * abs(delta_y))
+            print("velocity: ", velocity)
+        else:
+            velocity = 0
+            print("velocity: ", velocity)
+        self.shoot_angle = angle
+        self.shoot_velocity = velocity
 
     def selection_cannonball(self):
         if self.available[0] == 0:

@@ -91,6 +91,7 @@ class Round:
         self.turns_queue = [*range(len(self.tanks))]
         random.shuffle(self.turns_queue)
 
+
     def create_tanks(self) -> None:
         self.tanks = []
         positions = self.generate_tanks_positions()
@@ -122,6 +123,16 @@ class Round:
             points.append((x, y))
 
         return points
+
+    def find_tank(self):
+        find = True
+        while find:
+            random_tank = random.randint(0, len(self.tanks) - 1)
+            if random_tank != self.actual_player:
+                if self.tanks[random_tank].is_alive:
+                    self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                    find = False
+
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -505,14 +516,7 @@ class Round:
                 self.next_turn()
 
             if isinstance(self.get_current_tank(), Bot):
-                find = True
-                while find:
-                    random_tank = random.randint(0, len(self.tanks) - 1)
-                    if random_tank != self.actual_player:
-                        self.get_current_tank().random_shoot(
-                            self.tanks[random_tank].position
-                        )
-                        find = False
+                self.find_tank()
                 self.cannonball = self.get_current_tank().shoot()
             else:
                 while self.running and self.cannonball is None:
