@@ -7,6 +7,7 @@ from cannonballs import (
     CannonballType,
 )
 
+
 class Bot(Tank):
     def __init__(
         self, color: pygame.Color | str, position: pygame.Vector2, player: Player
