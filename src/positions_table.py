@@ -64,8 +64,8 @@ class PositionTable:
             )
             sum = 0
             self.bubble_sort()
-            for i in range(len(instance.players)):
-                sf = self.generate_surface(str(instance.players[i].deads))
+            for i, item in enumerate(instance.players):
+                sf = self.generate_surface(str(item.deads))
                 self.position_box(sf, sum)
                 sf_number = self.ranking(i)
                 self.position_number(sf_number, sum)

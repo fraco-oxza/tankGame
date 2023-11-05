@@ -123,9 +123,9 @@ class TankGame:
 
     def Replace(self):
         self.context.number_of_players = self.menu_option.quantity_players
-        for j in range(len(self.screen_resolution)):
+        for j, item in enumerate(self.screen_resolution):
             if j == self.menu_option.index_screen_resolution:
-                self.context.windows_size = self.screen_resolution[j]
+                self.context.windows_size = item
         self.context.number_of_bots = self.menu_option.quantity_bots
         self.context.number_of_rounds = self.menu_option.quantity_rounds
         self.context.type_of_effect = self.menu_option.index_environment_effects
