@@ -360,9 +360,8 @@ class Round:
             keys_pressed = pygame.key.get_pressed()
             if isinstance(self.get_current_tank(), Bot):
                 break
-            else:
-                if keys_pressed[pygame.K_SPACE]:
-                    break
+            if keys_pressed[pygame.K_SPACE]:
+                break
             self.render()
 
     def check_last_state(self) -> None:
