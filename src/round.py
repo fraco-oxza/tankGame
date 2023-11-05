@@ -447,13 +447,14 @@ class Round:
 
                     affected = min(end_layer, sup_limit) - max(start_layer, inf_limit)
 
+                    self.terrain.ground_lines[i] -= max(0,affected)
+
                     if affected > 0 and sup_limit < end_layer:
                         fall = end_layer - sup_limit
                         self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
                         affected+= fall 
 
                     current_line[j] -= max(0, affected)
-                    self.terrain.ground_lines[i] -= affected
                     accumulated = end_layer
 
     def display_fire(self):

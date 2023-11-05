@@ -132,7 +132,7 @@ class Terrain(Drawable, Collidable):
                     continue
                 pygame.draw.rect(
                     screen,
-                    "#232323",
+                    color,
                     pygame.Rect(
                         i * constants.TERRAIN_LINE_WIDTH,
                         layer[0],
@@ -157,7 +157,7 @@ class Terrain(Drawable, Collidable):
                             i * constants.TERRAIN_LINE_WIDTH,
                             self.size[1] - latest_height - layer,
                             constants.TERRAIN_LINE_WIDTH,
-                            layer,
+                            layer + 1,
                         ),
                     )
                 latest_height += layer
