@@ -234,7 +234,9 @@ class HUD(Drawable):
             "#131313",
             (width_bar + fill1, height_bar, bar_length - fill1 + 1, bar_height),
         )
-        player = self.font16.render("Salud " + str(actual_tank.life) + " / 100", True, "white")
+        player = self.font16.render(
+            "Salud " + str(actual_tank.life) + " / 100", True, "white"
+        )
         sf.blit(player, (width_bar + width_bar // 9, height_bar + height_bar // 9))
 
         # this is for money
@@ -242,8 +244,7 @@ class HUD(Drawable):
         money_icon = pygame.transform.scale(money_icon, (width / 11.66, height / 6.66))
         sf.blit(money_icon, (width / 7.5, height / 2.2))
         actual_money = self.font16.render(
-            "Dinero disponible: $"
-            + str(actual_tank.player.money),
+            "Dinero disponible: $" + str(actual_tank.player.money),
             True,
             "#FFFFFF",
         )
@@ -476,7 +477,9 @@ class HUD(Drawable):
         height = 10
         for tank in self.tank_game.tanks:
             bar_length = (tank.life / 100) * width
-            pygame.draw.rect(sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height))
+            pygame.draw.rect(
+                sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height)
+            )
 
             if tank.life <= 100:
                 color_life = "green"
@@ -485,7 +488,11 @@ class HUD(Drawable):
             if tank.life < 50:
                 color_life = "red"
 
-            pygame.draw.rect(sf, color_life, (tank.position.x + 5, tank.position.y + 50, bar_length, height))
+            pygame.draw.rect(
+                sf,
+                color_life,
+                (tank.position.x + 5, tank.position.y + 50, bar_length, height),
+            )
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
