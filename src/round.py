@@ -10,6 +10,7 @@ from background import Background
 from caches import animation_cache, audio_cache, font_cache
 from cannonballs import CannonballType, Cannonball
 from context import Context
+from effects import AmbientEffect
 from exit_requested import ExitRequested, RestartRequested
 from explotion import Explosion
 from hud import HUD
@@ -44,7 +45,11 @@ class Round:
         self.context = context.instance
         self.map = Map()
         # self.shop_menu = Shop(self.context.screen)
-        self.wind = Wind()
+
+        if self.context.type_of_effect in [AmbientEffect.GRAVITY_AND_WIND, AmbientEffect.WIND]:
+            self.wind = Wind()
+        else: 
+            self.wind = None
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
         self.terrain = Terrain(
@@ -292,7 +297,9 @@ class Round:
             return None
 
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
-        self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
+
+        if self.wind is not None:
+            self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
             self.cannonball.position.x < 0

@@ -5,6 +5,7 @@ import pygame
 import constants
 from caches import font_cache, image_cache
 from context import instance
+from effects import AmbientEffect
 from inputs import check_running
 
 
@@ -185,11 +186,11 @@ class OptionMenu:
                 ),
             )
             msj = self.font.render(
-                f"{self.environment_effects[self.index_environment_effects]}",
+                f"{self.environment_effects[self.index_environment_effects.value]}",
                 True,
                 "#8ACAC0",
             )
-            if self.index_environment_effects < len(self.environment_effects) - 1:
+            if self.index_environment_effects.value < len(self.environment_effects) - 1:
                 self.screen.blit(
                     msj,
                     (
@@ -473,9 +474,9 @@ class OptionMenu:
             if self.quantity_rounds < 20:
                 self.quantity_rounds += 1
         if self.sobre == 5:
-            if self.index_environment_effects > 0:
-                self.index_environment_effects -= 1
+            if self.index_environment_effects.value > 0:
+                self.index_environment_effects = AmbientEffect(self.index_environment_effects.value - 1)
         if self.sobre == 10:
-            if self.index_environment_effects < len(self.environment_effects) - 1:
-                self.index_environment_effects += 1
+            if self.index_environment_effects.value < len(self.environment_effects) - 1:
+                self.index_environment_effects = AmbientEffect(self.index_environment_effects.value + 1)
         self.clock.tick(constants.FPS / 15)

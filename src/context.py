@@ -3,6 +3,7 @@ from pygame.time import Clock
 
 import constants
 import player
+from effects import AmbientEffect
 
 
 class Context:
@@ -20,6 +21,7 @@ class Context:
     __fps: float
     clock: pygame.time.Clock
     players: list[player.Player]
+    type_of_effect: AmbientEffect
 
     def __init__(self) -> None:
         print("se ha creado un contexto")

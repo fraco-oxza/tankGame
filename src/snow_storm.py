@@ -1,4 +1,5 @@
 from random import randint
+from typing import Optional
 
 import pygame
 
@@ -14,9 +15,9 @@ class SnowStorm(Drawable):
     """
 
     snowflakes: list[pygame.Vector2]
-    wind: Wind
+    wind: Optional[Wind]
 
-    def __init__(self, storm_color: str, wind: Wind):
+    def __init__(self, storm_color: str, wind: Optional[Wind]):
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
@@ -50,7 +51,8 @@ class SnowStorm(Drawable):
             elif snowflake.x < 0:
                 snowflake.x += instance.windows_size[0]
 
-            snowflake.x += self.wind.velocity
+            if self.wind is not None:
+                snowflake.x += self.wind.velocity
 
     def draw_snowflakes(self, screen: pygame.surface.Surface):
         """This function draws each snowflake present in the list of snowflakes."""
