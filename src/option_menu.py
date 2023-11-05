@@ -475,8 +475,12 @@ class OptionMenu:
                 self.quantity_rounds += 1
         if self.sobre == 5:
             if self.index_environment_effects.value > 0:
-                self.index_environment_effects = AmbientEffect(self.index_environment_effects.value - 1)
+                self.index_environment_effects = AmbientEffect(
+                    self.index_environment_effects.value - 1
+                )
         if self.sobre == 10:
             if self.index_environment_effects.value < len(self.environment_effects) - 1:
-                self.index_environment_effects = AmbientEffect(self.index_environment_effects.value + 1)
+                self.index_environment_effects = AmbientEffect(
+                    self.index_environment_effects.value + 1
+                )
         self.clock.tick(constants.FPS / 15)
