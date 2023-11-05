@@ -1,6 +1,4 @@
 import pygame
-
-import constants
 from caches import image_cache
 from draw import Drawable
 from context import instance

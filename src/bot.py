@@ -1,7 +1,4 @@
-import math
 import pygame
-import constants
-from random import randint
 
 from player import Player
 from tank import Tank

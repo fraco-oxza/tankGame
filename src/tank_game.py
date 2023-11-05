@@ -6,7 +6,6 @@ from pygame.font import Font
 from caches import audio_cache, image_cache, font_cache
 from context import Context
 from exit_requested import ExitRequested, RestartRequested
-from inputs import check_running
 from player import Player
 from round import Round
 from menu import Menu

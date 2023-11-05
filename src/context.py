@@ -1,5 +1,4 @@
 import pygame
-from pygame.event import Event
 from pygame.time import Clock
 
 import constants
