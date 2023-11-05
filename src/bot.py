@@ -7,6 +7,7 @@ from cannonballs import (
     CannonballType,
 )
 
+
 class Bot(Tank):
     def __init__(
         self, color: pygame.Color | str, position: pygame.Vector2, player: Player
@@ -19,7 +20,9 @@ class Bot(Tank):
         delta_y = position2.y - self.position.y
         d = pygame.math.Vector2(delta_x, delta_y).length()
         print("d: ", d)
-        angle = abs(pygame.math.Vector2(delta_x, delta_y).angle_to(pygame.math.Vector2(1, 0)))
+        angle = abs(
+            pygame.math.Vector2(delta_x, delta_y).angle_to(pygame.math.Vector2(1, 0))
+        )
         angle = math.radians(angle)
         print("angle: ", angle)
         if delta_y != 0:

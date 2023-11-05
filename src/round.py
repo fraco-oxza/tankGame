@@ -91,7 +91,6 @@ class Round:
         self.turns_queue = [*range(len(self.tanks))]
         random.shuffle(self.turns_queue)
 
-
     def create_tanks(self) -> None:
         self.tanks = []
         positions = self.generate_tanks_positions()
@@ -130,9 +129,10 @@ class Round:
             random_tank = random.randint(0, len(self.tanks) - 1)
             if random_tank != self.actual_player:
                 if self.tanks[random_tank].is_alive:
-                    self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                    self.get_current_tank().random_shoot(
+                        self.tanks[random_tank].position
+                    )
                     find = False
-
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -458,12 +458,15 @@ class Round:
 
                     affected = min(end_layer, sup_limit) - max(start_layer, inf_limit)
 
-                    self.terrain.ground_lines[i] -= max(0,affected)
+                    self.terrain.ground_lines[i] -= max(0, affected)
 
                     if affected > 0 and sup_limit < end_layer:
                         fall = end_layer - sup_limit
-                        self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
-                        affected+= fall 
+                        self.terrain.falling[i][j] = (
+                            self.context.map_size[1] - end_layer,
+                            fall,
+                        )
+                        affected += fall
 
                     current_line[j] -= max(0, affected)
                     accumulated = end_layer
