@@ -449,8 +449,11 @@ class Round:
 
                     if affected > 0 and sup_limit < end_layer:
                         fall = end_layer - sup_limit
-                        self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
-                        affected+= fall 
+                        self.terrain.falling[i][j] = (
+                            self.context.map_size[1] - end_layer,
+                            fall,
+                        )
+                        affected += fall
 
                     current_line[j] -= max(0, affected)
                     self.terrain.ground_lines[i] -= affected
