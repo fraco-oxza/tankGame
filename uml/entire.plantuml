@@ -13,6 +13,7 @@ class TankGame {
     + menu: Menu
     + menu_option: OptionMenu
     + screen_resolution: list[tuple[int, int]]
+    +font: Font
 
     + TankGame(Context):
     + create_player():
@@ -22,7 +23,27 @@ class TankGame {
     + Replace():
     + start():
 }
+class PositionTable{
+    +table: pygame.Vector2
+    +screen: pygame.Surface
 
+    +PositionTable(screen: pygame.Surface)
+    +draw_blocks()
+    +show_positions()
+    +generate_surface(mensaje: str)
+    +position_box(sf: pygame.surface.Surface, sum)
+    +position_tank(sf: pygame.surface.Surface, sum)
+    +position_number(sf: pygame.surface.Surface, sum)
+    +button()
+    +handle_input(mouse: pygame.Vector2)
+    +tank(j)
+    +ranking(i)
+    +bubble_sort()
+
+}
+class PositionTableButton{
+    VOLVER_A_JUGAR = int
+ }
 class Cannonballs extends Drawable {
     + damage:int
     + position: Point
@@ -74,7 +95,7 @@ class HUD extends Drawable{
     + height: int
     + color: list[int]
  +HUD(tank,TankGame)
- +draw_shoot_into(screen: pygame.surface.Surface)
+ +draw_shoot_info(screen: pygame.surface.Surface)
  +draw_cannonball_105_mm(self, screen: pygame.surface)
  +draw_cannonball_80_mm(self, screen: pygame.surface)
  +draw_cannonball_60_mm(self, screen: pygame.surface)
@@ -82,6 +103,7 @@ class HUD extends Drawable{
  +get_actual_player()
  +get_select_cannonball()
  +get_cannonball_indicators()
+ +draw_tank_health(self, sf: pygame.surface.Surface):
  +draw(Surface)
  }
 
@@ -104,8 +126,9 @@ class InGameMenu{
     +hover_botton_color: str
     +button_reset_position = pygame.Vector2
     +sobre: Optional[int]
-    +InGameMenu()
-    +tick()
+
+    +InGameMenu(screen: pygame.Surface, storm: SnowStorm)
+    +tick(dt: float)
     +render()
     +handleInput(mouse: pygame.Vector2)
     +start_menu()
@@ -124,12 +147,14 @@ class Terrain extends Drawable,Collidable {
     +size: tuple[int, int]
     +ground_lines: list[int]
     +new_ground_lines: list[list[float]]
+    +falling: list[list[tuple[float, float]]]
 
 
     +Terrain(tuple[int,int], int, int, list[str])
     +generate_terrain(mountains: int, valleys: int)
     +mountain(i: int, j: int, height: int):
     +valley( inicio: int, fin: int, profundidad: int)
+    +draw_falling(screen: pygame.surface.Surface)
     +draw( screen: pygame.surface.Surface)
     +collidesWith( point: pygame.Vector2): bool
 }
@@ -176,11 +201,8 @@ class Collidable {
 
 class Background extends Drawable{
     +sky_image: pygame.Surface
-    +snowflakes: list[pygame.Vector2]
-    +wind: float
-    +wind_target: float
 
-    + Background()
+    + Background(image: str)
     + draw(Surface):None
 
 }
@@ -196,12 +218,11 @@ class Tank extends Collidable,Drawable  {
     +life: int
     +is_alive:bool
 
-
-
     +Tank(position,color,player)
-    +draw(Surface) : None
     +collides_with(Point,cannon) : Boolean
     +shoot(): Cannonball
+    +draw(Surface) : None
+    +random_shoot(position)
 }
 
 class Player {
@@ -291,7 +312,6 @@ class SelfImpactWindows extends Drawable {
 class WarnningWindows extends Drawable {
     +num_seleccionado: int
     +quantity: list[int]
-    +tank_game: TankGame
 
     +WarnningWindows(TankGame)
     +get_background(screen: pygame.surface.Surface)
@@ -312,9 +332,9 @@ class Map{
 
 class SnowStorm extends Drawable{
     +snowflakes: list[pygame.Vector2]
-    +wind: float
-    +wind_target: float
-    +SnowStorm()
+    +wind: Optional[Wind]
+
+    +SnowStorm(storm_color: str, wind: Optional[Wind])
     +add_random_snowflake()
     +tick():None
     +draw_snowflakes()
@@ -329,11 +349,12 @@ class Menu{
    +botton_color: str
    +hover_botton_color: str
    +is_hover: bool
+   +prev: bool
 
     +Menu(pygame.surface.Surface)
     +render()
-    +show_menu
-    +handle_input
+    +show_menu()
+    +handle_input()
 
 }
 enum MenuStatus {
@@ -368,26 +389,42 @@ class OptionMenu{
 
 class Bot(Tank)
 {
+    +Bot()
     +random_shoot(pygame.Vector2)
+    +selection_cannonball()
 }
 class Context {
     +rounds: int
     +screen: pygame.surface.Surface
     +number_of_players: int
+    +number_of_bots: int
     +number_of_rounds: int
     +__windows_size: tuple[int, int]
     +map_size: tuple[int, int]
     +__fps: float
     +clock: pygame.time.Clock
+    +players: list[player.Player]
+    +type_of_effect: AmbientEffect
 
     +Context()
-    +fps()
+    +fps()-> float
     +fps(val)
     +windows_size()
     +windows_size(new_size: tuple[int, int])
 
 
 }
+class AmbientEffect(Enum){
+    +NONE = int
+    +GRAVITY = int
+    +WIND = int
+    +GRAVITY_AND_WIND = int
+}
+
+
+
+
+
 class Round{
     +tanks: list[Tank]
     +context: Context
@@ -396,10 +433,13 @@ class Round{
     +actual_player: int
     +cannonball: Optional[Cannonball]
     +tanks_alive: int
-    +Round(players: list[Player])
+    +wind: Optional[Wind]
+
+    +Round()
     +create_turns()
     +create_tanks()
     +generate_tanks_positions()
+    +find_tank()
     +draw_cannonball_indicator(sf: pygame.surface.Surface)
     +render()
     +process_input()
@@ -413,6 +453,7 @@ class Round{
     +check_last_state()
     +terrain_destruction()
     +display_explotion()
+    +display_fire
     +next_turn()
     +start()
 }
@@ -427,6 +468,38 @@ enum InGameMenuStatus {
 class Inputs {
     +check_running()
 }
+
+class Shop {
+    +check_running()
+
+    +Shop(screen: pygame.surface, i)
+    +generate_shop()
+    +start_shop()
+    +handle_input(mouse: pygame.Vector2)
+    +cannonball_buttons(message: str)
+    +reset_shopping(message: str)
+    +buy_ammo(message: str)
+
+}
+
+class ShopStatus{
+    C60AMMO: int
+    C80AMMO: int
+    C105AMMO: int
+    RESTART: int
+    BUY: int
+}
+class Wind{
+    +__velocity: float
+    +__target_velocity: float
+    +__min_velocity: int
+    +__max_velocity: int
+
+    +Wind()
+    +velocity() -> float
+    +tick(dt: float) -> None
+}
+
 
 
 Inputs -- TankGame

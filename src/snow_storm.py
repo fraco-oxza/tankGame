@@ -33,7 +33,7 @@ class SnowStorm(Drawable):
             )
         )
 
-    def tick(self, dt: float) -> None:
+    def tick(self) -> None:
         """
         This function is responsible for advancing the snowflakes and
         repositioning them if they have gone off the map.

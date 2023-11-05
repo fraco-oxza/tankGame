@@ -25,7 +25,6 @@ class Context:
 
     def __init__(self) -> None:
         print("se ha creado un contexto")
-
         self.windows_size = constants.DEFAULT_WINDOWS_SIZE
         self.screen = pygame.display.set_mode(self.__windows_size)
         self.number_of_players = constants.DEFAULT_NUMBER_OF_PLAYERS
