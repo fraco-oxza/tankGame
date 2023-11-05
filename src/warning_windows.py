@@ -1,6 +1,4 @@
 import pygame
-
-import constants
 from caches import font_cache
 from caches import image_cache
 from cannonballs import CannonballType

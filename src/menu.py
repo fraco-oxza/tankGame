@@ -1,8 +1,6 @@
-import random
 from typing import Optional
 
 import pygame
-from pygame.event import Event
 from pygame.font import Font
 
 from caches import font_cache
@@ -11,7 +9,6 @@ from caches import audio_cache
 from exit_requested import ExitRequested
 from snow_storm import SnowStorm
 from context import instance
-from inputs import check_running
 
 
 class MenuStatus:

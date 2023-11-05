@@ -1,5 +1,3 @@
-import math
-import random
 from random import randint
 
 import pygame
