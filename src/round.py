@@ -410,7 +410,7 @@ class Round:
                 tank.player.deads += 1
 
                 if self.get_current_tank().player is not tank.player:
-                    self.get_current_tank().player.money += 1000
+                    self.get_current_tank().player.money += 5000
                     self.get_current_tank().player.murders += 1
                 else:
                     self.get_current_tank().player.money -= 5000
@@ -427,35 +427,34 @@ class Round:
             return
 
         if self.cannonball is not None and self.last_state is not None:
-            radius = self.cannonball.radius_damage
-            # FIXME: Esto esta muy mal con el nuevo modelo
-            for p in range(0, self.tanks.__len__()):
-                if self.tanks[p].position.x in range(
-                    int(self.cannonball.position.x - radius),
-                    int(self.cannonball.position.x + radius),
-                ):
-                    self.tanks[p].position.y += radius
-                    self.tanks[p].life -= 10
+            radius = int(self.cannonball.radius_damage)
+            imp_x, imp_y = self.cannonball.position
+            imp_x = int(imp_x)
+            imp_y = self.context.map_size[1] - imp_y
 
-            for i in range(
-                int(self.last_state.position.x) - radius,
-                int(self.last_state.position.x) + radius,
-            ):
-                leftover_damage = math.sqrt(
-                    max(0, radius**2 - (self.last_state.position.x - i) ** 2)
-                )
-                if i < len(self.terrain.new_ground_lines):
-                    j = len(self.terrain.new_ground_lines[i]) - 1
-                    while leftover_damage != 0 and j >= 0:
-                        initial_height = self.terrain.new_ground_lines[i][j]
-                        if initial_height >= leftover_damage:
-                            self.terrain.ground_lines[i] -= leftover_damage
-                            self.terrain.new_ground_lines[i][j] -= leftover_damage
-                            leftover_damage = 0
-                        else:
-                            leftover_damage -= initial_height
-                            self.terrain.new_ground_lines[i][j] = 0
-                        j -= 1
+            for i in range(imp_x - radius, imp_x + radius + 1):
+                left_damage = math.sqrt(max(radius**2 - (i - imp_x) ** 2, 0))
+
+                sup_limit = imp_y + left_damage
+                inf_limit = imp_y - left_damage
+
+                current_line = self.terrain.new_ground_lines[i]
+
+                accumulated = 0
+                for j, size in enumerate(current_line):
+                    start_layer = accumulated
+                    end_layer = start_layer + size
+
+                    affected = min(end_layer, sup_limit) - max(start_layer, inf_limit)
+
+                    if affected > 0 and sup_limit < end_layer:
+                        fall = end_layer - sup_limit
+                        self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
+                        affected+= fall 
+
+                    current_line[j] -= max(0, affected)
+                    self.terrain.ground_lines[i] -= affected
+                    accumulated = end_layer
 
     def display_fire(self):
         """This method is responsible for the animation of the fire when a tank is not alive."""

@@ -17,6 +17,7 @@ class Terrain(Drawable, Collidable):
     size: tuple[int, int]
     ground_lines: list[int]
     new_ground_lines: list[list[float]]
+    falling: list[list[tuple[float, float]]]
 
     def generate_terrain(self, mountains: int, valley: int):
         """
@@ -116,11 +117,29 @@ class Terrain(Drawable, Collidable):
         self.layers_num = len(colors)
 
         self.new_ground_lines = []
+        self.falling = []
         # Transform to a new model
         for height in self.ground_lines:
             self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
+            self.falling.append([(0, 0)] * self.layers_num)
 
         print(self.new_ground_lines.__len__(), self.ground_lines.__len__())
+
+    def draw_falling(self, screen: pygame.surface.Surface) -> None:
+        for i, layers in enumerate(self.falling):
+            for layer, color in zip(layers, self.terrain_layer_colors):
+                if layer == (0, 0):
+                    continue
+                pygame.draw.rect(
+                    screen,
+                    "#232323",
+                    pygame.Rect(
+                        i * constants.TERRAIN_LINE_WIDTH,
+                        layer[0],
+                        constants.TERRAIN_LINE_WIDTH,
+                        layer[1],
+                    ),
+                )
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -136,12 +155,13 @@ class Terrain(Drawable, Collidable):
                         color,
                         pygame.Rect(
                             i * constants.TERRAIN_LINE_WIDTH,
-                            self.size[1] - latest_height - layer - 3,
+                            self.size[1] - latest_height - layer,
                             constants.TERRAIN_LINE_WIDTH,
-                            layer + 3,
+                            layer,
                         ),
                     )
                 latest_height += layer
+        self.draw_falling(screen)
 
     def collides_with(self, point: pygame.Vector2) -> bool:
         """
