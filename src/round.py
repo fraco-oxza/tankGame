@@ -46,9 +46,12 @@ class Round:
         self.map = Map()
         # self.shop_menu = Shop(self.context.screen)
 
-        if self.context.type_of_effect in [AmbientEffect.GRAVITY_AND_WIND, AmbientEffect.WIND]:
+        if self.context.type_of_effect in [
+            AmbientEffect.GRAVITY_AND_WIND,
+            AmbientEffect.WIND,
+        ]:
             self.wind = Wind()
-        else: 
+        else:
             self.wind = None
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
