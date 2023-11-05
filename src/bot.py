@@ -1,11 +1,11 @@
 import pygame
-
+import random
+import math
 from player import Player
 from tank import Tank
 from cannonballs import (
     CannonballType,
 )
-
 
 class Bot(Tank):
     def __init__(
@@ -15,8 +15,8 @@ class Bot(Tank):
 
     def random_shoot(self, position2: pygame.Vector2):
         self.selection_cannonball()
-        self.shoot_angle = 90
-        self.shoot_velocity = 0
+        self.shoot_angle = math.radians(random.randint(0, 180))
+        self.shoot_velocity = random.randint(50, 240)
 
     def selection_cannonball(self):
         if self.available[0] == 0:
