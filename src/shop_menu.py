@@ -13,11 +13,11 @@ from player import Player
 
 
 class ShopStatus:
-    C60AMMO: 1
-    C80AMMO: 2
-    C105AMMO: 3
-    RESTART: 4
-    BUY: 5
+    C60AMMO = 1
+    C80AMMO = 2
+    C105AMMO = 3
+    RESTART = 4
+    BUY = 5
 
 
 class Shop:
@@ -30,7 +30,7 @@ class Shop:
     hover_button_color: str
     upon: Optional[int]
 
-    def __init__(self, screen: pygame.surface, i):
+    def __init__(self, screen: pygame.surface):
         self.clock = pygame.time.Clock()
         self.button_reset_position = pygame.Vector2(
             instance.windows_size[0] / 17, instance.windows_size[1] / 15
@@ -58,11 +58,12 @@ class Shop:
             image_cache["images/shopmenu.png"], image_size
         )
         self.image_rect = self.image.get_rect()
-        self.money_player = instance.players[i].money
+        self.money_player = 0
 
-    def generate_shop(self):
+    def generate_shop(self, player: Player):
         while True:
             check_running()
+            self.money_player = player.money
             self.screen.blit(self.image, self.image_rect.topleft)
             self.screen.blit(self.cannonball_buttons("$1000"), (460, 180))
             self.screen.blit(self.cannonball_buttons("$2500"), (460, 247))
@@ -85,12 +86,12 @@ class Shop:
                 if self.upon == 4:
                     pass
                 if self.upon == 5:
-                    pass
+                    return ShopStatus.BUY
             self.clock.tick(constants.FPS)
             pygame.display.flip()
 
-    def start_shop(self):
-        return self.generate_shop()
+    def start_shop(self, player: Player):
+        return self.generate_shop(player)
 
     def handle_input(self, mouse: pygame.Vector2):
         reset_position = (805, 178)
