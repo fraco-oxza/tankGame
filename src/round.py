@@ -54,6 +54,7 @@ class Round:
             self.wind = Wind()
         else:
             self.wind = None
+
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
         self.terrain = Terrain(
@@ -116,9 +117,9 @@ class Round:
             x = min(max(zone * segments_size, x), (zone + 1) * segments_size)
             x = int(x)
             y = (
-                    self.context.map_size[1]
-                    - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
-                    - 15
+                self.context.map_size[1]
+                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                - 15
             )
             points.append((x, y))
 
@@ -134,7 +135,6 @@ class Round:
                         self.tanks[random_tank].position
                     )
                     find = False
-
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -204,7 +204,7 @@ class Round:
         self.hud.draw(self.context.screen)
         # self.shop_menu.start_shop()
 
-        self.snow_storm.tick(1.0 / (self.context.fps + 0.1))
+        self.snow_storm.tick()
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.context.screen)
             if not self.warning.is_current_cannonball_available():
@@ -233,21 +233,21 @@ class Round:
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle -= math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -521,7 +521,6 @@ class Round:
                 # sleep temporal
                 time.sleep(0.5)
 
-
         while self.running:
             self.wait_release_space()
             check_running()
@@ -531,7 +530,7 @@ class Round:
             # -cuando no quedan tankes jugables
             # -mostrar advertencias
             while not self.get_current_tank().is_alive or (
-                    sum(self.get_current_tank().available.values()) <= 0
+                sum(self.get_current_tank().available.values()) <= 0
             ):
                 self.next_turn()
 

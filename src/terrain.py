@@ -6,6 +6,7 @@ import pygame
 import constants
 from collidable import Collidable
 from draw import Drawable
+from context import instance
 
 
 class Terrain(Drawable, Collidable):
@@ -131,15 +132,15 @@ class Terrain(Drawable, Collidable):
         self.is_falling = False
         self.falling_speed += constants.GRAVITY * dt
         for i, layers in enumerate(self.falling):
-            top_point = 1e10
+            top_point = None
             for j, layer in enumerate(layers):
                 if layer == (0, 0):
                     continue
                 self.is_falling = True
-                top_point = min(top_point, layer[0] + self.falling_speed * dt)
+                top_point = instance.map_size[1] - layer[0]
                 layers[j] = (layer[0] + self.falling_speed * dt, layer[1])
 
-            if top_point < self.ground_lines[i]:
+            if top_point is not None and top_point < self.ground_lines[i]:
                 for j, layer in enumerate(layers):
                     self.new_ground_lines[i][j] += layer[1]
                     self.falling[i][j] = (0, 0)
