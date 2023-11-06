@@ -32,9 +32,9 @@ class Player:
         self.points = 0
         self.color = color
         self.ammunition = {
-            CannonballType.MM60: 3,
-            CannonballType.MM80: 10,
-            CannonballType.MM105: 3,
+            CannonballType.MM60: 0,
+            CannonballType.MM80: 0,
+            CannonballType.MM105: 0,
         }
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):

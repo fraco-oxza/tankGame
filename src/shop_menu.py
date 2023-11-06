@@ -1,5 +1,5 @@
 from typing import Optional
-import time
+
 import pygame
 from pygame.font import Font
 
@@ -7,7 +7,6 @@ import constants
 from caches import audio_cache
 from caches import font_cache
 from caches import image_cache
-from cannonballs import CannonballType
 from context import instance
 from inputs import check_running
 from tank import Tank
@@ -121,12 +120,12 @@ class Shop:
                     self.Ammo80 = 0
                     self.Ammo105 = 0
                 if self.upon == 5:
-                    self.ammunition = {
-                        CannonballType.MM60: self.Ammo60,
-                        CannonballType.MM80: self.Ammo80,
-                        CannonballType.MM105: self.Ammo105,
-                    }
-                    tank.player.ammunition = self.ammunition
+                    tank.available[0] += self.Ammo60
+                    tank.available[1] += self.Ammo80
+                    tank.available[2] += self.Ammo105
+                    self.Ammo60 = 0
+                    self.Ammo80 = 0
+                    self.Ammo105 = 0
                     return ShopStatus.BUY
             self.clock.tick(constants.FPS / 7)
             pygame.display.flip()
