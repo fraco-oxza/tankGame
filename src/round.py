@@ -1,5 +1,6 @@
 import math
 import random
+import time
 from typing import Optional
 
 import pygame
@@ -7,6 +8,7 @@ import pygame
 import constants
 import context
 from background import Background
+from bot import Bot
 from caches import animation_cache, audio_cache, font_cache
 from cannonballs import CannonballType, Cannonball
 from context import Context
@@ -28,7 +30,6 @@ from terrain import Terrain
 from warning_windows import WarningWindows
 from wind import Wind
 from winner_screen import WinnerScreen
-from bot import Bot
 
 
 class Round:
@@ -76,7 +77,7 @@ class Round:
         self.menu = Menu(self.context.screen)
         self.create_tanks()
         self.create_turns()
-
+        self.shop_menu = Shop(self.context.screen)
         self.actual_player = self.turns_queue[-1]
         self.turns_queue.pop()
 
@@ -115,9 +116,9 @@ class Round:
             x = min(max(zone * segments_size, x), (zone + 1) * segments_size)
             x = int(x)
             y = (
-                self.context.map_size[1]
-                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
-                - 15
+                    self.context.map_size[1]
+                    - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                    - 15
             )
             points.append((x, y))
 
@@ -133,6 +134,7 @@ class Round:
                         self.tanks[random_tank].position
                     )
                     find = False
+
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -231,21 +233,21 @@ class Round:
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
-                    constants.FPS / self.context.fps
+                        constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                    constants.FPS / self.context.fps
+                        constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle -= math.radians(1) * (
-                    constants.FPS / self.context.fps
+                        constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                    constants.FPS / self.context.fps
+                        constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -508,6 +510,17 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
+        for tank in self.tanks:
+            if isinstance(tank, Bot):
+                print("es el bot: ", tank)
+                tank.buy_cannonballs()
+            else:
+                print("es el tanque: ", tank)
+                self.shop_menu.start_shop(tank)
+                tank.available = tank.player.ammunition
+                # sleep temporal
+                time.sleep(0.5)
+
 
         while self.running:
             self.wait_release_space()
@@ -518,7 +531,7 @@ class Round:
             # -cuando no quedan tankes jugables
             # -mostrar advertencias
             while not self.get_current_tank().is_alive or (
-                sum(self.get_current_tank().available.values()) <= 0
+                    sum(self.get_current_tank().available.values()) <= 0
             ):
                 self.next_turn()
 

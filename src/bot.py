@@ -1,11 +1,16 @@
-import pygame
-import random
+from __future__ import annotations
+
 import math
-from player import Player
-from tank import Tank
+import random
+
+import pygame
+
 from cannonballs import (
     CannonballType,
 )
+from player import Player
+from tank import Tank
+
 
 class Bot(Tank):
     def __init__(
@@ -41,3 +46,22 @@ class Bot(Tank):
                 self.actual = CannonballType.MM80
             if self.available[0] != 0:
                 self.actual = CannonballType.MM60
+
+    def buy_cannonballs(self):
+        buy = True
+        while buy:
+            cannon = random.randint(1, 3)
+            if self.player.money < 1000:
+                buy = False
+            if cannon == 1 and self.player.money >= 1000:
+                self.player.money = self.player.money - 1000
+                self.available[0] = self.available[0] + 1
+                print("compré una de 1", self.player.money)
+            if cannon == 2 and self.player.money >= 2500:
+                self.player.money = self.player.money - 2500
+                self.available[1] = self.available[1] + 1
+                print("compré una de 2", self.player.money)
+            if cannon == 3 and self.player.money >= 4000:
+                self.player.money = self.player.money - 4000
+                self.available[2] = self.available[2] + 1
+                print("compré una de 3", self.player.money)
