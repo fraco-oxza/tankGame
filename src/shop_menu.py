@@ -135,9 +135,9 @@ class Shop:
     def handle_input(self, mouse: pygame.Vector2):
         reset_position = (805, 178)
         if reset_position[0] < mouse.x < (
-                reset_position[0] + self.button_reset_position[0]
+            reset_position[0] + self.button_reset_position[0]
         ) and reset_position[1] < mouse.y < (
-                reset_position[1] + self.button_reset_position[1]
+            reset_position[1] + self.button_reset_position[1]
         ):
             self.reset_button_color = self.hover_button_color
             self.upon = 4
@@ -145,9 +145,9 @@ class Shop:
             self.reset_button_color = "#A4947A"
         buy_position = (765, 395)
         if buy_position[0] < mouse.x < (
-                buy_position[0] + self.buy_button_reset_position[0]
+            buy_position[0] + self.buy_button_reset_position[0]
         ) and buy_position[1] < mouse.y < (
-                buy_position[1] + self.buy_button_reset_position[1]
+            buy_position[1] + self.buy_button_reset_position[1]
         ):
             self.buy_button_color = self.hover_button_color
             self.upon = 5
@@ -155,9 +155,9 @@ class Shop:
             self.buy_button_color = "#A4947A"
         cannonball60mm_position = (460, 180)
         if cannonball60mm_position[0] < mouse.x < (
-                cannonball60mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball60mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball60mm_position[1] < mouse.y < (
-                cannonball60mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball60mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c60_button_color = self.hover_button_color
             self.upon = 1
@@ -165,9 +165,9 @@ class Shop:
             self.c60_button_color = "#A4947A"
         cannonball80mm_position = (460, 247)
         if cannonball80mm_position[0] < mouse.x < (
-                cannonball80mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball80mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball80mm_position[1] < mouse.y < (
-                cannonball80mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball80mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c80_button_color = self.hover_button_color
             self.upon = 2
@@ -175,9 +175,9 @@ class Shop:
             self.c80_button_color = "#A4947A"
         cannonball105mm_position = (460, 315)
         if cannonball105mm_position[0] < mouse.x < (
-                cannonball105mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball105mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball105mm_position[1] < mouse.y < (
-                cannonball105mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball105mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c105_button_color = self.hover_button_color
             self.upon = 3
