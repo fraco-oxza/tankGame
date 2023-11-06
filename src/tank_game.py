@@ -16,6 +16,7 @@ from option_menu import OptionMenuStatus
 from positions_table import PositionTable
 from positions_table import PositionTableButton
 
+
 class TankGame:
     context: Context
     menu: Menu
