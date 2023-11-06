@@ -121,6 +121,7 @@ class Shop:
                     self.Ammo80 = 0
                     self.Ammo105 = 0
                 if self.upon == 5:
+                    player.money = self.money_player
                     self.ammunition = {
                         CannonballType.MM60: self.Ammo60,
                         CannonballType.MM80: self.Ammo80,
