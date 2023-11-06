@@ -1,5 +1,5 @@
 from typing import Optional
-
+import time
 import pygame
 from pygame.font import Font
 
@@ -70,6 +70,9 @@ class Shop:
 
     def generate_shop(self, tank: Tank):
         self.money_player = tank.player.money
+        contador60mm = 0
+        contador80mm = 0
+        contador105mm = 0
         while True:
             check_running()
             self.screen.blit(self.image, self.image_rect.topleft)
@@ -79,6 +82,12 @@ class Shop:
             self.screen.blit(self.reset_shopping("Reset"), (805, 178))
             self.screen.blit(self.buy_ammo("Buy"), (765, 395))
             money = self.principal_font.render(f"${self.money_player}", True, "#ffffff")
+            quantity60mm = self.money_font.render(f"{contador60mm}", True, "#ffffff")
+            quantity80mm = self.money_font.render(f"{contador80mm}", True, "#ffffff")
+            quantity105mm = self.money_font.render(f"{contador105mm}", True, "#ffffff")
+            self.screen.blit(quantity60mm, (700, 185))
+            self.screen.blit(quantity80mm, (700, 255))
+            self.screen.blit(quantity105mm, (700, 320))
             self.screen.blit(money, (580, 120))
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handle_input(mouse)
@@ -89,16 +98,19 @@ class Shop:
                     if self.money_player >= 1000:
                         self.money_player -= 1000
                         self.Ammo60 += 1
+                        contador60mm += 1
                         print(self.Ammo60)
                 if self.upon == 2:
                     if self.money_player >= 2500:
                         self.money_player -= 2500
                         self.Ammo80 += 1
+                        contador80mm += 1
                         print(self.Ammo80)
                 if self.upon == 3:
                     if self.money_player >= 4000:
                         self.money_player -= 4000
                         self.Ammo105 += 1
+                        contador105mm += 1
                         print(self.Ammo105)
                 if self.upon == 4:
                     self.money_player = tank.player.money
@@ -113,7 +125,7 @@ class Shop:
                     }
                     tank.player.ammunition = self.ammunition
                     return ShopStatus.BUY
-            self.clock.tick(constants.FPS / 8)
+            self.clock.tick(constants.FPS / 7)
             pygame.display.flip()
 
     def start_shop(self, tank: Tank):
@@ -122,9 +134,9 @@ class Shop:
     def handle_input(self, mouse: pygame.Vector2):
         reset_position = (805, 178)
         if reset_position[0] < mouse.x < (
-            reset_position[0] + self.button_reset_position[0]
+                reset_position[0] + self.button_reset_position[0]
         ) and reset_position[1] < mouse.y < (
-            reset_position[1] + self.button_reset_position[1]
+                reset_position[1] + self.button_reset_position[1]
         ):
             self.reset_button_color = self.hover_button_color
             self.upon = 4
@@ -132,9 +144,9 @@ class Shop:
             self.reset_button_color = "#A4947A"
         buy_position = (765, 395)
         if buy_position[0] < mouse.x < (
-            buy_position[0] + self.buy_button_reset_position[0]
+                buy_position[0] + self.buy_button_reset_position[0]
         ) and buy_position[1] < mouse.y < (
-            buy_position[1] + self.buy_button_reset_position[1]
+                buy_position[1] + self.buy_button_reset_position[1]
         ):
             self.buy_button_color = self.hover_button_color
             self.upon = 5
@@ -142,9 +154,9 @@ class Shop:
             self.buy_button_color = "#A4947A"
         cannonball60mm_position = (460, 180)
         if cannonball60mm_position[0] < mouse.x < (
-            cannonball60mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball60mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball60mm_position[1] < mouse.y < (
-            cannonball60mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball60mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c60_button_color = self.hover_button_color
             self.upon = 1
@@ -152,9 +164,9 @@ class Shop:
             self.c60_button_color = "#A4947A"
         cannonball80mm_position = (460, 247)
         if cannonball80mm_position[0] < mouse.x < (
-            cannonball80mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball80mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball80mm_position[1] < mouse.y < (
-            cannonball80mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball80mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c80_button_color = self.hover_button_color
             self.upon = 2
@@ -162,9 +174,9 @@ class Shop:
             self.c80_button_color = "#A4947A"
         cannonball105mm_position = (460, 315)
         if cannonball105mm_position[0] < mouse.x < (
-            cannonball105mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball105mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball105mm_position[1] < mouse.y < (
-            cannonball105mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball105mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c105_button_color = self.hover_button_color
             self.upon = 3
@@ -227,3 +239,68 @@ class Shop:
             ),
         )
         return sf
+
+    def show_buy(self, tank: Tank):
+        transparency = 220
+        rect_surface = pygame.Surface(
+            (instance.windows_size[0] / 1.22, instance.windows_size[1] / 1.8)
+        )
+        rect_surface.fill("#000000")
+        rect_surface.set_alpha(transparency)
+        rect_x1, rect_y1 = (
+            instance.windows_size[0] / 10.66,
+            instance.windows_size[1] / 12,
+        )
+        self.screen.blit(rect_surface, (rect_x1, rect_y1))
+        pygame.draw.rect(
+            self.screen,
+            tank.color,
+            pygame.Rect(
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 51.2,
+                instance.windows_size[1] / 2.05 - instance.windows_size[1] / 72,
+                instance.windows_size[0] / 25.6,
+                instance.windows_size[1] / 20.57,
+            ),
+        )
+        pygame.draw.rect(
+            self.screen,
+            tank.color,
+            pygame.Rect(
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+                instance.windows_size[1] / 2.05 + instance.windows_size[1] / 28.8,
+                instance.windows_size[0] / 10.24,
+                instance.windows_size[1] / 14.4,
+            ),
+        )
+        pygame.draw.rect(
+            self.screen,
+            constants.GRAY,
+            pygame.Rect(
+                instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+                instance.windows_size[1] / 2.05 + instance.windows_size[1] / 9.6,
+                instance.windows_size[0] / 10.24,
+                instance.windows_size[0] / 64,
+            ),
+        )
+
+        for i in range(6):
+            pygame.draw.circle(
+                self.screen,
+                constants.BLACK,
+                (
+                    instance.windows_size[0] / 1.96
+                    - instance.windows_size[0] / 21.33
+                    + instance.windows_size[0] / 51.2 * i,
+                    instance.windows_size[1] / 2.05 + instance.windows_size[1] / 8,
+                ),
+                instance.windows_size[0] / 85.33,
+            )
+
+        pygame.draw.line(
+            self.screen,
+            tank.color,
+            (instance.windows_size[0] / 1.96, instance.windows_size[1] / 2.05),
+            (instance.windows_size[0] / 2.32, instance.windows_size[1] / 2.4),
+            int(instance.windows_size[0] / 51.2),
+        )
+        pygame.display.flip()
