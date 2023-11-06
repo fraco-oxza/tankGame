@@ -54,6 +54,7 @@ class Round:
             self.wind = Wind()
         else:
             self.wind = None
+
         self.background = Background(self.map.define_background_image())
         self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
         self.terrain = Terrain(
@@ -92,7 +93,6 @@ class Round:
         self.turns_queue = [*range(len(self.tanks))]
         random.shuffle(self.turns_queue)
 
-
     def create_tanks(self) -> None:
         self.tanks = []
         positions = self.generate_tanks_positions()
@@ -117,9 +117,9 @@ class Round:
             x = min(max(zone * segments_size, x), (zone + 1) * segments_size)
             x = int(x)
             y = (
-                    self.context.map_size[1]
-                    - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
-                    - 15
+                self.context.map_size[1]
+                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                - 15
             )
             points.append((x, y))
 
@@ -131,9 +131,10 @@ class Round:
             random_tank = random.randint(0, len(self.tanks) - 1)
             if random_tank != self.actual_player:
                 if self.tanks[random_tank].is_alive:
-                    self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                    self.get_current_tank().random_shoot(
+                        self.tanks[random_tank].position
+                    )
                     find = False
-
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -232,21 +233,21 @@ class Round:
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle -= math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -272,9 +273,9 @@ class Round:
             self.cannonball = playing_tank.shoot()
 
         if (
-                keys_pressed[pygame.K_1]
-                or keys_pressed[pygame.K_2]
-                or keys_pressed[pygame.K_3]
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
         ):
             change = audio_cache["sounds/click_cannonball.mp3"]
             change.play()
@@ -317,8 +318,8 @@ class Round:
             self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
-                self.cannonball.position.x < 0
-                or self.cannonball.position.x > self.context.map_size[0]
+            self.cannonball.position.x < 0
+            or self.cannonball.position.x > self.context.map_size[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
@@ -327,7 +328,7 @@ class Round:
 
         for tank in self.tanks:
             if tank.collides_with(
-                    self.cannonball.position, self.get_current_tank().actual
+                self.cannonball.position, self.get_current_tank().actual
             ):
                 return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
@@ -432,22 +433,13 @@ class Round:
         This method takes care of the destruction of terrain, the fall of tanks and the damage related to this.
         """
         if (
-                self.last_state is not None
-                and self.last_state.impact_type == ImpactType.BORDER
+            self.last_state is not None
+            and self.last_state.impact_type == ImpactType.BORDER
         ):
             # Aquí detengo porque este caso no me sirve
             return
 
         if self.cannonball is not None and self.last_state is not None:
-            radius = self.cannonball.radius_damage
-            # FIXME: Esto esta muy mal con el nuevo modelo
-            for p in range(0, self.tanks.__len__()):
-                if self.tanks[p].position.x in range(
-                        int(self.cannonball.position.x - radius),
-                        int(self.cannonball.position.x + radius),
-                ):
-                    self.tanks[p].position.y += radius
-                    self.tanks[p].life -= 10
             radius = int(self.cannonball.radius_damage)
             imp_x, imp_y = self.cannonball.position
             imp_x = int(imp_x)
@@ -461,38 +453,26 @@ class Round:
 
                 current_line = self.terrain.new_ground_lines[i]
 
-            for i in range(
-                    int(self.last_state.position.x) - radius,
-                    int(self.last_state.position.x) + radius,
-            ):
-                leftover_damage = math.sqrt(
-                    max(0, radius ** 2 - (self.last_state.position.x - i) ** 2)
-                )
-                if i < len(self.terrain.new_ground_lines):
-                    j = len(self.terrain.new_ground_lines[i]) - 1
-                    while leftover_damage != 0 and j >= 0:
-                        initial_height = self.terrain.new_ground_lines[i][j]
-                        if initial_height >= leftover_damage:
-                            self.terrain.ground_lines[i] -= leftover_damage
-                            self.terrain.new_ground_lines[i][j] -= leftover_damage
-                            leftover_damage = 0
-                        else:
-                            leftover_damage -= initial_height
-                            self.terrain.new_ground_lines[i][j] = 0
-                        j -= 1
                 accumulated = 0
                 for j, size in enumerate(current_line):
                     start_layer = accumulated
                     end_layer = start_layer + size
 
-                    affected = min(end_layer, sup_limit) - max(start_layer, inf_limit)
+                    affected = max(
+                        0, min(end_layer, sup_limit) - max(start_layer, inf_limit)
+                    )
 
-                    self.terrain.ground_lines[i] -= max(0,affected)
+                    self.terrain.ground_lines[i] -= affected
 
-                    if affected > 0 and sup_limit < end_layer:
-                        fall = end_layer - sup_limit
-                        self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
+                    if sup_limit < end_layer:
+                        fall = end_layer - max(sup_limit, start_layer)
+                        self.terrain.falling[i][j] = (
+                            self.context.map_size[1] - end_layer,
+                            fall,
+                        )
                         affected += fall
+                        self.terrain.falling_speed = 0
+                        self.terrain.is_falling = True
 
                     current_line[j] -= max(0, affected)
                     accumulated = end_layer
@@ -530,12 +510,18 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        for i in range(len(self.players)):
-            self.shop_menu.start_shop(self.players[i])
-            self.tanks[i].available = self.players[i].ammunition
-            # sleep temporal
-            time.sleep(0.5)
-            print(i)
+        for tank in self.tanks:
+            if isinstance(tank, Bot):
+                print("es el bot: ", tank)
+                tank.buy_cannonballs()
+            else:
+                print("es el tanque: ", tank)
+                self.shop_menu.start_shop(tank)
+                tank.available = tank.player.ammunition
+                # sleep temporal
+                time.sleep(0.5)
+                self.shop_menu.show_buy(tank)
+
 
         while self.running:
             self.wait_release_space()
@@ -543,12 +529,17 @@ class Round:
             self.next_turn()
 
             # TODO: Añadir muchas verificaciones
-            # -cuando no quedan tankes jugables
             # -mostrar advertencias
+            tries = 0
             while not self.get_current_tank().is_alive or (
-                    sum(self.get_current_tank().available.values()) <= 0
+                sum(self.get_current_tank().available.values()) <= 0
             ):
                 self.next_turn()
+                tries += 1
+                if tries > 2 * self.context.number_of_players:
+                    # TODO: Que hacer cuando empatan
+                    print("Empataron")
+                    return
 
             if isinstance(self.get_current_tank(), Bot):
                 self.find_tank()
@@ -596,6 +587,12 @@ class Round:
                 self.animacion = None
 
             self.terrain_destruction()
+
+            while self.terrain.is_falling:
+                check_running()
+                self.terrain.tick(1.0 / self.context.fps)
+                self.render()
+
             if not isinstance(self.get_current_tank(), Bot):
                 self.wait_release_space()
                 self.wait_on_space()

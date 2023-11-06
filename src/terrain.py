@@ -6,6 +6,7 @@ import pygame
 import constants
 from collidable import Collidable
 from draw import Drawable
+from context import instance
 
 
 class Terrain(Drawable, Collidable):
@@ -118,12 +119,31 @@ class Terrain(Drawable, Collidable):
 
         self.new_ground_lines = []
         self.falling = []
+        self.is_falling = False
+        self.falling_speed = 0
         # Transform to a new model
         for height in self.ground_lines:
             self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
             self.falling.append([(0, 0)] * self.layers_num)
 
         print(self.new_ground_lines.__len__(), self.ground_lines.__len__())
+
+    def tick(self, dt: float):
+        self.is_falling = False
+        self.falling_speed += 2 * constants.GRAVITY * dt
+        for i, layers in enumerate(self.falling):
+            top_point = None
+            for j, layer in enumerate(layers):
+                if layer == (0, 0):
+                    continue
+                self.is_falling = True
+                top_point = instance.map_size[1] - layer[0]
+                layers[j] = (layer[0] + self.falling_speed * dt, layer[1])
+
+            if top_point is not None and top_point < self.ground_lines[i]:
+                for j, layer in enumerate(layers):
+                    self.new_ground_lines[i][j] += layer[1]
+                    self.falling[i][j] = (0, 0)
 
     def draw_falling(self, screen: pygame.surface.Surface) -> None:
         for i, layers in enumerate(self.falling):
@@ -147,7 +167,7 @@ class Terrain(Drawable, Collidable):
         simulating the substrate of the ground.
         """
         for i, layers in enumerate(self.new_ground_lines):
-            latest_height = -5
+            latest_height = 0
             for layer, color in zip(layers, self.terrain_layer_colors):
                 if layer != 0:
                     pygame.draw.rect(

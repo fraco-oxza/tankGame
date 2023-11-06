@@ -53,6 +53,9 @@ class Tank(Drawable, Collidable):
         self.animacion_fuego = Explosion(
             self.position, animation_cache["fire"], (50, 50), loop=True
         )
+        self.available[0] = 0
+        self.available[1] = 0
+        self.available[3] = 0
 
     def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
         """
@@ -204,4 +207,7 @@ class Tank(Drawable, Collidable):
         )
 
     def random_shoot(self, position):
+        pass
+
+    def buy_cannonballs(self):
         pass

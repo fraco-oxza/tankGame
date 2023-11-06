@@ -181,7 +181,7 @@ class Cannonball60mm(Cannonball):
             fire_x = tail_x - 6 * angle_x
             fire_y = tail_y - 6 * angle_y
             pygame.draw.line(screen, "#fbb741", (tail_x, tail_y), (fire_x, fire_y), 6)
-            pygame.draw.circle(screen, "red", self.position, 4)
+            # pygame.draw.circle(screen, "red", self.position, 4)
 
 
 class Cannonball80mm(Cannonball):

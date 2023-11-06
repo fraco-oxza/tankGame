@@ -15,7 +15,6 @@ from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 from positions_table import PositionTable
 from positions_table import PositionTableButton
-from shop_menu import Shop
 
 
 class TankGame:
@@ -142,8 +141,6 @@ class TankGame:
                     self.context.number_of_players + self.context.number_of_bots
                 ):
                     self.create_player()
-                    # self.shop_menu=Shop(self.context.screen, _)
-                    # self.shop_menu.start_shop()
                 for i in range(self.context.number_of_rounds):
                     print(f"round {i}")
                     current_round = Round()
