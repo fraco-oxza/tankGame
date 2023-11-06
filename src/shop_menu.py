@@ -10,8 +10,7 @@ from caches import image_cache
 from cannonballs import CannonballType
 from context import instance
 from inputs import check_running
-from player import Player
-
+from tank import Tank
 
 class ShopStatus:
     C60AMMO = 1
@@ -67,8 +66,8 @@ class Shop:
         self.image_rect = self.image.get_rect()
         self.money_player = None
 
-    def generate_shop(self, player: Player):
-        self.money_player = player.money
+    def generate_shop(self, tank: Tank):
+        self.money_player = tank.player.money
         while True:
             check_running()
             self.screen.blit(self.image, self.image_rect.topleft)
@@ -100,7 +99,7 @@ class Shop:
                         self.Ammo105 += 1
                         print(self.Ammo105)
                 if self.upon == 4:
-                    self.money_player = player.money
+                    self.money_player = tank.player.money
                     self.Ammo60 = 0
                     self.Ammo80 = 0
                     self.Ammo105 = 0
@@ -110,13 +109,13 @@ class Shop:
                         CannonballType.MM80: self.Ammo80,
                         CannonballType.MM105: self.Ammo105,
                     }
-                    player.ammunition = self.ammunition
+                    tank.player.ammunition = self.ammunition
                     return ShopStatus.BUY
             self.clock.tick(constants.FPS / 8)
             pygame.display.flip()
 
-    def start_shop(self, player: Player):
-        return self.generate_shop(player)
+    def start_shop(self, tank: Tank):
+        return self.generate_shop(tank)
 
     def handle_input(self, mouse: pygame.Vector2):
         reset_position = (805, 178)
