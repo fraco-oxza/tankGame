@@ -522,7 +522,6 @@ class Round:
                 time.sleep(0.5)
                 self.shop_menu.show_buy(tank)
 
-
         while self.running:
             self.wait_release_space()
             check_running()
