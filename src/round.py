@@ -91,7 +91,6 @@ class Round:
         self.turns_queue = [*range(len(self.tanks))]
         random.shuffle(self.turns_queue)
 
-
     def create_tanks(self) -> None:
         self.tanks = []
         positions = self.generate_tanks_positions()
@@ -130,9 +129,10 @@ class Round:
             random_tank = random.randint(0, len(self.tanks) - 1)
             if random_tank != self.actual_player:
                 if self.tanks[random_tank].is_alive:
-                    self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+                    self.get_current_tank().random_shoot(
+                        self.tanks[random_tank].position
+                    )
                     find = False
-
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
         """This method allows you to track the bullet when it is not on the screen."""
@@ -456,14 +456,21 @@ class Round:
                     start_layer = accumulated
                     end_layer = start_layer + size
 
-                    affected = min(end_layer, sup_limit) - max(start_layer, inf_limit)
+                    affected = max(
+                        0, min(end_layer, sup_limit) - max(start_layer, inf_limit)
+                    )
 
-                    self.terrain.ground_lines[i] -= max(0,affected)
+                    self.terrain.ground_lines[i] -= affected
 
-                    if affected > 0 and sup_limit < end_layer:
-                        fall = end_layer - sup_limit
-                        self.terrain.falling[i][j] = (self.context.map_size[1] - end_layer, fall)
-                        affected+= fall 
+                    if sup_limit < end_layer:
+                        fall = end_layer - max(sup_limit, start_layer)
+                        self.terrain.falling[i][j] = (
+                            self.context.map_size[1] - end_layer,
+                            fall,
+                        )
+                        affected += fall
+                        self.terrain.falling_speed = 0
+                        self.terrain.is_falling = True
 
                     current_line[j] -= max(0, affected)
                     accumulated = end_layer
@@ -561,6 +568,12 @@ class Round:
                 self.animacion = None
 
             self.terrain_destruction()
+
+            while self.terrain.is_falling:
+                check_running()
+                self.terrain.tick(1.0 / self.context.fps)
+                self.render()
+
             if not isinstance(self.get_current_tank(), Bot):
                 self.wait_release_space()
                 self.wait_on_space()
