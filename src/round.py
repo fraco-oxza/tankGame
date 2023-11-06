@@ -533,6 +533,7 @@ class Round:
         for i in range(len(self.players)):
             self.shop_menu.start_shop(self.players[i])
             self.tanks[i].available = self.players[i].ammunition
+            # sleep temporal
             time.sleep(0.5)
             print(i)
 
