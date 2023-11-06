@@ -1,11 +1,15 @@
-import pygame
-import random
+from __future__ import annotations
+
 import math
-from player import Player
-from tank import Tank
+
+import pygame
+
 from cannonballs import (
     CannonballType,
 )
+from player import Player
+from tank import Tank
+
 
 class Bot(Tank):
     def __init__(

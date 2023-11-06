@@ -1,12 +1,14 @@
 import math
 import random
-from typing import Optional
 import time
+from typing import Optional
+
 import pygame
 
 import constants
 import context
 from background import Background
+from bot import Bot
 from caches import animation_cache, audio_cache, font_cache
 from cannonballs import CannonballType, Cannonball
 from context import Context
@@ -28,7 +30,6 @@ from terrain import Terrain
 from warning_windows import WarningWindows
 from wind import Wind
 from winner_screen import WinnerScreen
-from bot import Bot
 
 
 class Round:
@@ -530,8 +531,8 @@ class Round:
         shocked with something.
         """
         for i in range(len(self.players)):
-            player = self.players[i]
-            self.shop_menu.start_shop(player)
+            self.shop_menu.start_shop(self.players[i])
+            self.tanks[i].available = self.players[i].ammunition
             time.sleep(0.5)
             print(i)
 

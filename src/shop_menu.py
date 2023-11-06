@@ -3,12 +3,13 @@ from typing import Optional
 import pygame
 from pygame.font import Font
 
+import constants
 from caches import audio_cache
 from caches import font_cache
 from caches import image_cache
+from cannonballs import CannonballType
 from context import instance
 from inputs import check_running
-import constants
 from player import Player
 
 
@@ -29,7 +30,9 @@ class Shop:
     buy_button_color: str
     hover_button_color: str
     upon: Optional[int]
-
+    Ammo60 = 0
+    Ammo80 = 0
+    Ammo105 = 0
     def __init__(self, screen: pygame.surface):
         self.clock = pygame.time.Clock()
         self.button_reset_position = pygame.Vector2(
@@ -45,6 +48,10 @@ class Shop:
         self.principal_font = font_cache[
             "Roboto.ttf", int(instance.windows_size[0] / 40)
         ]
+        self.ammunition = {}
+        self.Ammo60 = 0
+        self.Ammo80 = 0
+        self.Ammo105 = 0
         self.c60_button_color = "#A4947A"
         self.c80_button_color = "#A4947A"
         self.c105_button_color = "#A4947A"
@@ -58,12 +65,12 @@ class Shop:
             image_cache["images/shopmenu.png"], image_size
         )
         self.image_rect = self.image.get_rect()
-        self.money_player = 0
+        self.money_player = None
 
     def generate_shop(self, player: Player):
+        self.money_player = player.money
         while True:
             check_running()
-            self.money_player = player.money
             self.screen.blit(self.image, self.image_rect.topleft)
             self.screen.blit(self.cannonball_buttons("$1000"), (460, 180))
             self.screen.blit(self.cannonball_buttons("$2500"), (460, 247))
@@ -78,16 +85,34 @@ class Shop:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
                 if self.upon == 1:
-                    pass
+                    if self.money_player >= 1000:
+                        self.money_player -= 1000
+                        self.Ammo60 += 1
+                        print(self.Ammo60)
                 if self.upon == 2:
-                    pass
+                    if self.money_player >= 2500:
+                        self.money_player -= 2500
+                        self.Ammo80 += 1
+                        print(self.Ammo80)
                 if self.upon == 3:
-                    pass
+                    if self.money_player >= 4000:
+                        self.money_player -= 4000
+                        self.Ammo105 += 1
+                        print(self.Ammo105)
                 if self.upon == 4:
-                    pass
+                    self.money_player = player.money
+                    self.Ammo60 = 0
+                    self.Ammo80 = 0
+                    self.Ammo105 = 0
                 if self.upon == 5:
+                    self.ammunition = {
+                        CannonballType.MM60: self.Ammo60,
+                        CannonballType.MM80: self.Ammo80,
+                        CannonballType.MM105: self.Ammo105,
+                    }
+                    player.ammunition = self.ammunition
                     return ShopStatus.BUY
-            self.clock.tick(constants.FPS)
+            self.clock.tick(constants.FPS / 8)
             pygame.display.flip()
 
     def start_shop(self, player: Player):
