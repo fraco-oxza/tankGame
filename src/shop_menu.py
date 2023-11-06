@@ -12,6 +12,7 @@ from context import instance
 from inputs import check_running
 from tank import Tank
 
+
 class ShopStatus:
     C60AMMO = 1
     C80AMMO = 2
@@ -32,6 +33,7 @@ class Shop:
     Ammo60 = 0
     Ammo80 = 0
     Ammo105 = 0
+
     def __init__(self, screen: pygame.surface):
         self.clock = pygame.time.Clock()
         self.button_reset_position = pygame.Vector2(

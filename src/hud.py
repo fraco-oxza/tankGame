@@ -479,7 +479,9 @@ class HUD(Drawable):
             if tank != self.tank_game.tanks[self.tank_game.actual_player]:
                 bar_length = (tank.life / 100) * width
                 pygame.draw.rect(
-                    sf, "gray", (tank.position.x + 5, tank.position.y + 50, width, height)
+                    sf,
+                    "gray",
+                    (tank.position.x + 5, tank.position.y + 50, width, height),
                 )
 
                 if tank.life <= 100:
