@@ -527,12 +527,17 @@ class Round:
             self.next_turn()
 
             # TODO: Añadir muchas verificaciones
-            # -cuando no quedan tankes jugables
             # -mostrar advertencias
+            tries = 0
             while not self.get_current_tank().is_alive or (
                 sum(self.get_current_tank().available.values()) <= 0
             ):
                 self.next_turn()
+                tries += 1
+                if tries > 2 * self.context.number_of_players:
+                    # TODO: Que hacer cuando empatan
+                    print("Empataron")
+                    return
 
             if isinstance(self.get_current_tank(), Bot):
                 self.find_tank()

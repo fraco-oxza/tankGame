@@ -130,7 +130,7 @@ class Terrain(Drawable, Collidable):
 
     def tick(self, dt: float):
         self.is_falling = False
-        self.falling_speed += constants.GRAVITY * dt
+        self.falling_speed += 2 * constants.GRAVITY * dt
         for i, layers in enumerate(self.falling):
             top_point = None
             for j, layer in enumerate(layers):
