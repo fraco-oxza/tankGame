@@ -80,7 +80,6 @@ class Round:
         self.create_turns()
         self.shop_menu = Shop(self.context.screen)
         self.actual_player = self.turns_queue[-1]
-        self.turns_queue.pop()
 
         self.in_game_menu = InGameMenu(self.context.screen, self.snow_storm)
         self.hud = HUD(self.tanks, self)
@@ -117,9 +116,9 @@ class Round:
             x = min(max(zone * segments_size, x), (zone + 1) * segments_size)
             x = int(x)
             y = (
-                    self.context.map_size[1]
-                    - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
-                    - 15
+                self.context.map_size[1]
+                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                - 15
             )
             points.append((x, y))
 
@@ -233,21 +232,21 @@ class Round:
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle += math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_UP]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle -= math.radians(1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
             else:
                 playing_tank.shoot_angle -= math.radians(0.1) * (
-                        constants.FPS / self.context.fps
+                    constants.FPS / self.context.fps
                 )
 
         if keys_pressed[pygame.K_RIGHT]:
@@ -273,9 +272,9 @@ class Round:
             self.cannonball = playing_tank.shoot()
 
         if (
-                keys_pressed[pygame.K_1]
-                or keys_pressed[pygame.K_2]
-                or keys_pressed[pygame.K_3]
+            keys_pressed[pygame.K_1]
+            or keys_pressed[pygame.K_2]
+            or keys_pressed[pygame.K_3]
         ):
             change = audio_cache["sounds/click_cannonball.mp3"]
             change.play()
@@ -318,8 +317,8 @@ class Round:
             self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
 
         if (
-                self.cannonball.position.x < 0
-                or self.cannonball.position.x > self.context.map_size[0]
+            self.cannonball.position.x < 0
+            or self.cannonball.position.x > self.context.map_size[0]
         ):
             return Impact(self.cannonball.position, ImpactType.BORDER)
 
@@ -328,7 +327,7 @@ class Round:
 
         for tank in self.tanks:
             if tank.collides_with(
-                    self.cannonball.position, self.get_current_tank().actual
+                self.cannonball.position, self.get_current_tank().actual
             ):
                 return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
@@ -398,15 +397,15 @@ class Round:
         if self.last_state.impact_type != ImpactType.BORDER:
             for tank in self.tanks:
                 if (
-                        self.last_state.impact_type == ImpactType.TANK
-                        and tank is self.last_state.impacted_tank
+                    self.last_state.impact_type == ImpactType.TANK
+                    and tank is self.last_state.impacted_tank
                 ):
                     # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
                     continue
                 tank.life -= int(
                     (
-                            self.cannonball.damage
-                            / ((1.0 - self.calculate_distance(tank)) ** 2)
+                        self.cannonball.damage
+                        / ((1.0 - self.calculate_distance(tank)) ** 2)
                     )
                     * 200
                 )
@@ -433,8 +432,8 @@ class Round:
         This method takes care of the destruction of terrain, the fall of tanks and the damage related to this.
         """
         if (
-                self.last_state is not None
-                and self.last_state.impact_type == ImpactType.BORDER
+            self.last_state is not None
+            and self.last_state.impact_type == ImpactType.BORDER
         ):
             # Aquí detengo porque este caso no me sirve
             return
@@ -446,7 +445,7 @@ class Round:
             imp_y = self.context.map_size[1] - imp_y
 
             for i in range(imp_x - radius, imp_x + radius + 1):
-                left_damage = math.sqrt(max(radius ** 2 - (i - imp_x) ** 2, 0))
+                left_damage = math.sqrt(max(radius**2 - (i - imp_x) ** 2, 0))
 
                 sup_limit = imp_y + left_damage
                 inf_limit = imp_y - left_damage
@@ -533,7 +532,7 @@ class Round:
             # -mostrar advertencias
             tries = 0
             while not self.get_current_tank().is_alive or (
-                    sum(self.get_current_tank().available.values()) <= 0
+                sum(self.get_current_tank().available.values()) == 0
             ):
                 self.next_turn()
                 tries += 1
@@ -561,12 +560,12 @@ class Round:
             fall.stop()
 
             if (
-                    self.last_state is not None
-                    and self.last_state.impact_type != ImpactType.BORDER
+                self.last_state is not None
+                and self.last_state.impact_type != ImpactType.BORDER
             ):
                 if self.cannonball is not None and self.last_state.impact_type in (
-                        ImpactType.TANK,
-                        ImpactType.SUICIDIO,
+                    ImpactType.TANK,
+                    ImpactType.SUICIDIO,
                 ):
                     tank_explotion = audio_cache["sounds/bomb.mp3"]
                     tank_explotion.play()
@@ -574,8 +573,8 @@ class Round:
                         self.cannonball.position, animation_cache["tank_explosion"]
                     )
                 elif (
-                        self.cannonball is not None
-                        and self.last_state.impact_type == ImpactType.TERRAIN
+                    self.cannonball is not None
+                    and self.last_state.impact_type == ImpactType.TERRAIN
                 ):
                     shoot = audio_cache["sounds/shoot.mp3"]
                     shoot.play()
