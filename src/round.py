@@ -118,7 +118,7 @@ class Round:
             y = (
                 self.context.map_size[1]
                 - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
-                - 15
+                - constants.TANK_OFFSET
             )
             points.append((x, y))
 
@@ -402,13 +402,6 @@ class Round:
                 ):
                     # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
                     continue
-                tank.life -= int(
-                    (
-                        self.cannonball.damage
-                        / ((1.0 - self.calculate_distance(tank)) ** 2)
-                    )
-                    * 200
-                )
 
         if self.last_state.impact_type == ImpactType.TANK:
             if self.last_state.impacted_tank is not None:
@@ -501,6 +494,36 @@ class Round:
         self.actual_player = self.turns_queue[-1]  # Swap actual player
         self.turns_queue.pop()
 
+    def make_tanks_fall(self, dt: float):
+        self.falling_speed += constants.GRAVITY * dt
+        self.tanks_falling = False
+
+        for i, tank in enumerate(self.tanks):
+            x, y = tank.position
+            x = int(x)
+            y = self.context.map_size[1] - y - constants.TANK_OFFSET
+
+            if y <= 0:
+                if i in self.has_fallen:
+                    tank.life = max(
+                        0,
+                        tank.life
+                        - int(self.falling_speed * constants.DAMAGE_PER_SPEED),
+                    )
+                    self.has_fallen.discard(i)
+                print("Rompieron todo debajo")
+                continue
+
+            if self.terrain.ground_lines[x] < y:
+                tank.position.y += self.falling_speed * dt
+                self.tanks_falling = True
+                self.has_fallen.add(i)
+            elif i in self.has_fallen:
+                tank.life = max(
+                    0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
+                )
+                self.has_fallen.discard(i)
+
     def start(self) -> None:
         """
         This method shows the basic instructions and then gives way to the
@@ -576,6 +599,15 @@ class Round:
                     self.cannonball is not None
                     and self.last_state.impact_type == ImpactType.TERRAIN
                 ):
+                    for tank in self.tanks:
+                        tank.life -= int(
+                            (
+                                self.cannonball.damage
+                                / ((1.0 - self.calculate_distance(tank)) ** 2)
+                            )
+                            * 100
+                        )
+
                     shoot = audio_cache["sounds/shoot.mp3"]
                     shoot.play()
                     self.animacion = Explosion(
@@ -588,9 +620,14 @@ class Round:
 
             self.terrain_destruction()
 
-            while self.terrain.is_falling:
+            self.tanks_falling = True
+            self.falling_speed = 0
+            self.has_fallen = set()
+            while self.terrain.is_falling or self.tanks_falling:
                 check_running()
-                self.terrain.tick(1.0 / self.context.fps)
+                dt = 1.0 / self.context.fps
+                self.terrain.tick(dt * constants.TERRAIN_FALL_X_SPEED)
+                self.make_tanks_fall(dt * constants.TERRAIN_FALL_X_SPEED)
                 self.render()
 
             if not isinstance(self.get_current_tank(), Bot):

@@ -14,6 +14,8 @@ MOUNTAINS = 3
 VALLEYS = 2
 BLACK = (0, 0, 0)
 GRAY = (94, 94, 110)
+TERRAIN_FALL_X_SPEED = 5.0
+DAMAGE_PER_SPEED = 0.1  # expresses how much damage a tank must suffer for each m/s it carries at the moment of falling
 X_SPEED = 4.0
 TANK_RADIO = 18
 DarkGreen = "#1C542D"
@@ -22,6 +24,8 @@ White = "#FFFFFF"
 H_WINNER = (210, 60)
 DESTWARNING = (900, 0)
 TANK_WINNER = (650, 350)
+
+TANK_OFFSET = 20  # tanks float this many pixels up
 
 MAP_SEED = -1
 SNOWFLAKES = 100
