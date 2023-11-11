@@ -511,6 +511,7 @@ class Round:
                         - int(self.falling_speed * constants.DAMAGE_PER_SPEED),
                     )
                     self.has_fallen.discard(i)
+                    tank.position.y = self.context.map_size[1]
                 print("Rompieron todo debajo")
                 continue
 
@@ -521,6 +522,10 @@ class Round:
             elif i in self.has_fallen:
                 tank.life = max(
                     0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
+                )
+                tank.position.y = (
+                    self.context.map_size[1]
+                    - self.terrain.ground_lines[int(tank.position.x)]
                 )
                 self.has_fallen.discard(i)
 

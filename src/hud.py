@@ -558,7 +558,7 @@ class HUD(Drawable):
         if constants.DEVELOPMENT_MODE:
             screen.blit(
                 self.font.render(
-                    f"FPS: {int(self.tank_game.fps)}",
+                    f"FPS: {int(instance.fps)}",
                     True,
                     "black",
                 ),

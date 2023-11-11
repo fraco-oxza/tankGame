@@ -34,7 +34,7 @@ class Player:
         self.ammunition = {
             CannonballType.MM60: 0,
             CannonballType.MM80: 0,
-            CannonballType.MM105: 0,
+            CannonballType.MM105: 1000 * int(constants.DEVELOPMENT_MODE),
         }
 
     def score(self, impact: Impact, tank_position: pygame.Vector2):
