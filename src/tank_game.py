@@ -143,6 +143,8 @@ class TankGame:
                     self.create_player()
                 for i in range(self.context.number_of_rounds):
                     print(f"round {i}")
+                    for player in self.context.players:
+                        player.money += 10000
                     current_round = Round()
                     current_round.start()
 

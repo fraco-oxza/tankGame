@@ -9,6 +9,7 @@ from caches import font_cache
 from caches import image_cache
 from context import instance
 from inputs import check_running
+from exit_requested import ExitRequested
 from tank import Tank
 
 
@@ -72,7 +73,11 @@ class Shop:
         contador60mm = 0
         contador80mm = 0
         contador105mm = 0
+        i = 0
         while True:
+            if i == 1:
+                self.show_buy(tank)
+            i += 1
             check_running()
             self.screen.blit(self.image, self.image_rect.topleft)
             self.screen.blit(self.cannonball_buttons("$1000"),
@@ -142,7 +147,7 @@ class Shop:
         if reset_position[0] < mouse.x < (
                 reset_position[0] + self.button_reset_position[0]
         ) and reset_position[1] < mouse.y < (
-            reset_position[1] + self.button_reset_position[1]
+                reset_position[1] + self.button_reset_position[1]
         ):
             self.reset_button_color = self.hover_button_color
             self.upon = 4
@@ -150,9 +155,9 @@ class Shop:
             self.reset_button_color = "#A4947A"
         buy_position = (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82)
         if buy_position[0] < mouse.x < (
-            buy_position[0] + self.buy_button_reset_position[0]
+                buy_position[0] + self.buy_button_reset_position[0]
         ) and buy_position[1] < mouse.y < (
-            buy_position[1] + self.buy_button_reset_position[1]
+                buy_position[1] + self.buy_button_reset_position[1]
         ):
             self.buy_button_color = self.hover_button_color
             self.upon = 5
@@ -160,9 +165,9 @@ class Shop:
             self.buy_button_color = "#A4947A"
         cannonball60mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 4)
         if cannonball60mm_position[0] < mouse.x < (
-            cannonball60mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball60mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball60mm_position[1] < mouse.y < (
-            cannonball60mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball60mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c60_button_color = self.hover_button_color
             self.upon = 1
@@ -170,9 +175,9 @@ class Shop:
             self.c60_button_color = "#A4947A"
         cannonball80mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.91)
         if cannonball80mm_position[0] < mouse.x < (
-            cannonball80mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball80mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball80mm_position[1] < mouse.y < (
-            cannonball80mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball80mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c80_button_color = self.hover_button_color
             self.upon = 2
@@ -180,9 +185,9 @@ class Shop:
             self.c80_button_color = "#A4947A"
         cannonball105mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.28)
         if cannonball105mm_position[0] < mouse.x < (
-            cannonball105mm_position[0] + self.ammo_button_reset_position[0]
+                cannonball105mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball105mm_position[1] < mouse.y < (
-            cannonball105mm_position[1] + self.ammo_button_reset_position[1]
+                cannonball105mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c105_button_color = self.hover_button_color
             self.upon = 3

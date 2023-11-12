@@ -26,7 +26,7 @@ class Player:
     def __init__(self, name: str, color: str | pygame.Color):
         self.name = name
         self.points = 0
-        self.money = 10000
+        self.money = 0
         self.murders = 0
         self.deads = 0
         self.points = 0
