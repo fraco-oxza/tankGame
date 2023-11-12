@@ -94,6 +94,33 @@ class FinalWinner:
                     (instance.windows_size[0] / 2.32, instance.windows_size[1] / 2.4),
                     int(instance.windows_size[0] / 51.2),
                 )
+            else:
+                screen = self.instance.screen
+                background = image_cache["images/tie.jpg"]
+                background = pygame.transform.scale(background, self.instance.windows_size)
+                rect = background.get_rect()
+                size = rect.size
+                screen.blit(
+                    background,
+                    (
+                        self.instance.windows_size[0] / 2 - size[0] / 2,
+                        self.instance.windows_size[1] / 2 - size[1] / 2,
+                    ),
+                )
+                out_text = self.font.render(
+                    "Presione espacio para ver la tabla de posiciones",
+                    True,
+                    "white",
+                )
+                size = out_text.get_rect().size
+                screen.blit(
+                    out_text,
+                    (
+                        self.instance.windows_size[0] - size[0],
+                        self.instance.windows_size[1] - size[1],
+                    ),
+                )
+
 
             pygame.display.flip()
             check_running()
