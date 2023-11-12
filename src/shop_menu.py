@@ -111,7 +111,7 @@ class Shop:
         )
         pygame.display.flip()
 
-    def generate_shop(self, tank: Tank, i):
+    def generate_shop(self, tank: Tank):
         self.money_player = tank.player.money
         contador60mm = 0
         contador80mm = 0
@@ -135,21 +135,21 @@ class Shop:
                         self.money_player -= 1000
                         self.Ammo60 += 1
                         contador60mm += 1
-                        instance.players[i].money -= 1000
+                        tank.player.money -= 1000
                         print(self.Ammo60)
                 if self.upon == 2:
                     if self.money_player >= 2500:
                         self.money_player -= 2500
                         self.Ammo80 += 1
                         contador80mm += 1
-                        instance.players[i].money -= 2500
+                        tank.player.money -= 2500
                         print(self.Ammo80)
                 if self.upon == 3:
                     if self.money_player >= 4000:
                         self.money_player -= 4000
                         self.Ammo105 += 1
                         contador105mm += 1
-                        instance.players[i].money -= 4000
+                        tank.player.money -= 4000
                         print(self.Ammo105)
                 if self.upon == 4:
                     self.money_player = tank.player.money
@@ -166,8 +166,8 @@ class Shop:
                     return ShopStatus.BUY
             self.clock.tick(constants.FPS / 7)
 
-    def start_shop(self, tank: Tank, i):
-        return self.generate_shop(tank, i)
+    def start_shop(self, tank: Tank):
+        return self.generate_shop(tank)
 
     def handle_input(self, mouse: pygame.Vector2):
         reset_position = (

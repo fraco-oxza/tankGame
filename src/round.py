@@ -537,13 +537,13 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        for i, tank in enumerate(self.tanks):
+        for tank in (self.tanks):
             if isinstance(tank, Bot):
                 print("es el bot: ", tank)
                 tank.buy_cannonballs()
             else:
                 print("es el tanque: ", tank)
-                self.shop_menu.start_shop(tank, i)
+                self.shop_menu.start_shop(tank)
                 tank.available = tank.player.ammunition
                 # sleep temporal
                 # time.sleep(0.5)
