@@ -547,9 +547,7 @@ class Round:
                 self.shop_menu.start_shop(tank, i)
                 tank.available = tank.player.ammunition
                 # sleep temporal
-                time.sleep(0.5)
-                self.shop_menu.show_buy(tank)
-            i = i + 1
+                # time.sleep(0.5)
 
         while self.running:
             self.wait_release_space()
