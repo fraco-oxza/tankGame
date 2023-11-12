@@ -470,15 +470,29 @@ class Inputs {
 }
 
 class Shop {
+    +money_font: Font
+    +c60_button_color: str
+    +c80_button_color: str
+    +c105_button_color: str
+    +reset_button_color: str
+    +buy_button_color: str
+    +hover_button_color: str
+    +upon: Optional[int]
+    +Ammo60: int
+    +Ammo80: int
+    Ammo105: int
+
     +check_running()
 
-    +Shop(screen: pygame.surface, i)
-    +generate_shop()
-    +start_shop()
+    +Shop(screen: pygame.surface)
+    +draw_shop(contador60mm, contador80mm, contador105mm)
+    +generate_shop(tank: Tank, i)
+    +start_shop(tank: Tank, i)
     +handle_input(mouse: pygame.Vector2)
     +cannonball_buttons(message: str)
     +reset_shopping(message: str)
     +buy_ammo(message: str)
+    +show_buy(tank: Tank)
 
 }
 
