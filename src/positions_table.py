@@ -1,4 +1,3 @@
-from typing import Optional
 import pygame
 from caches import font_cache, image_cache
 from context import instance

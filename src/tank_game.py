@@ -15,6 +15,7 @@ from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 from positions_table import PositionTable
 from positions_table import PositionTableButton
+from final_winner import FinalWinner
 
 
 class TankGame:
@@ -42,6 +43,7 @@ class TankGame:
         self.font = font_cache["Roboto.ttf", int(self.context.windows_size[0] // 53.33)]
         self.position_table = PositionTable(self.context.screen)
         self.shop_menu = None
+        self.finalWinner = FinalWinner()
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
@@ -148,12 +150,16 @@ class TankGame:
 
                 self.game_brief()
                 print("termino")
-                self.position_table = PositionTable(self.context.screen)
-                if (
-                    self.position_table.show_positions()
-                    == PositionTableButton.VOLVER_A_JUGAR
-                ):
-                    pass
+
+                self.finalWinner.final_winner()
+                keys_pressed = pygame.key.get_pressed()
+                if keys_pressed[pygame.K_SPACE]:
+                    self.position_table = PositionTable(self.context.screen)
+                    if (
+                            self.position_table.show_positions()
+                            == PositionTableButton.VOLVER_A_JUGAR
+                    ):
+                        pass
             except ExitRequested:
                 break
             except RestartRequested:
