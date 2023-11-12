@@ -537,7 +537,7 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        for tank in (self.tanks):
+        for tank in self.tanks:
             if isinstance(tank, Bot):
                 print("es el bot: ", tank)
                 tank.buy_cannonballs()
