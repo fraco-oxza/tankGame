@@ -80,23 +80,45 @@ class Shop:
             i += 1
             check_running()
             self.screen.blit(self.image, self.image_rect.topleft)
-            self.screen.blit(self.cannonball_buttons("$1000"),
-                             (instance.windows_size[0] / 2.78, instance.windows_size[1] / 4))
-            self.screen.blit(self.cannonball_buttons("$2500"),
-                             (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.91))
-            self.screen.blit(self.cannonball_buttons("$4000"),
-                             (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.28))
-            self.screen.blit(self.reset_shopping("Reset"),
-                             (instance.windows_size[0] / 1.59, instance.windows_size[1] / 4.04))
-            self.screen.blit(self.buy_ammo("Buy"), (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82))
+            self.screen.blit(
+                self.cannonball_buttons("$1000"),
+                (instance.windows_size[0] / 2.78, instance.windows_size[1] / 4),
+            )
+            self.screen.blit(
+                self.cannonball_buttons("$2500"),
+                (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.91),
+            )
+            self.screen.blit(
+                self.cannonball_buttons("$4000"),
+                (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.28),
+            )
+            self.screen.blit(
+                self.reset_shopping("Reset"),
+                (instance.windows_size[0] / 1.59, instance.windows_size[1] / 4.04),
+            )
+            self.screen.blit(
+                self.buy_ammo("Buy"),
+                (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82),
+            )
             money = self.principal_font.render(f"${self.money_player}", True, "#ffffff")
             quantity60mm = self.money_font.render(f"{contador60mm}", True, "#ffffff")
             quantity80mm = self.money_font.render(f"{contador80mm}", True, "#ffffff")
             quantity105mm = self.money_font.render(f"{contador105mm}", True, "#ffffff")
-            self.screen.blit(quantity60mm, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 3.89))
-            self.screen.blit(quantity80mm, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 2.82))
-            self.screen.blit(quantity105mm, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 2.25))
-            self.screen.blit(money, (instance.windows_size[0] / 2.20, instance.windows_size[1] / 6))
+            self.screen.blit(
+                quantity60mm,
+                (instance.windows_size[0] / 1.82, instance.windows_size[1] / 3.89),
+            )
+            self.screen.blit(
+                quantity80mm,
+                (instance.windows_size[0] / 1.82, instance.windows_size[1] / 2.82),
+            )
+            self.screen.blit(
+                quantity105mm,
+                (instance.windows_size[0] / 1.82, instance.windows_size[1] / 2.25),
+            )
+            self.screen.blit(
+                money, (instance.windows_size[0] / 2.20, instance.windows_size[1] / 6)
+            )
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handle_input(mouse)
             if pygame.mouse.get_pressed()[0]:
@@ -143,51 +165,66 @@ class Shop:
         return self.generate_shop(tank, i)
 
     def handle_input(self, mouse: pygame.Vector2):
-        reset_position = (instance.windows_size[0] / 1.59, instance.windows_size[1] / 4.04)
+        reset_position = (
+            instance.windows_size[0] / 1.59,
+            instance.windows_size[1] / 4.04,
+        )
         if reset_position[0] < mouse.x < (
-                reset_position[0] + self.button_reset_position[0]
+            reset_position[0] + self.button_reset_position[0]
         ) and reset_position[1] < mouse.y < (
-                reset_position[1] + self.button_reset_position[1]
+            reset_position[1] + self.button_reset_position[1]
         ):
             self.reset_button_color = self.hover_button_color
             self.upon = 4
         else:
             self.reset_button_color = "#A4947A"
-        buy_position = (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82)
+        buy_position = (
+            instance.windows_size[0] / 1.67,
+            instance.windows_size[1] / 1.82,
+        )
         if buy_position[0] < mouse.x < (
-                buy_position[0] + self.buy_button_reset_position[0]
+            buy_position[0] + self.buy_button_reset_position[0]
         ) and buy_position[1] < mouse.y < (
-                buy_position[1] + self.buy_button_reset_position[1]
+            buy_position[1] + self.buy_button_reset_position[1]
         ):
             self.buy_button_color = self.hover_button_color
             self.upon = 5
         else:
             self.buy_button_color = "#A4947A"
-        cannonball60mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 4)
+        cannonball60mm_position = (
+            instance.windows_size[0] / 2.78,
+            instance.windows_size[1] / 4,
+        )
         if cannonball60mm_position[0] < mouse.x < (
-                cannonball60mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball60mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball60mm_position[1] < mouse.y < (
-                cannonball60mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball60mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c60_button_color = self.hover_button_color
             self.upon = 1
         else:
             self.c60_button_color = "#A4947A"
-        cannonball80mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.91)
+        cannonball80mm_position = (
+            instance.windows_size[0] / 2.78,
+            instance.windows_size[1] / 2.91,
+        )
         if cannonball80mm_position[0] < mouse.x < (
-                cannonball80mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball80mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball80mm_position[1] < mouse.y < (
-                cannonball80mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball80mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c80_button_color = self.hover_button_color
             self.upon = 2
         else:
             self.c80_button_color = "#A4947A"
-        cannonball105mm_position = (instance.windows_size[0] / 2.78, instance.windows_size[1] / 2.28)
+        cannonball105mm_position = (
+            instance.windows_size[0] / 2.78,
+            instance.windows_size[1] / 2.28,
+        )
         if cannonball105mm_position[0] < mouse.x < (
-                cannonball105mm_position[0] + self.ammo_button_reset_position[0]
+            cannonball105mm_position[0] + self.ammo_button_reset_position[0]
         ) and cannonball105mm_position[1] < mouse.y < (
-                cannonball105mm_position[1] + self.ammo_button_reset_position[1]
+            cannonball105mm_position[1] + self.ammo_button_reset_position[1]
         ):
             self.c105_button_color = self.hover_button_color
             self.upon = 3
@@ -314,26 +351,24 @@ class Shop:
             (instance.windows_size[0] / 2.32, instance.windows_size[1] / 2.4),
             int(instance.windows_size[0] / 51.2),
         )
-        buy_now = self.money_font.render("Compre ya sus balas al por menor", True, "#ffffff")
+        buy_now = self.money_font.render(
+            "Compre ya sus balas al por menor", True, "#ffffff"
+        )
         self.screen.blit(
             buy_now,
-            (
-                instance.windows_size[0] / 2.72, instance.windows_size[1] / 1.44
-            ),
+            (instance.windows_size[0] / 2.72, instance.windows_size[1] / 1.44),
         )
         best = self.principal_font.render("Tienda Los Manqueques", True, "#ffffff")
         self.screen.blit(
             best,
-            (
-                instance.windows_size[0] / 2.56, instance.windows_size[1] / 10.28
-            ),
+            (instance.windows_size[0] / 2.56, instance.windows_size[1] / 10.28),
         )
-        press_to_continue = self.money_font.render("Presione espacio para continuar", True, "#ffffff")
+        press_to_continue = self.money_font.render(
+            "Presione espacio para continuar", True, "#ffffff"
+        )
         self.screen.blit(
             press_to_continue,
-            (
-                instance.windows_size[0] / 1.6, instance.windows_size[1] / 1.10
-            ),
+            (instance.windows_size[0] / 1.6, instance.windows_size[1] / 1.10),
         )
         pygame.display.flip()
 
