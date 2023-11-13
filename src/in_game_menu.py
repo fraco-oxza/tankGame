@@ -108,7 +108,6 @@ class InGameMenu:
                 (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2.9),
             )
 
-            self.storm.tick(1.0 / constants.FPS)
             self.clock.tick(constants.FPS)
             pygame.display.flip()
 

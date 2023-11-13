@@ -57,7 +57,7 @@ class SnowStorm(Drawable):
     def draw_snowflakes(self, screen: pygame.surface.Surface):
         """This function draws each snowflake present in the list of snowflakes."""
         for snowflake in self.snowflakes:
-            pygame.draw.circle(screen, self.storm_color, snowflake, 1)
+            pygame.draw.circle(screen, self.storm_color, snowflake, 2)
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """This function only draws the particles on the screen"""
