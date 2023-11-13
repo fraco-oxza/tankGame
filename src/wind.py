@@ -2,6 +2,7 @@ import math
 import random
 
 from constants import EPSILON
+import constants
 
 
 class Wind:
@@ -19,19 +20,21 @@ class Wind:
     def velocity(self) -> float:
         return self.__velocity
 
-    def tick(self, dt: float) -> None:
-        if abs(self.__velocity - self.__target_velocity) < EPSILON:
-            self.__target_velocity = float(
-                random.randint(
-                    self.__min_velocity - self.__max_velocity,
-                    self.__max_velocity - self.__min_velocity,
-                )
+    def change_speed(self):
+        self.__target_velocity = float(
+            random.randint(
+                self.__min_velocity - self.__max_velocity,
+                self.__max_velocity - self.__min_velocity,
             )
+        )
 
-            if self.__target_velocity < 0.0:
-                self.__target_velocity -= self.__min_velocity
-            else:
-                self.__target_velocity += self.__min_velocity
+        if self.__target_velocity < 0.0:
+            self.__target_velocity -= self.__min_velocity
+        else:
+            self.__target_velocity += self.__min_velocity
 
+    def tick(self, dt: float) -> None:
         velocity_diff = self.__target_velocity - self.__velocity
-        self.__velocity += math.tanh(velocity_diff) * dt
+        self.__velocity += (
+            constants.WIND_SPEED_CHANGE_SCALE * math.tanh(velocity_diff) * dt
+        )

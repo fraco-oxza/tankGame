@@ -314,7 +314,11 @@ class Round:
         self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
 
         if self.wind is not None:
-            self.cannonball.position.x += self.wind.velocity * (1.0 / self.context.fps)
+            self.cannonball.position.x += (
+                self.wind.velocity
+                * (1.0 / self.context.fps)
+                * constants.WIND_EFFECT_SCALE
+            )
 
         if (
             self.cannonball.position.x < 0
@@ -553,6 +557,8 @@ class Round:
             self.wait_release_space()
             check_running()
             self.next_turn()
+            if self.wind is not None:
+                self.wind.change_speed()
 
             # TODO: Añadir muchas verificaciones
             # -mostrar advertencias
