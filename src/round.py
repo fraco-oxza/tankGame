@@ -515,7 +515,7 @@ class Round:
                 print("Rompieron todo debajo")
                 continue
 
-            if self.terrain.ground_lines[x] < y:
+            if self.terrain.ground_lines[max(x, 0)] < y:
                 tank.position.y += self.falling_speed * dt
                 self.tanks_falling = True
                 self.has_fallen.add(i)
@@ -525,7 +525,8 @@ class Round:
                 )
                 tank.position.y = (
                     self.context.map_size[1]
-                    - self.terrain.ground_lines[int(tank.position.x)] - constants.TANK_OFFSET
+                    - self.terrain.ground_lines[int(tank.position.x)]
+                    - constants.TANK_OFFSET
                 )
                 self.has_fallen.discard(i)
 
@@ -537,7 +538,7 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        for tank in (self.tanks):
+        for tank in self.tanks:
             if isinstance(tank, Bot):
                 print("es el bot: ", tank)
                 tank.buy_cannonballs()
