@@ -525,7 +525,7 @@ class Round:
                 )
                 tank.position.y = (
                     self.context.map_size[1]
-                    - self.terrain.ground_lines[int(tank.position.x)]
+                    - self.terrain.ground_lines[int(tank.position.x)] - constants.TANK_OFFSET
                 )
                 self.has_fallen.discard(i)
 
