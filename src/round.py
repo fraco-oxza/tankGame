@@ -525,7 +525,8 @@ class Round:
                 )
                 tank.position.y = (
                     self.context.map_size[1]
-                    - self.terrain.ground_lines[int(tank.position.x)] - constants.TANK_OFFSET
+                    - self.terrain.ground_lines[int(tank.position.x)]
+                    - constants.TANK_OFFSET
                 )
                 self.has_fallen.discard(i)
 
@@ -537,7 +538,7 @@ class Round:
         where in which case it will be checked if the bullet continues to advance or if it has
         shocked with something.
         """
-        for tank in (self.tanks):
+        for tank in self.tanks:
             if isinstance(tank, Bot):
                 print("es el bot: ", tank)
                 tank.buy_cannonballs()
