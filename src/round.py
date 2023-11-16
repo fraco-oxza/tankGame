@@ -446,32 +446,32 @@ class Round:
 
                 sup_limit = imp_y + left_damage
                 inf_limit = imp_y - left_damage
+                if i < len(self.terrain.ground_lines):
+                    current_line = self.terrain.new_ground_lines[i]
 
-                current_line = self.terrain.new_ground_lines[i]
+                    accumulated = 0
+                    for j, size in enumerate(current_line):
+                        start_layer = accumulated
+                        end_layer = start_layer + size
 
-                accumulated = 0
-                for j, size in enumerate(current_line):
-                    start_layer = accumulated
-                    end_layer = start_layer + size
-
-                    affected = max(
-                        0, min(end_layer, sup_limit) - max(start_layer, inf_limit)
-                    )
-
-                    self.terrain.ground_lines[i] -= affected
-
-                    if sup_limit < end_layer:
-                        fall = end_layer - max(sup_limit, start_layer)
-                        self.terrain.falling[i][j] = (
-                            self.context.map_size[1] - end_layer,
-                            fall,
+                        affected = max(
+                            0, min(end_layer, sup_limit) - max(start_layer, inf_limit)
                         )
-                        affected += fall
-                        self.terrain.falling_speed = 0
-                        self.terrain.is_falling = True
 
-                    current_line[j] -= max(0, affected)
-                    accumulated = end_layer
+                        self.terrain.ground_lines[i] -= affected
+
+                        if sup_limit < end_layer:
+                            fall = end_layer - max(sup_limit, start_layer)
+                            self.terrain.falling[i][j] = (
+                                self.context.map_size[1] - end_layer,
+                                fall,
+                            )
+                            affected += fall
+                            self.terrain.falling_speed = 0
+                            self.terrain.is_falling = True
+
+                        current_line[j] -= max(0, affected)
+                        accumulated = end_layer
 
     def display_fire(self):
         """This method is responsible for the animation of the fire when a tank is not alive."""
@@ -518,11 +518,11 @@ class Round:
                     tank.position.y = self.context.map_size[1]
                 print("Rompieron todo debajo")
                 continue
-
-            if self.terrain.ground_lines[max(x, 0)] < y:
-                tank.position.y += self.falling_speed * dt
-                self.tanks_falling = True
-                self.has_fallen.add(i)
+            if max(x, 0) < len(self.terrain.ground_lines):
+                if self.terrain.ground_lines[max(x, 0)] < y:
+                    tank.position.y += self.falling_speed * dt
+                    self.tanks_falling = True
+                    self.has_fallen.add(i)
             elif i in self.has_fallen:
                 tank.life = max(
                     0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)

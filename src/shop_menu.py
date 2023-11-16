@@ -164,7 +164,7 @@ class Shop:
                     self.Ammo80 = 0
                     self.Ammo105 = 0
                     return ShopStatus.BUY
-            self.clock.tick(constants.FPS / 7)
+            self.clock.tick(constants.FPS / 12)
 
     def start_shop(self, tank: Tank):
         return self.generate_shop(tank)
