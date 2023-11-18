@@ -57,18 +57,14 @@ class PositionTable:
             self.screen.blit(
                 deads, (instance.windows_size[0] / 3.2, instance.windows_size[1] / 8)
             )
-            deads = self.font.render("Asesinatos cometidos", True, "#ffffff")
+            murders = self.font.render("Asesinatos cometidos", True, "#ffffff")
             self.screen.blit(
-                deads, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8)
+                murders, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8)
             )
             sum = 0
-            for i in range(len(instance.players)):
-                print(",,,", instance.players[i].color)
-            self.bubble_sort()
-            for i in range(len(instance.players)):
-                print("----", instance.players[i].color)
+
             for k, item in enumerate(instance.players):
-                sf = self.generate_surface(str(item.deads))
+                sf = self.generate_surface(str(item.murders))
                 self.position_box(sf, sum)
                 sf_number = self.ranking(k)
                 self.position_number(sf_number, sum)
@@ -231,9 +227,9 @@ class PositionTable:
         return sf
 
     def bubble_sort(self):
-        for i in range(len(instance.players)):
-            for j in range(len(instance.players) - 1):
-                if instance.players[j].deads < instance.players[j + 1].deads:
+        for c in range(len(instance.players)):
+            for j in range(len(instance.players) - c - 1):
+                if instance.players[j].murders < instance.players[j + 1].murders:
                     temp = instance.players[j]
                     instance.players[j] = instance.players[j + 1]
                     instance.players[j + 1] = temp
