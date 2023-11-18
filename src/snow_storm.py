@@ -16,13 +16,15 @@ class SnowStorm(Drawable):
 
     snowflakes: list[pygame.Vector2]
     wind: Optional[Wind]
+    gravity: float
 
-    def __init__(self, storm_color: str, wind: Optional[Wind]):
+    def __init__(self, storm_color: str, wind: Optional[Wind], gravity: float):
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()
         self.wind = wind
         self.storm_color = storm_color
+        self.gravity = gravity
 
     def add_random_snowflake(self):
         """Add a snowflake at a random valid position within the map"""
@@ -39,7 +41,7 @@ class SnowStorm(Drawable):
         repositioning them if they have gone off the map.
         """
         for snowflake in self.snowflakes:
-            snowflake.y += constants.GRAVITY / 10.0  # gravity
+            snowflake.y += self.gravity / 10.0  # gravity
 
             # Corner case down
             if snowflake.y > (instance.windows_size[1]):

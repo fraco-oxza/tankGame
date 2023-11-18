@@ -1,7 +1,9 @@
 from effects import AmbientEffect
 
 
-GRAVITY = 9.8  # m/s^2
+DEFAULT_GRAVITY = 9.8  # m/s^2
+MIN_GRAVITY = 1.0
+MAX_GRAVITY = 30.0
 DEVELOPMENT_MODE = False
 DEFAULT_WINDOWS_SIZE = (1280, 720)
 EPSILON = 1e-8

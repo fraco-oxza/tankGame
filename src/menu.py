@@ -7,7 +7,6 @@ from caches import font_cache
 from caches import image_cache
 from caches import audio_cache
 from exit_requested import ExitRequested
-from snow_storm import SnowStorm
 from context import instance
 
 
@@ -24,7 +23,6 @@ class Menu:
     """
 
     fontTitle: Font
-    storm: SnowStorm
     box_size = (instance.windows_size[0] / 6.4, instance.windows_size[1] / 7.2)
     box_pos: Optional[tuple[float, float]]
     botton_color: str

@@ -128,9 +128,9 @@ class Terrain(Drawable, Collidable):
 
         print(self.new_ground_lines.__len__(), self.ground_lines.__len__())
 
-    def tick(self, dt: float):
+    def tick(self, dt: float, gravity: float):
         self.is_falling = False
-        self.falling_speed += constants.GRAVITY * dt
+        self.falling_speed += gravity * dt
         for i, layers in enumerate(self.falling):
             top_point = None
             for j, layer in enumerate(layers):

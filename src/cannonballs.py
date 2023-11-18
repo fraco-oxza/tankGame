@@ -33,14 +33,14 @@ class Cannonball(Drawable):
         self.trajectory = []
         self.radius_damage = 0
 
-    def tick(self, dt: float):
+    def tick(self, dt: float, gravity: float):
         """
         Esta función va actualizando la posición de la bala por cada intervalo
         de tiempo, su propósito es simular el movimiento y comportamiento de la
         parábola que dibuja la bala del cañón
         """
         self.position += self.velocity * dt
-        self.velocity[1] += constants.GRAVITY * dt
+        self.velocity[1] += gravity * dt
 
         if self.position.y < self.max_height:
             self.max_height = self.position.y

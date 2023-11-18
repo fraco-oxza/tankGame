@@ -5,7 +5,6 @@ from pygame.font import Font
 
 import constants
 from caches import font_cache, audio_cache, image_cache
-from snow_storm import SnowStorm
 from context import instance
 from inputs import check_running
 
@@ -29,7 +28,6 @@ class InGameMenu:
     fontExit: Font
     fontBack: Font
     fontRestart: Font
-    storm: SnowStorm
     box_size = pygame.Vector2
     box_pos: Optional[tuple[float, float]]
     botton_color1: str
@@ -39,7 +37,7 @@ class InGameMenu:
     button_reset_position = pygame.Vector2
     sobre: Optional[int]
 
-    def __init__(self, screen: pygame.Surface, storm: SnowStorm):
+    def __init__(self, screen: pygame.Surface):
         self.button_reset_position = pygame.Vector2(
             instance.windows_size[0] / 4.26, instance.windows_size[1] / 15
         )
@@ -48,7 +46,6 @@ class InGameMenu:
             "Roboto.ttf", int(instance.windows_size[0] / 51.2)
         ]
         self.fontBack = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
-        self.storm = storm
         self.botton_color1 = "#73726E"
         self.botton_color2 = "#73726E"
         self.botton_color3 = "#73726E"
@@ -61,10 +58,6 @@ class InGameMenu:
             image_cache["images/Control.png"], image_size
         )
         self.sky_rect = self.image.get_rect()
-
-    def tick(self, dt: float):
-        """Function that is responsible for drawing the snow"""
-        self.storm.tick(dt)
 
     def render(self):
         """
@@ -94,7 +87,6 @@ class InGameMenu:
                     return InGameMenuStatus.EXIT
                 if self.sobre == 3:
                     return InGameMenuStatus.CONTINUE
-            self.storm.draw(self.screen)
             self.screen.blit(
                 self.restart("Reiniciar Partida"),
                 (instance.windows_size[0] // 2.6, instance.windows_size[1] / 2.37),

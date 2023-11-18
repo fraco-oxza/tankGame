@@ -41,8 +41,10 @@ class Round:
     cannonball: Optional[Cannonball]
     tanks_alive: int
     wind: Optional[Wind]
+    gravity: float
 
     def __init__(self):
+        self.tanks_falling = None
         self.context = context.instance
         self.map = Map()
         # self.shop_menu = Shop(self.context.screen)
@@ -55,8 +57,13 @@ class Round:
         else:
             self.wind = None
 
+        self.gravity = (
+            constants.DEFAULT_GRAVITY
+            if self.context.type_of_effect in [AmbientEffect.NONE, AmbientEffect.WIND]
+            else random.uniform(constants.MIN_GRAVITY, constants.MAX_GRAVITY)
+        )
         self.background = Background(self.map.define_background_image())
-        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind)
+        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind, self.gravity)
         self.terrain = Terrain(
             self.context.map_size,
             constants.MOUNTAINS,
@@ -81,7 +88,7 @@ class Round:
         self.shop_menu = Shop(self.context.screen)
         self.actual_player = self.turns_queue[-1]
 
-        self.in_game_menu = InGameMenu(self.context.screen, self.snow_storm)
+        self.in_game_menu = InGameMenu(self.context.screen)
         self.hud = HUD(self.tanks, self)
         self.warning = WarningWindows(self)
 
@@ -311,7 +318,7 @@ class Round:
         if self.cannonball is None:
             return None
 
-        self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED)
+        self.cannonball.tick((1.0 / self.context.fps) * constants.X_SPEED, self.gravity)
 
         if self.wind is not None:
             self.cannonball.position.x += (
@@ -499,7 +506,7 @@ class Round:
         self.turns_queue.pop()
 
     def make_tanks_fall(self, dt: float):
-        self.falling_speed += constants.GRAVITY * dt
+        self.falling_speed += self.gravity * dt
         self.tanks_falling = False
 
         for i, tank in enumerate(self.tanks):
@@ -635,7 +642,7 @@ class Round:
             while self.terrain.is_falling or self.tanks_falling:
                 check_running()
                 dt = 1.0 / self.context.fps
-                self.terrain.tick(dt * constants.TERRAIN_FALL_X_SPEED)
+                self.terrain.tick(dt * constants.TERRAIN_FALL_X_SPEED, self.gravity)
                 self.make_tanks_fall(dt * constants.TERRAIN_FALL_X_SPEED)
                 self.render()
 
