@@ -4,14 +4,13 @@ from context import instance
 from inputs import check_running
 from caches import audio_cache
 import constants
-from tank import Tank
 
 
 class FinalWinner:
-    def __init__(self):
-        self.instance = instance
-        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
-        self.tanks = instance.players
+    def __init__(self, context: instance):
+        self.instance = context
+        self.font = font_cache["Roboto.ttf", int(context.windows_size[0] / 51.2)]
+        self.tanks = context.players
 
     def final_winner(self):
         self.sort_tanks()
@@ -140,11 +139,7 @@ class FinalWinner:
             instance.fps = instance.clock.get_fps()
 
     def sort_tanks(self):
-        self.tanks = sorted(self.tanks, key=lambda player: player.deads, reverse=True)
+        self.tanks = sorted(self.tanks, key=lambda player: player.murders, reverse=True)
 
     def check_tie(self):
-        self.sort_tanks()
-        equals = False
-        if self.tanks[0].deads == self.tanks[1].deads:
-            equals = True
-        return equals
+        return self.tanks[0].murders == self.tanks[1].murders
