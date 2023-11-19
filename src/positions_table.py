@@ -62,8 +62,9 @@ class PositionTable:
                 murders, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8)
             )
             sum = 0
-
+            sort_players()
             for k, item in enumerate(instance.players):
+
                 sf = self.generate_surface(str(item.murders))
                 self.position_box(sf, sum)
                 sf_number = self.ranking(k)
@@ -226,10 +227,6 @@ class PositionTable:
         )
         return sf
 
-    def bubble_sort(self):
-        for c in range(len(instance.players)):
-            for j in range(len(instance.players) - c - 1):
-                if instance.players[j].murders < instance.players[j + 1].murders:
-                    temp = instance.players[j]
-                    instance.players[j] = instance.players[j + 1]
-                    instance.players[j + 1] = temp
+
+def sort_players():
+    instance.players = sorted(instance.players, key=lambda player: player.murders, reverse=True)

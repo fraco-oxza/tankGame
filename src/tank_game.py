@@ -43,7 +43,7 @@ class TankGame:
         self.font = font_cache["Roboto.ttf", int(self.context.windows_size[0] // 53.33)]
         self.position_table = PositionTable(self.context.screen)
         self.shop_menu = None
-        self.finalWinner = FinalWinner()
+        self.finalWinner = FinalWinner(self.context)
 
     def create_player(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
