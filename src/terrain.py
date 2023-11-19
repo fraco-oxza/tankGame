@@ -62,17 +62,13 @@ class Terrain(Drawable, Collidable):
         """
         m = (i + j) // 2
         original_max = (m - i - 1) ** 2
-        multiplier = (height / original_max) / constants.TERRAIN_LINE_WIDTH
+        multiplier = height / original_max
 
         for k in range(i, m):
-            self.ground_lines[k // constants.TERRAIN_LINE_WIDTH] += int(
-                ((k - i) ** 2) * multiplier
-            )
+            self.ground_lines[k] += int(((k - i) ** 2) * multiplier)
 
         for k in range(m, j):
-            self.ground_lines[k // constants.TERRAIN_LINE_WIDTH] += int(
-                ((j - k) ** 2) * multiplier
-            )
+            self.ground_lines[k] += int(((j - k) ** 2) * multiplier)
 
     def valley(self, start: int, end: int, depth: int):
         """
@@ -83,17 +79,13 @@ class Terrain(Drawable, Collidable):
         """
         m = (start + end) // 2
         original_max = (m - start - 1) ** 2
-        multiplier = (depth / original_max) / constants.TERRAIN_LINE_WIDTH
+        multiplier = depth / original_max
 
         for i in range(start, m):
-            self.ground_lines[i // constants.TERRAIN_LINE_WIDTH] -= int(
-                ((i - start) ** 2) * multiplier
-            )
+            self.ground_lines[i] -= int(((i - start) ** 2) * multiplier)
 
         for j in range(m, end):
-            self.ground_lines[j // constants.TERRAIN_LINE_WIDTH] -= int(
-                ((j - end) ** 2) * multiplier
-            )
+            self.ground_lines[j] -= int(((j - end) ** 2) * multiplier)
 
     def __init__(
         self, size: tuple[int, int], mountains: int, valleys: int, colors: list[str]
@@ -103,9 +95,7 @@ class Terrain(Drawable, Collidable):
         and valleys, and color layers for rendering.
         """
         self.size = size
-        self.ground_lines = [constants.SEA_LEVEL] * (
-            self.size[0] // constants.TERRAIN_LINE_WIDTH
-        )
+        self.ground_lines = [constants.SEA_LEVEL] * (self.size[0])
 
         if constants.MAP_SEED != -1:
             random.seed(constants.MAP_SEED)
@@ -154,9 +144,9 @@ class Terrain(Drawable, Collidable):
                     screen,
                     color,
                     pygame.Rect(
-                        i * constants.TERRAIN_LINE_WIDTH,
+                        i,
                         layer[0],
-                        constants.TERRAIN_LINE_WIDTH,
+                        1,
                         layer[1],
                     ),
                 )
@@ -174,9 +164,9 @@ class Terrain(Drawable, Collidable):
                         screen,
                         color,
                         pygame.Rect(
-                            i * constants.TERRAIN_LINE_WIDTH,
+                            i,
                             self.size[1] - latest_height - layer,
-                            constants.TERRAIN_LINE_WIDTH,
+                            1,
                             layer + 1,
                         ),
                     )
@@ -189,6 +179,6 @@ class Terrain(Drawable, Collidable):
         comparing the terrain height at the corresponding line with the cannon's
         coordinate.
         """
-        line_index = int(point.x) // constants.TERRAIN_LINE_WIDTH
+        line_index = int(point.x)
 
         return point.y > (self.size[1] - self.ground_lines[line_index])

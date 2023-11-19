@@ -135,7 +135,7 @@ class Round:
             x = int(x)
             y = (
                 self.context.map_size[1]
-                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                - self.terrain.ground_lines[x - 1]
                 - constants.TANK_OFFSET
             )
             points.append((x, y))
