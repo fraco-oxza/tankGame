@@ -9,7 +9,6 @@ from caches import font_cache
 from caches import image_cache
 from context import instance
 from inputs import check_running
-from exit_requested import ExitRequested
 from tank import Tank
 
 

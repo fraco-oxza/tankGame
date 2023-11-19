@@ -1,5 +1,5 @@
 import random
-from random import normalvariate, randint, shuffle
+from random import shuffle
 
 import pygame
 from pygame.font import Font

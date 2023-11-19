@@ -2,7 +2,6 @@ import pygame
 from caches import font_cache, image_cache
 from context import instance
 from inputs import check_running
-from caches import audio_cache
 import constants
 
 

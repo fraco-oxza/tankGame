@@ -3,7 +3,6 @@ import random
 from typing import Optional
 
 import pygame
-from pygame.scrap import contains
 
 import constants
 import context
