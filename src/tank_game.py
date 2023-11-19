@@ -1,5 +1,5 @@
 import random
-from random import randint
+from random import normalvariate, randint, shuffle
 
 import pygame
 from pygame.font import Font
@@ -45,14 +45,47 @@ class TankGame:
         self.shop_menu = None
         self.finalWinner = FinalWinner()
 
-    def create_player(self):
+    def create_players(self):
         # TODO: crear un menu para que ingrese el nombre, y un color
-        self.context.players.append(
-            Player(
-                str(random.randint(0, 1000)),
-                pygame.Color(randint(1, 200), randint(1, 200), randint(1, 200)),
+        colors = self.create_different_colors(self.context.number_of_players)
+        for color in colors:
+            self.context.players.append(
+                Player(
+                    str(random.randint(0, 1000)),  # FIXME: choice a better name
+                    color,
+                )
             )
-        )
+
+    @staticmethod
+    def create_different_colors(n: int) -> list[pygame.Color]:
+        red = [
+            *map(
+                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                range(n),
+            )
+        ]
+        green = [
+            *map(
+                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                range(n),
+            )
+        ]
+        blue = [
+            *map(
+                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                range(n),
+            )
+        ]
+
+        shuffle(red)
+        shuffle(green)
+        shuffle(blue)
+
+        colors = []
+        for r, g, b in zip(red, blue, green):
+            colors.append(pygame.Color(r, g, b))
+
+        return colors
 
     def game_brief(self):
         pass
@@ -139,8 +172,9 @@ class TankGame:
                 self.start_menu()
                 soundtrack.play()
                 print("empezo partida", self.context.map_size)
-                for _ in range(self.context.number_of_players):
-                    self.create_player()
+
+                self.create_players()
+
                 for i in range(self.context.number_of_rounds):
                     print(f"round {i}")
                     for player in self.context.players:
