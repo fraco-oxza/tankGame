@@ -46,7 +46,6 @@ class Round:
         self.tanks_falling = None
         self.context = context.instance
         self.map = Map()
-        # self.shop_menu = Shop(self.context.screen)
 
         if self.context.type_of_effect in [
             AmbientEffect.GRAVITY_AND_WIND,
@@ -215,7 +214,6 @@ class Round:
         )
 
         self.hud.draw(self.context.screen)
-        # self.shop_menu.start_shop()
 
         self.snow_storm.tick()
         if self.cannonball is None and self.last_state is None:

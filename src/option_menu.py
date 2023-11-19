@@ -59,7 +59,6 @@ class OptionMenu:
             "Gravedad y Viento",
         ]
         self.index_environment_effects = instance.type_of_effect
-        # self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
         self.screen_resolution = [
             (800, 800),
             (1280, 720),
