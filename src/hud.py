@@ -6,6 +6,7 @@ import constants
 from caches import font_cache, image_cache
 from context import instance
 from draw import Drawable
+from effects import AmbientEffect
 from speedometer import Speedometer
 from tank import Tank
 
@@ -44,8 +45,16 @@ class HUD(Drawable):
         self.text_velocity2 = None
         self.text_cannonball_info = None
         self.color = tanks[self.tank_game.actual_player].available
-        self.actual_gravity = gravity
-        self.actual_wind = wind.velocity
+        if instance.type_of_effect in [
+            AmbientEffect.GRAVITY_AND_WIND,
+            AmbientEffect.GRAVITY,
+        ]:
+            self.actual_gravity = gravity
+        if instance.type_of_effect in [
+            AmbientEffect.GRAVITY_AND_WIND,
+            AmbientEffect.WIND,
+        ]:
+            self.actual_wind = wind.velocity
 
     def get_wind(self, wind):
         self.actual_wind = wind.velocity
@@ -449,52 +458,59 @@ class HUD(Drawable):
                 (4 / 8) * height - height / 13.33 - velocity_label.get_size()[1],
             ),
         )
-        gravity = self.font16.render(
-            f"{self.actual_gravity:.2f}",
-            True,
-            "white",
-        )
-        cds = pygame.rect.Rect(
-            (2 / 4) * width - width / 35,
-            (4 / 8) * height - height / 13.33,
-            width / 5,
-            height / 6.66,
-        )
-        pygame.draw.rect(sf, "#141414", cds)
-        sf.blit(
-            gravity, ((2 / 4) * width, (4 / 8) * height - gravity.get_size()[1] / 2)
-        )
-        sf.blit(
-            gravity_label,
-            (
+        if instance.type_of_effect in [
+            AmbientEffect.GRAVITY_AND_WIND,
+            AmbientEffect.GRAVITY
+        ]:
+            gravity = self.font16.render(
+                f"{self.actual_gravity:.2f}",
+                True,
+                "white",
+            )
+            cds = pygame.rect.Rect(
                 (2 / 4) * width - width / 35,
-                (4 / 8) * height - height / 13.33 - gravity_label.get_size()[1],
-            ),
-        )
+                (4 / 8) * height - height / 13.33,
+                width / 5,
+                height / 6.66,
+            )
+            pygame.draw.rect(sf, "#141414", cds)
+            sf.blit(
+                gravity, ((2 / 4) * width, (4 / 8) * height - gravity.get_size()[1] / 2)
+            )
+            sf.blit(
+                gravity_label,
+                (
+                    (2 / 4) * width - width / 35,
+                    (4 / 8) * height - height / 13.33 - gravity_label.get_size()[1],
+                ),
+            )
+        if instance.type_of_effect in [
+            AmbientEffect.GRAVITY_AND_WIND,
+            AmbientEffect.WIND,
+        ]:
+            wind = self.font16.render(
+                f"{self.actual_wind:.2f}",
+                True,
+                "white",
+            )
 
-        wind = self.font16.render(
-            f"{self.actual_wind:.2f}",
-            True,
-            "white",
-        )
-
-        cds = pygame.rect.Rect(
-            (2 / 4) * width - width / 35,
-            (6 / 8) * height - height / 13.33,
-            width / 5,
-            height / 6.66,
-        )
-        pygame.draw.rect(sf, "#141414", cds)
-        sf.blit(
-            wind, ((2 / 4) * width, (6 / 8) * height - wind.get_size()[1] / 2)
-        )
-        sf.blit(
-            wind_label,
-            (
+            cds = pygame.rect.Rect(
                 (2 / 4) * width - width / 35,
-                (6 / 8) * height - height / 13.33 - wind_label.get_size()[1],
-            ),
-        )
+                (6 / 8) * height - height / 13.33,
+                width / 5,
+                height / 6.66,
+            )
+            pygame.draw.rect(sf, "#141414", cds)
+            sf.blit(
+                wind, ((2 / 4) * width, (6 / 8) * height - wind.get_size()[1] / 2)
+            )
+            sf.blit(
+                wind_label,
+                (
+                    (2 / 4) * width - width / 35,
+                    (6 / 8) * height - height / 13.33 - wind_label.get_size()[1],
+                ),
+            )
 
         angle = self.font16.render(
             f"{math.degrees(self.tank_game.tanks[self.tank_game.actual_player].shoot_angle):.2f}",
