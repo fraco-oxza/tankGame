@@ -462,19 +462,13 @@ class OptionMenu:
             self.quantity_players += 1
         if self.sobre == 3 and self.quantity_bots > 0:
             self.quantity_bots -= 1
-        if (
-            self.sobre == 8
-            and self.quantity_bots < self.quantity_players
-        ):
+        if self.sobre == 8 and self.quantity_bots < self.quantity_players:
             self.quantity_bots += 1
         if self.sobre == 4 and self.quantity_rounds > 1:
             self.quantity_rounds -= 1
         if self.sobre == 9 and self.quantity_rounds < 20:
             self.quantity_rounds += 1
-        if (
-            self.sobre == 5
-            and self.index_environment_effects.value > 0
-        ):
+        if self.sobre == 5 and self.index_environment_effects.value > 0:
             self.index_environment_effects = AmbientEffect(
                 self.index_environment_effects.value - 1
             )
