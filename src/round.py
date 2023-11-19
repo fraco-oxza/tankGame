@@ -63,7 +63,9 @@ class Round:
             else random.uniform(constants.MIN_GRAVITY, constants.MAX_GRAVITY)
         )
         self.background = Background(self.map.define_background_image())
-        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind, self.gravity)
+        self.snow_storm = SnowStorm(
+            self.map.define_storm_color(), self.wind, self.gravity
+        )
         self.terrain = Terrain(
             self.context.map_size,
             constants.MOUNTAINS,
@@ -115,7 +117,11 @@ class Round:
 
     def correct_tanks_position(self) -> None:
         for tank in self.tanks:
-            tank.position.y = self.context.map_size[1] - self.terrain.ground_lines[int(tank.position.x)] - constants.TANK_OFFSET
+            tank.position.y = (
+                self.context.map_size[1]
+                - self.terrain.ground_lines[int(tank.position.x)]
+                - constants.TANK_OFFSET
+            )
 
     def generate_tanks_positions(self) -> list[tuple[int, int]]:
         to_generate = len(self.players)
