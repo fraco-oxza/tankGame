@@ -307,11 +307,11 @@ class Round:
 
         if menu_state is InGameMenuStatus.EXIT:
             raise ExitRequested
-        elif menu_state is InGameMenuStatus.RESTART:
+        if menu_state is InGameMenuStatus.RESTART:
             # TODO: Ver que hacer con esto en base al nuevo modelo
             # TankGame.__init__(self, self.context)
             raise RestartRequested
-        elif menu_state is InGameMenuStatus.CONTINUE:
+        if menu_state is InGameMenuStatus.CONTINUE:
             pass
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
