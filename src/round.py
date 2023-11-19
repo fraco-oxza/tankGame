@@ -422,9 +422,11 @@ class Round:
                     # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
                     continue
 
-        if self.last_state.impact_type == ImpactType.TANK:
-            if self.last_state.impacted_tank is not None:
-                self.last_state.impacted_tank.life -= self.cannonball.damage
+        if (
+            self.last_state.impact_type == ImpactType.TANK
+            and self.last_state.impacted_tank is not None
+        ):
+            self.last_state.impacted_tank.life -= self.cannonball.damage
 
         for tank in self.tanks:
             if tank.is_alive and tank.life <= 0:
