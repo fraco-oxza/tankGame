@@ -63,7 +63,9 @@ class Round:
             else random.uniform(constants.MIN_GRAVITY, constants.MAX_GRAVITY)
         )
         self.background = Background(self.map.define_background_image())
-        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind, self.gravity)
+        self.snow_storm = SnowStorm(
+            self.map.define_storm_color(), self.wind, self.gravity
+        )
         self.terrain = Terrain(
             self.context.map_size,
             constants.MOUNTAINS,
@@ -136,9 +138,7 @@ class Round:
         while find:
             random_tank = random.randint(0, len(self.tanks) - 1)
             if random_tank != self.actual_player and self.tanks[random_tank].is_alive:
-                self.get_current_tank().random_shoot(
-                    self.tanks[random_tank].position
-                )
+                self.get_current_tank().random_shoot(self.tanks[random_tank].position)
                 find = False
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
