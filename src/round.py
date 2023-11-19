@@ -3,6 +3,7 @@ import random
 from typing import Optional
 
 import pygame
+from pygame.scrap import contains
 
 import constants
 import context
@@ -62,7 +63,9 @@ class Round:
             else random.uniform(constants.MIN_GRAVITY, constants.MAX_GRAVITY)
         )
         self.background = Background(self.map.define_background_image())
-        self.snow_storm = SnowStorm(self.map.define_storm_color(), self.wind, self.gravity)
+        self.snow_storm = SnowStorm(
+            self.map.define_storm_color(), self.wind, self.gravity
+        )
         self.terrain = Terrain(
             self.context.map_size,
             constants.MOUNTAINS,
@@ -111,6 +114,14 @@ class Round:
                 self.tanks.append(
                     Tank(player.color, pygame.Vector2(player_pos), player)
                 )
+
+    def correct_tanks_position(self) -> None:
+        for tank in self.tanks:
+            tank.position.y = (
+                self.context.map_size[1]
+                - self.terrain.ground_lines[int(tank.position.x)]
+                - constants.TANK_OFFSET
+            )
 
     def generate_tanks_positions(self) -> list[tuple[int, int]]:
         to_generate = len(self.players)
@@ -562,6 +573,7 @@ class Round:
 
         while self.running:
             self.wait_release_space()
+            self.correct_tanks_position()
             check_running()
             self.next_turn()
             if self.wind is not None:
