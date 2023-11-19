@@ -576,9 +576,9 @@ class Round:
             self.correct_tanks_position()
             check_running()
             self.next_turn()
+
             if self.wind is not None:
                 self.wind.change_speed()
-                self.hud.get_wind(self.wind)
 
             # TODO: Añadir muchas verificaciones
             # -mostrar advertencias

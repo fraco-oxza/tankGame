@@ -1,4 +1,5 @@
 import math
+from typing import Optional
 
 import pygame
 
@@ -9,6 +10,7 @@ from draw import Drawable
 from effects import AmbientEffect
 from speedometer import Speedometer
 from tank import Tank
+from wind import Wind
 
 
 class HUD(Drawable):
@@ -24,7 +26,7 @@ class HUD(Drawable):
     height = 50
     color: list[int]
 
-    def __init__(self, tanks: list[Tank], tank_game, gravity, wind):
+    def __init__(self, tanks: list[Tank], tank_game, gravity, wind: Optional[Wind]):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = image_cache["images/Angle.png"]
@@ -50,14 +52,8 @@ class HUD(Drawable):
             AmbientEffect.GRAVITY,
         ]:
             self.actual_gravity = gravity
-        if instance.type_of_effect in [
-            AmbientEffect.GRAVITY_AND_WIND,
-            AmbientEffect.WIND,
-        ]:
-            self.actual_wind = wind.velocity
-
-    def get_wind(self, wind):
-        self.actual_wind = wind.velocity
+        if wind is not None:
+            self.actual_wind = wind
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         """
@@ -489,7 +485,7 @@ class HUD(Drawable):
             AmbientEffect.WIND,
         ]:
             wind = self.font16.render(
-                f"{self.actual_wind:.2f}",
+                f"{self.actual_wind.velocity:.2f}",
                 True,
                 "white",
             )
