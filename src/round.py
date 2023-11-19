@@ -70,6 +70,7 @@ class Round:
             self.map.define_terrain_colors(),
         )
         # TODO: Add the winner screen
+
         self.tanks_alive = len(self.context.players)
         self.winner_msj = WinnerScreen(self)
         self.players = self.context.players

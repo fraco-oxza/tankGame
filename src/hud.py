@@ -472,6 +472,7 @@ class HUD(Drawable):
             True,
             "white",
         )
+
         cds = pygame.rect.Rect(
             (2 / 2.7) * width - width / 35,
             (6 / 8) * height - height / 13.33,
