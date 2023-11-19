@@ -152,7 +152,12 @@ class Shop:
                         tank.player.money -= 4000
                         print(self.Ammo105)
                 if self.upon == 4:
-                    self.money_player = tank.player.money + self.Ammo60 * 1000 + self.Ammo80 * 2500 + self.Ammo105 * 4000
+                    self.money_player = (
+                        tank.player.money
+                        + self.Ammo60 * 1000
+                        + self.Ammo80 * 2500
+                        + self.Ammo105 * 4000
+                    )
                     contador60mm = 0
                     contador80mm = 0
                     contador105mm = 0
