@@ -6,7 +6,6 @@ from caches import audio_cache
 import constants
 
 
-
 class FinalWinner:
     def __init__(self, context: instance):
         self.instance = context

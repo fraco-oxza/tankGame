@@ -64,7 +64,6 @@ class PositionTable:
             sum = 0
             sort_players()
             for k, item in enumerate(instance.players):
-
                 sf = self.generate_surface(str(item.murders))
                 self.position_box(sf, sum)
                 sf_number = self.ranking(k)
@@ -84,6 +83,7 @@ class PositionTable:
                 if self.sobre == 1:
                     return PositionTableButton.VOLVER_A_JUGAR
             pygame.display.flip()
+
     def show_positions(self):
         return self.draw_blocks()
 
@@ -145,7 +145,7 @@ class PositionTable:
         """
         restart_pos = (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2)
         if restart_pos[0] < mouse.x < (
-                restart_pos[0] + self.button_position[0]
+            restart_pos[0] + self.button_position[0]
         ) and restart_pos[1] < mouse.y < (restart_pos[1] + self.button_position[1]):
             self.color1 = self.hover_color
             self.sobre = 1
@@ -229,4 +229,6 @@ class PositionTable:
 
 
 def sort_players():
-    instance.players = sorted(instance.players, key=lambda player: player.murders, reverse=True)
+    instance.players = sorted(
+        instance.players, key=lambda player: player.murders, reverse=True
+    )
