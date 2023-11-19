@@ -89,7 +89,7 @@ class Round:
         self.actual_player = self.turns_queue[-1]
 
         self.in_game_menu = InGameMenu(self.context.screen)
-        self.hud = HUD(self.tanks, self, self.gravity)
+        self.hud = HUD(self.tanks, self, self.gravity, self.wind)
         self.warning = WarningWindows(self)
 
     def create_turns(self) -> None:
@@ -566,6 +566,7 @@ class Round:
             self.next_turn()
             if self.wind is not None:
                 self.wind.change_speed()
+                self.hud.get_wind(self.wind)
 
             # TODO: Añadir muchas verificaciones
             # -mostrar advertencias

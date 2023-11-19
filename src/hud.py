@@ -23,7 +23,7 @@ class HUD(Drawable):
     height = 50
     color: list[int]
 
-    def __init__(self, tanks: list[Tank], tank_game, gravity):
+    def __init__(self, tanks: list[Tank], tank_game, gravity, wind):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = image_cache["images/Angle.png"]
@@ -45,6 +45,10 @@ class HUD(Drawable):
         self.text_cannonball_info = None
         self.color = tanks[self.tank_game.actual_player].available
         self.actual_gravity = gravity
+        self.actual_wind = wind.velocity
+
+    def get_wind(self, wind):
+        self.actual_wind = wind.velocity
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         """
@@ -419,6 +423,7 @@ class HUD(Drawable):
         velocity_label = self.font16.render("Velocidad", True, "white")
         angle_label = self.font16.render("Angulo", True, "white")
         gravity_label = self.font16.render("Gravedad", True, "white")
+        wind_label = self.font16.render("Viento", True, "white")
 
         self.speedometer.actual = self.tank_game.tanks[
             self.tank_game.actual_player
@@ -464,6 +469,30 @@ class HUD(Drawable):
             (
                 (2 / 4) * width - width / 35,
                 (4 / 8) * height - height / 13.33 - gravity_label.get_size()[1],
+            ),
+        )
+
+        wind = self.font16.render(
+            f"{self.actual_wind:.2f}",
+            True,
+            "white",
+        )
+
+        cds = pygame.rect.Rect(
+            (2 / 4) * width - width / 35,
+            (6 / 8) * height - height / 13.33,
+            width / 5,
+            height / 6.66,
+        )
+        pygame.draw.rect(sf, "#141414", cds)
+        sf.blit(
+            wind, ((2 / 4) * width, (6 / 8) * height - wind.get_size()[1] / 2)
+        )
+        sf.blit(
+            wind_label,
+            (
+                (2 / 4) * width - width / 35,
+                (6 / 8) * height - height / 13.33 - wind_label.get_size()[1],
             ),
         )
 
