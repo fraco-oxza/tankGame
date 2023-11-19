@@ -311,8 +311,6 @@ class Round:
             # TODO: Ver que hacer con esto en base al nuevo modelo
             # TankGame.__init__(self, self.context)
             raise RestartRequested
-        if menu_state is InGameMenuStatus.CONTINUE:
-            pass
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
