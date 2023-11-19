@@ -1,6 +1,5 @@
 import math
 import random
-import time
 from typing import Optional
 
 import pygame
@@ -89,7 +88,7 @@ class Round:
         self.actual_player = self.turns_queue[-1]
 
         self.in_game_menu = InGameMenu(self.context.screen)
-        self.hud = HUD(self.tanks, self)
+        self.hud = HUD(self.tanks, self, self.gravity)
         self.warning = WarningWindows(self)
 
     def create_turns(self) -> None:

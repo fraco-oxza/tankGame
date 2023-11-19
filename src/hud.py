@@ -4,10 +4,10 @@ import pygame
 
 import constants
 from caches import font_cache, image_cache
+from context import instance
 from draw import Drawable
 from speedometer import Speedometer
 from tank import Tank
-from context import instance
 
 
 class HUD(Drawable):
@@ -23,7 +23,7 @@ class HUD(Drawable):
     height = 50
     color: list[int]
 
-    def __init__(self, tanks: list[Tank], tank_game):
+    def __init__(self, tanks: list[Tank], tank_game, gravity):
         self.tank_game = tank_game
         self.tanks = tanks
         self.hud_image = image_cache["images/Angle.png"]
@@ -44,6 +44,7 @@ class HUD(Drawable):
         self.text_velocity2 = None
         self.text_cannonball_info = None
         self.color = tanks[self.tank_game.actual_player].available
+        self.actual_gravity = gravity
 
     def draw_shoot_info(self, screen: pygame.surface.Surface) -> None:
         """
@@ -417,6 +418,7 @@ class HUD(Drawable):
         text = self.font30.render("Ajustes de bala", True, "white")
         velocity_label = self.font16.render("Velocidad", True, "white")
         angle_label = self.font16.render("Angulo", True, "white")
+        gravity_label = self.font16.render("Gravedad", True, "white")
 
         self.speedometer.actual = self.tank_game.tanks[
             self.tank_game.actual_player
@@ -426,20 +428,42 @@ class HUD(Drawable):
 
         sf.blit(text, (width / 2 - text.get_size()[0] / 2, width / 70))
         cds = pygame.rect.Rect(
-            (2 / 3) * width - width / 35,
+            (2 / 2.7) * width - width / 35,
             (4 / 8) * height - height / 13.33,
             width / 5,
             height / 6.66,
         )
         pygame.draw.rect(sf, "#141414", cds)
         sf.blit(
-            velocity, ((2 / 3) * width, (4 / 8) * height - velocity.get_size()[1] / 2)
+            velocity, ((2 / 2.7) * width, (4 / 8) * height - velocity.get_size()[1] / 2)
         )
         sf.blit(
             velocity_label,
             (
-                (2 / 3) * width - width / 35,
+                (2 / 2.7) * width - width / 35,
                 (4 / 8) * height - height / 13.33 - velocity_label.get_size()[1],
+            ),
+        )
+        gravity = self.font16.render(
+            f"{self.actual_gravity:.2f}",
+            True,
+            "white",
+        )
+        cds = pygame.rect.Rect(
+            (2 / 4) * width - width / 35,
+            (4 / 8) * height - height / 13.33,
+            width / 5,
+            height / 6.66,
+        )
+        pygame.draw.rect(sf, "#141414", cds)
+        sf.blit(
+            gravity, ((2 / 4) * width, (4 / 8) * height - gravity.get_size()[1] / 2)
+        )
+        sf.blit(
+            gravity_label,
+            (
+                (2 / 4) * width - width / 35,
+                (4 / 8) * height - height / 13.33 - gravity_label.get_size()[1],
             ),
         )
 
@@ -449,17 +473,17 @@ class HUD(Drawable):
             "white",
         )
         cds = pygame.rect.Rect(
-            (2 / 3) * width - width / 35,
+            (2 / 2.7) * width - width / 35,
             (6 / 8) * height - height / 13.33,
             width / 5,
             height / 6.66,
         )
         pygame.draw.rect(sf, "#141414", cds)
-        sf.blit(angle, ((2 / 3) * width, (6 / 8) * height - angle.get_size()[1] / 2))
+        sf.blit(angle, ((2 / 2.7) * width, (6 / 8) * height - angle.get_size()[1] / 2))
         sf.blit(
             angle_label,
             (
-                (2 / 3) * width - width / 35,
+                (2 / 2.7) * width - width / 35,
                 (6 / 8) * height - height / 23.33 - velocity_label.get_size()[1],
             ),
         )
