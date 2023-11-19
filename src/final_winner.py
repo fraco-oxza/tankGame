@@ -7,10 +7,10 @@ import constants
 
 
 class FinalWinner:
-    def __init__(self, context: instance):
-        self.instance = context
-        self.font = font_cache["Roboto.ttf", int(context.windows_size[0] / 51.2)]
-        self.tanks = context.players
+    def __init__(self):
+        self.instance = instance
+        self.font = font_cache["Roboto.ttf", int(self.instance.windows_size[0] / 51.2)]
+        self.tanks = self.instance.players
 
     def final_winner(self):
         self.sort_tanks()
