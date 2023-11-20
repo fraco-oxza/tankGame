@@ -59,7 +59,6 @@ class OptionMenu:
             "Gravedad y Viento",
         ]
         self.index_environment_effects = instance.type_of_effect
-        # self.screen_resolution = ["800 X 800", "1366 X 768", "1600 x 900", "1280 X 720", "1920 X 1080"]
         self.screen_resolution = [
             (800, 800),
             (1280, 720),
@@ -449,38 +448,34 @@ class OptionMenu:
         return sf
 
     def selection(self):
-        if self.sobre == 1:
-            if self.index_screen_resolution > 0:
-                self.index_screen_resolution -= 1
-        if self.sobre == 6:
-            if self.index_screen_resolution < len(self.screen_resolution) - 1:
-                self.index_screen_resolution += 1
-        if self.sobre == 2:
-            if self.quantity_players > 2:
-                self.quantity_players -= 1
-        if self.sobre == 7:
-            if self.quantity_players < 6:
-                self.quantity_players += 1
-        if self.sobre == 3:
-            if self.quantity_bots > 0:
-                self.quantity_bots -= 1
-        if self.sobre == 8:
-            if self.quantity_bots < self.quantity_players:
-                self.quantity_bots += 1
-        if self.sobre == 4:
-            if self.quantity_rounds > 1:
-                self.quantity_rounds -= 1
-        if self.sobre == 9:
-            if self.quantity_rounds < 20:
-                self.quantity_rounds += 1
-        if self.sobre == 5:
-            if self.index_environment_effects.value > 0:
-                self.index_environment_effects = AmbientEffect(
-                    self.index_environment_effects.value - 1
-                )
-        if self.sobre == 10:
-            if self.index_environment_effects.value < len(self.environment_effects) - 1:
-                self.index_environment_effects = AmbientEffect(
-                    self.index_environment_effects.value + 1
-                )
+        if self.sobre == 1 and self.index_screen_resolution > 0:
+            self.index_screen_resolution -= 1
+        if (
+            self.sobre == 6
+            and self.index_screen_resolution < len(self.screen_resolution) - 1
+        ):
+            self.index_screen_resolution += 1
+        if self.sobre == 2 and self.quantity_players > 2:
+            self.quantity_players -= 1
+        if self.sobre == 7 and self.quantity_players < 6:
+            self.quantity_players += 1
+        if self.sobre == 3 and self.quantity_bots > 0:
+            self.quantity_bots -= 1
+        if self.sobre == 8 and self.quantity_bots < self.quantity_players:
+            self.quantity_bots += 1
+        if self.sobre == 4 and self.quantity_rounds > 1:
+            self.quantity_rounds -= 1
+        if self.sobre == 9 and self.quantity_rounds < 20:
+            self.quantity_rounds += 1
+        if self.sobre == 5 and self.index_environment_effects.value > 0:
+            self.index_environment_effects = AmbientEffect(
+                self.index_environment_effects.value - 1
+            )
+        if (
+            self.sobre == 10
+            and self.index_environment_effects.value < len(self.environment_effects) - 1
+        ):
+            self.index_environment_effects = AmbientEffect(
+                self.index_environment_effects.value + 1
+            )
         self.clock.tick(constants.FPS / 15)

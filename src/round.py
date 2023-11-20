@@ -3,7 +3,6 @@ import random
 from typing import Optional
 
 import pygame
-from pygame.scrap import contains
 
 import constants
 import context
@@ -47,7 +46,6 @@ class Round:
         self.tanks_falling = None
         self.context = context.instance
         self.map = Map()
-        # self.shop_menu = Shop(self.context.screen)
 
         if self.context.type_of_effect in [
             AmbientEffect.GRAVITY_AND_WIND,
@@ -135,7 +133,7 @@ class Round:
             x = int(x)
             y = (
                 self.context.map_size[1]
-                - self.terrain.ground_lines[x // constants.TERRAIN_LINE_WIDTH - 1]
+                - self.terrain.ground_lines[x - 1]
                 - constants.TANK_OFFSET
             )
             points.append((x, y))
@@ -216,7 +214,6 @@ class Round:
         )
 
         self.hud.draw(self.context.screen)
-        # self.shop_menu.start_shop()
 
         self.snow_storm.tick()
         if self.cannonball is None and self.last_state is None:
@@ -310,12 +307,10 @@ class Round:
 
         if menu_state is InGameMenuStatus.EXIT:
             raise ExitRequested
-        elif menu_state is InGameMenuStatus.RESTART:
+        if menu_state is InGameMenuStatus.RESTART:
             # TODO: Ver que hacer con esto en base al nuevo modelo
             # TankGame.__init__(self, self.context)
             raise RestartRequested
-        elif menu_state is InGameMenuStatus.CONTINUE:
-            pass
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
         """
@@ -422,9 +417,11 @@ class Round:
                     # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
                     continue
 
-        if self.last_state.impact_type == ImpactType.TANK:
-            if self.last_state.impacted_tank is not None:
-                self.last_state.impacted_tank.life -= self.cannonball.damage
+        if (
+            self.last_state.impact_type == ImpactType.TANK
+            and self.last_state.impacted_tank is not None
+        ):
+            self.last_state.impacted_tank.life -= self.cannonball.damage
 
         for tank in self.tanks:
             if tank.is_alive and tank.life <= 0:

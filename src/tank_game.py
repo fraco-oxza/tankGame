@@ -1,5 +1,5 @@
 import random
-from random import normalvariate, randint, shuffle
+from random import shuffle
 
 import pygame
 from pygame.font import Font
@@ -8,9 +8,8 @@ from context import Context
 from exit_requested import ExitRequested, RestartRequested
 from player import Player
 from round import Round
-from menu import Menu
+from menu import Menu, MenuStatus
 import constants
-from menu import MenuStatus
 from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 from positions_table import PositionTable

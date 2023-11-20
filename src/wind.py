@@ -1,7 +1,6 @@
 import math
 import random
 
-from constants import EPSILON
 import constants
 
 

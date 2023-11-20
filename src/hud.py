@@ -456,7 +456,7 @@ class HUD(Drawable):
         )
         if instance.type_of_effect in [
             AmbientEffect.GRAVITY_AND_WIND,
-            AmbientEffect.GRAVITY
+            AmbientEffect.GRAVITY,
         ]:
             gravity = self.font16.render(
                 f"{self.actual_gravity:.2f}",
@@ -497,9 +497,7 @@ class HUD(Drawable):
                 height / 6.66,
             )
             pygame.draw.rect(sf, "#141414", cds)
-            sf.blit(
-                wind, ((2 / 4) * width, (6 / 8) * height - wind.get_size()[1] / 2)
-            )
+            sf.blit(wind, ((2 / 4) * width, (6 / 8) * height - wind.get_size()[1] / 2))
             sf.blit(
                 wind_label,
                 (

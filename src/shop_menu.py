@@ -9,7 +9,6 @@ from caches import font_cache
 from caches import image_cache
 from context import instance
 from inputs import check_running
-from exit_requested import ExitRequested
 from tank import Tank
 
 
@@ -130,29 +129,31 @@ class Shop:
             if pygame.mouse.get_pressed()[0]:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
-                if self.upon == 1:
-                    if self.money_player >= 1000:
-                        self.money_player -= 1000
-                        self.Ammo60 += 1
-                        contador60mm += 1
-                        tank.player.money -= 1000
-                        print(self.Ammo60)
-                if self.upon == 2:
-                    if self.money_player >= 2500:
-                        self.money_player -= 2500
-                        self.Ammo80 += 1
-                        contador80mm += 1
-                        tank.player.money -= 2500
-                        print(self.Ammo80)
-                if self.upon == 3:
-                    if self.money_player >= 4000:
-                        self.money_player -= 4000
-                        self.Ammo105 += 1
-                        contador105mm += 1
-                        tank.player.money -= 4000
-                        print(self.Ammo105)
+                if self.upon == 1 and self.money_player >= 1000:
+                    self.money_player -= 1000
+                    self.Ammo60 += 1
+                    contador60mm += 1
+                    tank.player.money -= 1000
+                    print(self.Ammo60)
+                if self.upon == 2 and self.money_player >= 2500:
+                    self.money_player -= 2500
+                    self.Ammo80 += 1
+                    contador80mm += 1
+                    tank.player.money -= 2500
+                    print(self.Ammo80)
+                if self.upon == 3 and self.money_player >= 4000:
+                    self.money_player -= 4000
+                    self.Ammo105 += 1
+                    contador105mm += 1
+                    tank.player.money -= 4000
+                    print(self.Ammo105)
                 if self.upon == 4:
-                    self.money_player = self.money_player + self.Ammo60 * 1000 + self.Ammo80 * 2500 + self.Ammo105 * 4000
+                    self.money_player = (
+                        self.money_player
+                        + self.Ammo60 * 1000
+                        + self.Ammo80 * 2500
+                        + self.Ammo105 * 4000
+                    )
                     contador60mm = 0
                     contador80mm = 0
                     contador105mm = 0
