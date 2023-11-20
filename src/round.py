@@ -144,7 +144,10 @@ class Round:
         find = True
         while find:
             random_tank = random.randint(0, len(self.tanks) - 1)
-            if random_tank != self.actual_player and not self.tanks[random_tank].is_alive:
+            if (
+                random_tank != self.actual_player
+                and not self.tanks[random_tank].is_alive
+            ):
                 self.get_current_tank().random_shoot(self.tanks[random_tank].position)
                 find = False
 
@@ -536,7 +539,9 @@ class Round:
                     self.has_fallen.add(i)
                 elif i in self.has_fallen:
                     tank.life = max(
-                        0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
+                        0,
+                        tank.life
+                        - int(self.falling_speed * constants.DAMAGE_PER_SPEED),
                     )
                     print(self.falling_speed * constants.DAMAGE_PER_SPEED)
                     tank.position.y = (
