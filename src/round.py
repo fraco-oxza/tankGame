@@ -528,23 +528,23 @@ class Round:
                     )
                     self.has_fallen.discard(i)
                     tank.position.y = self.context.map_size[1]
-                print("Rompieron todo debajo")
                 continue
             if max(x, 0) < len(self.terrain.ground_lines):
                 if self.terrain.ground_lines[max(x, 0)] < y:
                     tank.position.y += self.falling_speed * dt
                     self.tanks_falling = True
                     self.has_fallen.add(i)
-            elif i in self.has_fallen:
-                tank.life = max(
-                    0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
-                )
-                tank.position.y = (
-                    self.context.map_size[1]
-                    - self.terrain.ground_lines[int(tank.position.x)]
-                    - constants.TANK_OFFSET
-                )
-                self.has_fallen.discard(i)
+                elif i in self.has_fallen:
+                    tank.life = max(
+                        0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
+                    )
+                    print(self.falling_speed * constants.DAMAGE_PER_SPEED)
+                    tank.position.y = (
+                        self.context.map_size[1]
+                        - self.terrain.ground_lines[int(tank.position.x)]
+                        - constants.TANK_OFFSET
+                    )
+                    self.has_fallen.discard(i)
 
     def start(self) -> None:
         """
