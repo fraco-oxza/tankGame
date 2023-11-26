@@ -70,7 +70,6 @@ class Round:
             constants.VALLEYS,
             self.map.define_terrain_colors(),
         )
-        # TODO: Add the winner screen
 
         self.tanks_alive = len(self.context.players)
         self.winner_msj = WinnerScreen(self)
@@ -308,8 +307,6 @@ class Round:
         if menu_state is InGameMenuStatus.EXIT:
             raise ExitRequested
         if menu_state is InGameMenuStatus.RESTART:
-            # TODO: Ver que hacer con esto en base al nuevo modelo
-            # TankGame.__init__(self, self.context)
             raise RestartRequested
 
     def process_cannonball_trajectory(self) -> Optional[Impact]:
@@ -341,7 +338,7 @@ class Round:
 
         for tank in self.tanks:
             if tank.collides_with(
-                self.cannonball.position, self.get_current_tank().actual
+                self.cannonball.position, self.cannonball.radius
             ):
                 return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
@@ -538,7 +535,6 @@ class Round:
                     tank.life = max(
                         0, tank.life - int(self.falling_speed * constants.DAMAGE_PER_SPEED)
                     )
-                    print(self.falling_speed * constants.DAMAGE_PER_SPEED)
                     tank.position.y = (
                         self.context.map_size[1]
                         - self.terrain.ground_lines[int(tank.position.x)]
@@ -556,10 +552,8 @@ class Round:
         """
         for tank in self.tanks:
             if isinstance(tank, Bot):
-                print("es el bot: ", tank)
                 tank.buy_cannonballs()
             else:
-                print("es el tanque: ", tank)
                 self.shop_menu.start_shop(tank)
                 tank.available = tank.player.ammunition
                 # sleep temporal
@@ -574,17 +568,14 @@ class Round:
             if self.wind is not None:
                 self.wind.change_speed()
 
-            # TODO: Añadir muchas verificaciones
-            # -mostrar advertencias
             tries = 0
             while not self.get_current_tank().is_alive or (
                 sum(self.get_current_tank().available.values()) == 0
             ):
                 self.next_turn()
+
                 tries += 1
                 if tries > 2 * self.context.number_of_players:
-                    # TODO: Que hacer cuando empatan
-                    print("Empataron")
                     return
 
             if isinstance(self.get_current_tank(), Bot):

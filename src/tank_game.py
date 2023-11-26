@@ -45,12 +45,10 @@ class TankGame:
         self.finalWinner = FinalWinner()
 
     def create_players(self):
-        # TODO: crear un menu para que ingrese el nombre, y un color
         colors = self.create_different_colors(self.context.number_of_players)
         for color in colors:
             self.context.players.append(
                 Player(
-                    str(random.randint(0, 1000)),  # FIXME: choice a better name
                     color,
                 )
             )
@@ -166,37 +164,37 @@ class TankGame:
 
     def start(self) -> None:
         soundtrack = audio_cache["sounds/inGame.mp3"]
-        while True:
-            try:
-                self.start_menu()
-                soundtrack.play()
-                print("empezo partida", self.context.map_size)
+        try:
+            self.start_menu()
+            while True:
+                try:
+                    soundtrack.play()
 
-                self.create_players()
+                    self.create_players()
 
-                for i in range(self.context.number_of_rounds):
-                    print(f"round {i}")
-                    for player in self.context.players:
-                        player.money += 10000
-                    current_round = Round()
-                    current_round.start()
+                    for i in range(self.context.number_of_rounds):
+                        for player in self.context.players:
+                            player.money += 10000
+                        current_round = Round()
+                        current_round.start()
 
-                self.game_brief()
-                print("termino")
+                    self.game_brief()
 
-                self.finalWinner.final_winner()
-                keys_pressed = pygame.key.get_pressed()
-                if keys_pressed[pygame.K_SPACE]:
-                    self.position_table = PositionTable(self.context.screen)
-                    if (
-                        self.position_table.show_positions()
-                        == PositionTableButton.VOLVER_A_JUGAR
-                    ):
-                        pass
-            except ExitRequested:
-                break
-            except RestartRequested:
-                pass
+                    self.finalWinner.final_winner()
+                    keys_pressed = pygame.key.get_pressed()
+                    if keys_pressed[pygame.K_SPACE]:
+                        self.position_table = PositionTable(self.context.screen)
+                        if (
+                            self.position_table.show_positions()
+                            == PositionTableButton.VOLVER_A_JUGAR
+                        ):
+                            pass
 
-            self.context.players.clear()
-            soundtrack.stop()
+                except RestartRequested:
+                    pass
+
+                self.context.players.clear()
+                soundtrack.stop()
+
+        except ExitRequested:
+            return

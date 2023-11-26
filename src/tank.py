@@ -57,28 +57,16 @@ class Tank(Drawable, Collidable):
         self.available[1] = 0
         self.available[3] = 0
 
-    def collides_with(self, point: pygame.Vector2, cannon: int) -> bool:
+    def collides_with(
+        self, point: pygame.Vector2, validation_distance: float = 0
+    ) -> bool:
         """
-        This function is responsible for checking if the tank was hit by the cannon ball returned True or False
-        as appropriate
+         This function is responsible for checking if the tank was hit by the cannon ball returned True or False
+         as appropriate
         """
-        # FIXME: Esta function esta bien, el problema es que el parameter cannon no esta en la clase padre
-
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
-        ) <= constants.TANK_RADIO:
-            return True
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
-        ) <= 10 and cannon == 0:
-            return True
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
-        ) <= 20 and cannon == 1:
-            return True
-        if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
-            1 / 2
-        ) <= 30 and cannon == 2:
+        ) <= validation_distance:
             return True
         return False
 

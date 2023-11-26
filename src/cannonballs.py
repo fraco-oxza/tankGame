@@ -17,6 +17,7 @@ class Cannonball(Drawable):
     """
 
     damage: int
+    radius: float
     position: pygame.Vector2
     velocity: pygame.Vector2
     trajectory: list[pygame.Vector2]
@@ -115,6 +116,7 @@ class Cannonball105mm(Cannonball):
         self.damage = 50
         self.radius_damage = 30
         self.units_available = 3
+        self.radius = 30
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """This function is responsible for drawing the bullet chosen by the user"""
@@ -160,6 +162,7 @@ class Cannonball60mm(Cannonball):
         self.damage = 30
         self.radius_damage = 10
         self.units_available = 3
+        self.radius = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """This function is responsible for drawing the bullet chosen by the user"""
@@ -196,6 +199,7 @@ class Cannonball80mm(Cannonball):
         self.damage = 40
         self.radius_damage = 20
         self.units_available = 10
+        self.radius = 20
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """This function is responsible for drawing the bullet chosen by the user"""

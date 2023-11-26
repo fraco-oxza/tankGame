@@ -116,8 +116,6 @@ class Terrain(Drawable, Collidable):
             self.new_ground_lines.append([height / self.layers_num] * self.layers_num)
             self.falling.append([(0, 0)] * self.layers_num)
 
-        print(self.new_ground_lines.__len__(), self.ground_lines.__len__())
-
     def tick(self, dt: float, gravity: float):
         self.is_falling = False
         self.falling_speed += gravity * dt
@@ -173,7 +171,9 @@ class Terrain(Drawable, Collidable):
                 latest_height += layer
         self.draw_falling(screen)
 
-    def collides_with(self, point: pygame.Vector2) -> bool:
+    def collides_with(
+        self, point: pygame.Vector2, validation_distance: float = 0
+    ) -> bool:
         """
         Checks if the position of the projectile collides with the terrain,
         comparing the terrain height at the corresponding line with the cannon's

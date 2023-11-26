@@ -14,7 +14,6 @@ class Player:
     aim
     """
 
-    name: str
     points: int
     money: int
     ammunition: dict[int, int]
@@ -23,8 +22,7 @@ class Player:
     murders: int
     deads: int
 
-    def __init__(self, name: str, color: str | pygame.Color):
-        self.name = name
+    def __init__(self, color: str | pygame.Color):
         self.points = 0
         self.money = 0
         self.murders = 0

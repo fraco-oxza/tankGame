@@ -44,7 +44,7 @@ class AnimationCache(FileCache):
         scale = (
             instance.windows_size[0] / 4.26,
             instance.windows_size[1] / 3.6,
-        )  # TODO: Find the correct place for this scale
+        )
 
         animations_path = resource_path(os.path.join("animations", animation_name))
         animation = []
