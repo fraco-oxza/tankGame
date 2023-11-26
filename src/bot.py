@@ -18,7 +18,7 @@ class Bot(Tank):
     ):
         super().__init__(color, position, player)
 
-    def random_shoot(self, position2: pygame.Vector2):
+    def random_shoot(self, position2: pygame.Vector2, gravity):
         option = random.randint(0, 1)
         if option == 0:
             self.selection_cannonball()
@@ -32,7 +32,7 @@ class Bot(Tank):
             )
             angle = math.radians(angle)
             if delta_y != 0:
-                velocity = (d * 9.8) / (2 * abs(delta_y))
+                velocity = (d * gravity) / (2 * abs(delta_y))
             else:
                 velocity = 0
             self.shoot_angle = angle
@@ -62,9 +62,11 @@ class Bot(Tank):
             if cannon == 1 and self.player.money >= 1000:
                 self.player.money = self.player.money - 1000
                 self.available[0] = self.available[0] + 1
+
             if cannon == 2 and self.player.money >= 2500:
                 self.player.money = self.player.money - 2500
                 self.available[1] = self.available[1] + 1
+
             if cannon == 3 and self.player.money >= 4000:
                 self.player.money = self.player.money - 4000
                 self.available[2] = self.available[2] + 1

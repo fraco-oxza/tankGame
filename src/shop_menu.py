@@ -86,7 +86,7 @@ class Shop:
             (instance.windows_size[0] / 1.59, instance.windows_size[1] / 4.04),
         )
         self.screen.blit(
-            self.buy_ammo("Buy"),
+            self.buy_ammo("Comprar"),
             (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82),
         )
         money = self.principal_font.render(f"${self.money_player}", True, "#ffffff")
