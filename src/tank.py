@@ -206,7 +206,7 @@ class Tank(Drawable, Collidable):
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
 
-    def random_shoot(self, position):
+    def random_shoot(self, position, gravity):
         pass
 
     def buy_cannonballs(self):
