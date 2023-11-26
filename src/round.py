@@ -339,9 +339,7 @@ class Round:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
-            if tank.collides_with(
-                self.cannonball.position, self.cannonball.radius
-            ):
+            if tank.collides_with(self.cannonball.position, self.cannonball.radius):
                 return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
         return None
