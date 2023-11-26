@@ -144,8 +144,8 @@ class Round:
         find = True
         while find:
             random_tank = random.randint(0, len(self.tanks) - 1)
-            if random_tank != self.actual_player and not self.tanks[random_tank].is_alive:
-                self.get_current_tank().random_shoot(self.tanks[random_tank].position)
+            if random_tank != self.actual_player and self.tanks[random_tank].life > 0:
+                self.get_current_tank().random_shoot(self.tanks[random_tank].position, self.gravity)
                 find = False
 
     def draw_cannonball_indicator(self, sf: pygame.surface.Surface):
