@@ -3,10 +3,6 @@
 top to bottom direction
 skinparam linetype ortho
 
-class Main{
-    +main()
-}
-
 class TankGame {
     + players: list[Player]
     + context: Context
@@ -387,12 +383,14 @@ class OptionMenu{
 
 }
 
-class Bot(Tank)
+class Bot extends Tank
 {
     +Bot()
-    +random_shoot(pygame.Vector2)
-    +selection_cannonball()
+    +random_shoot(pygame.Vector2):
+    +selection_cannonball():
+    +buy_cannonball():
 }
+
 class Context {
     +rounds: int
     +screen: pygame.surface.Surface
@@ -414,11 +412,11 @@ class Context {
 
 
 }
-class AmbientEffect(Enum){
-    +NONE = int
-    +GRAVITY = int
-    +WIND = int
-    +GRAVITY_AND_WIND = int
+enum AmbientEffect{
+    NONE
+    GRAVITY
+    WIND
+    GRAVITY_AND_WIND
 }
 
 
@@ -496,13 +494,14 @@ class Shop {
 
 }
 
-class ShopStatus{
-    C60AMMO: int
-    C80AMMO: int
-    C105AMMO: int
-    RESTART: int
-    BUY: int
+enum ShopStatus{
+    C60AMMO
+    C80AMMO
+    C105AMMO
+    RESTART
+    BUY
 }
+
 class Wind{
     +__velocity: float
     +__target_velocity: float
@@ -528,11 +527,20 @@ TankGame -- ExitRequested
 TankGame -- AudioCache
 TankGame -- SoundCache
 TankGame -- FontCache
-
-Main *--> TankGame
+Shop -- ShopStatus
+Shop -- AudioCache
+Shop -- FontCache
+Shop -- ImageCache
+Shop -- Context
+Shop -- Tank
+Context *--> AmbientEffect
 WinnerScreen *--> TankGame
 InGameMenu o--> TankGame
 InGameMenu *--> InGameMenuStatus
+SnowStorm o--> Wind
+PositionTable -- PositionTableButton
+TankGame -- PositionTableButton
+Round o--> Wind
 Round *--> Tank
 Round *--> Context
 Round o--> Cannonball
@@ -556,6 +564,7 @@ Round o--> WinnerScreen
 Round -- inputs
 Background *--> Context
 Background *--> ImageCache
+Background --- Drawable
 Terrain *--> ImageCache
 Menu *--> ImageCache
 Menu *--> FontCache
