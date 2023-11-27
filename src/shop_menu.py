@@ -146,9 +146,14 @@ class Shop:
                     contador105mm += 1
                     tank.player.money -= 4000
                 if self.upon == 4:
-                    tank.player.money = tank.player.money + self.Ammo60 * 1000 + self.Ammo80 * 2500 + self.Ammo105 * 4000
+                    tank.player.money = (
+                        tank.player.money
+                        + self.Ammo60 * 1000
+                        + self.Ammo80 * 2500
+                        + self.Ammo105 * 4000
+                    )
                     self.money_player = (
-                            tank.player.money
+                        tank.player.money
                         + self.Ammo60 * 1000
                         + self.Ammo80 * 2500
                         + self.Ammo105 * 4000
