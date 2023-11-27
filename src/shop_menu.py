@@ -120,6 +120,7 @@ class Shop:
         self.show_buy(tank)
 
         while True:
+            self.money_player = tank.player.money
             check_running()
 
             self.draw_shop(contador60mm, contador80mm, contador105mm)
@@ -145,8 +146,9 @@ class Shop:
                     contador105mm += 1
                     tank.player.money -= 4000
                 if self.upon == 4:
+                    tank.player.money = tank.player.money + self.Ammo60 * 1000 + self.Ammo80 * 2500 + self.Ammo105 * 4000
                     self.money_player = (
-                        self.money_player
+                            tank.player.money
                         + self.Ammo60 * 1000
                         + self.Ammo80 * 2500
                         + self.Ammo105 * 4000
