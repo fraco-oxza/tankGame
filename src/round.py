@@ -296,7 +296,8 @@ class Round:
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
 
-    def process_shoot_type_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+    @staticmethod
+    def process_shoot_type_change(playing_tank: Tank, keys_pressed: ScancodeWrapper):
         """
         This method is responsible for changing the type of projectile that the
         player is going to shoot. It read the keys pressed and changes the type
