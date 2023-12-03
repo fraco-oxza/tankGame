@@ -11,7 +11,7 @@ class Player:
     """
     This class is responsible for assigning the score obtained per shot to each player,
     through the calculation of the distance with the bullet launched and the tank in
-    aim
+    aim. The amount of deaths, ammunition and money is in here too.
     """
 
     points: int
@@ -20,13 +20,13 @@ class Player:
     color: str | pygame.Color
     money: int
     murders: int
-    deads: int
+    deaths: int
 
     def __init__(self, color: str | pygame.Color):
         self.points = 0
         self.money = 0
         self.murders = 0
-        self.deads = 0
+        self.deaths = 0
         self.points = 0
         self.color = color
         self.ammunition = {

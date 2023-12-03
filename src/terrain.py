@@ -5,8 +5,8 @@ import pygame
 
 import constants
 from collidable import Collidable
-from draw import Drawable
 from context import instance
+from draw import Drawable
 
 
 class Terrain(Drawable, Collidable):
@@ -117,6 +117,9 @@ class Terrain(Drawable, Collidable):
             self.falling.append([(0, 0)] * self.layers_num)
 
     def tick(self, dt: float, gravity: float):
+        """
+        This method is responsible for the calculations for each frame of the fall of the ground.
+        """
         self.is_falling = False
         self.falling_speed += gravity * dt
         for i, layers in enumerate(self.falling):
@@ -134,6 +137,9 @@ class Terrain(Drawable, Collidable):
                     self.falling[i][j] = (0, 0)
 
     def draw_falling(self, screen: pygame.surface.Surface) -> None:
+        """
+        This method is responsible for each frame when the ground is destroyed and a part of it needs to fall.
+        """
         for i, layers in enumerate(self.falling):
             for layer, color in zip(layers, self.terrain_layer_colors):
                 if layer == (0, 0):
