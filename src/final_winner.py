@@ -1,8 +1,9 @@
 import pygame
+
+import constants
 from caches import font_cache, image_cache
 from context import instance
 from inputs import check_running
-import constants
 
 
 def draw_tank(screen, tank):
@@ -10,8 +11,7 @@ def draw_tank(screen, tank):
         screen,
         tank.color,
         pygame.Rect(
-            instance.windows_size[0] / 1.96
-            - instance.windows_size[0] / 51.2,
+            instance.windows_size[0] / 1.96 - instance.windows_size[0] / 51.2,
             instance.windows_size[1] / 2.05 - instance.windows_size[1] / 72,
             instance.windows_size[0] / 25.6,
             instance.windows_size[1] / 20.57,
@@ -21,10 +21,8 @@ def draw_tank(screen, tank):
         screen,
         tank.color,
         pygame.Rect(
-            instance.windows_size[0] / 1.96
-            - instance.windows_size[0] / 20.48,
-            instance.windows_size[1] / 2.05
-            + instance.windows_size[1] / 28.8,
+            instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+            instance.windows_size[1] / 2.05 + instance.windows_size[1] / 28.8,
             instance.windows_size[0] / 10.24,
             instance.windows_size[1] / 14.4,
         ),
@@ -33,10 +31,8 @@ def draw_tank(screen, tank):
         screen,
         constants.GRAY,
         pygame.Rect(
-            instance.windows_size[0] / 1.96
-            - instance.windows_size[0] / 20.48,
-            instance.windows_size[1] / 2.05
-            + instance.windows_size[1] / 9.6,
+            instance.windows_size[0] / 1.96 - instance.windows_size[0] / 20.48,
+            instance.windows_size[1] / 2.05 + instance.windows_size[1] / 9.6,
             instance.windows_size[0] / 10.24,
             instance.windows_size[0] / 64,
         ),
@@ -49,8 +45,7 @@ def draw_tank(screen, tank):
                 instance.windows_size[0] / 1.96
                 - instance.windows_size[0] / 21.33
                 + instance.windows_size[0] / 51.2 * i,
-                instance.windows_size[1] / 2.05
-                + instance.windows_size[1] / 8,
+                instance.windows_size[1] / 2.05 + instance.windows_size[1] / 8,
             ),
             instance.windows_size[0] / 85.33,
         )
@@ -92,9 +87,7 @@ class FinalWinner:
             instance.fps = instance.clock.get_fps()
 
     def tabla_posiciones(self, background, screen):
-        background = pygame.transform.scale(
-            background, self.instance.windows_size
-        )
+        background = pygame.transform.scale(background, self.instance.windows_size)
         rect = background.get_rect()
         size = rect.size
         screen.blit(

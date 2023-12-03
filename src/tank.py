@@ -6,6 +6,7 @@ from typing import Optional
 import pygame
 
 import constants
+from caches import animation_cache
 from cannonballs import (
     Cannonball,
     Cannonball105mm,
@@ -14,11 +15,10 @@ from cannonballs import (
     CannonballType,
 )
 from collidable import Collidable
-from draw import Drawable
-from player import Player
-from explotion import Explosion
-from caches import animation_cache
 from context import instance
+from draw import Drawable
+from explotion import Explosion
+from player import Player
 
 
 class Tank(Drawable, Collidable):
@@ -61,8 +61,8 @@ class Tank(Drawable, Collidable):
         self, point: pygame.Vector2, validation_distance: float = 0
     ) -> bool:
         """
-         This function is responsible for checking if the tank was hit by the cannonball returned True or False
-         as appropriate
+        This function is responsible for checking if the tank was hit by the cannonball returned True or False
+        as appropriate
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2

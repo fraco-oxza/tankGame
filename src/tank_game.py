@@ -2,18 +2,19 @@ from random import shuffle
 
 import pygame
 from pygame.font import Font
+
+import constants
 from caches import audio_cache, image_cache, font_cache
 from context import Context
 from exit_requested import ExitRequested, RestartRequested
-from player import Player
-from round import Round
+from final_winner import FinalWinner
 from menu import Menu, MenuStatus
-import constants
 from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
+from player import Player
 from positions_table import PositionTable
 from positions_table import PositionTableButton
-from final_winner import FinalWinner
+from round import Round
 
 
 class TankGame:
@@ -167,7 +168,7 @@ class TankGame:
 
                     self.create_players()
 
-                    for i in range(self.context.number_of_rounds):
+                    for _ in range(self.context.number_of_rounds):
                         for player in self.context.players:
                             player.money += 10000
                         current_round = Round()
