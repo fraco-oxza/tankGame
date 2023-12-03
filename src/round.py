@@ -3,6 +3,7 @@ import random
 from typing import Optional
 
 import pygame
+from pygame.key import ScancodeWrapper
 
 import constants
 import context
@@ -244,15 +245,12 @@ class Round:
         self.context.clock.tick(constants.FPS)
         self.context.fps = self.context.clock.get_fps()
 
-    def process_input(self) -> None:
+    def process_shoot_angle_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
         """
-        This method is responsible for reading from the keyboard what the user wants
-        to do, modifying the attributes of the tanks or creating the cannonball.
-        :return:
+        This method is responsible for changing the angle of the projectile that
+        the player is going to shoot. It read the keys pressed and changes the
+        angle of the projectile.
         """
-        playing_tank = self.tanks[self.actual_player]
-
-        keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_DOWN]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_angle += math.radians(1) * (
@@ -273,6 +271,12 @@ class Round:
                     constants.FPS / self.context.fps
                 )
 
+    def process_shoot_speed_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+        """
+        This method is responsible for changing the speed of the projectile that
+        the player is going to shoot. It read the keys pressed and changes the
+        speed of the projectile.
+        """
         if keys_pressed[pygame.K_RIGHT]:
             if keys_pressed[pygame.K_LSHIFT]:
                 playing_tank.shoot_velocity += 1 * (constants.FPS / self.context.fps)
@@ -292,9 +296,12 @@ class Round:
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
 
-        if keys_pressed[pygame.K_SPACE]:
-            self.cannonball = playing_tank.shoot()
-
+    def process_shoot_type_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+        """
+        This method is responsible for changing the type of projectile that the
+        player is going to shoot. It read the keys pressed and changes the type
+        of projectile.
+        """
         if (
             keys_pressed[pygame.K_1]
             or keys_pressed[pygame.K_2]
@@ -303,11 +310,30 @@ class Round:
             change = audio_cache["sounds/click_cannonball.mp3"]
             change.play()
             if keys_pressed[pygame.K_1]:
-                self.tanks[self.actual_player].actual = CannonballType.MM60
+                playing_tank.actual = CannonballType.MM60
             elif keys_pressed[pygame.K_2]:
-                self.tanks[self.actual_player].actual = CannonballType.MM80
+                playing_tank.actual = CannonballType.MM80
             elif keys_pressed[pygame.K_3]:
-                self.tanks[self.actual_player].actual = CannonballType.MM105
+                playing_tank.actual = CannonballType.MM105
+
+
+
+    def process_input(self) -> None:
+        """
+        This method is responsible for reading from the keyboard what the user wants
+        to do, modifying the attributes of the tanks or creating the cannonball.
+        :return:
+        """
+        playing_tank = self.tanks[self.actual_player]
+        keys_pressed = pygame.key.get_pressed()
+
+        self.process_shoot_angle_change(playing_tank, keys_pressed)
+        self.process_shoot_speed_change(playing_tank, keys_pressed)
+        self.process_shoot_type_change(playing_tank, keys_pressed)
+
+        if keys_pressed[pygame.K_SPACE]:
+            self.cannonball = playing_tank.shoot()
+
         if keys_pressed[pygame.K_ESCAPE]:
             click = audio_cache["sounds/click.mp3"]
             click.play()
