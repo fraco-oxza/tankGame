@@ -13,8 +13,8 @@ class Drawable:
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-         This function is responsible for drawing an instance, through the screen
-         What is passed in the parameters. You should not do the
-         pygame.display.flip
-         """
+        This function is responsible for drawing an instance, through the screen
+        What is passed in the parameters. You should not do the
+        pygame.display.flip
+        """
         raise NotImplementedError

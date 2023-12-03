@@ -15,6 +15,7 @@ class Cannonball(Drawable):
     functionalities to update your position, draw your trajectory and
     get information.
     """
+
     damage: int
     radius: float
     position: pygame.Vector2
