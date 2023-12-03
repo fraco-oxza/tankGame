@@ -7,6 +7,10 @@ from inputs import check_running
 
 
 def draw_tank(screen, tank):
+    """
+    This method draws the winning tank on the screen.
+    The position and size of each tank element are calculated in relation to the dimensions of the game window.
+    """
     pygame.draw.rect(
         screen,
         tank.color,
@@ -59,12 +63,18 @@ def draw_tank(screen, tank):
 
 
 class FinalWinner:
+    """
+    This class is responsible for presenting the final winner or tie screen.
+    """
     def __init__(self):
         self.instance = instance
         self.font = font_cache["Roboto.ttf", int(self.instance.windows_size[0] / 51.2)]
         self.tanks = self.instance.players
 
     def final_winner(self):
+        """
+        This method shows the winner or tie window after sorting them.
+        """
         self.sort_tanks()
         tank = self.tanks[0]
         while True:
@@ -87,6 +97,9 @@ class FinalWinner:
             instance.fps = instance.clock.get_fps()
 
     def tabla_posiciones(self, background, screen):
+        """
+        This method displays a text on the screen to go to the leaderboard and Scale the image.
+        """
         background = pygame.transform.scale(background, self.instance.windows_size)
         rect = background.get_rect()
         size = rect.size
@@ -112,7 +125,13 @@ class FinalWinner:
         )
 
     def sort_tanks(self):
+        """
+        This method orders the tanks from those who committed the most murders to those who committed the least.
+        """
         self.tanks = sorted(self.tanks, key=lambda player: player.murders, reverse=True)
 
     def check_tie(self):
+        """
+        This method checks if there is a tie
+        """
         return self.tanks[0].murders == self.tanks[1].murders

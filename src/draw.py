@@ -5,16 +5,16 @@ import pygame
 
 class Drawable:
     """
-    Clase que contiene un método abstracto que se pasa a través de Override a
-    otras clases, donde se crearán elementos visuales que serán mostrados por
-    medio de la interfaz.
+    Class containing an abstract method that is passed via Override to
+    other classes, where visual elements will be created that will be shown by
+    middle of the interface.
     """
 
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Esta funcion se encarga de dibujar una instancia, a traves de la screen
-        que se le pasa en los parametros. No se debe hacer el
-        pygame.display.flip
-        """
+         This function is responsible for drawing an instance, through the screen
+         What is passed in the parameters. You should not do the
+         pygame.display.flip
+         """
         raise NotImplementedError

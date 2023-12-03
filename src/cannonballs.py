@@ -11,11 +11,10 @@ from draw import Drawable
 
 class Cannonball(Drawable):
     """
-    Esta clase representa una bala de cañón en movimiento, proporciona
-    funcionalidades para actualizar su posición, dibujar su trayectoria y
-    obtener información.
+    This class represents a cannonball in motion, provides
+    functionalities to update your position, draw your trajectory and
+    get information.
     """
-
     damage: int
     radius: float
     position: pygame.Vector2
@@ -36,9 +35,9 @@ class Cannonball(Drawable):
 
     def tick(self, dt: float, gravity: float):
         """
-        Esta función va actualizando la posición de la bala por cada intervalo
-        de tiempo, su propósito es simular el movimiento y comportamiento de la
-        parábola que dibuja la bala del cañón
+        This function updates the position of the bullet for each interval
+        of time, its purpose is to simulate the movement and behavior of the
+        parable drawn by the cannonball.
         """
         self.position += self.velocity * dt
         self.velocity[1] += gravity * dt
@@ -58,17 +57,17 @@ class Cannonball(Drawable):
 
     def kill(self):
         """
-        Esta función "desactiva" la bala de cañón para indicar qye ya no está en
-        uso, para esto elimina el atributo trajectory del objeto y establece el
-        estado de vida en False
+        This function "deactivates" the cannonball to indicate that it is no longer in
+        use, for this removes the trajectory attribute of the object and sets the
+        life status in False
         """
         del self.trajectory
         self.is_alive = False
 
     def draw_trajectory(self, screen: pygame.surface.Surface):
         """
-        Esta función dibuja la trayectoria de la bala, por cada punto en la
-        lista trajectory dibuja un círculo.
+        This function draws the trajectory of the bullet, for each point on the
+        trajectory list draws a circle.
         """
         for point in self.trajectory:
             pygame.draw.circle(screen, "#000000", (point.x, point.y), 1)
@@ -79,15 +78,15 @@ class Cannonball(Drawable):
 
     def get_max_height(self) -> int:
         """
-        Esta función se encarga de retornar la altura máxima del lanzamiento de
-        la bala
+        This function is responsible for returning the maximum launch height of
+        the bullet
         """
         return int(context.instance.map_size[1] - self.max_height)
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
-        Esta función se encarga de retornar la distancia máxima entre la bala y
-        el tanque que la lanzó
+        This function is responsible for returning the maximum distance between the bullet and
+        the tank that launched it
         """
         return (
             (self.position.x - tank_position.x) ** 2
@@ -96,7 +95,9 @@ class Cannonball(Drawable):
 
 
 class CannonballType:
-    """function that identifies what type of cannonball the user chose"""
+    """
+    function that identifies what type of cannonball the user chose
+    """
 
     MM60 = 0
     MM80 = 1
@@ -119,7 +120,9 @@ class Cannonball105mm(Cannonball):
         self.radius = 30
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """This function is responsible for drawing the bullet chosen by the user"""
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -165,7 +168,9 @@ class Cannonball60mm(Cannonball):
         self.radius = 10
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """This function is responsible for drawing the bullet chosen by the user"""
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
@@ -202,7 +207,9 @@ class Cannonball80mm(Cannonball):
         self.radius = 20
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """This function is responsible for drawing the bullet chosen by the user"""
+        """
+        This function is responsible for drawing the bullet chosen by the user
+        """
         travel_angle = math.atan2(self.velocity.y, self.velocity.x)
         angle_x = math.cos(travel_angle)
         angle_y = math.sin(travel_angle)
