@@ -548,6 +548,13 @@ class Round:
                     )
                     self.has_fallen.discard(i)
 
+    def sleep_rendering(self, time_ms: int) -> None:
+        """This method is responsible for making the game wait for a while."""
+        start = pygame.time.get_ticks()
+        while pygame.time.get_ticks() - start < time_ms:
+            check_running()
+            self.render()
+
     def start(self) -> None:
         """
         This method shows the basic instructions and then gives way to the
@@ -656,6 +663,8 @@ class Round:
             if not isinstance(self.get_current_tank(), Bot):
                 self.wait_release_space()
                 self.wait_on_space()
+            else:
+                self.sleep_rendering(constants.BOT_SLEEP_TIME)
 
             self.check_last_state()
 

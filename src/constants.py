@@ -39,6 +39,7 @@ DEVELOPMENT_MODE = False
 DAMAGE_PER_SPEED = 0.1  # expresses how much damage a tank must suffer for each m/s it carries at the moment of falling
 TANK_RADIO = 18
 TANK_OFFSET = 20  # tanks float this many pixels up
+BOT_SLEEP_TIME = 1000  # ms
 
 # Map settings
 MAP_SEED = -1
