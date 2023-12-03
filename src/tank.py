@@ -61,7 +61,7 @@ class Tank(Drawable, Collidable):
         self, point: pygame.Vector2, validation_distance: float = 0
     ) -> bool:
         """
-         This function is responsible for checking if the tank was hit by the cannon ball returned True or False
+         This function is responsible for checking if the tank was hit by the cannonball returned True or False
          as appropriate
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (

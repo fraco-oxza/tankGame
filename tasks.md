@@ -18,7 +18,7 @@
 - [x] Hacer el mostrador de vida, con unas barritas. 15-10-2023. Sofia.
 - [x] Hacer un indicador para que se muestre quien está jugando. 9-10-2023. Francisco.
 - [x] Distintos biomas (unos 3). 18-10-2023. Sofia y Benja.
-- [x] Arreglar la destrucción terreno. 18-10-2023. Benjamín
+- [x] Arreglar la destrucción del terreno. 18-10-2023. Benjamín
 - [x] Hacer que el terreno caiga con animacion. 18-10-2023. Benjamín y Francisco
 - [x] Mejorar el readme.md. 20-10-2023. Benjamín.
 

@@ -28,17 +28,17 @@ class PositionTable:
         self.color1 = "#2E3440"
         self.hover_color = "#3b4252"
         self.sobre = 0
+        image_size = pygame.Vector2(
+            instance.windows_size[0], instance.windows_size[1]
+        )
+        self.image = pygame.transform.scale(
+            image_cache["images/Tablero.png"], image_size
+        )
+        self.sky_rect = self.image.get_rect()
 
     def draw_blocks(self):
         while True:
             check_running()
-            image_size = pygame.Vector2(
-                instance.windows_size[0], instance.windows_size[1]
-            )
-            self.image = pygame.transform.scale(
-                image_cache["images/Tablero.png"], image_size
-            )
-            self.sky_rect = self.image.get_rect()
             self.screen.blit(self.image, self.sky_rect.topleft)
             transparency = 150
             rect_surface = pygame.Surface(
@@ -60,16 +60,16 @@ class PositionTable:
             self.screen.blit(
                 murders, (instance.windows_size[0] / 1.82, instance.windows_size[1] / 8)
             )
-            sum = 0
+            accumulated = 0
             sort_players()
             for k, item in enumerate(instance.players):
                 sf = self.generate_surface(str(item.murders))
-                self.position_box(sf, sum)
+                self.position_box(sf, accumulated)
                 sf_number = self.ranking(k)
-                self.position_number(sf_number, sum)
+                self.position_number(sf_number, accumulated)
                 sf_tank = self.tank(k)
-                self.position_tank(sf_tank, sum)
-                sum += instance.windows_size[1] / 10.28
+                self.position_tank(sf_tank, accumulated)
+                accumulated += instance.windows_size[1] / 10.28
             self.screen.blit(
                 self.button(),
                 (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2),
@@ -105,19 +105,19 @@ class PositionTable:
         )
         return sf
 
-    def position_box(self, sf: pygame.surface.Surface, sum):
+    def position_box(self, sf: pygame.surface.Surface, val):
         self.screen.blit(
-            sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + sum)
+            sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + val)
         )
 
-    def position_tank(self, sf: pygame.surface.Surface, sum):
+    def position_tank(self, sf: pygame.surface.Surface, val):
         self.screen.blit(
-            sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + sum)
+            sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + val)
         )
 
-    def position_number(self, sf: pygame.surface.Surface, sum):
+    def position_number(self, sf: pygame.surface.Surface, val):
         self.screen.blit(
-            sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + sum)
+            sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + val)
         )
 
     def button(self):

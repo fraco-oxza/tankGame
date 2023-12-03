@@ -88,6 +88,9 @@ class Round:
         self.shop_menu = Shop(self.context.screen)
         self.actual_player = self.turns_queue[-1]
 
+        self.falling_speed = 0
+        self.has_fallen = set()
+
         self.in_game_menu = InGameMenu(self.context.screen)
         self.hud = HUD(self.tanks, self, self.gravity, self.wind)
         self.warning = WarningWindows(self)
@@ -116,7 +119,9 @@ class Round:
         for tank in self.tanks:
             tank.position.y = (
                 self.context.map_size[1]
-                - self.terrain.ground_lines[int(tank.position.x)]
+                - self.terrain.ground_lines[
+                    min(int(tank.position.x), len(self.terrain.ground_lines) - 1)
+                ]
                 - constants.TANK_OFFSET
             )
 
@@ -186,7 +191,6 @@ class Round:
             )
 
     def render(self) -> None:
-        keys_pressed = pygame.key.get_pressed()
         """
         This method is responsible for drawing each element of the window, it
         also puts the execution to sleep for a while to make the game run at the
@@ -339,9 +343,7 @@ class Round:
             return Impact(self.cannonball.position, ImpactType.TERRAIN)
 
         for tank in self.tanks:
-            if tank.collides_with(
-                self.cannonball.position, self.cannonball.radius
-            ):
+            if tank.collides_with(self.cannonball.position, self.cannonball.radius):
                 return Impact(self.cannonball.position, ImpactType.TANK, tank)
 
         return None

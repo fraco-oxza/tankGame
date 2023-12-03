@@ -1,4 +1,3 @@
-import random
 from random import shuffle
 
 import pygame
@@ -57,19 +56,19 @@ class TankGame:
     def create_different_colors(n: int) -> list[pygame.Color]:
         red = [
             *map(
-                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                lambda val: int(((val / n) * 255 + (((val + 1) / n) * 255)) / 2),
                 range(n),
             )
         ]
         green = [
             *map(
-                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                lambda val: int(((val / n) * 255 + (((val + 1) / n) * 255)) / 2),
                 range(n),
             )
         ]
         blue = [
             *map(
-                lambda val: int(((val / (n)) * 255 + (((val + 1) / (n)) * 255)) / 2),
+                lambda val: int(((val / n) * 255 + (((val + 1) / n) * 255)) / 2),
                 range(n),
             )
         ]
@@ -83,9 +82,6 @@ class TankGame:
             colors.append(pygame.Color(r, g, b))
 
         return colors
-
-    def game_brief(self):
-        pass
 
     def show_instructions(self, screen: pygame.surface.Surface):
         """
@@ -125,7 +121,6 @@ class TankGame:
         """This method takes care of the menu music and the start button click."""
         soundtrack = audio_cache["sounds/inicio.mp3"]
         soundtrack.play()
-        i = 0
         show_instructions = False
         while True:
             menu = self.menu.show_menu()
@@ -142,7 +137,7 @@ class TankGame:
                 if self.menu_option.start_option_menu() == OptionMenuStatus.CONTINUE:
                     click = audio_cache["sounds/click.mp3"]
                     click.play()
-                    self.Replace()
+                    self.replace()
             if show_instructions:
                 self.show_instructions(self.context.screen)
                 keys = pygame.key.get_pressed()
@@ -153,7 +148,7 @@ class TankGame:
             self.context.clock.tick(constants.FPS)
             self.context.fps = self.context.clock.get_fps()
 
-    def Replace(self):
+    def replace(self):
         self.context.number_of_players = self.menu_option.quantity_players
         for j, item in enumerate(self.screen_resolution):
             if j == self.menu_option.index_screen_resolution:
@@ -177,8 +172,6 @@ class TankGame:
                             player.money += 10000
                         current_round = Round()
                         current_round.start()
-
-                    self.game_brief()
 
                     self.finalWinner.final_winner()
                     keys_pressed = pygame.key.get_pressed()

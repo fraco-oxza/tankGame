@@ -17,9 +17,9 @@ class WarningWindows(Drawable):
 
     def __init__(self, tank_game):
         """
-        This constructor loads the fonts that will be used and It sets the size
+        This constructor loads the fonts that will be used, and It sets the size
         of the warning box based on the screen size. It saves the tank_game
-        instance inside of the object to know the quantity of ammunition
+        instance inside the object to know the quantity of ammunition
         available and the current cannonball.
         """
         self.tank_game = tank_game

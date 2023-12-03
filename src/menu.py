@@ -41,15 +41,15 @@ class Menu:
         self.upon = None
         self.screen = screen
         self.prev = False
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
+        self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
+        self.sky_rect = self.image.get_rect()
 
     def render(self) -> int:
         """
         Function responsible for creating and displaying the new surface on the screen,
         which is responsible for loading the background image and drawing the start button
         """
-        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
-        self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
-        self.sky_rect = self.image.get_rect()
         self.screen.blit(self.image, self.sky_rect.topleft)
         transparency = 150
         rect_surface = pygame.Surface(

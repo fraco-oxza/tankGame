@@ -24,7 +24,7 @@ class HUD(Drawable):
     top = instance.windows_size[1] - int((3 / 5) * instance.windows_size[1] / 3.6)
     width = 160
     height = 50
-    color: list[int]
+    color: dict[int, int]
 
     def __init__(self, tanks: list[Tank], tank_game, gravity, wind: Optional[Wind]):
         self.tank_game = tank_game

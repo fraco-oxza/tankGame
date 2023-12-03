@@ -130,7 +130,7 @@ class WinnerScreen(Drawable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        Function that in the event that there is a winner and it is not yet shown in
+        Function that in the event that there is a winner, and it is not yet shown in
         screen, it will redirect to another function where the message will be created and
         presented to the user through the interface.
         """
