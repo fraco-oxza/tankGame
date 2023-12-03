@@ -1,12 +1,14 @@
 from typing import Optional
 
 import pygame
+from pygame import Surface, SurfaceType
 
 import constants
 from caches import font_cache, image_cache
 from context import instance
 from effects import AmbientEffect
 from inputs import check_running
+from button import Button
 
 
 class OptionMenuStatus:
@@ -14,6 +16,7 @@ class OptionMenuStatus:
 
 
 class OptionMenu:
+    screen: Surface | SurfaceType
     box_size = pygame.Vector2
     box_pos: Optional[tuple[float, float]]
     hover_botton_color: str
@@ -21,13 +24,6 @@ class OptionMenu:
     sobre: Optional[int]
 
     def __init__(self, screen: pygame.Surface):
-        self.secondary_buttons = pygame.Vector2(
-            instance.windows_size[0] / 25, instance.windows_size[1] / 15
-        )
-        self.principal_button_size = pygame.Vector2(
-            instance.windows_size[0] / 7.11, instance.windows_size[1] / 3.42
-        )
-        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
         self.button_color1 = "#46575E"
         self.button_color2 = "#46575E"
         self.button_color3 = "#46575E"
@@ -41,8 +37,12 @@ class OptionMenu:
         self.button_color11 = "#A4715C"
         self.hover_botton_color = "#2A2E37"
         self.hover_botton_color_continue = "#9F705C"
-        self.screen = screen
-        self.sobre = None
+        self.secondary_buttons = pygame.Vector2(
+            instance.windows_size[0] / 25, instance.windows_size[1] / 15
+        )
+        self.principal_button_size = pygame.Vector2(
+            instance.windows_size[0] / 7.11, instance.windows_size[1] / 3.42
+        )
         self.clock = pygame.time.Clock()
         image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(
@@ -69,6 +69,10 @@ class OptionMenu:
         self.index_screen_resolution = self.screen_resolution.index(
             instance.windows_size
         )
+        self.screen = screen
+        self.font = font_cache["Roboto.ttf", int(instance.windows_size[0] / 51.2)]
+        self.sobre = None
+        self.button = Button(screen, self.secondary_buttons, self.principal_button_size)
 
     def render(self):
         while True:
@@ -239,145 +243,57 @@ class OptionMenu:
         color of the button when the mouse passes over a button, otherwise it
         remains in its original color
         """
-        button_left_1 = (
-            instance.windows_size[0] / 3.45,
-            instance.windows_size[1] / 5.53,
-        )
-        if button_left_1[0] < mouse.x < (
-            button_left_1[0] + self.secondary_buttons[0]
-        ) and button_left_1[1] < mouse.y < (
-            button_left_1[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 1:
             self.button_color1 = self.hover_botton_color
             self.sobre = 1
         else:
             self.button_color1 = "#46575E"
-        button_left_2 = (
-            instance.windows_size[0] / 3.45,
-            instance.windows_size[1] / 3.2,
-        )
-        if button_left_2[0] < mouse.x < (
-            button_left_2[0] + self.secondary_buttons[0]
-        ) and button_left_2[1] < mouse.y < (
-            button_left_2[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 2:
             self.button_color2 = self.hover_botton_color
             self.sobre = 2
         else:
             self.button_color2 = "#46575E"
-        button_left_3 = (
-            instance.windows_size[0] / 3.45,
-            instance.windows_size[1] / 2.28,
-        )
-        if button_left_3[0] < mouse.x < (
-            button_left_3[0] + self.secondary_buttons[0]
-        ) and button_left_3[1] < mouse.y < (
-            button_left_3[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 3:
             self.button_color3 = self.hover_botton_color
             self.sobre = 3
         else:
             self.button_color3 = "#46575E"
-        button_left_4 = (
-            instance.windows_size[0] / 3.45,
-            instance.windows_size[1] / 1.77,
-        )
-        if button_left_4[0] < mouse.x < (
-            button_left_4[0] + self.secondary_buttons[0]
-        ) and button_left_4[1] < mouse.y < (
-            button_left_4[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 4:
             self.button_color4 = self.hover_botton_color
             self.sobre = 4
         else:
             self.button_color4 = "#46575E"
-        button_left_5 = (
-            instance.windows_size[0] / 3.45,
-            instance.windows_size[1] / 1.45,
-        )
-        if button_left_5[0] < mouse.x < (
-            button_left_5[0] + self.secondary_buttons[0]
-        ) and button_left_5[1] < mouse.y < (
-            button_left_5[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 5:
             self.button_color5 = self.hover_botton_color
             self.sobre = 5
         else:
             self.button_color5 = "#46575E"
-        button_left_6 = (
-            instance.windows_size[0] / 1.52,
-            instance.windows_size[1] / 5.53,
-        )
-        if button_left_6[0] < mouse.x < (
-            button_left_6[0] + self.secondary_buttons[0]
-        ) and button_left_6[1] < mouse.y < (
-            button_left_6[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 6:
             self.button_color6 = self.hover_botton_color
             self.sobre = 6
         else:
             self.button_color6 = "#46575E"
-        button_left_7 = (
-            instance.windows_size[0] / 1.52,
-            instance.windows_size[1] / 3.2,
-        )
-        if button_left_7[0] < mouse.x < (
-            button_left_7[0] + self.secondary_buttons[0]
-        ) and button_left_7[1] < mouse.y < (
-            button_left_7[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 7:
             self.button_color7 = self.hover_botton_color
             self.sobre = 7
         else:
             self.button_color7 = "#46575E"
-        button_left_8 = (
-            instance.windows_size[0] / 1.52,
-            instance.windows_size[1] / 2.28,
-        )
-        if button_left_8[0] < mouse.x < (
-            button_left_8[0] + self.secondary_buttons[0]
-        ) and button_left_8[1] < mouse.y < (
-            button_left_8[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 8:
             self.button_color8 = self.hover_botton_color
             self.sobre = 8
         else:
             self.button_color8 = "#46575E"
-        button_left_9 = (
-            instance.windows_size[0] / 1.52,
-            instance.windows_size[1] / 1.77,
-        )
-        if button_left_9[0] < mouse.x < (
-            button_left_9[0] + self.secondary_buttons[0]
-        ) and button_left_9[1] < mouse.y < (
-            button_left_9[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 9:
             self.button_color9 = self.hover_botton_color
             self.sobre = 9
         else:
             self.button_color9 = "#46575E"
-        button_left_10 = (
-            instance.windows_size[0] / 1.52,
-            instance.windows_size[1] / 1.45,
-        )
-        if button_left_10[0] < mouse.x < (
-            button_left_10[0] + self.secondary_buttons[0]
-        ) and button_left_10[1] < mouse.y < (
-            button_left_10[1] + self.secondary_buttons[1]
-        ):
+        if self.button.handle_input(mouse) == 10:
             self.button_color10 = self.hover_botton_color
             self.sobre = 10
         else:
             self.button_color10 = "#46575E"
-        button_left_11 = (
-            instance.windows_size[0] / 1.25,
-            instance.windows_size[1] / 2.21,
-        )
-        if button_left_11[0] < mouse.x < (
-            button_left_11[0] + self.principal_button_size[0]
-        ) and button_left_11[1] < mouse.y < (
-            button_left_11[1] + self.principal_button_size[1]
-        ):
+        if self.button.handle_input(mouse) == 11:
             self.button_color11 = self.hover_botton_color_continue
             self.sobre = 11
         else:
@@ -451,8 +367,8 @@ class OptionMenu:
         if self.sobre == 1 and self.index_screen_resolution > 0:
             self.index_screen_resolution -= 1
         if (
-            self.sobre == 6
-            and self.index_screen_resolution < len(self.screen_resolution) - 1
+                self.sobre == 6
+                and self.index_screen_resolution < len(self.screen_resolution) - 1
         ):
             self.index_screen_resolution += 1
         if self.sobre == 2 and self.quantity_players > 2:
@@ -472,10 +388,10 @@ class OptionMenu:
                 self.index_environment_effects.value - 1
             )
         if (
-            self.sobre == 10
-            and self.index_environment_effects.value < len(self.environment_effects) - 1
+                self.sobre == 10
+                and self.index_environment_effects.value < len(self.environment_effects) - 1
         ):
             self.index_environment_effects = AmbientEffect(
                 self.index_environment_effects.value + 1
             )
-        self.clock.tick(constants.FPS / 15)
+        self.clock.tick(constants.FPS / 18)
