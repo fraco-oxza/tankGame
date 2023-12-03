@@ -4,12 +4,19 @@ from caches import font_cache
 
 
 class Button:
+    """
+    class responsible for identifying which button is being clicked with the mouse
+    """
     def __init__(self, screen: pygame.Surface, secondary, principal):
         self.secondary_buttons = secondary
         self.principal_button_size = principal
         self.screen = screen
 
     def handle_input_inside(self, mouse: pygame.Vector2, button):
+        """
+        Through the position of the mouse,
+        the position of the buttons and their size, you can identify if the mouse is over a button
+        """
         if button[0] < mouse.x < (
                 button[0] + self.secondary_buttons[0]
         ) and button[1] < mouse.y < (
@@ -19,10 +26,8 @@ class Button:
 
     def handle_input(self, mouse: pygame.Vector2):
         """
-        Function responsible for identifying which button the user pressed by
-        clicking on one of the buttons. It is also responsible for changing the
-        color of the button when the mouse passes over a button, otherwise it
-        remains in its original color
+        This function returns the button that is being pressed through a number,
+        which is returned to the option_menu class
         """
         sobre = 0
         button_left_1 = (

@@ -11,6 +11,11 @@ class PositionTableButton:
 
 
 class PositionTable:
+    """
+    class in charge of displaying the leaderboard at the end of the game, the leaderboard is made
+    based on the deaths committed by each of the players and the more deaths a player makes,
+    the higher he will be on the leaderboard
+    """
     table: pygame.Vector2
     screen: pygame.Surface
 
@@ -36,6 +41,10 @@ class PositionTable:
         self.sky_rect = self.image.get_rect()
 
     def draw_blocks(self):
+        """
+        function responsible for displaying all the players on the screen in their respective position
+         on the table. Shows the leaderboard until the player presses "return to play"
+        """
         while True:
             check_running()
             self.screen.blit(self.image, self.sky_rect.topleft)
@@ -83,6 +92,10 @@ class PositionTable:
             pygame.display.flip()
 
     def show_positions(self):
+        """
+        function in charge of executing the draw_blocks function that is in charge of displaying the
+        entire leaderboard and executing the logic behind it
+        """
         return self.draw_blocks()
 
     def generate_surface(self, mensaje: str):
@@ -105,21 +118,35 @@ class PositionTable:
         return sf
 
     def position_box(self, sf: pygame.surface.Surface, val):
+        """
+        function in charge of showing the containers in which the position in which the player
+        and the player's tank will go
+        """
         self.screen.blit(
             sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + val)
         )
 
     def position_tank(self, sf: pygame.surface.Surface, val):
+        """
+        function responsible for showing the tank in its respective position within the table
+        """
         self.screen.blit(
             sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + val)
         )
 
     def position_number(self, sf: pygame.surface.Surface, val):
+        """
+        function responsible for drawing the leaderboard number
+        """
         self.screen.blit(
             sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + val)
         )
 
     def button(self):
+        """
+        function responsible for displaying the "play again" button.
+        When this is pressed, the leaderboard stops displaying
+        """
         sf = pygame.Surface(self.button_position)
         box_size = sf.get_size()
         end = self.font.render("Volver a Jugar", True, "#ffffff")
@@ -151,6 +178,10 @@ class PositionTable:
             self.color1 = "#2E3440"
 
     def tank(self, j):
+        """
+        function responsible for drawing the tanks, so that they are shown in their
+        respective position within the table
+        """
         width = instance.windows_size[0] / 18.28
         height = instance.windows_size[1] / 13
         sf = pygame.Surface((width, height))
@@ -208,6 +239,10 @@ class PositionTable:
         return sf
 
     def ranking(self, i):
+        """
+        function behind the logic that shows the place where you were after playing against
+        the other players
+        """
         width = instance.windows_size[0] / 18.28
         height = instance.windows_size[1] / 13
         sf = pygame.Surface((width, height))
@@ -227,6 +262,11 @@ class PositionTable:
 
 
 def sort_players():
+    """
+    function that orders the list of players from largest to smallest based on the deaths they committed
+     during the game. It is ordered from highest to lowest so that when the entire table is shown,
+     the player who committed the most deaths is highest in the table.
+    """
     instance.players = sorted(
         instance.players, key=lambda player: player.murders, reverse=True
     )
