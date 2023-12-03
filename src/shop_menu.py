@@ -33,7 +33,7 @@ class Shop:
     Ammo80 = 0
     Ammo105 = 0
 
-    def __init__(self, screen: pygame.surface):
+    def __init__(self, screen: pygame.surface.Surface):
         self.clock = pygame.time.Clock()
         self.button_reset_position = pygame.Vector2(
             instance.windows_size[0] / 17, instance.windows_size[1] / 15
@@ -147,13 +147,13 @@ class Shop:
                     tank.player.money -= 4000
                 if self.upon == 4:
                     tank.player.money = (
-                            tank.player.money
-                            + self.Ammo60 * 1000
-                            + self.Ammo80 * 2500
-                            + self.Ammo105 * 4000
+                        tank.player.money
+                        + self.Ammo60 * 1000
+                        + self.Ammo80 * 2500
+                        + self.Ammo105 * 4000
                     )
                     self.money_player = (
-                            tank.player.money
+                        tank.player.money
                         + self.Ammo60 * 1000
                         + self.Ammo80 * 2500
                         + self.Ammo105 * 4000

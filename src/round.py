@@ -86,6 +86,9 @@ class Round:
         self.create_tanks()
         self.create_turns()
         self.shop_menu = Shop(self.context.screen)
+        self.throw_sound = audio_cache["sounds/throw.mp3"]
+        self.fall_sound = audio_cache["sounds/fall.mp3"]
+        self.fall_sound.set_volume(0.3)
         self.actual_player = self.turns_queue[-1]
 
         self.falling_speed = 0
@@ -385,10 +388,12 @@ class Round:
         This function is responsible for drawing the projectile's parabolic path,
         making it advance, and then drawing it.
         """
+        self.fall_sound.play()
         while self.running and self.last_state is None:
             check_running()
             self.last_state = self.process_cannonball_trajectory()
             self.render()
+        self.fall_sound.stop()
 
     def wait_on_space(self) -> None:
         """
@@ -405,10 +410,10 @@ class Round:
                 break
             self.render()
 
-    def check_last_state(self) -> None:
+    def do_radius_damage(self):
         """
-        This function is responsible for checking what happened in the last shot
-        and modifying the class fields to adapt to the outcome.
+        This function is responsible for calculating the damage that the projectile
+        will do to the tanks that are within the radius of action of the projectile.
         """
         if self.last_state is None or self.cannonball is None:
             return
@@ -421,6 +426,21 @@ class Round:
                 ):
                     # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
                     continue
+                tank.life -= int(
+                    (
+                        self.cannonball.damage
+                        / ((1.0 - self.calculate_distance(tank)) ** 2)
+                    )
+                    * 100
+                )
+
+    def check_last_state(self) -> None:
+        """
+        This function is responsible for checking what happened in the last shot
+        and modifying the class fields to adapt to the outcome.
+        """
+        if self.last_state is None or self.cannonball is None:
+            return
 
         if (
             self.last_state.impact_type == ImpactType.TANK
@@ -509,6 +529,10 @@ class Round:
             self.render()
 
     def next_turn(self):
+        """
+        This method is responsible for changing the turn of the players. It is
+        also responsible for create the turns queue.
+        """
         if len(self.turns_queue) == 0:
             self.create_turns()
 
@@ -516,6 +540,10 @@ class Round:
         self.turns_queue.pop()
 
     def make_tanks_fall(self, dt: float):
+        """
+        This method is responsible for making the tanks fall when the terrain
+        is destroyed.
+        """
         self.falling_speed += self.gravity * dt
         self.tanks_falling = False
 
@@ -559,13 +587,10 @@ class Round:
             check_running()
             self.render()
 
-    def start(self) -> None:
+    def display_shop_menu(self):
         """
-        This method shows the basic instructions and then gives way to the
-        game as such. It is responsible for managing the current situation, such as which
-        player's turn, the angle of the cannon or if it has been decided to shoot,
-        where in which case it will be checked if the bullet continues to advance or if it has
-        shocked with something.
+        This method is responsible for displaying the shop menu to buy
+        ammunition.
         """
         for tank in self.tanks:
             if isinstance(tank, Bot):
@@ -574,118 +599,151 @@ class Round:
                 self.shop_menu.start_shop(tank)
                 tank.available = tank.player.ammunition
 
-        while self.running:
-            self.wait_release_space()
-            self.correct_tanks_position()
-            check_running()
-            self.next_turn()
-
-            if self.wind is not None:
-                self.wind.change_speed()
-                while self.wind.is_changing():
-                    check_running()
-                    self.render()
-
-            tries = 0
-            while not self.get_current_tank().is_alive or (
-                sum(self.get_current_tank().available.values()) == 0
-            ):
-                self.next_turn()
-
-                tries += 1
-                if tries > 2 * self.context.number_of_players:
-                    return
-
-            if isinstance(self.get_current_tank(), Bot):
-                self.find_tank()
-                self.cannonball = self.get_current_tank().shoot()
-            else:
-                while self.running and self.cannonball is None:
-                    check_running()
-                    self.process_input()
-                    self.render()
-
-            throw = audio_cache["sounds/throw.mp3"]
-            throw.play()
-            fall = audio_cache["sounds/fall.mp3"]
-            fall.set_volume(0.3)
-            fall.play()
-
-            self.cannonball_travel()
-            fall.stop()
-
-            if (
-                self.last_state is not None
-                and self.last_state.impact_type != ImpactType.BORDER
-            ):
-                if self.cannonball is not None and self.last_state.impact_type in (
-                    ImpactType.TANK,
-                    ImpactType.SUICIDIO,
-                ):
-                    tank_explotion = audio_cache["sounds/bomb.mp3"]
-                    tank_explotion.play()
-                    self.animacion = Explosion(
-                        self.cannonball.position, animation_cache["tank_explosion"]
-                    )
-                elif (
-                    self.cannonball is not None
-                    and self.last_state.impact_type == ImpactType.TERRAIN
-                ):
-                    for tank in self.tanks:
-                        tank.life -= int(
-                            (
-                                self.cannonball.damage
-                                / ((1.0 - self.calculate_distance(tank)) ** 2)
-                            )
-                            * 100
-                        )
-
-                    shoot = audio_cache["sounds/shoot.mp3"]
-                    shoot.play()
-                    self.animacion = Explosion(
-                        self.cannonball.position, animation_cache["snow_explosion"]
-                    )
-
-                # Display explotion
-                self.display_explotion()
-                self.animacion = None
-
-            self.terrain_destruction()
-
-            self.tanks_falling = True
-            self.falling_speed = 0
-            self.has_fallen = set()
-            while self.terrain.is_falling or self.tanks_falling:
+    def update_wind(self):
+        """
+        This method is responsible for updating the wind speed. only if the
+        wind is active.
+        """
+        if self.wind is not None:
+            self.wind.change_speed()
+            while self.wind.is_changing():
                 check_running()
-                dt = 1.0 / self.context.fps
-                self.terrain.tick(dt * constants.TERRAIN_FALL_X_SPEED, self.gravity)
-                self.make_tanks_fall(dt * constants.TERRAIN_FALL_X_SPEED)
                 self.render()
 
-            if not isinstance(self.get_current_tank(), Bot):
-                self.wait_release_space()
-                self.wait_on_space()
-            else:
-                self.sleep_rendering(constants.BOT_SLEEP_TIME)
+    def try_next_turn(self) -> bool:
+        """
+        This method is responsible for checking if the next player can shoot or
+        not. If the player cannot shoot, it will pass the turn to the next one
+        and return True. and if no one can shoot, it will return False.
+        """
 
-            self.check_last_state()
+        tries = 0
+        self.next_turn()
+        while not self.get_current_tank().is_alive or (
+            sum(self.get_current_tank().available.values()) == 0
+        ):
+            self.next_turn()
 
-            self.cannonball = None
+            tries += 1
+            if tries > 2 * self.context.number_of_players:
+                return False
+        return True
 
-            self.wait_release_space()
+    def aim_and_shoot(self):
+        """
+        This method is responsible for aiming and shooting the projectile. If
+        the player is a bot, it will aim and shoot automatically, otherwise it
+        will wait for the player to press the space bar, and process their inputs
+        to change the angle and speed.
+        """
+        if isinstance(self.get_current_tank(), Bot):
+            self.find_tank()
+            self.cannonball = self.get_current_tank().shoot()
+        else:
+            while self.running and self.cannonball is None:
+                check_running()
+                self.process_input()
+                self.render()
+        self.throw_sound.play()
 
+    def do_explotion(self):
+        """
+        This method is responsible for displaying the explosion when the
+        projectile collides with something.
+        """
+        if self.last_state is None or self.last_state.impact_type == ImpactType.BORDER:
+            return
+
+        if self.cannonball is not None and self.last_state.impact_type in (
+            ImpactType.TANK,
+            ImpactType.SUICIDIO,
+        ):
+            tank_explotion = audio_cache["sounds/bomb.mp3"]
+            tank_explotion.play()
+            self.animacion = Explosion(
+                self.cannonball.position, animation_cache["tank_explosion"]
+            )
+        elif (
+            self.cannonball is not None
+            and self.last_state.impact_type == ImpactType.TERRAIN
+        ):
+            shoot = audio_cache["sounds/shoot.mp3"]
+            shoot.play()
+            self.animacion = Explosion(
+                self.cannonball.position, animation_cache["snow_explosion"]
+            )
+
+        # Display explotion
+        self.display_explotion()
+        self.animacion = None
+
+    def do_fall_terrain_and_tanks(self):
+        """
+        This method is responsible for making the terrain fall and the tanks fall
+        when the projectile collides with something.
+        """
+        self.tanks_falling = True
+        self.falling_speed = 0
+        self.has_fallen = set()
+        while self.terrain.is_falling or self.tanks_falling:
+            check_running()
+            dt = 1.0 / self.context.fps
+            self.terrain.tick(dt * constants.TERRAIN_FALL_X_SPEED, self.gravity)
+            self.make_tanks_fall(dt * constants.TERRAIN_FALL_X_SPEED)
             self.render()
 
-            if self.tanks_alive == 1:
-                for i, tank in enumerate(self.tanks):
-                    if tank.is_alive:
-                        self.winner = i
+    def wait_to_end_of_turn(self):
+        """
+        This method is responsible for waiting for the end of the turn.
+        In the screen appears the stats of the shooting.
+        If the player is a bot, it will wait for a while, otherwise it will wait
+        for the player to press the space bar.
+        """
+        if not isinstance(self.get_current_tank(), Bot):
+            self.wait_release_space()
+            self.wait_on_space()
+        else:
+            self.sleep_rendering(constants.BOT_SLEEP_TIME)
 
-            if self.winner is not None:
-                break
+    def play_turn(self):
+        """
+        This method is responsible for playing the turn of the player, it will
+        call the functions that are responsible for the different parts of the
+        turn.
+        """
+        self.update_wind()
+        self.aim_and_shoot()
+        self.cannonball_travel()
+        self.do_explotion()
+        self.do_radius_damage()
+        self.terrain_destruction()
+        self.do_fall_terrain_and_tanks()
+        self.correct_tanks_position()
+        self.wait_to_end_of_turn()
+        self.check_last_state()
+        self.wait_release_space()
 
-            self.last_state = None
+    def try_to_find_winner(self):
+        """
+        This method is responsible for checking if there is a winner, if there
+        is a winner, it will change the attributes of the class to adapt to the
+        situation.
+        """
+        if self.tanks_alive != 1:
+            return
 
+        self.running = False
+        for i, tank in enumerate(self.tanks):
+            if tank.is_alive:
+                self.winner = i
+
+    def display_results(self):
+        """
+        This method does not show the results screen, but rather, based on the
+        state changes, it is automatically shown when calling render. This
+        function only waits for users to have read and want to continue,
+        waiting for a click in the space.
+        """
         if self.winner is not None:
             self.running = True
         while self.running:
@@ -694,3 +752,25 @@ class Round:
             if keys_pressed[pygame.K_SPACE]:
                 break
             self.render()
+
+    def start(self) -> None:
+        """
+        This method is responsible for starting the game, it will call the
+        functions that are responsible for the different parts of the game.
+        """
+        self.display_shop_menu()
+
+        while self.running:
+            check_running()
+
+            if self.try_next_turn() is False:
+                # No one can shoot
+                return
+
+            self.play_turn()
+            self.try_to_find_winner()
+
+            self.cannonball = None
+            self.last_state = None
+
+        self.display_results()
