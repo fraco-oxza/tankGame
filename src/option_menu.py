@@ -367,8 +367,8 @@ class OptionMenu:
         if self.sobre == 1 and self.index_screen_resolution > 0:
             self.index_screen_resolution -= 1
         if (
-                self.sobre == 6
-                and self.index_screen_resolution < len(self.screen_resolution) - 1
+            self.sobre == 6
+            and self.index_screen_resolution < len(self.screen_resolution) - 1
         ):
             self.index_screen_resolution += 1
         if self.sobre == 2 and self.quantity_players > 2:
@@ -388,8 +388,8 @@ class OptionMenu:
                 self.index_environment_effects.value - 1
             )
         if (
-                self.sobre == 10
-                and self.index_environment_effects.value < len(self.environment_effects) - 1
+            self.sobre == 10
+            and self.index_environment_effects.value < len(self.environment_effects) - 1
         ):
             self.index_environment_effects = AmbientEffect(
                 self.index_environment_effects.value + 1
