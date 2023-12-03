@@ -118,6 +118,7 @@ class Menu:
                     return MenuStatus.start
                 if self.upon == 2:
                     return MenuStatus.options
+        return MenuStatus.nothing
 
     def show_menu(self):
         return self.render()

@@ -119,6 +119,7 @@ class Tank(Drawable, Collidable):
 
                 start_point = pygame.Vector2(new_x, new_y)
                 return Cannonball105mm(start_point, start_velocity)
+        return None
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
@@ -193,9 +194,3 @@ class Tank(Drawable, Collidable):
         pygame.draw.line(
             screen, self.color, (cannon_x, cannon_y), (muzzle_x, muzzle_y), 6
         )
-
-    def random_shoot(self, position, gravity):
-        pass
-
-    def buy_cannonballs(self):
-        pass

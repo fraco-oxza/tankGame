@@ -178,11 +178,7 @@ class TankGame:
                     keys_pressed = pygame.key.get_pressed()
                     if keys_pressed[pygame.K_SPACE]:
                         self.position_table = PositionTable(self.context.screen)
-                        if (
-                            self.position_table.show_positions()
-                            == PositionTableButton.VOLVER_A_JUGAR
-                        ):
-                            pass
+                        self.position_table.show_positions()
 
                 except RestartRequested:
                     pass

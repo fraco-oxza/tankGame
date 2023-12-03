@@ -35,13 +35,13 @@ class SnowStorm(Drawable):
             )
         )
 
-    def tick(self) -> None:
+    def tick(self, dt: float) -> None:
         """
         This function is responsible for advancing the snowflakes and
         repositioning them if they have gone off the map.
         """
         for snowflake in self.snowflakes:
-            snowflake.y += self.gravity / 10.0  # gravity
+            snowflake.y += constants.X_SPEED * self.gravity * dt  # gravity
 
             # Corner case down
             if snowflake.y > (instance.windows_size[1]):
@@ -54,7 +54,7 @@ class SnowStorm(Drawable):
                 snowflake.x += instance.windows_size[0]
 
             if self.wind is not None:
-                snowflake.x += self.wind.velocity
+                snowflake.x += constants.X_WIND_SPEED * self.wind.velocity * dt
 
     def draw_snowflakes(self, screen: pygame.surface.Surface):
         """This function draws each snowflake present in the list of snowflakes."""

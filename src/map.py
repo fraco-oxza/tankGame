@@ -24,7 +24,6 @@ class Map:
         """
         function that is responsible for delivering colors to the soil substrate according to the chosen biome
         """
-
         if self.chosen_biome == 0:
             self.terrain_colors = ["#3C474F", "#586874", "#99B4C9", "#B8D9F2"]
 
@@ -58,7 +57,6 @@ class Map:
         """
         function that is responsible for delivering the background image according to the chosen biome
         """
-
         if self.chosen_biome == 0:
             self.background_image = "images/sky.jpg"
 

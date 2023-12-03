@@ -220,7 +220,7 @@ class Round:
 
         self.hud.draw(self.context.screen)
 
-        self.snow_storm.tick()
+        self.snow_storm.tick(1.0 / self.context.fps)
         if self.cannonball is None and self.last_state is None:
             self.warning.draw(self.context.screen)
             if not self.warning.is_current_cannonball_available():

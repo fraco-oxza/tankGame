@@ -8,7 +8,8 @@ from effects import AmbientEffect
 
 class Context:
     """
-    this class is responsible for save the info about the general game.
+    this class is responsible for save the info about the general game. It is
+    used to share information between modules. It is a singleton.
     """
 
     rounds: int
