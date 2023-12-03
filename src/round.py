@@ -145,11 +145,15 @@ class Round:
         return points
 
     def find_tank(self):
+        current_tank = self.get_current_tank()
+        if not isinstance(current_tank, Bot):
+            return
+
         find = True
         while find:
             random_tank = random.randint(0, len(self.tanks) - 1)
             if random_tank != self.actual_player and self.tanks[random_tank].life > 0:
-                self.get_current_tank().random_shoot(
+                current_tank.random_shoot(
                     self.tanks[random_tank].position, self.gravity
                 )
                 find = False
@@ -569,8 +573,6 @@ class Round:
             else:
                 self.shop_menu.start_shop(tank)
                 tank.available = tank.player.ammunition
-                # sleep temporal
-                # time.sleep(0.5)
 
         while self.running:
             self.wait_release_space()

@@ -13,7 +13,6 @@ from option_menu import OptionMenu
 from option_menu import OptionMenuStatus
 from player import Player
 from positions_table import PositionTable
-from positions_table import PositionTableButton
 from round import Round
 
 
