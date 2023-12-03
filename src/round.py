@@ -245,7 +245,9 @@ class Round:
         self.context.clock.tick(constants.FPS)
         self.context.fps = self.context.clock.get_fps()
 
-    def process_shoot_angle_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+    def process_shoot_angle_change(
+        self, playing_tank: Tank, keys_pressed: ScancodeWrapper
+    ):
         """
         This method is responsible for changing the angle of the projectile that
         the player is going to shoot. It read the keys pressed and changes the
@@ -271,7 +273,9 @@ class Round:
                     constants.FPS / self.context.fps
                 )
 
-    def process_shoot_speed_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+    def process_shoot_speed_change(
+        self, playing_tank: Tank, keys_pressed: ScancodeWrapper
+    ):
         """
         This method is responsible for changing the speed of the projectile that
         the player is going to shoot. It read the keys pressed and changes the
@@ -296,7 +300,9 @@ class Round:
             if playing_tank.shoot_velocity < 1:
                 playing_tank.shoot_velocity = 1
 
-    def process_shoot_type_change(self, playing_tank: Tank, keys_pressed: ScancodeWrapper):
+    def process_shoot_type_change(
+        self, playing_tank: Tank, keys_pressed: ScancodeWrapper
+    ):
         """
         This method is responsible for changing the type of projectile that the
         player is going to shoot. It read the keys pressed and changes the type
@@ -315,8 +321,6 @@ class Round:
                 playing_tank.actual = CannonballType.MM80
             elif keys_pressed[pygame.K_3]:
                 playing_tank.actual = CannonballType.MM105
-
-
 
     def process_input(self) -> None:
         """
