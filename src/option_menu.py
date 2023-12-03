@@ -16,6 +16,7 @@ class OptionMenuStatus:
     class used to signal if the player presses continue. This class is responsible for signaling
     that all changes must be saved
     """
+
     CONTINUE = 1
 
 
@@ -26,6 +27,7 @@ class OptionMenu:
     of rounds and the environmental effects can be changed. . If the player does not choose one or
     wishes not to modify it, it remains by default
     """
+
     screen: Surface | SurfaceType
     box_size = pygame.Vector2
     box_pos: Optional[tuple[float, float]]
@@ -401,8 +403,8 @@ class OptionMenu:
         if self.sobre == 1 and self.index_screen_resolution > 0:
             self.index_screen_resolution -= 1
         if (
-                self.sobre == 6
-                and self.index_screen_resolution < len(self.screen_resolution) - 1
+            self.sobre == 6
+            and self.index_screen_resolution < len(self.screen_resolution) - 1
         ):
             self.index_screen_resolution += 1
         if self.sobre == 2 and self.quantity_players > 2:
@@ -422,8 +424,8 @@ class OptionMenu:
                 self.index_environment_effects.value - 1
             )
         if (
-                self.sobre == 10
-                and self.index_environment_effects.value < len(self.environment_effects) - 1
+            self.sobre == 10
+            and self.index_environment_effects.value < len(self.environment_effects) - 1
         ):
             self.index_environment_effects = AmbientEffect(
                 self.index_environment_effects.value + 1

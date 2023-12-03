@@ -16,6 +16,7 @@ class PositionTable:
     based on the deaths committed by each of the players and the more deaths a player makes,
     the higher he will be on the leaderboard
     """
+
     table: pygame.Vector2
     screen: pygame.Surface
 
