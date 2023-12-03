@@ -16,6 +16,7 @@ class Bot(Tank):
     This class is a subclass of Tank, it represents a tank bot that can fire projectiles randomly,
     select projectiles based on their availability and purchase new projectiles on its own.
     """
+
     def __init__(
         self, color: pygame.Color | str, position: pygame.Vector2, player: Player
     ):

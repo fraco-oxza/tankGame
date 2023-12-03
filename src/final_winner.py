@@ -66,6 +66,7 @@ class FinalWinner:
     """
     This class is responsible for presenting the final winner or tie screen.
     """
+
     def __init__(self):
         self.instance = instance
         self.font = font_cache["Roboto.ttf", int(self.instance.windows_size[0] / 51.2)]
