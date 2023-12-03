@@ -28,9 +28,7 @@ class PositionTable:
         self.color1 = "#2E3440"
         self.hover_color = "#3b4252"
         self.sobre = 0
-        image_size = pygame.Vector2(
-            instance.windows_size[0], instance.windows_size[1]
-        )
+        image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(
             image_cache["images/Tablero.png"], image_size
         )
