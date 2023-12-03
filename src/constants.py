@@ -16,6 +16,7 @@ White = "#FFFFFF"
 HUD_BACKGROUND = "#282828"
 
 # Limits
+EPSILON = 0.0001
 MIN_GRAVITY = 1.0
 MAX_GRAVITY = 30.0
 SHOOT_MAX_SPEED = 400
@@ -28,7 +29,7 @@ VALLEYS = 2
 
 # Speed settings
 X_SPEED = 4.0
-X_WIND_SPEED = 8.0
+X_WIND_SPEED = 16.0
 TERRAIN_FALL_X_SPEED = 5.0
 
 # Development settings

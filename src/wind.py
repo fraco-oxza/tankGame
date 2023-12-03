@@ -19,6 +19,9 @@ class Wind:
     def velocity(self) -> float:
         return self.__velocity
 
+    def is_changing(self) -> bool:
+        return abs(self.__target_velocity - self.__velocity) > constants.EPSILON
+
     def change_speed(self):
         self.__target_velocity = float(
             random.randint(

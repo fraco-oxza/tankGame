@@ -573,6 +573,9 @@ class Round:
 
             if self.wind is not None:
                 self.wind.change_speed()
+                while self.wind.is_changing():
+                    check_running()
+                    self.render()
 
             tries = 0
             while not self.get_current_tank().is_alive or (
