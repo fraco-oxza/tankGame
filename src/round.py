@@ -482,7 +482,7 @@ class Round:
                 tank.is_alive = False
                 tank.life = 0
                 self.tanks_alive -= 1
-                tank.player.deads += 1
+                tank.player.deaths += 1
 
                 if self.get_current_tank().player is not tank.player:
                     self.get_current_tank().player.money += 5000

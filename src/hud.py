@@ -284,7 +284,7 @@ class HUD(Drawable):
         sf.blit(deads_icon, (width / 7.5, height / 1.25))
         actual_deads = self.font16.render(
             "Veces que ha muerto: "
-            + str(self.tanks[self.tank_game.actual_player].player.deads),
+            + str(self.tanks[self.tank_game.actual_player].player.deaths),
             True,
             "#FFFFFF",
         )
