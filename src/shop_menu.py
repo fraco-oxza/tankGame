@@ -24,8 +24,9 @@ class ShopStatus:
 
 class Shop:
     """
-    This class is responsible for displaying the shop in screen before each round, allowing each player to
-    purchase whatever ammo they want with the money they have.
+    This class is responsible for displaying the shop in screen before each
+    round, allowing each player to purchase whatever ammo they want with the
+    money they have.
     """
 
     money_font: Font
@@ -120,8 +121,9 @@ class Shop:
 
     def generate_shop(self, tank: Tank):
         """
-        This method initializes the shop for the respective tank allowing them to buy ammo.
-        They can also restart the shopping receiving a full refund of their money.
+        This method initializes the shop for the respective tank allowing them
+        to buy ammo. They can also restart the shopping receiving a full refund
+        of their money.
         """
         self.money_player = tank.player.money
         contador60mm = 0
@@ -192,8 +194,8 @@ class Shop:
 
     def handle_input(self, mouse: pygame.Vector2):
         """
-        This method is responsible for the change of color of the buttons when the mouse it's
-        over them.
+        This method is responsible for the change of color of the buttons when
+        the mouse it's over them.
         """
         reset_position = (
             instance.windows_size[0] / 1.59,

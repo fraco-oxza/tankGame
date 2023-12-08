@@ -13,8 +13,8 @@ from button import Button
 
 class OptionMenuStatus:
     """
-    class used to signal if the player presses continue. This class is responsible for signaling
-    that all changes must be saved
+    class used to signal if the player presses continue. This class is
+    responsible for signaling that all changes must be saved
     """
 
     CONTINUE = 1
@@ -22,10 +22,11 @@ class OptionMenuStatus:
 
 class OptionMenu:
     """
-    class in charge of displaying and containing the entire menu of options that the user can choose
-    before starting the game, the screen size, the number of players, the number of bots, the number
-    of rounds and the environmental effects can be changed. . If the player does not choose one or
-    wishes not to modify it, it remains by default
+    class in charge of displaying and containing the entire menu of options
+    that the user can choose before starting the game, the screen size, the
+    number of players, the number of bots, the number of rounds and the
+    environmental effects can be changed. . If the player does not choose one
+    or wishes not to modify it, it remains by default
     """
 
     screen: Surface | SurfaceType
@@ -88,9 +89,10 @@ class OptionMenu:
 
     def render(self):
         """
-        function responsible for the operation of the options menu, in it you can see which button the
-        player is pressing and based on this the player can choose everything necessary to start the
-        game, this function ends when the continue button is pressed, which save all changes
+        function responsible for the operation of the options menu, in it you
+        can see which button the player is pressing and based on this the
+        player can choose everything necessary to start the game, this function
+        ends when the continue button is pressed, which save all changes
         """
         while True:
             check_running()
@@ -389,10 +391,12 @@ class OptionMenu:
 
     def selection(self):
         """
-        function that is responsible for increasing (with the right arrow), decreasing
-        (with the left arrow) or changing the state of some options, IMPORTANT: the number of bots is
-        based on the number of players, so if they are chosen 4 players and you want 3 of them to be bots,
-        you must click the arrow on the right until the number 3 appears in "number of players"
+        function that is responsible for increasing (with the right arrow),
+        decreasing (with the left arrow) or changing the state of some options,
+        IMPORTANT: the number of bots is based on the number of players, so if
+        they are chosen 4 players and you want 3 of them to be bots, you must
+        click the arrow on the right until the number 3 appears in "number of
+        players"
         """
         if self.sobre == 1 and self.index_screen_resolution > 0:
             self.index_screen_resolution -= 1

@@ -56,9 +56,10 @@ class Terrain(Drawable, Collidable):
     def mountain(self, i: int, j: int, height: int):
         """
         This function creates mountains from a start point to an end point,
-        including their midpoint to make them symmetrical. The first for loop adds
-        values to the ground_lines list that increase up to the midpoint, while
-        the second for loop adds values that decrease from the midpoint to the end point.
+        including their midpoint to make them symmetrical. The first for loop
+        adds values to the ground_lines list that increase up to the midpoint,
+        while the second for loop adds values that decrease from the midpoint
+        to the end point.
         """
         m = (i + j) // 2
         original_max = (m - i - 1) ** 2
@@ -118,7 +119,8 @@ class Terrain(Drawable, Collidable):
 
     def tick(self, dt: float, gravity: float):
         """
-        This method is responsible for the calculations for each frame of the fall of the ground.
+        This method is responsible for the calculations for each frame of the
+        fall of the ground.
         """
         self.is_falling = False
         self.falling_speed += gravity * dt
@@ -138,7 +140,8 @@ class Terrain(Drawable, Collidable):
 
     def draw_falling(self, screen: pygame.surface.Surface) -> None:
         """
-        This method is responsible for each frame when the ground is destroyed and a part of it needs to fall.
+        This method is responsible for each frame when the ground is destroyed
+        and a part of it needs to fall.
         """
         for i, layers in enumerate(self.falling):
             for layer, color in zip(layers, self.terrain_layer_colors):

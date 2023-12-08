@@ -87,8 +87,8 @@ class Cannonball(Drawable):
 
     def calculate_distance_to(self, tank_position: pygame.Vector2) -> int:
         """
-        This function is responsible for returning the maximum distance between the bullet and
-        the tank that launched it
+        This function is responsible for returning the maximum distance between
+        the bullet and the tank that launched it
         """
         return (
             (self.position.x - tank_position.x) ** 2
@@ -106,7 +106,8 @@ class CannonballType:
 
 class Cannonball105mm(Cannonball):
     """
-    This class represents the 105mm cannonball, with its available quantity and damage attributes
+    This class represents the 105mm cannonball, with its available quantity and
+    damage attributes
     """
 
     radius_damage: int
@@ -152,7 +153,8 @@ class Cannonball105mm(Cannonball):
 
 class Cannonball60mm(Cannonball):
     """
-    This class represents the 60mm cannonball, with its available quantity and damage attributes
+    This class represents the 60mm cannonball, with its available quantity and
+    damage attributes
     """
 
     radius_damage: int
@@ -189,7 +191,8 @@ class Cannonball60mm(Cannonball):
 
 class Cannonball80mm(Cannonball):
     """
-    This class represents the 80mm cannonball, with its available quantity and damage attributes
+    This class represents the 80mm cannonball, with its available quantity and
+    damage attributes
     """
 
     radius_damage: int

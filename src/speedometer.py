@@ -7,8 +7,8 @@ from caches import font_cache
 
 class Speedometer:
     """
-    This class represents a speedometer. This speedometer has the ability to display the speed for a bullet on the HUD,
-    in real time as it is changed
+    This class represents a speedometer. This speedometer has the ability to
+    display the speed for a bullet on the HUD, in real time as it is changed
     """
 
     size: int
@@ -29,8 +29,9 @@ class Speedometer:
 
     def get_draw(self) -> pygame.Surface:
         """
-        This function is responsible for drawing and rendering the "drawing" of the speedometer on the HUD.
-        Used to display the current speed according to the parameters and values in the class instance.
+        This function is responsible for drawing and rendering the "drawing" of
+        the speedometer on the HUD. Used to display the current speed according
+        to the parameters and values in the class instance.
         """
         surface = pygame.Surface((500, 500), pygame.SRCALPHA, 32)
         surface = surface.convert_alpha()

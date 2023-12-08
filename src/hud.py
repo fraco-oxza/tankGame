@@ -220,7 +220,8 @@ class HUD(Drawable):
 
     def tank_info(self) -> pygame.Surface:
         """
-        This method is responsible for displaying all the tank and player information in a section of the HUD
+        This method is responsible for displaying all the tank and player
+        information in a section of the HUD
         """
         actual_tank = self.tanks[self.tank_game.actual_player]
         width = instance.windows_size[0] / 3.65
@@ -353,7 +354,8 @@ class HUD(Drawable):
 
     def get_select_cannonball(self):
         """
-        This method allows you to draw on the HUD the number of bullets that the current player has.
+        This method allows you to draw on the HUD the number of bullets that
+        the current player has.
         """
         width = instance.windows_size[0] / 3.65
         height = instance.windows_size[1] / 3.6
@@ -416,7 +418,8 @@ class HUD(Drawable):
 
     def get_cannonball_indicators(self) -> pygame.Surface:
         """
-        This method allows you to draw on the HUD both the angle and the speed at which you want to shoot.
+        This method allows you to draw on the HUD both the angle and the speed
+        at which you want to shoot.
         """
         width = instance.windows_size[0] / 3.65
         height = instance.windows_size[1] / 3.6
@@ -537,8 +540,9 @@ class HUD(Drawable):
 
     def draw_tank_health(self, sf: pygame.surface.Surface):
         """
-        This method is responsible for drawing the health bars of the tanks on the game itself.
-        The colors of the bars vary depending on the life level of the tank.
+        This method is responsible for drawing the health bars of the tanks on
+        the game itself. The colors of the bars vary depending on the life
+        level of the tank.
         """
         color_life = ""
         width = 30

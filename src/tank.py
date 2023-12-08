@@ -61,8 +61,8 @@ class Tank(Drawable, Collidable):
         self, point: pygame.Vector2, validation_distance: float = 0
     ) -> bool:
         """
-        This function is responsible for checking if the tank was hit by the cannonball returned True or False
-        as appropriate
+        This function is responsible for checking if the tank was hit by the
+        cannonball returned True or False as appropriate
         """
         if ((point.x - self.position.x) ** 2 + (point.y - self.position.y) ** 2) ** (
             1 / 2
@@ -123,9 +123,9 @@ class Tank(Drawable, Collidable):
 
     def draw(self, screen: pygame.surface.Surface) -> None:
         """
-        This function is responsible for drawing the tank and updates the position of the
-        tank gun according to its angle. Additionally, if mode is activated
-        developer draws the hitbox
+        This function is responsible for drawing the tank and updates the
+        position of the tank gun according to its angle. Additionally, if mode
+        is activated developer draws the hitbox
         """
         if not self.is_alive:
             self.color = "#232323"

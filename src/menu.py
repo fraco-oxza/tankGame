@@ -13,7 +13,8 @@ from context import instance
 class MenuStatus:
     """
     This class is responsible for identifying the status of the menu, that is,
-    if the user clicked on the start button or the options button, or if he did not click on any button.
+    if the user clicked on the start button or the options button, or if he did
+    not click on any button.
     """
 
     nothing = 0
@@ -23,8 +24,8 @@ class MenuStatus:
 
 class Menu:
     """
-    This class is in charge of displaying everything related to the main menu on the screen
-    when you enter the game.
+    This class is in charge of displaying everything related to the main menu
+    on the screen when you enter the game.
     """
 
     fontTitle: Font
@@ -52,8 +53,9 @@ class Menu:
 
     def render(self) -> int:
         """
-        Function responsible for creating and displaying the new surface on the screen,
-        which is responsible for loading the background image and drawing the start button
+        Function responsible for creating and displaying the new surface on the
+        screen, which is responsible for loading the background image and
+        drawing the start button
         """
         image_size = pygame.Vector2(instance.windows_size[0], instance.windows_size[1])
         self.image = pygame.transform.scale(image_cache["images/Play.png"], image_size)
@@ -134,9 +136,10 @@ class Menu:
 
     def handle_input(self):
         """
-        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
-        It is also responsible for changing the color of the button when the mouse passes over a button,
-        otherwise it remains in its original color
+        Function responsible for identifying which button the user pressed by
+        clicking on one of the buttons. It is also responsible for changing the
+        color of the button when the mouse passes over a button, otherwise it
+        remains in its original color
         """
         mouse = pygame.Vector2(pygame.mouse.get_pos())
         if (self.box_pos[0] <= mouse.x <= self.box_pos[0] + self.box_size[0]) and (

@@ -11,7 +11,8 @@ from inputs import check_running
 
 class InGameMenuStatus:
     """
-    This class is responsible, through numbers, for identifying what type of option the user chooses.
+    This class is responsible, through numbers, for identifying what type of
+    option the user chooses.
     """
 
     EXIT = 0
@@ -21,8 +22,9 @@ class InGameMenuStatus:
 
 class InGameMenu:
     """
-    This class is responsible for loading the background image and drawing all the buttons that are in the
-    menu (return, restart game and return) when the user presses the esc option on the keyboard.
+    This class is responsible for loading the background image and drawing all
+    the buttons that are in the menu (return, restart game and return) when the
+    user presses the esc option on the keyboard.
     """
 
     fontExit: Font
@@ -61,9 +63,10 @@ class InGameMenu:
 
     def render(self):
         """
-        Function responsible for loading the image and the transparency over it while any of the button options
-        are not pressed. It is also responsible for calling the function that draws the buttons on the screen
-        and loading the snow that is drawn on the screen
+        Function responsible for loading the image and the transparency over it
+        while any of the button options are not pressed. It is also responsible
+        for calling the function that draws the buttons on the screen and
+        loading the snow that is drawn on the screen
         """
         while True:
             check_running()
@@ -105,9 +108,10 @@ class InGameMenu:
 
     def handle_input(self, mouse: pygame.Vector2):
         """
-        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
-        It is also responsible for changing the color of the button when the mouse passes over a button,
-        otherwise it remains in its original color
+        Function responsible for identifying which button the user pressed by
+        clicking on one of the buttons. It is also responsible for changing the
+        color of the button when the mouse passes over a button, otherwise it
+        remains in its original color
         """
         restart_pos = (
             instance.windows_size[0] // 2.6,

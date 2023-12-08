@@ -419,7 +419,10 @@ class Round:
         return None
 
     def get_current_tank(self):
-        """This method is responsible for returning the tank that is currently playing."""
+        """
+        This method is responsible for returning the tank that is currently
+        playing.
+        """
         return self.tanks[self.actual_player]
 
     def calculate_distance(self, tank: Tank) -> float:
@@ -492,8 +495,6 @@ class Round:
                     self.last_state.impact_type == ImpactType.TANK
                     and tank is self.last_state.impacted_tank
                 ):
-                    # Si se impacto un tanque, no hacemos daño por distancia a
-                    # ese tanque
                     continue
                 tank.life -= int(
                     (
@@ -532,7 +533,8 @@ class Round:
 
     def terrain_destruction(self):
         """
-        This method takes care of the destruction of terrain, the fall of tanks and the damage related to this.
+        This method takes care of the destruction of terrain, the fall of tanks
+        and the damage related to this.
         """
         if (
             self.last_state is not None
@@ -580,7 +582,10 @@ class Round:
                         accumulated = end_layer
 
     def display_fire(self):
-        """This method is responsible for the animation of the fire when a tank is not alive."""
+        """
+        This method is responsible for the animation of the fire when a tank
+        is not alive.
+        """
         if self.animacion_fuego is None:
             return
 

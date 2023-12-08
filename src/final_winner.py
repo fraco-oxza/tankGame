@@ -8,8 +8,9 @@ from inputs import check_running
 
 def draw_tank(screen, tank):
     """
-    This method draws the winning tank on the screen.
-    The position and size of each tank element are calculated in relation to the dimensions of the game window.
+    This method draws the winning tank on the screen. The position and size of
+    each tank element are calculated in relation to the dimensions of the game
+    window.
     """
     pygame.draw.rect(
         screen,
@@ -93,9 +94,10 @@ class FinalWinner:
             instance.clock.tick(constants.FPS)
             instance.fps = instance.clock.get_fps()
 
-    def tabla_posiciones(self, background, screen):
+    def tabla_posiciones(self, background, screen):  # FIXME: translate to Englis
         """
-        This method displays a text on the screen to go to the leaderboard and Scale the image.
+        This method displays a text on the screen to go to the leaderboard and
+        Scale the image.
         """
         background = pygame.transform.scale(background, self.instance.windows_size)
         rect = background.get_rect()
@@ -123,7 +125,8 @@ class FinalWinner:
 
     def sort_tanks(self):
         """
-        This method orders the tanks from those who committed the most murders to those who committed the least.
+        This method orders the tanks from those who committed the most murders
+        to those who committed the least.
         """
         self.tanks = sorted(self.tanks, key=lambda player: player.murders, reverse=True)
 

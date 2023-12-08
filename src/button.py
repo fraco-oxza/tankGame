@@ -7,14 +7,19 @@ class Button:
     """class responsible for identifying which button is being clicked with the mouse"""
 
     def __init__(self, screen: pygame.Surface, secondary, principal):
+        """
+        :param screen: screen where the buttons will be displayed
+        :param secondary: size of the secondary buttons
+        :param principal: size of the principal buttons
+        """
         self.secondary_buttons = secondary
         self.principal_button_size = principal
         self.screen = screen
 
     def handle_input_inside(self, mouse: pygame.Vector2, button):
         """
-        Through the position of the mouse,
-        the position of the buttons and their size, you can identify if the mouse is over a button
+        Through the position of the mouse, the position of the buttons and
+        their size, you can identify if the mouse is over a button
         """
         if button[0] < mouse.x < (button[0] + self.secondary_buttons[0]) and button[
             1

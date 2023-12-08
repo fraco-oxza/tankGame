@@ -12,9 +12,10 @@ class PositionTableButton:
 
 class PositionTable:
     """
-    class in charge of displaying the leaderboard at the end of the game, the leaderboard is made
-    based on the deaths committed by each of the players and the more deaths a player makes,
-    the higher he will be on the leaderboard
+    class in charge of displaying the leaderboard at the end of the game, the
+    leaderboard is made based on the deaths committed by each of the players
+    and the more deaths a player makes, the higher he will be on the
+    leaderboard
     """
 
     table: pygame.Vector2
@@ -43,8 +44,9 @@ class PositionTable:
 
     def draw_blocks(self):
         """
-        function responsible for displaying all the players on the screen in their respective position
-         on the table. Shows the leaderboard until the player presses "return to play"
+        function responsible for displaying all the players on the screen in
+        their respective position on the table. Shows the leaderboard until the
+        player presses "return to play"
         """
         while True:
             check_running()
@@ -94,8 +96,9 @@ class PositionTable:
 
     def show_positions(self):
         """
-        function in charge of executing the draw_blocks function that is in charge of displaying the
-        entire leaderboard and executing the logic behind it
+        function in charge of executing the draw_blocks function that is in
+        charge of displaying the entire leaderboard and executing the logic
+        behind it
         """
         return self.draw_blocks()
 
@@ -120,8 +123,8 @@ class PositionTable:
 
     def position_box(self, sf: pygame.surface.Surface, val):
         """
-        function in charge of showing the containers in which the position in which the player
-        and the player's tank will go
+        function in charge of showing the containers in which the position in
+        which the player and the player's tank will go
         """
         self.screen.blit(
             sf, (instance.windows_size[0] / 5.12, instance.windows_size[1] / 4.8 + val)
@@ -129,7 +132,8 @@ class PositionTable:
 
     def position_tank(self, sf: pygame.surface.Surface, val):
         """
-        function responsible for showing the tank in its respective position within the table
+        function responsible for showing the tank in its respective position
+        within the table
         """
         self.screen.blit(
             sf, (instance.windows_size[0] / 3.12, instance.windows_size[1] / 4.8 + val)
@@ -163,9 +167,10 @@ class PositionTable:
 
     def handle_input(self, mouse: pygame.Vector2):
         """
-        Function responsible for identifying which button the user pressed by clicking on one of the buttons.
-        It is also responsible for changing the color of the button when the mouse passes over a button,
-        otherwise it remains in its original color
+        Function responsible for identifying which button the user pressed by
+        clicking on one of the buttons. It is also responsible for changing the
+        color of the button when the mouse passes over a button, otherwise it
+        remains in its original color
         """
         restart_pos = (instance.windows_size[0] / 2.56, instance.windows_size[1] / 1.2)
         if restart_pos[0] < mouse.x < (
@@ -239,8 +244,8 @@ class PositionTable:
 
     def ranking(self, i):
         """
-        function behind the logic that shows the place where you were after playing against
-        the other players
+        function behind the logic that shows the place where you were after
+        playing against the other players
         """
         width = instance.windows_size[0] / 18.28
         height = instance.windows_size[1] / 13
@@ -262,9 +267,10 @@ class PositionTable:
 
 def sort_players():
     """
-    function that orders the list of players from largest to smallest based on the deaths they committed
-     during the game. It is ordered from highest to lowest so that when the entire table is shown,
-     the player who committed the most deaths is highest in the table.
+    function that orders the list of players from largest to smallest based on
+    the deaths they committed during the game. It is ordered from highest to
+    lowest so that when the entire table is shown, the player who committed the
+    most deaths is highest in the table.
     """
     instance.players = sorted(
         instance.players, key=lambda player: player.murders, reverse=True

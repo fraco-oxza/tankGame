@@ -13,8 +13,9 @@ from tank import Tank
 
 class Bot(Tank):
     """
-    This class is a subclass of Tank, it represents a tank bot that can fire projectiles randomly,
-    select projectiles based on their availability and purchase new projectiles on its own.
+    This class is a subclass of Tank, it represents a tank bot that can fire
+    projectiles randomly, select projectiles based on their availability and
+    purchase new projectiles on its own.
     """
 
     def __init__(
@@ -24,10 +25,11 @@ class Bot(Tank):
 
     def random_shoot(self, position2: pygame.Vector2, gravity):
         """
-        This method simulates a cannon shot in the game.
-        Depending on the random option, it calculates the angle and speed of the projectile differently
-        (with a formula depending on the position of other tank or 100% random).
-        Use selection_cannonball for projectile type selection.
+        This method simulates a cannon shot in the game. Depending on the
+        random option, it calculates the angle and speed of the projectile
+        differently (with a formula depending on the position of other tank or
+        100% random). Use selection_cannonball for projectile type
+        selection.
         """
         option = random.randint(0, 1)
         if option == 0:
@@ -54,9 +56,9 @@ class Bot(Tank):
 
     def selection_cannonball(self):
         """
-        This method chooses the type of projectile based on the availability of different types.
-        Prioritize shells with zero availability,
-        and if options are available, select a specific shell based on priority order.
+        This method chooses the type of projectile based on the availability of
+        different types. Prioritize shells with zero availability, and if
+        options are available, select a specific shell based on priority order.
         """
         if self.available[0] == 0:
             self.actual = CannonballType.MM80
@@ -71,8 +73,9 @@ class Bot(Tank):
     def buy_cannonballs(self):
         """
         This method simulates a process of randomly purchasing cannon shells,
-        where the type of shell and the player's amount of money determine whether the purchase is made and what type
-        of shell is added to the inventory.
+        where the type of shell and the player's amount of money determine
+        whether the purchase is made and what type of shell is added to the
+        inventory.
         """
         buy = True
         while buy:
