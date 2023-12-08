@@ -75,6 +75,7 @@ class Cannonball(Drawable):
 
     @abstractmethod
     def draw(self, screen: pygame.surface.Surface) -> None:
+        """This function is responsible for drawing the bullet chosen by the user"""
         raise NotImplementedError
 
     def get_max_height(self) -> int:

@@ -124,6 +124,7 @@ class Menu:
         return MenuStatus.nothing
 
     def show_menu(self):
+        """This function is responsible for displaying the menu on the screen"""
         return self.render()
 
     def handle_input(self):

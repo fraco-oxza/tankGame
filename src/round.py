@@ -178,6 +178,10 @@ class Round:
         return points
 
     def find_tank(self):
+        """
+        This method is responsible for finding the tank that is alive and is
+        not the player tank
+        """
         current_tank = self.get_current_tank()
         if not isinstance(current_tank, Bot):
             return
@@ -414,9 +418,14 @@ class Round:
         return None
 
     def get_current_tank(self):
+        """This method is responsible for returning the tank that is currently playing."""
         return self.tanks[self.actual_player]
 
     def calculate_distance(self, tank: Tank) -> float:
+        """
+        This method is responsible for calculating the distance between the
+        projectile and the tank.
+        """
         if self.cannonball is None:
             return math.inf
 
