@@ -14,6 +14,7 @@ from tank import Tank
 
 class ShopStatus:
     """This class is used for future assignments of ammo in the Shop class"""
+
     C60AMMO = 1
     C80AMMO = 2
     C105AMMO = 3
@@ -26,6 +27,7 @@ class Shop:
     This class is responsible for displaying the shop in screen before each round, allowing each player to
     purchase whatever ammo they want with the money they have.
     """
+
     money_font: Font
     c60_button_color: str
     c80_button_color: str
