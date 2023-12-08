@@ -39,6 +39,7 @@ class Round:
     the inputs, managing the different states of the game and managing the
     different menus.
     """
+
     tanks: list[Tank]
     context: Context
     players: list[Player]
