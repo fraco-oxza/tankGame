@@ -683,7 +683,6 @@ class Round:
         not. If the player cannot shoot, it will pass the turn to the next one
         and return True. and if no one can shoot, it will return False.
         """
-
         tries = 0
         self.next_turn()
         while not self.get_current_tank().is_alive or (

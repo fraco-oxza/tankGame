@@ -11,6 +11,11 @@ from context import instance
 
 
 class MenuStatus:
+    """
+    This class is responsible for identifying the status of the menu, that is,
+    if the user clicked on the start button or the options button, or if he did not click on any button.
+    """
+
     nothing = 0
     start = 1
     options = 2

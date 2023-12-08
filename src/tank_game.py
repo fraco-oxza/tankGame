@@ -17,6 +17,11 @@ from round import Round
 
 
 class TankGame:
+    """
+    This class is in charge of managing the entire game, from the start menu to
+    the end of the game.
+    """
+
     context: Context
     menu: Menu
     menu_option: OptionMenu
