@@ -18,7 +18,8 @@ class Map:
         self.background_image = ""
         self.storm_color = ""
 
-        # 0 : snowy , 1 : forest, 2: desert, 3: city, 4:island, 5: moon, 6: fantastic, 7: ocean , 8: hell
+        # 0 : snowy , 1 : forest, 2: desert, 3: city, 4:island, 5: moon, 6:
+        # fantastic, 7: ocean , 8: hell
         self.chosen_biome = random.randint(0, 8)
 
     def define_terrain_colors(self):

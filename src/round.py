@@ -492,7 +492,8 @@ class Round:
                     self.last_state.impact_type == ImpactType.TANK
                     and tank is self.last_state.impacted_tank
                 ):
-                    # Si se impacto un tanque, no hacemos daño por distancia a ese tanque
+                    # Si se impacto un tanque, no hacemos daño por distancia a
+                    # ese tanque
                     continue
                 tank.life -= int(
                     (

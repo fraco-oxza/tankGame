@@ -36,7 +36,9 @@ TERRAIN_FALL_X_SPEED = 5.0
 DEVELOPMENT_MODE = False
 
 # Tank settings
-DAMAGE_PER_SPEED = 0.1  # expresses how much damage a tank must suffer for each m/s it carries at the moment of falling
+# expresses how much damage a tank must suffer for each m/s it carries at
+# the moment of falling
+DAMAGE_PER_SPEED = 0.1
 TANK_RADIO = 18
 TANK_OFFSET = 20  # tanks float this many pixels up
 BOT_SLEEP_TIME = 1000  # ms

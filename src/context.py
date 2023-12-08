@@ -1,6 +1,6 @@
 """
 This module is responsible for save the info about the general game. It is
-used to share information between modules. It uses a singleton for the Context 
+used to share information between modules. It uses a singleton for the Context
 class.
 """
 
