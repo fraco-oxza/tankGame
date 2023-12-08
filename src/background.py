@@ -5,9 +5,7 @@ from context import instance
 
 
 class Background(Drawable):
-    """
-    This class represents the game background, which loads an image.
-    """
+    """This class represents the game background, which loads an image."""
 
     sky_image: pygame.Surface
 
@@ -22,7 +20,6 @@ class Background(Drawable):
         self.sky_rect = self.sky_image.get_rect()
 
     def draw(self, screen: pygame.surface.Surface) -> None:
-        """
-        This function is responsible for drawing the background"""
+        """This function is responsible for drawing the background"""
         size = screen.get_size()
         screen.blit(self.sky_image, (0, (size[1] - self.sky_image.get_size()[1])))

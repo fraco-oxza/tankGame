@@ -4,9 +4,7 @@ from caches import font_cache
 
 
 class Button:
-    """
-    class responsible for identifying which button is being clicked with the mouse
-    """
+    """class responsible for identifying which button is being clicked with the mouse"""
     def __init__(self, screen: pygame.Surface, secondary, principal):
         self.secondary_buttons = secondary
         self.principal_button_size = principal

@@ -249,9 +249,7 @@ class OptionMenu:
             pygame.display.flip()
 
     def start_option_menu(self):
-        """
-        function responsible for executing the render function
-        """
+        """function responsible for executing the render function"""
         return self.render()
 
     def handle_input(self, mouse: pygame.Vector2):
@@ -318,9 +316,7 @@ class OptionMenu:
             self.button_color11 = "#A4715C"
 
     def paint_left(self, index: int):
-        """
-        function responsible for drawing all the buttons on the left side
-        """
+        """function responsible for drawing all the buttons on the left side"""
         sf = pygame.Surface(self.secondary_buttons)
         if index == 1:
             sf.fill(self.button_color1)
@@ -345,9 +341,7 @@ class OptionMenu:
         return sf
 
     def paint_right(self, index: int):
-        """
-        function responsible for drawing all the buttons on the right side
-        """
+        """function responsible for drawing all the buttons on the right side"""
         sf = pygame.Surface(self.secondary_buttons)
         if index == 6:
             sf.fill(self.button_color6)

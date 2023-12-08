@@ -13,9 +13,7 @@ from tank import Tank
 
 
 class ShopStatus:
-    """
-    This class is used for future assignments of ammo in the Shop class
-    """
+    """This class is used for future assignments of ammo in the Shop class"""
     C60AMMO = 1
     C80AMMO = 2
     C105AMMO = 3
@@ -75,9 +73,7 @@ class Shop:
         self.money_player = None
 
     def draw_shop(self, contador60mm, contador80mm, contador105mm):
-        """
-        This method draws the buttons for each ammo type.
-        """
+        """This method draws the buttons for each ammo type."""
         self.screen.blit(self.image, self.image_rect.topleft)
         self.screen.blit(
             self.cannonball_buttons("$1000"),
@@ -189,9 +185,7 @@ class Shop:
             self.clock.tick(constants.FPS / 12)
 
     def start_shop(self, tank: Tank):
-        """
-        This method allows a better way to call the shop.
-        """
+        """This method allows a better way to call the shop."""
         return self.generate_shop(tank)
 
     def handle_input(self, mouse: pygame.Vector2):
@@ -291,9 +285,7 @@ class Shop:
         return sf
 
     def reset_shopping(self, message: str):
-        """
-        This method draws the button for the resetting option.
-        """
+        """This method draws the button for the resetting option."""
         sf = pygame.Surface(self.button_reset_position)
         box_size = sf.get_size()
         end = self.money_font.render(message, True, "#ffffff")
@@ -310,9 +302,7 @@ class Shop:
         return sf
 
     def buy_ammo(self, message: str):
-        """
-        This method draw the button that finish the shopping.
-        """
+        """This method draw the button that finish the shopping."""
         sf = pygame.Surface(self.buy_button_reset_position)
         box_size = sf.get_size()
         end = self.money_font.render(message, True, "#ffffff")
@@ -329,9 +319,7 @@ class Shop:
         return sf
 
     def show_buy(self, tank: Tank):
-        """
-        This method draws the message where is showed who is shopping
-        """
+        """This method draws the message where is showed who is shopping"""
         transparency = 200
         rect_surface = pygame.Surface(
             (instance.windows_size[0] / 1.22, instance.windows_size[1] / 1.15)

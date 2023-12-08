@@ -63,9 +63,7 @@ def draw_tank(screen, tank):
 
 
 class FinalWinner:
-    """
-    This class is responsible for presenting the final winner or tie screen.
-    """
+    """This class is responsible for presenting the final winner or tie screen."""
 
     def __init__(self):
         self.instance = instance
@@ -73,9 +71,7 @@ class FinalWinner:
         self.tanks = self.instance.players
 
     def final_winner(self):
-        """
-        This method shows the winner or tie window after sorting them.
-        """
+        """This method shows the winner or tie window after sorting them."""
         self.sort_tanks()
         tank = self.tanks[0]
         while True:
@@ -132,7 +128,5 @@ class FinalWinner:
         self.tanks = sorted(self.tanks, key=lambda player: player.murders, reverse=True)
 
     def check_tie(self):
-        """
-        This method checks if there is a tie
-        """
+        """This method checks if there is a tie"""
         return self.tanks[0].murders == self.tanks[1].murders

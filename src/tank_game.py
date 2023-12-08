@@ -44,9 +44,7 @@ class TankGame:
         self.finalWinner = FinalWinner()
 
     def create_players(self):
-        """
-        This method creates each player giving them different colors.
-        """
+        """This method creates each player giving them different colors."""
         colors = self.create_different_colors(self.context.number_of_players)
         for color in colors:
             self.context.players.append(
@@ -57,9 +55,7 @@ class TankGame:
 
     @staticmethod
     def create_different_colors(n: int) -> list[pygame.Color]:
-        """
-        This method creates a random color and returns it.
-        """
+        """This method creates a random color and returns it."""
         red = [
             *map(
                 lambda val: int(((val / n) * 255 + (((val + 1) / n) * 255)) / 2),
@@ -155,9 +151,7 @@ class TankGame:
             self.context.fps = self.context.clock.get_fps()
 
     def replace(self):
-        """
-        This method replaces the default configuration with the new one.
-        """
+        """This method replaces the default configuration with the new one."""
         self.context.number_of_players = self.menu_option.quantity_players
         for j, item in enumerate(self.screen_resolution):
             if j == self.menu_option.index_screen_resolution:
@@ -167,9 +161,7 @@ class TankGame:
         self.context.type_of_effect = self.menu_option.index_environment_effects
 
     def start(self) -> None:
-        """
-        This method start the game covers the entire process.
-        """
+        """This method start the game covers the entire process."""
         soundtrack = audio_cache["sounds/inGame.mp3"]
         try:
             self.start_menu()

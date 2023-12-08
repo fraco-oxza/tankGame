@@ -135,9 +135,7 @@ class PositionTable:
         )
 
     def position_number(self, sf: pygame.surface.Surface, val):
-        """
-        function responsible for drawing the leaderboard number
-        """
+        """function responsible for drawing the leaderboard number"""
         self.screen.blit(
             sf, (instance.windows_size[0] / 4.92, instance.windows_size[1] / 4.8 + val)
         )

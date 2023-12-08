@@ -17,9 +17,7 @@ class Speedometer:
     actual: float
 
     def __init__(self, size: int):
-        """
-        Initialize the class with the default values
-        """
+        """Initialize the class with the default values"""
         self.min = 0
         self.max = 400
         self.inc = 10
