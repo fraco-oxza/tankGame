@@ -11,7 +11,8 @@ from wind import Wind
 
 class SnowStorm(Drawable):
     """
-    This class is responsible for adding small particles to the map, changing depending on the biome.
+    This class is responsible for adding small particles to the map, changing
+    depending on the biome.
     """
 
     snowflakes: list[pygame.Vector2]
@@ -19,6 +20,10 @@ class SnowStorm(Drawable):
     gravity: float
 
     def __init__(self, storm_color: str, wind: Optional[Wind], gravity: float):
+        """
+        Initialize the class by loading the images and setting the initial
+        position of the particles.
+        """
         self.snowflakes = []
         for _ in range(constants.SNOWFLAKES):
             self.add_random_snowflake()

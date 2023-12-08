@@ -13,6 +13,7 @@ class Map:
     chosen_biome: int
 
     def __init__(self):
+        """Initialize the class without values"""
         self.terrain_colors = []
         self.background_image = ""
         self.storm_color = ""
@@ -22,7 +23,8 @@ class Map:
 
     def define_terrain_colors(self):
         """
-        function that is responsible for delivering colors to the soil substrate according to the chosen biome
+        function that is responsible for delivering colors to the soil
+        substrate according to the chosen biome
         """
         if self.chosen_biome == 0:
             self.terrain_colors = ["#3C474F", "#586874", "#99B4C9", "#B8D9F2"]
@@ -55,7 +57,8 @@ class Map:
 
     def define_background_image(self):
         """
-        function that is responsible for delivering the background image according to the chosen biome
+        function that is responsible for delivering the background image
+        according to the chosen biome
         """
         if self.chosen_biome == 0:
             self.background_image = "images/sky.jpg"
@@ -88,7 +91,8 @@ class Map:
 
     def define_storm_color(self):
         """
-        function that is responsible for delivering the colors to the particles according to the chosen biome
+        function that is responsible for delivering the colors to the particles
+        according to the chosen biome
         """
         if self.chosen_biome == 0:
             self.storm_color = "#FFFFFF"

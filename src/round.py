@@ -33,6 +33,12 @@ from winner_screen import WinnerScreen
 
 
 class Round:
+    """
+    This class is responsible for managing the game, it is responsible for
+    creating the different elements of the game, managing the turns, managing
+    the inputs, managing the different states of the game and managing the
+    different menus.
+    """
     tanks: list[Tank]
     context: Context
     players: list[Player]
@@ -44,6 +50,11 @@ class Round:
     gravity: float
 
     def __init__(self):
+        """
+        This method is responsible for initializing the class, it creates the
+        attributes of the class and calls the methods that are responsible for
+        creating the different elements of the game.
+        """
         self.tanks_falling = None
         self.context = context.instance
         self.map = Map()
@@ -100,6 +111,10 @@ class Round:
         self.warning = WarningWindows(self)
 
     def create_turns(self) -> None:
+        """
+        This method is responsible for creating the turns queue, it creates the
+        queue based on the number of players.
+        """
         if len(self.turns_queue) != 0:
             return
 
@@ -107,6 +122,10 @@ class Round:
         random.shuffle(self.turns_queue)
 
     def create_tanks(self) -> None:
+        """
+        This method is responsible for creating the tanks, it creates the tanks
+        based on the number of players and the number of bots.
+        """
         self.tanks = []
         positions = self.generate_tanks_positions()
         contador = 0
@@ -120,6 +139,11 @@ class Round:
                 )
 
     def correct_tanks_position(self) -> None:
+        """
+        This method is responsible for correcting the position of the tanks,
+        because when the terrain falls, the tanks can be left floating in the
+        air or underground.
+        """
         for tank in self.tanks:
             tank.position.y = (
                 self.context.map_size[1]
@@ -130,6 +154,11 @@ class Round:
             )
 
     def generate_tanks_positions(self) -> list[tuple[int, int]]:
+        """
+        This method is responsible for generating the positions of the tanks
+        on the map. It generates the positions based on the number of players
+        and the size of the map.
+        """
         to_generate = len(self.players)
         segments_size = self.context.map_size[0] / to_generate
 
