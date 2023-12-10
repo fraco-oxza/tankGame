@@ -75,7 +75,7 @@ class Shop:
         self.image_rect = self.image.get_rect()
         self.money_player = None
 
-    def draw_shop(self, contador60mm, contador80mm, contador105mm):
+    def draw_shop(self):
         """This method draws the buttons for each ammo type."""
         self.screen.blit(self.image, self.image_rect.topleft)
         self.screen.blit(
@@ -99,9 +99,9 @@ class Shop:
             (instance.windows_size[0] / 1.67, instance.windows_size[1] / 1.82),
         )
         money = self.principal_font.render(f"${self.money_player}", True, "#ffffff")
-        quantity60mm = self.money_font.render(f"{contador60mm}", True, "#ffffff")
-        quantity80mm = self.money_font.render(f"{contador80mm}", True, "#ffffff")
-        quantity105mm = self.money_font.render(f"{contador105mm}", True, "#ffffff")
+        quantity60mm = self.money_font.render(f"{self.Ammo60}", True, "#ffffff")
+        quantity80mm = self.money_font.render(f"{self.Ammo80}", True, "#ffffff")
+        quantity105mm = self.money_font.render(f"{self.Ammo105}", True, "#ffffff")
         self.screen.blit(
             quantity60mm,
             (instance.windows_size[0] / 1.82, instance.windows_size[1] / 3.89),
@@ -126,18 +126,19 @@ class Shop:
         of their money.
         """
         self.money_player = tank.player.money
-        contador60mm = tank.player.ammunition[0]
-        contador80mm = tank.player.ammunition[1]
-        contador105mm = tank.player.ammunition[2]
-
-        self.draw_shop(contador60mm, contador80mm, contador105mm)
+        contador60mm = 0
+        contador80mm = 0
+        contador105mm = 0
+        self.Ammo60 = tank.player.ammunition[0]
+        self.Ammo80 = tank.player.ammunition[1]
+        self.Ammo105 = tank.player.ammunition[2]
+        self.draw_shop()
         self.show_buy(tank)
-
         while True:
             self.money_player = tank.player.money
             check_running()
 
-            self.draw_shop(contador60mm, contador80mm, contador105mm)
+            self.draw_shop()
 
             mouse = pygame.Vector2(pygame.mouse.get_pos())
             self.handle_input(mouse)
@@ -162,26 +163,26 @@ class Shop:
                 if self.upon == 4:
                     tank.player.money = (
                         tank.player.money
-                        + self.Ammo60 * 1000
-                        + self.Ammo80 * 2500
-                        + self.Ammo105 * 4000
+                        + contador60mm * 1000
+                        + contador80mm * 2500
+                        + contador105mm * 4000
                     )
                     self.money_player = (
                         tank.player.money
-                        + self.Ammo60 * 1000
-                        + self.Ammo80 * 2500
-                        + self.Ammo105 * 4000
+                        + contador60mm * 1000
+                        + contador80mm * 2500
+                        + contador105mm * 4000
                     )
-                    contador60mm = tank.player.ammunition[0]
-                    contador80mm = tank.player.ammunition[1]
-                    contador105mm = tank.player.ammunition[2]
-                    self.Ammo60 = contador60mm
-                    self.Ammo80 = contador80mm
-                    self.Ammo105 = contador105mm
+                    contador60mm = 0
+                    contador80mm = 0
+                    contador105mm = 0
+                    self.Ammo60 = tank.player.ammunition[0]
+                    self.Ammo80 = tank.player.ammunition[1]
+                    self.Ammo105 = tank.player.ammunition[2]
                 if self.upon == 5:
-                    tank.player.ammunition[0] += self.Ammo60
-                    tank.player.ammunition[1] += self.Ammo80
-                    tank.player.ammunition[2] += self.Ammo105
+                    tank.player.ammunition[0] = self.Ammo60
+                    tank.player.ammunition[1] = self.Ammo80
+                    tank.player.ammunition[2] = self.Ammo105
                     self.Ammo60 = 0
                     self.Ammo80 = 0
                     self.Ammo105 = 0
