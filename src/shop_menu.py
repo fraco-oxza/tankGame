@@ -179,9 +179,9 @@ class Shop:
                     self.Ammo80 = contador80mm
                     self.Ammo105 = contador105mm
                 if self.upon == 5:
-                    tank.available[0] += self.Ammo60
-                    tank.available[1] += self.Ammo80
-                    tank.available[2] += self.Ammo105
+                    tank.player.ammunition[0] += self.Ammo60
+                    tank.player.ammunition[1] += self.Ammo80
+                    tank.player.ammunition[2] += self.Ammo105
                     self.Ammo60 = 0
                     self.Ammo80 = 0
                     self.Ammo105 = 0

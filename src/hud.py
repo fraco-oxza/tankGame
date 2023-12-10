@@ -46,7 +46,6 @@ class HUD(Drawable):
         self.text_velocity1 = None
         self.text_velocity2 = None
         self.text_cannonball_info = None
-        self.color = tanks[self.tank_game.actual_player].available
         if instance.type_of_effect in [
             AmbientEffect.GRAVITY_AND_WIND,
             AmbientEffect.GRAVITY,
@@ -374,7 +373,7 @@ class HUD(Drawable):
         for i in range(3):
             pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 11.66)
             ancho += width / 2.91
-        self.color = self.tanks[self.tank_game.actual_player].available
+        self.color = self.tank_game.get_current_tank().player.ammunition
         ancho = width / 7
         for i in range(3):
             pygame.draw.circle(sf, "#232323", (ancho, alto), width / 14)
@@ -389,11 +388,11 @@ class HUD(Drawable):
             for i in range(3):
                 pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 17.5)
                 cantidad = self.font.render(
-                    f"{self.tanks[self.tank_game.actual_player].available[i]}",
+                    f"{self.color[i]}",
                     True,
                     "white",
                 )
-                if self.tanks[self.tank_game.actual_player].available[i] > 9:
+                if self.color[i] > 9:
                     sf.blit(cantidad, (ancho - width / 23.33, alto - height / 13.33))
                 else:
                     sf.blit(cantidad, (ancho - width / 43.75, alto - height / 13.33))
@@ -402,11 +401,11 @@ class HUD(Drawable):
             for i in range(3):
                 pygame.draw.circle(sf, "#45484A", (ancho, alto), width / 17.5)
                 cantidad = self.font.render(
-                    f"{self.tanks[self.tank_game.actual_player].available[i]}",
+                    f"{self.color[i]}",
                     True,
                     "white",
                 )
-                if self.tanks[self.tank_game.actual_player].available[i] > 9:
+                if self.color[i] > 9:
                     sf.blit(cantidad, (ancho - width / 23.33, alto - height / 27.33))
                 else:
                     sf.blit(cantidad, (ancho - width / 43.75, alto - height / 27.33))

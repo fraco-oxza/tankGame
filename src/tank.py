@@ -34,7 +34,6 @@ class Tank(Drawable, Collidable):
     shoot_velocity: float  # m/s
     shoot_angle: float  # rad //
     actual: int  # bala seleccionada
-    available: dict[int, int]
     life: int
     is_alive: bool
 
@@ -47,15 +46,11 @@ class Tank(Drawable, Collidable):
         self.shoot_angle = 3.0 * math.pi / 4.0  # rad
         self.shoot_velocity = 145  # m/s
         self.actual = CannonballType.MM60
-        self.available = player.ammunition
         self.is_alive = True
         self.life = 100
         self.animacion_fuego = Explosion(
             self.position, animation_cache["fire"], (50, 50), loop=True
         )
-        self.available[0] = 0
-        self.available[1] = 0
-        self.available[3] = 0
 
     def collides_with(
         self, point: pygame.Vector2, validation_distance: float = 0
@@ -83,8 +78,8 @@ class Tank(Drawable, Collidable):
         start_velocity = pygame.Vector2(v_x, v_y)
 
         if self.actual == CannonballType.MM60:
-            if self.available[0] > 0:
-                self.available[0] = self.available[0] - 1
+            if self.player.ammunition[CannonballType.MM60] > 0:
+                self.player.ammunition[CannonballType.MM60] -= 1
                 new_x = self.position.x + (10 + constants.TANK_RADIO) * math.cos(
                     self.shoot_angle
                 )
@@ -96,8 +91,8 @@ class Tank(Drawable, Collidable):
 
                 return Cannonball60mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM80:
-            if self.available[1] > 0:
-                self.available[1] = self.available[1] - 1
+            if self.player.ammunition[CannonballType.MM80] > 0:
+                self.player.ammunition[CannonballType.MM80] -=1
                 new_x = self.position.x + (20 + constants.TANK_RADIO) * math.cos(
                     self.shoot_angle
                 )
@@ -108,8 +103,8 @@ class Tank(Drawable, Collidable):
                 start_point = pygame.Vector2(new_x, new_y)
                 return Cannonball80mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM105:
-            if self.available[2] > 0:
-                self.available[2] = self.available[2] - 1
+            if self.player.ammunition[CannonballType.MM105] > 0:
+                self.player.ammunition[CannonballType.MM105] -= 1
                 new_x = self.position.x + (30 + constants.TANK_RADIO) * math.cos(
                     self.shoot_angle
                 )

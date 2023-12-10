@@ -671,7 +671,6 @@ class Round:
                 tank.buy_cannonballs()
             else:
                 self.shop_menu.start_shop(tank)
-                tank.available = tank.player.ammunition
 
     def update_wind(self):
         """
@@ -693,7 +692,7 @@ class Round:
         tries = 0
         self.next_turn()
         while not self.get_current_tank().is_alive or (
-            sum(self.get_current_tank().available.values()) == 0
+            sum(self.get_current_tank().player.ammunition.values()) == 0
         ):
             self.next_turn()
 

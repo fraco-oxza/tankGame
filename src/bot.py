@@ -4,9 +4,7 @@ import random
 
 import pygame
 
-from cannonballs import (
-    CannonballType,
-)
+from cannonballs import CannonballType
 from player import Player
 from tank import Tank
 
@@ -60,14 +58,14 @@ class Bot(Tank):
         different types. Prioritize shells with zero availability, and if
         options are available, select a specific shell based on priority order.
         """
-        if self.available[0] == 0:
+        if self.player.ammunition[CannonballType.MM60] == 0:
             self.actual = CannonballType.MM80
-        if self.available[1] == 0:
+        if self.player.ammunition[CannonballType.MM80] == 0:
             self.actual = CannonballType.MM105
-        if self.available[2] == 0:
-            if self.available[1] != 0:
+        if self.player.ammunition[CannonballType.MM105] == 0:
+            if self.player.ammunition[CannonballType.MM80] != 0:
                 self.actual = CannonballType.MM80
-            if self.available[0] != 0:
+            if self.player.ammunition[CannonballType.MM60] != 0:
                 self.actual = CannonballType.MM60
 
     def buy_cannonballs(self):
@@ -83,13 +81,13 @@ class Bot(Tank):
             if self.player.money < 1000:
                 buy = False
             if cannon == 1 and self.player.money >= 1000:
-                self.player.money = self.player.money - 1000
-                self.available[0] = self.available[0] + 1
+                self.player.money -= 1000
+                self.player.ammunition[CannonballType.MM60]+=  1
 
             if cannon == 2 and self.player.money >= 2500:
-                self.player.money = self.player.money - 2500
-                self.available[1] = self.available[1] + 1
+                self.player.money -= 2500
+                self.player.ammunition[CannonballType.MM80] += 1
 
             if cannon == 3 and self.player.money >= 4000:
-                self.player.money = self.player.money - 4000
-                self.available[2] = self.available[2] + 1
+                self.player.money -= 4000
+                self.player.ammunition[CannonballType.MM105] += 1

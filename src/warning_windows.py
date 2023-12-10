@@ -67,7 +67,7 @@ class WarningWindows(Drawable):
         self.num_seleccionado = self.tank_game.tanks[
             self.tank_game.actual_player
         ].actual
-        self.quantity = self.tank_game.tanks[self.tank_game.actual_player].available
+        self.quantity = self.tank_game.get_current_tank().player.ammunition
 
         if self.is_current_cannonball_available():
             # In this case there are cannonballs available, so is not necessary
