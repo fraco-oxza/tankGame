@@ -82,7 +82,7 @@ class Bot(Tank):
                 buy = False
             if cannon == 1 and self.player.money >= 1000:
                 self.player.money -= 1000
-                self.player.ammunition[CannonballType.MM60]+=  1
+                self.player.ammunition[CannonballType.MM60] += 1
 
             if cannon == 2 and self.player.money >= 2500:
                 self.player.money -= 2500
