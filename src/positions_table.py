@@ -4,10 +4,10 @@ import constants
 from caches import audio_cache, font_cache, image_cache
 from context import instance
 from inputs import check_running
-
+from exit_requested import ExitRequested
 
 class PositionTableButton:
-    VOLVER_A_JUGAR = 1
+    SALIR = 1
 
 
 class PositionTable:
@@ -91,7 +91,7 @@ class PositionTable:
                 click = audio_cache["sounds/click.mp3"]
                 click.play()
                 if self.sobre == 1:
-                    return PositionTableButton.VOLVER_A_JUGAR
+                    raise ExitRequested
             pygame.display.flip()
 
     def show_positions(self):
@@ -152,7 +152,7 @@ class PositionTable:
         """
         sf = pygame.Surface(self.button_position)
         box_size = sf.get_size()
-        end = self.font.render("Volver a Jugar", True, "#ffffff")
+        end = self.font.render("Salir", True, "#ffffff")
         box_pos = ((box_size[0] - box_size[0]) / 3, box_size[1] / 2.5)
         sf.fill(self.color1)
 

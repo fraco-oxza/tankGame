@@ -2,7 +2,7 @@ from random import shuffle
 
 import pygame
 from pygame.font import Font
-
+from positions_table import PositionTableButton
 import constants
 from caches import audio_cache, image_cache, font_cache
 from context import Context
@@ -184,9 +184,12 @@ class TankGame:
 
                     self.finalWinner.final_winner()
                     keys_pressed = pygame.key.get_pressed()
-                    if keys_pressed[pygame.K_SPACE]:
-                        self.position_table = PositionTable(self.context.screen)
-                        self.position_table.show_positions()
+                    try:
+                        if keys_pressed[pygame.K_SPACE]:
+                            self.position_table = PositionTable(self.context.screen)
+                            self.position_table.show_positions()
+                    except ExitRequested:
+                        return
 
                 except RestartRequested:
                     pass
