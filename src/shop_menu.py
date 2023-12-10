@@ -126,9 +126,9 @@ class Shop:
         of their money.
         """
         self.money_player = tank.player.money
-        contador60mm = 0
-        contador80mm = 0
-        contador105mm = 0
+        contador60mm = tank.player.ammunition[0]
+        contador80mm = tank.player.ammunition[1]
+        contador105mm = tank.player.ammunition[2]
 
         self.draw_shop(contador60mm, contador80mm, contador105mm)
         self.show_buy(tank)
@@ -172,9 +172,9 @@ class Shop:
                         + self.Ammo80 * 2500
                         + self.Ammo105 * 4000
                     )
-                    contador60mm = 0
-                    contador80mm = 0
-                    contador105mm = 0
+                    contador60mm = tank.player.ammunition[0]
+                    contador80mm = tank.player.ammunition[1]
+                    contador105mm = tank.player.ammunition[2]
                     self.Ammo60 = contador60mm
                     self.Ammo80 = contador80mm
                     self.Ammo105 = contador105mm
