@@ -92,7 +92,7 @@ class Tank(Drawable, Collidable):
                 return Cannonball60mm(start_point, start_velocity)
         elif self.actual == CannonballType.MM80:
             if self.player.ammunition[CannonballType.MM80] > 0:
-                self.player.ammunition[CannonballType.MM80] -=1
+                self.player.ammunition[CannonballType.MM80] -= 1
                 new_x = self.position.x + (20 + constants.TANK_RADIO) * math.cos(
                     self.shoot_angle
                 )

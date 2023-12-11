@@ -6,6 +6,7 @@ from context import instance
 from inputs import check_running
 from exit_requested import ExitRequested
 
+
 class PositionTableButton:
     SALIR = 1
 
